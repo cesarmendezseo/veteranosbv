@@ -7,6 +7,8 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\TemporaryUploadedFile;
 use Illuminate\Validation\ValidationException;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Jantinnerezo\LivewireAlert\Enums\Position;
 
 class EquipoCrear extends Component
 {
@@ -32,6 +34,25 @@ class EquipoCrear extends Component
     {
         $this->validate();
 
+        $existe = Equipo::where('nombre', $this->nombre)->exists();
+
+        if ($existe) {
+
+
+            throw ValidationException::withMessages(
+                [
+                    'nombre' => 'El equipo ya existe en la base de datos.',
+                    LivewireAlert::title('Error!')
+                        ->text('El equipo ya existe en la base de datos..')
+                        ->error()
+                        ->toast()
+                        ->position('top')
+                        /* ->timer(1500) */
+                        ->show()
+                ]
+            );
+        }
+
 
         Equipo::create([
             'nombre' => $this->nombre,
@@ -43,7 +64,12 @@ class EquipoCrear extends Component
         ]);
 
         $this->reset(); // Limpia todo
-        session()->flash('mensaje', 'Equipo creado correctamente.');
+        LivewireAlert::title('Equipo Creado')
+            ->text('El equipo se ha creado correctamente.')
+            ->success()
+            ->toast()
+            ->position('top')
+            ->show();
     }
 
     public function render()
