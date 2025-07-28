@@ -2,11 +2,73 @@
 
 namespace App\Livewire\Equipo;
 
+use App\Models\Equipo;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
 
 class EquipoIndex extends Component
 {
+
+    public $equipos = [];
+
+    public function mount()
+    {
+        $this->equipos = Equipo::all();
+    }
+
+    public function borrar($equipoId)
+    {
+
+        LivewireAlert::title('ATENCION')
+            ->text('Esta por ELIMINAR un equipo, lo confirma?')
+            ->asConfirm()
+            ->confirmButtonText('Sí, Eliminar ')
+            ->cancelButtonText('No, Cancelar')
+            ->confirmButtonColor('#00A321') // Verde (Tailwind green-600)
+            ->cancelButtonColor('#FF6600')  // Rojo (Tailwind red-600)
+            ->warning()
+            ->onConfirm('deleteItem', ['id' => $equipoId])
+            ->onDeny('keepItem', ['id' => $equipoId])
+            ->show();
+    }
+
+    public function deleteItem($data)
+    {
+        $itemId = $data['id'];
+
+        $equipo = Equipo::find($itemId);
+
+        if (!$equipo) {
+            LivewireAlert::title('Error')
+                ->text('Equipo no encontrado.')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+            return;
+        }
+        $equipo->delete();
+
+        LivewireAlert::title('')
+            ->text('El equipo se ha eliminado correctamente.')
+            ->warning()
+            ->toast()
+            ->position('top')
+            ->timer(15000)
+            ->show();
+
+        $this->equipos = Equipo::all(); // Refresh the list of equipos */
+    }
+
+    public function keepItem($data)
+    {
+        $itemId = $data['id'];
+        $this->equipos = Equipo::all(); // Refresh the list of equipos */
+        // Keep logic
+    }
+
+
+
 
 
     public function render()

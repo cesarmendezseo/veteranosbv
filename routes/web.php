@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\LogoEquipoController;
 use App\Livewire\Equipo\EquipoCrear;
+use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -26,6 +28,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/equipo', EquipoIndex::class)->name('equipo.index');
     Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear');
+    Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar');
+    Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
+    Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
 });
 
 require __DIR__ . '/auth.php';

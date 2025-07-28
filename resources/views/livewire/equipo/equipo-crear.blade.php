@@ -1,7 +1,5 @@
 <div class="max-w-sm w-full lg:max-w-full lg:flex">
 
-
-
     <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Crear equipo</h5>
         <form wire:submit.prevent="guardar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
