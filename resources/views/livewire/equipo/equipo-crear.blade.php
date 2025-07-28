@@ -1,7 +1,7 @@
 <div class="max-w-sm w-full lg:max-w-full lg:flex">
 
     <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <h5 class="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Crear equipo</h5>
+        <h5 class="mb-4 text-3xl font-bold text-gray-900 dark:text-white underline">Crear Equipo</h5>
         <form wire:submit.prevent="guardar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
             @csrf
             <div class="grid md:grid-cols-2 md:gap-6">
@@ -77,7 +77,7 @@
 
 
             <button type="submit"
-                class="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                class="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="mr-2 lucide lucide-save-icon lucide-save">
