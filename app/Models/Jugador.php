@@ -33,8 +33,9 @@ class Jugador extends Model
     ];
     protected $casts = [
         'is_active' => 'boolean',
-        'fecha_nac' => 'date:d/m/Y',
+        'nacimiento' => 'date:d/m/Y',
     ];
+
 
     public function equipo()
     {

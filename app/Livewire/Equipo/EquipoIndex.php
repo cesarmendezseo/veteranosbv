@@ -13,7 +13,7 @@ class EquipoIndex extends Component
 
     public function mount()
     {
-        $this->equipos = Equipo::all();
+        $this->equipos = Equipo::orderBy('nombre')->get();
     }
 
     public function borrar($equipoId)
@@ -57,13 +57,13 @@ class EquipoIndex extends Component
             ->timer(15000)
             ->show();
 
-        $this->equipos = Equipo::all(); // Refresh the list of equipos */
+        $this->equipos = Equipo::orderBy('nombre')->get(); // Refresh the list of equipos */
     }
 
     public function keepItem($data)
     {
         $itemId = $data['id'];
-        $this->equipos = Equipo::all(); // Refresh the list of equipos */
+        $this->equipos = Equipo::orderBy('nombre')->get(); // Refresh the list of equipos */
         // Keep logic
     }
 

@@ -19,10 +19,13 @@
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
 
-                <flux:navlist.group expandable heading="Equipo" class="hidden lg:grid">
+                <flux:navlist.group expandable heading="Equipo" icon="users" class="hidden lg:grid">
                     <flux:navlist.item icon="eye" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
                     <flux:navlist.item icon="plus-circle" :href="route('equipo.crear')" :current="request()->routeIs('equipo.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
-
+                </flux:navlist.group>
+                <flux:navlist.group expandable heading="Jugadores" class="hidden lg:grid">
+                    <flux:navlist.item icon="eye" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
+                    <flux:navlist.item icon="plus-circle" :href="route('jugadores.crear')" :current="request()->routeIs('jugadores.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist.group>
         </flux:navlist>
