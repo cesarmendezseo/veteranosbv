@@ -22,7 +22,7 @@ class JugadoresCrear extends Component
     public $cod_pos;
     public $activo = true;
     public $tipo_documento = 'DNI'; // Default value, can be changed as needed
-    public $equipo = 1; // Default value, can be changed as needed
+    public $equipo; // Default value, can be changed as needed
     public $equipos = [];
     public $equipo_seleccionado;
 
@@ -49,7 +49,7 @@ class JugadoresCrear extends Component
             'nacimiento' => 'nullable|date',
             'cod_pos' => 'nullable|string|max:10',
             'equipo_seleccionado' => 'nullable|exists:equipos,id',
-            'activo' => 'boolean',
+
         ]);
 
         // Logic to save the player data goes here
@@ -82,7 +82,7 @@ class JugadoresCrear extends Component
             'provincia' => $this->provincia,
             'fecha_nac' => $this->nacimiento,
             'cod_pos' => $this->cod_pos,
-            'activo' => $this->activo,
+            'is_active' => $this->activo,
             'equipo_id' => $this->equipo_seleccionado, // Assuming you have a relation to the team
         ]);
 

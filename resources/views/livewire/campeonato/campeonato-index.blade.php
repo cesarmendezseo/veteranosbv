@@ -1,83 +1,47 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-     @if(session('success'))
-     <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-         {{ session('success') }}
-     </div>
-     @endif
      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
              <tr>
                  <th scope="col" class="px-6 py-3">
-                     Logo
+                     Nombre
                  </th>
                  <th scope="col" class="px-6 py-3">
-                     Nombre y Apellido
+                     Formato
                  </th>
                  <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                     Equipo
+                     Cant. Equipos
                  </th>
                  <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                     Activo
+                     Cant. Grupos
                  </th>
                  <th scope="col" class="px-6 py-3">
-                     Acción
+                     Categoria
+                 </th>
+                 <th scope="col" class="px-6 py-3">
+                     Pt.G
+                 </th>
+                 <th scope="col" class="px-6 py-3">
+                     Pt.E
+                 </th>
+                 <th scope="col" class="px-6 py-3">
+                     Pt.P
+                 </th>
+                 <th scope="col" class="px-6 py-3">
+                     Acciones
                  </th>
              </tr>
          </thead>
          <tbody>
-             @foreach ($jugadores as $jugador)
+             @foreach ($campeonatos as $campeonato)
              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     @if($jugador->foto)
-                     <div class="mb-4 flex justify-center">
-                         <div class="w-18 h-18 rounded-full border-4 border-gray-300 shadow-lg overflow-hidden">
-                             <img src="{{ asset('storage/' . $jugador->foto) }}"
-                                 alt="Logo {{ $jugador->nombre }}"
-                                 class="w-full h-full object-cover" />
-                         </div>
-                     </div>
-                     @else
-                     <div class="w-18 h-18 rounded-full border-4 border-gray-300 shadow-lg overflow-hidden flex items-center justify-center">
-                         <div class="flex animate-pulse  items-center justify-center w-full h-48 bg-gray-300 rounded-sm sm:w-96 dark:bg-gray-700">
-                             <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                             </svg>
-                         </div>
-                     </div>
-                     @endif
-                 </th>
-                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="text-base font-semibold">{{strToupper($jugador->apellido)}}, {{strToupper($jugador->nombre)}}</div>
-
-                     <div class="font-normal text-gray-500">Dni: {{$jugador->documento}} </div>
-                 </th>
 
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                     <div class="text-base font-semibold"></div>
 
-                     <div class="text-base font-semibold">{{strToupper($jugador->equipo->nombre)}}</div>
-
+                     <div class="font-normal text-gray-500"> </div>
                  </th>
-                 <th class="text-center align-center px-6 py-4">
-                     <p class="flex items-center">
-                         @if($jugador->is_active)
 
-                         <span class="inline-flex w-6 h-6 items-center justify-center rounded-full bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900">
-                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                             </svg>
-                         </span>
-                         @else
 
-                         <span class="inline-flex items-center w-6 h-6 rounded-full text-sm font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
-                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                             </svg>
-
-                         </span>
-                         @endif
-                     </p>
-                 </th>
 
 
                  <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
@@ -85,7 +49,7 @@
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-end">
                          {{-- Editar --}}
-                         <a href="{{ route('jugadores.editar', $jugador->id) }}"
+                         <a href="{{ route('campeonato.editar', $campeonato->id) }}"
                              class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
                             focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
                             shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
@@ -98,7 +62,7 @@
                          </a>
 
                          {{-- Borrar --}}
-                         <button wire:click="borrar({{ $jugador->id }})"
+                         <button wire:click="borrar({{ $campeonato->id }})"
                              class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br
                                 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
                                 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80
@@ -110,7 +74,7 @@
                              </svg>
                          </button>
                          {{-- ver --}}
-                         <button wire:click="verJugador({{ $jugador->id }})"
+                         <button wire:click="verCampeonato({{ $campeonato->id }})"
                              class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
                                 focus:ring-4 focus:outline-none focus:ring-[#d8c897] dark:focus:ring-[#efb810]
                                 shadow-lg shadow-[#efb71096] dark:shadow-lg dark:shadow-[#efb71070]
@@ -125,19 +89,7 @@
                              </svg>
                          </button>
 
-                         {{-- Logo --}}
-                         <a href="{{ route('jugadores.foto.upload', $jugador->id) }}"
-                             class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br
-                                focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800
-                                shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80
-                                font-medium rounded-full text-sm
-                                h-10 w-10 flex items-center justify-center"
-                             title="Subir logo">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera h-6 w-6">
-                                 <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-                                 <circle cx="12" cy="13" r="3" />
-                             </svg>
-                         </a>
+
 
                      </div>
 
@@ -157,7 +109,7 @@
                          <div x-show="open" @click.away="open = false"
                              class="absolute right-0 mt-2   z-50">
                              <!-- EDITAR -->
-                             <a href="{{ route('jugadores.editar', $jugador->id) }}"
+                             <a href="{{ route('campeonato.editar', $campeonato->id) }}"
                                  class="mb-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
                             focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
                             shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
@@ -170,7 +122,7 @@
                              </a>
 
                              {{-- Borrar --}}
-                             <button wire:click="borrar({{ $jugador->id }})"
+                             <button wire:click="borrar({{ $campeonato->id }})"
                                  class="mb-1 text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br
                                 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
                                 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80
@@ -182,7 +134,7 @@
                                  </svg>
                              </button>
                              {{-- ver --}}
-                             <button wire:click="verJugador({{ $jugador->id }})"
+                             <button wire:click="verCampeonato({{ $campeonato->id }})"
                                  class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
                                 focus:ring-4 focus:outline-none focus:ring-[#d8c897] dark:focus:ring-[#efb810]
                                 shadow-lg shadow-[#efb71096] dark:shadow-lg dark:shadow-[#efb71070]
@@ -197,19 +149,7 @@
                                  </svg>
                              </button>
 
-                             {{-- Logo --}}
-                             <a href="{{ route('jugadores.foto.upload', $jugador->id) }}"
-                                 class="mb-1 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br
-                                focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800
-                                shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80
-                                font-medium rounded-full text-sm
-                                h-10 w-10 flex items-center justify-center"
-                                 title="Subir logo">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera h-6 w-6">
-                                     <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-                                     <circle cx="12" cy="13" r="3" />
-                                 </svg>
-                             </a>
+
                          </div>
                      </div>
                  </td>
@@ -244,7 +184,7 @@
                  Detalles del Jugador
              </h2>
 
-             @if($jugadorSeleccionado)
+             @if($campeonatoSeleccionado)
              <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
 
                  <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
@@ -280,7 +220,7 @@
                  </div>
 
                  @else
-                 <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún jugador para mostrar.</p>
+                 <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún campeonato para mostrar.</p>
                  @endif
              </div>
          </div>

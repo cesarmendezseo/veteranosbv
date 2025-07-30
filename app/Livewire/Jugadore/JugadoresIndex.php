@@ -15,7 +15,7 @@ class JugadoresIndex extends Component
     public function mount()
     {
         // Aquí podrías cargar los jugadores desde la base de datos o cualquier otra fuente
-        $this->jugadores = Jugador::all(); // Reemplaza esto con la lógica para obtener los jugadores
+        $this->jugadores = Jugador::orderBy('apellido')->get(); // Reemplaza esto con la lógica para obtener los jugadores
     }
     public function abrirModal()
     {
@@ -63,19 +63,19 @@ class JugadoresIndex extends Component
             ->timer(15000)
             ->show();
 
-        $this->jugadores = Jugador::orderBy('nombre')->get(); // Refresh the list of equipos */
+        $this->jugadores = Jugador::orderBy('apellido')->get(); // Refresh the list of equipos */
     }
 
     public function keepItem($data)
     {
         $itemId = $data['id'];
-        $this->jugadores = Jugador::orderBy('nombre')->get(); // Refresh the list of jugadores */
+        $this->jugadores = Jugador::orderBy('apellido')->get(); // Refresh the list of jugadores */
         // Keep logic
     }
 
     public function verJugador($jugadorId)
     {
-        $this->jugadorSeleccionado = \App\Models\Jugador::with('equipo')->findOrFail($jugadorId);
+        $this->jugadorSeleccionado = \App\Models\Jugador::find($jugadorId);
         $this->dispatch('static-modal');
     }
 

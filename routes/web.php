@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\FotoJugadorController;
 use App\Http\Controllers\LogoEquipoController;
+use App\Livewire\Campeonato\Campeonatocrear;
+use App\Livewire\Campeonato\CampeonatoEditar;
+use App\Livewire\Campeonato\CampeonatoIndex;
+use App\Livewire\Categoria\CategoriaCrear;
+use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
@@ -41,6 +46,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/jugadores/crear', JugadoresCrear::class)->name('jugadores.crear');
     Route::get('/jugadores/{jugadorId}/foto', [FotoJugadorController::class, 'upload'])->name('jugadores.foto.upload');
     Route::post('/jugadores/{jugadorId}/foto', [FotoJugadorController::class, 'guardarFoto'])->name('jugadores.foto.guardar');
+    //==============FIN JUGADORES========================
+    //==============CAMPEONATO========================
+    Route::get('/campeonato', CampeonatoIndex::class)->name('campeonato.index');
+    Route::get('/campeonato/crear', CampeonatoCrear::class)->name('campeonato.crear');
+    Route::get('/campeonato/{campeonatoId}/editar', CampeonatoEditar::class)->name('campeonato.editar');
+    // Route::get('/campeonato/{campeonatoId}/logo', [LogoCampeonatoController::class, 'upload'])->name('campeonato.logo.upload');
+    // Route::post('/campeonato/{campeonatoId}/logo', [LogoCampeonatoController::class, 'guardarLogo'])->name('campeonato.logo.guardar');
+    //==============FIN CAMPEONATO========================
+    //==============CATEGORIA========================
+    Route::get('/categoria', \App\Livewire\Categoria\CategoriaIndex::class)->name('categoria.index');
+    Route::get('/categoria/crear', CategoriaCrear::class)->name('categoria.crear');
+    Route::get('/categoria/{categoriaId}/editar', CategoriaEdit::class)->name('categoria.editar');
+    //==============FIN CATEGORIA========================  
+
 });
 
 require __DIR__ . '/auth.php';
