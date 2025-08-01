@@ -1,4 +1,22 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+     <flux:navbar>
+         <button wire:click="crear"
+             class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
+                 <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                 <line x1="12" x2="12" y1="8" y2="16" />
+                 <line x1="8" x2="16" y1="12" y2="12" />
+             </svg>
+             Crear
+         </button>
+         <h1 class="text-2xl font-bold text-gray-900 dark:text-white ml-4">Campeonato</h1>
+         @if(session('success'))
+         <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+             {{ session('success') }}
+         </div>
+         @endif
+
+     </flux:navbar>
      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
              <tr>
@@ -11,20 +29,8 @@
                  <th scope="col" class="px-6 py-3 hidden sm:table-cell">
                      Cant. Equipos
                  </th>
-                 <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                     Cant. Grupos
-                 </th>
                  <th scope="col" class="px-6 py-3">
                      Categoria
-                 </th>
-                 <th scope="col" class="px-6 py-3">
-                     Pt.G
-                 </th>
-                 <th scope="col" class="px-6 py-3">
-                     Pt.E
-                 </th>
-                 <th scope="col" class="px-6 py-3">
-                     Pt.P
                  </th>
                  <th scope="col" class="px-6 py-3">
                      Acciones
@@ -36,12 +42,26 @@
              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="text-base font-semibold"></div>
+                     <div class="text-base font-semibold">{{$campeonato->nombre}}</div>
+                 </th>
+                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                     <div class="font-normal text-gray-500"> {{$campeonato->formato}}</div>
+                 </th>
+                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                     @if($campeonato->formato === 'todos_contra_todos')
 
-                     <div class="font-normal text-gray-500"> </div>
+                     @foreach ($campeonato->grupos as $grupo)
+                     <div class="font-normal text-gray-500"> {{ $grupo->cantidad_equipos}} </div>
+                     @endforeach
+                     @else
+                     <div class="font-normal text-gray-500"> {{$campeonato->cantidad_equipos_grupo}} x Grupo</div>
+                     @endif
+
                  </th>
 
-
+                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                     <div class="font-normal text-gray-500"> {{$campeonato->categoria->nombre}}</div>
+                 </th>
 
 
                  <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
@@ -181,7 +201,7 @@
              </button>
 
              <h2 class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                 Detalles del Jugador
+                 Detalles del Campeonato
              </h2>
 
              @if($campeonatoSeleccionado)
@@ -190,33 +210,44 @@
                  <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
 
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre :</strong> {{ ucwords(strtolower($jugadorSeleccionado->apellido)) }} {{ ucwords(strtolower($jugadorSeleccionado->nombre)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre Campeonato:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Fecha de Nac:</strong> {{ ucwords(strtolower($jugadorSeleccionado->fecha_nac)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos: </strong> {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">N° Socio:</strong> {{ ucwords(strtolower($jugadorSeleccionado->num_socio)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x Grupo: </strong>{{$campeonatoSeleccionado->cantidad_equipos_grupo}}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Teléfono:</strong> {{ ucwords(strtolower($jugadorSeleccionado->telefono)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Email:</strong> {{ $jugadorSeleccionado->email }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ciudad:</strong> {{ ucwords(strtolower($jugadorSeleccionado->ciudad)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong> {{ $campeonatoSeleccionado->puntos_perdido }}
+                     </p>
+                     <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                         Puntos por Tarjeta para Fair Play
+                     </h4>
+                     <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Provincia:</strong> {{ ucwords(strtolower($jugadorSeleccionado->provincia)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
                      </p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cod Pos:</strong> {{ ucwords(strtolower($jugadorSeleccionado->cod_pos)) }}
+                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Roja:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
+                     </p>
+                     <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                         Criterios de Desempate
+                     </h4>
+                     <p class=">
+                         <strong class=" font-semibold text-gray-400 dark:text-[#efb810]"></strong>@foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
+                     <div> Prioridad: {{ $criterio->orden }} - {{ ucwords(strtolower($criterio->criterio)) }}</div>
+                     @endforeach
                      </p>
 
-                     <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                         <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Equipo:</strong> {{ ucwords(strtolower($jugadorSeleccionado->equipo->nombre ?? 'Sin equipo'))}}
-                     </p>
                  </div>
 
                  @else

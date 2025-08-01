@@ -12,7 +12,7 @@ class Grupo extends Model
     use NormalizesAttributes;
 
     protected $normalizable = ['nombre'];
-    protected $fillable = ['nombre', 'campeonato_id'];
+    protected $fillable = ['nombre', 'campeonato_id', 'cantidad_equipos', 'descripcion'];
 
     public function campeonato()
     {

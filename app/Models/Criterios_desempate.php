@@ -12,6 +12,7 @@ class Criterios_desempate extends Model
 
     protected $fillable = ['campeonato_id', 'orden', 'criterio'];
 
+
     public function campeonato()
     {
         return $this->belongsTo(Campeonato::class);

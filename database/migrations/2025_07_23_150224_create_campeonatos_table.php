@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->enum('formato', ['eliminacion_simple', 'eliminacion_doble', 'grupos', 'todos_contra_todos'])->default('todos_contra_todos');
-            $table->unsignedBigInteger('cantidad_equipos_grupo')->nullable(0);
-            $table->unsignedBigInteger('cantidad_grupos')->nullable(0);
+            $table->unsignedBigInteger('cantidad_equipos_grupo')->nullable();
+            $table->unsignedBigInteger('cantidad_grupos')->nullable();
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedTinyInteger('puntos_ganado')->default(3);
             $table->unsignedTinyInteger('puntos_empatado')->default(1);
