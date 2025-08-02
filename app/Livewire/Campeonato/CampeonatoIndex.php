@@ -2,11 +2,16 @@
 
 namespace App\Livewire\Campeonato;
 
+
 use App\Models\Campeonato;
+use Livewire\Attributes\On;
 use Livewire\Component;
+use SweetAlert2\Laravel\Swal;
 
 class CampeonatoIndex extends Component
 {
+
+
     public $campeonatos;
     public $campeonatoSeleccionado;
     public $nombre;
@@ -23,21 +28,27 @@ class CampeonatoIndex extends Component
 
     public function mount()
     {
-
+        //mensaje de otras paginas
         $this->campeonatos = Campeonato::with('grupos', 'categoria')->get();
     }
 
-    public function borrar($campeonatoId)
+
+    #[On('eliminar-campeonato')]
+    public function eliminarCampeonato($id)
     {
-        $campeonato = Campeonato::find($campeonatoId);
-        if ($campeonato) {
-            $campeonato->delete();
-            session()->flash('success', 'Campeonato eliminado correctamente.');
-            $this->campeonatos = Campeonato::with('grupos')->get();
-        } else {
-            session()->flash('error', 'Campeonato no encontrado.');
-        }
+
+        Campeonato::findOrFail($id)->delete();
+
+        $this->dispatch('baja');
+        $this->dispatch('refresh');
     }
+
+    #[On('refresh')]
+    public function refresh()
+    {
+        // No hace falta que pongas nada acá, con solo tener este método, Livewire vuelve a renderizar
+    }
+
 
     public function crear()
     {

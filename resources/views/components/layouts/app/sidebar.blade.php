@@ -3,6 +3,8 @@
 
 <head>
     @include('partials.head')
+    @include('sweetalert2::index')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
@@ -139,7 +141,8 @@
     </flux:header>
 
     {{ $slot }}
-
+    @livewireScripts
+    @stack('js')
     @fluxScripts
 </body>
 

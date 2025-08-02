@@ -19,9 +19,20 @@ class Campeonato extends Model
         'puntos_ganado',
         'puntos_empatado',
         'puntos_perdido',
+        'puntos_tarjeta_amarilla',
+        'puntos_doble_amarilla',
+        'puntos_tarjeta_roja',
         'cantidad_equipos_grupo',
         'cantidad_grupos',
         'status',
+    ];
+    protected $casts = [
+        'puntos_ganado' => 'integer',
+        'puntos_empatado' => 'integer',
+        'puntos_perdido' => 'integer',
+        'puntos_tarjeta_amarilla' => 'integer',
+        'puntos_doble_amarilla' => 'integer',
+        'puntos_tarjeta_roja' => 'integer',
     ];
     public function criterioDesempate()
     {

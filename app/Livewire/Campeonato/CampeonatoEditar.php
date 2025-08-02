@@ -6,6 +6,7 @@ use App\Models\Campeonato;
 use App\Models\Categoria;
 use Livewire\Component;
 use App\Models\Criterios_desempate;
+use SweetAlert2\Laravel\Swal;
 
 class CampeonatoEditar extends Component
 {
@@ -81,6 +82,7 @@ class CampeonatoEditar extends Component
     public function editar()
     {
 
+
         $this->validate([
             'nombre' => 'required|string|max:255',
             'formato' => 'required|string',
@@ -92,7 +94,7 @@ class CampeonatoEditar extends Component
             'puntos_tarjeta_amarilla' => 'required|integer',
             'puntos_doble_amarilla' => 'required|integer',
             'puntos_tarjeta_roja' => 'required|integer',
-            'total_equipos' => 'required|integer|min:1',
+            'total_equipos' => 'nullable|integer|min:1',
             'equipos_por_grupo' => 'nullable|integer|min:1',
             'categoria_id' => 'required|exists:categorias,id'
         ]);
@@ -119,15 +121,20 @@ class CampeonatoEditar extends Component
         foreach ($this->criterios as $index => $criterio) {
             Criterios_desempate::create([
                 'campeonato_id' => $campeonato->id,
-                'criterio' => $criterio,
+                'criterio' => is_array($criterio) ? $criterio['criterio'] : $criterio->criterio,
                 'orden' => $index + 1,
             ]);
         }
 
 
         // Flash message to indicate success
+        Swal::toast([
+            'title' => 'Campeonato actualizado correctamente!',
 
-        session()->flash('message', 'Campeonato actualizado correctamente.');
+            'icon' => 'success',
+            'confirmButtonText' => 'OK'
+        ]);
+
         return redirect()->route('campeonato.index');
     }
 

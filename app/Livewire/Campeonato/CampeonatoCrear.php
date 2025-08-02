@@ -6,6 +6,7 @@ use App\Models\Campeonato;
 use App\Models\Categoria;
 use App\Models\Criterios_desempate;
 use App\Models\Grupo;
+use SweetAlert2\Laravel\Swal;
 use Livewire\Component;
 
 class CampeonatoCrear extends Component
@@ -14,12 +15,12 @@ class CampeonatoCrear extends Component
     public $formato = '';
     public $cantidad_grupos;
     public $cantidad_equipos_grupo;
-    public $puntos_victoria = 3;
-    public $puntos_empate = 1;
-    public $puntos_derrota = 0;
-    public $puntos_tarjeta_amarilla = -1;
+    public $puntos_ganado = 3;
+    public $puntos_empatado = 1;
+    public $puntos_perdido = 0;
+    public $puntos_tarjeta_amarilla = -5;
     public $puntos_doble_amarilla = -3;
-    public $puntos_tarjeta_roja = -5;
+    public $puntos_tarjeta_roja = -1;
     public $total_equipos;
     public $equipos_por_grupo;
     public $categoria_id;
@@ -41,13 +42,14 @@ class CampeonatoCrear extends Component
 
     public function rules()
     {
+
         $rules = [
             'nombre' => 'required|string|max:255',
             'formato' => 'required|in:todos_contra_todos,grupos',
             'categoria_id' => 'required|exists:categorias,id',
-            'puntos_victoria' => 'required|integer|min:0',
-            'puntos_empate' => 'required|integer|min:0',
-            'puntos_derrota' => 'required|integer|min:0',
+            'puntos_ganado' => 'required|integer',
+            'puntos_empatado' => 'required|integer',
+            'puntos_perdido' => 'required|integer',
             'puntos_tarjeta_amarilla' => 'required|integer',
             'puntos_doble_amarilla' => 'required|integer',
             'puntos_tarjeta_roja' => 'required|integer',
@@ -61,7 +63,7 @@ class CampeonatoCrear extends Component
             $rules['equipos_por_grupo'] = 'required|integer|min:1';
         }
 
-        return $rules;
+        return $rules; // Ejecuta las reglas de validación definidas en el método rules()
     }
 
     public function messages()
@@ -82,9 +84,9 @@ class CampeonatoCrear extends Component
             'nombre' => 'nombre del torneo',
             'formato' => 'formato del torneo',
             'categoria_id' => 'categoría',
-            'puntos_victoria' => 'puntos por victoria',
-            'puntos_empate' => 'puntos por empate',
-            'puntos_derrota' => 'puntos por derrota',
+            'puntos_ganado' => 'puntos por victoria',
+            'puntos_empatado' => 'puntos por empate',
+            'puntos_perdido' => 'puntos por derrota',
             'puntos_tarjeta_amarilla' => 'puntos por tarjeta amarilla',
             'puntos_doble_amarilla' => 'puntos por doble amarilla',
             'puntos_tarjeta_roja' => 'puntos por tarjeta roja',
@@ -112,23 +114,25 @@ class CampeonatoCrear extends Component
         }
     }
 
+
     public function save()
     {
 
-        $this->validate(); // Ejecuta las reglas de validación definidas en el método rules()
+        $this->validate();
 
         $campeonato = Campeonato::create([
             'nombre' => $this->nombre,
             'formato' => $this->formato,
-            'cantidad_grupos' => $this->formato === 'grupos' ? $this->cantidad_grupos : 1,
-            'cantidad_equipos_grupo' => $this->formato === 'grupos' ? $this->equipos_por_grupo : null,
-            'puntos_victoria' => $this->puntos_victoria,
-            'puntos_empate' => $this->puntos_empate,
-            'puntos_derrota' => $this->puntos_derrota,
+            'cantidad_grupos' => $this->formato === 'grupos' ? (int) $this->cantidad_grupos : 1,
+            'cantidad_equipos_grupo' => $this->formato === 'grupos' ? (int) $this->equipos_por_grupo : null,
+
+            'puntos_ganado' => $this->puntos_ganado,
+            'puntos_empatado' =>  $this->puntos_empatado,
+            'puntos_perdido' => $this->puntos_perdido,
             'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
             'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
             'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
-            'categoria_id' => $this->categoria_id,
+            'categoria_id' => (int) $this->categoria_id,
         ]);
         // Guardar criterios de desempate
         foreach ($this->criterios as $index => $criterio) {
@@ -159,8 +163,17 @@ class CampeonatoCrear extends Component
             ]);
         }
 
-        session()->flash('success', 'Campeonato creado correctamente.');
-        return redirect()->route('campeonato.index');
+
+        Swal::toast([
+            'title' => 'Perfecto!!',
+            'text' => 'Campeonato creado correctamente.',
+            'icon' => 'success',
+            'confirmButtonText' => 'OK'
+        ]);
+
+
+
+        return redirect()->route('campeonato.index'); // Redirige a la lista de campeonatos
     }
 
 
