@@ -6,15 +6,18 @@ use App\NormalizesAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cancha extends Model
+class Estadio extends Model
 {
     use HasFactory;
     use NormalizesAttributes;
 
-    protected $normalizable = ['nombre', 'direccion', 'ciudad'];
+    protected $normalizable = ['nombre', 'direccion', 'ciudad', 'provincia', 'cod_pos', 'otros'];
     protected $fillable = [
         'nombre',
         'direccion',
         'ciudad',
+        'provincia',
+        'cod_pos',
+        'otros',
     ];
 }

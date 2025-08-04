@@ -60,7 +60,6 @@ class JugadoresIndex extends Component
             ->warning()
             ->toast()
             ->position('top')
-            ->timer(15000)
             ->show();
 
         $this->jugadores = Jugador::orderBy('apellido')->get(); // Refresh the list of equipos */

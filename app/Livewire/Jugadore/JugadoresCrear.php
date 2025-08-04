@@ -5,6 +5,7 @@ namespace App\Livewire\Jugadore;
 use App\Models\Jugador;
 use Illuminate\Validation\ValidationException;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class JugadoresCrear extends Component
@@ -48,8 +49,17 @@ class JugadoresCrear extends Component
             'provincia' => 'nullable|string|max:255',
             'nacimiento' => 'nullable|date',
             'cod_pos' => 'nullable|string|max:10',
-            'equipo_seleccionado' => 'nullable|exists:equipos,id',
+            'equipo_seleccionado' => 'required|exists:equipos,id',
 
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'apellido.required' => 'El apellido es obligatorio.',
+            'documento.required' => 'El número de documento es obligatorio.',
+            'documento.numeric' => 'El documento debe ser un número.',
+            'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
+            'email.email' => 'El correo electrónico no es válido.',
+            'equipo_seleccionado.required' => 'Debe seleccionar un equipo.',
+            'equipo_seleccionado.exists' => 'El equipo seleccionado no es válido.',
         ]);
 
         // Logic to save the player data goes here
@@ -87,12 +97,15 @@ class JugadoresCrear extends Component
         ]);
 
         $this->reset(); // Limpia todo
-        LivewireAlert::title('Jugador Creado')
-            ->text('El jugador se ha creado correctamente.')
-            ->success()
-            ->toast()
-            ->position('top')
-            ->show();
+        $this->dispatch('jugador-creado');
+        // Dispatch an event to notify other components
+
+    }
+
+    #[On('redirigirIndex')]
+    public function redirigirIndex()
+    {
+        return redirect()->route('jugadores.index');
     }
 
     public function render()

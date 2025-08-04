@@ -10,6 +10,9 @@ use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
+use App\Livewire\Estadios\EstadiosCrear;
+use App\Livewire\Estadios\EstadiosEditar;
+use App\Livewire\Estadios\EstadiosIndex;
 use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
@@ -59,6 +62,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/categoria/crear', CategoriaCrear::class)->name('categoria.crear');
     Route::get('/categoria/{categoriaId}/editar', CategoriaEdit::class)->name('categoria.editar');
     //==============FIN CATEGORIA========================  
+    //==============FIN ESTADIOS======================== 
+    Route::get('/estadios', EstadiosIndex::class)->name('estadios.index');
+    Route::get('/estadios/crear', EstadiosCrear::class)->name('estadios.crear');
+    Route::get('/estadios/{estadioId}/editar', EstadiosEditar::class)->name('estadios.editar');
+    //==============FIN ESTADIOS========================
 
 });
 
