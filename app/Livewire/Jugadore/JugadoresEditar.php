@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Jugadore;
 
-use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class JugadoresEditar extends Component
@@ -51,22 +53,36 @@ class JugadoresEditar extends Component
 
     public function actualizarJugador()
     {
-        $this->validate([
-            'documento' => 'required|string|max:20',
-            'tipo_documento' => 'required|string|max:20',
-            'nombre' => 'nullable|string|max:255',
-            'apellido' => 'nullable|string|max:255',
-            'nacimiento' => 'nullable|date',
-            'num_socio' => 'nullable|integer',
-            'telefono' => 'nullable|string|max:15',
-            'email' => 'nullable|email|max:255',
-            'direccion' => 'nullable|string|max:255',
-            'ciudad' => 'nullable|string|max:255',
-            'provincia' => 'nullable|string|max:255',
-            'cod_pos' => 'nullable|string|max:10',
-            'foto' => 'nullable|image|max:2048',
-            'activo' => 'boolean' // Validación para la foto
-        ]);
+        try {
+            $this->validate([
+                'documento' => 'required|string|max:20',
+                'tipo_documento' => 'required|string|max:20',
+                'nombre' => 'nullable|string|max:255',
+                'apellido' => 'nullable|string|max:255',
+                'nacimiento' => 'nullable|date',
+                'num_socio' => 'nullable|integer|unique:jugadors,num_socio,' . $this->jugadorId,
+                'telefono' => 'nullable|string|max:15',
+                'email' => 'nullable|email|max:255',
+                'direccion' => 'nullable|string|max:255',
+                'ciudad' => 'nullable|string|max:255',
+                'provincia' => 'nullable|string|max:255',
+                'cod_pos' => 'nullable|string|max:10',
+                'foto' => 'nullable|image|max:2048',
+                'activo' => 'boolean'
+            ], [
+                'documento.required' => 'El campo documento es obligatorio.',
+                'documento.max' => 'El documento no debe tener más de 20 caracteres.',
+                'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
+                'num_socio.unique' => 'El número de socio ya está en uso.',
+                'email.email' => 'El formato del correo no es válido.',
+                'foto.image' => 'La foto debe ser una imagen.',
+                'foto.max' => 'La foto no debe superar los 2 MB.',
+            ]);
+        } catch (ValidationException $e) {
+            $errores = collect($e->validator->errors()->all())->implode("\n");
+            $this->dispatch('alertaError', message: $errores);
+            throw $e; // opcional: si querés que también se muestren los errores normales
+        }
 
         $jugador = \App\Models\Jugador::findOrFail($this->jugadorId);
         $jugador->update([
@@ -87,12 +103,13 @@ class JugadoresEditar extends Component
             // Aquí deberías manejar la lógica de subida de archivos
         ]);
 
-        LivewireAlert::title('Jugador Actualizado')
-            ->text('El jugador se ha actualizado correctamente.')
-            ->success()
-            ->toast()
-            ->position('top')
-            ->show();
+        $this->dispatch('actualizado');
+    }
+
+    #[On('index')]
+    public function index()
+    {
+        return redirect()->route('jugadores.index');
     }
 
     public function render()

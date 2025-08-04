@@ -78,9 +78,53 @@
                     'success'
                 );
             });
+            //para errroes de validación
+            Livewire.on('alertaError', (event) => {
+                const message = event.message; // Accede a los datos del evento
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errores de validación',
+                    text: message.replace(/\n/g, '\n'),
+                    customClass: {
+                        popup: 'text-sm'
+                    }
+                });
+            });
         });
     </script>
     @endpush
+
+    <!-- VALIDACION -->
+    try {
+    $this->validate([
+    'documento' => 'required|string|max:20',
+    'tipo_documento' => 'required|string|max:20',
+    'nombre' => 'nullable|string|max:255',
+    'apellido' => 'nullable|string|max:255',
+    'nacimiento' => 'nullable|date',
+    'num_socio' => 'nullable|integer|unique:jugadors,num_socio,' . $this->jugadorId,
+    'telefono' => 'nullable|string|max:15',
+    'email' => 'nullable|email|max:255',
+    'direccion' => 'nullable|string|max:255',
+    'ciudad' => 'nullable|string|max:255',
+    'provincia' => 'nullable|string|max:255',
+    'cod_pos' => 'nullable|string|max:10',
+    'foto' => 'nullable|image|max:2048',
+    'activo' => 'boolean'
+    ], [
+    'documento.required' => 'El campo documento es obligatorio.',
+    'documento.max' => 'El documento no debe tener más de 20 caracteres.',
+    'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
+    'num_socio.unique' => 'El número de socio ya está en uso.',
+    'email.email' => 'El formato del correo no es válido.',
+    'foto.image' => 'La foto debe ser una imagen.',
+    'foto.max' => 'La foto no debe superar los 2 MB.',
+    ]);
+    } catch (ValidationException $e) {
+    $errores = collect($e->validator->errors()->all())->implode("\n");
+    $this->dispatch('alertaError', message: $errores);
+    throw $e; // opcional: si querés que también se muestren los errores normales
+    }
     <!-- MODAL -->
 
     <style>

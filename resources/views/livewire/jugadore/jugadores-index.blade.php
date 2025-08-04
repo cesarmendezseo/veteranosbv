@@ -290,5 +290,42 @@
              </div>
          </div>
      </div>
+     @push('js')
+     <script>
+         document.addEventListener('livewire:initialized', () => {
 
+
+
+             Livewire.on('confirmar-baja', ({
+                 id
+             }) => {
+
+
+                 Swal.fire({
+                     title: 'CUIDADO...',
+                     text: "¿Estás seguro de borrar al el Campeonato?",
+                     icon: 'warning',
+                     showCancelButton: true,
+                     confirmButtonColor: '#3085d6',
+                     cancelButtonColor: '#d33',
+                     confirmButtonText: 'Sí, Borrar'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         Livewire.dispatch('eliminar-campeonato', {
+                             id: id
+                         });
+                     }
+                 });
+             });
+
+             Livewire.on('Baja', () => {
+                 Swal.fire(
+                     '¡Baja exitosa!',
+                     'El campeonato se ha borrado correctamente.',
+                     'success'
+                 );
+             });
+         });
+     </script>
+     @endpush
  </div>

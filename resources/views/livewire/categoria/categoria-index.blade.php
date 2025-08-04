@@ -36,10 +36,10 @@
              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="text-base font-semibold">{{$categoria->nombre}}</div>
+                     <div class="text-base font-semibold">{{ucwords($categoria->nombre)}}</div>
                  </th>
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="font-normal text-gray-500"> {{$categoria->descripcion}}</div>
+                     <div class="font-normal text-gray-500"> {{ucfirst($categoria->descripcion)}}</div>
                  </th>
                  <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
                  <td class="px-6 py-4 text-center">
@@ -152,6 +152,11 @@
      </table>
 
      {{-- Modal --}}
+     <style>
+         [x-cloak] {
+             display: none !important;
+         }
+     </style>
      <div x-data="{ show: false }"
          x-show="show"
          x-on:static-modal.window="show = true"

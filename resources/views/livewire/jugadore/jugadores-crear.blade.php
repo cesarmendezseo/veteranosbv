@@ -47,6 +47,7 @@
                     <label for="floating_first_name"
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">DNI
                     </label>
+
                 </div>
                 <!-- FECHA NACIMIENTO -->
                 <div class="relative z-0 w-full mb-5 group">
@@ -58,9 +59,7 @@
                         </div>
                         <input wire:model="nacimiento" datepicker id="default-datepicker" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
                     </div>
-                    @error('nacimiento')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+
                 </div>
                 <!-- SOCIO -->
                 <div class="relative z-0 w-full mb-5 group">
@@ -71,9 +70,7 @@
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">N° Socio
                     </label>
                 </div>
-                @error('socio')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+
                 <!-- TELEFONO -->
                 <div class="relative z-0 w-full mb-5 group">
                     <input wire:model="telefono" type="number" name="telefono" id="floating_first_name" value="{{ old('telefono') }}"
@@ -83,9 +80,7 @@
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Teléfono
                     </label>
                 </div>
-                @error('telefono')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+
                 <!-- EMAIL -->
                 <div class="relative z-0 w-full mb-5 group">
                     <input wire:model="email" type="email" name="email" id="floating_first_name" value="{{ old('email') }}"
@@ -95,9 +90,7 @@
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email
                     </label>
                 </div>
-                @error('email')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+
                 <!-- direccion -->
                 <div class="relative z-0 w-full mb-5 group">
                     <input wire:model="direccion" type="text" name="direccion" id="floating_first_name" value="{{ old('direccion') }}"
@@ -107,9 +100,7 @@
                         class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Dirección
                     </label>
                 </div>
-                @error('direccion')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+
                 <!-- CIUDAD -->
                 <div class="relative z-0 w-full mb-5 group">
                     <input wire:model="ciudad" type="text" name="ciudad" id="floating_first_name" value="{{ old('ciudad') }}"
@@ -195,14 +186,9 @@
     @push('js')
     <script>
         document.addEventListener('livewire:initialized', () => {
-
-
-
-            Livewire.on('jugador-creado', ({
+            Livewire.on('creado', ({
                 id
             }) => {
-
-
                 Swal.fire({
                     title: 'Exito...',
                     text: "Jugador creado correctamente",
@@ -213,20 +199,25 @@
                     confirmButtonText: 'Ok'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('redirigirIndex', {
+                        Livewire.dispatch('index', {
                             id: id
                         });
                     }
                 });
             });
-
-            Livewire.on('jugadorCreado', () => {
-                Swal.fire(
-                    '¡jugador Creado!',
-                    'El jugador se ha creado correctamente.',
-                    'success'
-                );
+            //para errroes de validación
+            Livewire.on('alertaError', (event) => {
+                const message = event.message; // Accede a los datos del evento
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Errores de validación',
+                    text: message.replace(/\n/g, '\n'),
+                    customClass: {
+                        popup: 'text-sm'
+                    }
+                });
             });
+
         });
     </script>
     @endpush

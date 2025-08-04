@@ -35,49 +35,40 @@ class JugadoresCrear extends Component
     public function guardar()
     {
 
+        try {
+            $this->validate([
+                'nombre' => 'required|string|max:255',
+                'apellido' => 'required|string|max:255',
+                'documento' => 'required|numeric|unique:jugadors,documento',
+                'tipo_documento' => 'required|string|max:50',
+                'socio' => 'nullable|numeric|unique:jugadors,num_socio',
+                'telefono' => 'nullable|numeric',
+                'email' => 'nullable|email|max:255',
+                'direccion' => 'nullable|string|max:255',
+                'ciudad' => 'nullable|string|max:255',
+                'provincia' => 'nullable|string|max:255',
+                'nacimiento' => 'nullable|date',
+                'cod_pos' => 'nullable|string|max:10',
+                'equipo_seleccionado' => 'required|exists:equipos,id',
 
-        $this->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'documento' => 'required|numeric',
-            'tipo_documento' => 'required|string|max:50',
-            'socio' => 'nullable|numeric',
-            'telefono' => 'nullable|numeric',
-            'email' => 'nullable|email|max:255',
-            'direccion' => 'nullable|string|max:255',
-            'ciudad' => 'nullable|string|max:255',
-            'provincia' => 'nullable|string|max:255',
-            'nacimiento' => 'nullable|date',
-            'cod_pos' => 'nullable|string|max:10',
-            'equipo_seleccionado' => 'required|exists:equipos,id',
-
-        ], [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'apellido.required' => 'El apellido es obligatorio.',
-            'documento.required' => 'El número de documento es obligatorio.',
-            'documento.numeric' => 'El documento debe ser un número.',
-            'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
-            'email.email' => 'El correo electrónico no es válido.',
-            'equipo_seleccionado.required' => 'Debe seleccionar un equipo.',
-            'equipo_seleccionado.exists' => 'El equipo seleccionado no es válido.',
-        ]);
-
-        // Logic to save the player data goes here
-        $existe = Jugador::where('documento', $this->documento)->exists();
-        if ($existe) {
-            throw ValidationException::withMessages(
-                [
-                    'documento' => 'El jugador ya existe en la base de datos.',
-                    LivewireAlert::title('Error!')
-                        ->text('El jugador ya existe en la base de datos.')
-                        ->error()
-                        ->toast()
-                        ->position('top')
-                        /* ->timer(1500) */
-                        ->show()
-                ]
-            );
+            ], [
+                'documento.unique' => 'El número de documento ya está registrado.',
+                'nombre.required' => 'El nombre es obligatorio.',
+                'apellido.required' => 'El apellido es obligatorio.',
+                'documento.required' => 'El número de documento es obligatorio.',
+                'documento.numeric' => 'El documento debe ser un número.',
+                'socio.unique' => 'El número de socio ya está registrado.',
+                'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
+                'email.email' => 'El correo electrónico no es válido.',
+                'equipo_seleccionado.required' => 'Debe seleccionar un equipo.',
+                'equipo_seleccionado.exists' => 'El equipo seleccionado no es válido.',
+            ]);
+        } catch (ValidationException $e) {
+            $errores = collect($e->validator->errors()->all())->implode("\n");
+            $this->dispatch('alertaError', message: $errores);
+            throw $e; // opcional: si querés que también se muestren los errores normales
         }
+
 
         Jugador::create([
             'nombre' => $this->nombre,
@@ -97,13 +88,13 @@ class JugadoresCrear extends Component
         ]);
 
         $this->reset(); // Limpia todo
-        $this->dispatch('jugador-creado');
+        $this->dispatch('creado');
         // Dispatch an event to notify other components
 
     }
 
-    #[On('redirigirIndex')]
-    public function redirigirIndex()
+    #[On('index')]
+    public function index()
     {
         return redirect()->route('jugadores.index');
     }
