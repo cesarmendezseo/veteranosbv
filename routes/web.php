@@ -7,6 +7,7 @@ use App\Livewire\Campeonato\CampeonatoEditar;
 use App\Livewire\Campeonato\CampeonatoIndex;
 use App\Livewire\Categoria\CategoriaCrear;
 use App\Livewire\Categoria\CategoriaEdit;
+use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
@@ -67,6 +68,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/estadios/crear', EstadiosCrear::class)->name('estadios.crear');
     Route::get('/estadios/{estadioId}/editar', EstadiosEditar::class)->name('estadios.editar');
     //==============FIN ESTADIOS========================
+    //==============ASIGNAR EQUIPOS========================
+    Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');
+    //==============FIN ASIGNAR EQUIPOS========================
 
 });
 

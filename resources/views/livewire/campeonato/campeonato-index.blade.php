@@ -114,6 +114,19 @@
                                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                              </svg>
                          </button>
+                         {{-- ASIGNAR EQUIPO --}}
+                         <a href="{{ route('asignar-equipos', $campeonato->id) }}"
+                             class="mb-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
+                            focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
+                            shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
+                            font-medium rounded-full text-sm
+                            h-10 w-10 flex items-center justify-center"
+                             title="Equipos">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt-icon lucide-shirt">
+                                 <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                             </svg>
+
+                         </a>
 
 
 
@@ -150,10 +163,10 @@
                              {{-- Borrar --}}
                              <button wire:click="$dispatch('confirmar-baja', { id: {{ $campeonato->id }} })"
                                  class="mb-1 text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br
-    focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
-    shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80
-    font-medium rounded-full text-sm
-    h-10 w-10 flex items-center justify-center cursor-pointer"
+                                    focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
+                                    shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80
+                                    font-medium rounded-full text-sm
+                                    h-10 w-10 flex items-center justify-center cursor-pointer"
                                  title="Borrar">
                                  {{-- SVG Icon --}}
                              </button>
@@ -172,20 +185,25 @@
                                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                  </svg>
                              </button>
+                             {{-- ASIGNAR EQUIPO --}}
+                             <a href="{{ route('asignar-equipos', $campeonato->id) }}"
+                                 class="mb-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
+                            focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
+                            shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
+                            font-medium rounded-full text-sm
+                            h-10 w-10 flex items-center justify-center"
+                                 title="Equipos">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt-icon lucide-shirt">
+                                     <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                                 </svg>
 
-
+                             </a>
                          </div>
                      </div>
                  </td>
-
-
-
              </tr>
              @endforeach
-
-
          </tbody>
-
      </table>
 
      {{-- Modal --}}
