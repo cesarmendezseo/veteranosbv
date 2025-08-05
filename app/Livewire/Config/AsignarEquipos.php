@@ -15,6 +15,7 @@ class AsignarEquipos extends Component
     public $grupoSeleccionado;
     public $equiposSeleccionados = [];
     public $equiposDisponibles;
+    public $grupoNombre;
 
     public function mount($campeonatoId)
     {
@@ -46,7 +47,8 @@ class AsignarEquipos extends Component
     public function asignarEquiposAGrupo()
     {
         if (empty($this->equiposSeleccionados)) {
-            session()->flash('error', 'Por favor, selecciona al menos un equipo.');
+
+            $this->dispatch('selecionarEquipos');
             return;
         }
 
@@ -61,6 +63,7 @@ class AsignarEquipos extends Component
                 if ($yaAsignado) {
                     $equipo = Equipo::find($equipoId);
                     session()->flash('error', "El equipo '{$equipo->nombre}' ya está asignado.");
+
                     return;
                 }
 
@@ -92,7 +95,9 @@ class AsignarEquipos extends Component
             $limite = $this->campeonato->cantidad_equipos_grupo;
 
             if ($totalActual + $totalAAgregar > $limite) {
-                session()->flash('error', "Este grupo solo permite un máximo de $limite equipos. Ya tiene $totalActual.");
+                $grupoNombre = ucwords($grupo->nombre);
+
+                $this->dispatch('errorEquipoAsignado', $grupoNombre);
                 return;
             }
 
@@ -123,7 +128,8 @@ class AsignarEquipos extends Component
         $this->cargarCampeonato();
         $this->cargarEquiposDisponibles();
 
-        session()->flash('success', 'Equipos asignados correctamente.');
+
+        $this->dispatch('equiposAsignados');
     }
 
 
