@@ -5,6 +5,9 @@ use App\Http\Controllers\LogoEquipoController;
 use App\Livewire\Campeonato\Campeonatocrear;
 use App\Livewire\Campeonato\CampeonatoEditar;
 use App\Livewire\Campeonato\CampeonatoIndex;
+use App\Livewire\Canchas\CanchasCrear;
+use App\Livewire\Canchas\CanchasEditar;
+use App\Livewire\Canchas\CanchasIndex;
 use App\Livewire\Categoria\CategoriaCrear;
 use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Config\AsignarEquipos;
@@ -64,9 +67,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/categoria/{categoriaId}/editar', CategoriaEdit::class)->name('categoria.editar');
     //==============FIN CATEGORIA========================  
     //==============FIN ESTADIOS======================== 
-    Route::get('/estadios', EstadiosIndex::class)->name('estadios.index');
-    Route::get('/estadios/crear', EstadiosCrear::class)->name('estadios.crear');
-    Route::get('/estadios/{estadioId}/editar', EstadiosEditar::class)->name('estadios.editar');
+    Route::get('/estadios', CanchasIndex::class)->name('canchas.index');
+    Route::get('/estadios/crear', CanchasCrear::class)->name('canchas.crear');
+    Route::get('/estadios/{estadioId}/editar', CanchasEditar::class)->name('canchas.editar');
     //==============FIN ESTADIOS========================
     //==============ASIGNAR EQUIPOS========================
     Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');

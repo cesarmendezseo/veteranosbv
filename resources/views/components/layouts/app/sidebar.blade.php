@@ -32,7 +32,7 @@
                 <flux:navlist.group expandable heading="Config" class="hidden lg:grid">
                     <flux:navlist.item icon="trophy" :href="route('campeonato.index')" :current="request()->routeIs('campeonato.index')" wire:navigate>{{ __('Campeonato') }}</flux:navlist.item>
                     <flux:navlist.item icon="shield-check" :href="route('categoria.index')" :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}</flux:navlist.item>
-                    <flux:navlist.item icon="device-phone-mobile" :href="route('estadios.index')" :current="request()->routeIs('estadios.index')" wire:navigate>{{ __('Estadios') }}</flux:navlist.item>
+                    <flux:navlist.item icon="device-phone-mobile" :href="route('canchas.index')" :current="request()->routeIs('Canchas.index')" wire:navigate>{{ __('Canchas') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist.group>
         </flux:navlist>
