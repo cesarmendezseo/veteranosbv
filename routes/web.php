@@ -17,6 +17,9 @@ use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Estadios\EstadiosCrear;
 use App\Livewire\Estadios\EstadiosEditar;
 use App\Livewire\Estadios\EstadiosIndex;
+use App\Livewire\Fixture\FixtureCrear;
+use App\Livewire\Fixture\FixtureEditar;
+use App\Livewire\Fixture\FixtureIndex;
 use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
@@ -70,6 +73,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/estadios', CanchasIndex::class)->name('canchas.index');
     Route::get('/estadios/crear', CanchasCrear::class)->name('canchas.crear');
     Route::get('/estadios/{estadioId}/editar', CanchasEditar::class)->name('canchas.editar');
+    //==============FIN ESTADIOS========================
+    //==============FIXTURE======================== 
+    Route::get('/fixture', FixtureIndex::class)->name('fixture.index');
+    Route::get('/fixture/crear', FixtureCrear::class)->name('fixture.crear');
+    Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
     //==============FIN ESTADIOS========================
     //==============ASIGNAR EQUIPOS========================
     Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');

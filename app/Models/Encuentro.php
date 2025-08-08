@@ -46,7 +46,7 @@ class Encuentro extends Model
     }
     public function cancha()
     {
-        return $this->belongsTo(Cancha::class);
+        return $this->belongsTo(Canchas::class);
     }
     public function grupo()
     {
