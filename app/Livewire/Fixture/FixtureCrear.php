@@ -213,8 +213,8 @@ class FixtureCrear extends Component
                 'equipo_visitante_id',
                 'estado',
                 'jornada', // ¿Faltaba este campo?
-                'grupo_id',
-                'campeonato_id', // Reseteamos el campeonato_id para que se pueda seleccionar otro
+
+                // Reseteamos el campeonato_id para que se pueda seleccionar otro
             ]);
         } catch (\Exception $e) {
             logger()->error('Error al guardar: ' . $e->getMessage());
