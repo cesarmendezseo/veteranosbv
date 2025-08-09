@@ -7,7 +7,7 @@
                 class="border border-gray-300 rounded px-3 py-2 w-full text-sm sm:text-base">
                 <option value="">-- Selecciona un campeonato --</option>
                 @foreach ($campeonatos as $campeonato)
-                <option value="{{ $campeonato->id }}">{{ $campeonato->nombre }}</option>
+                <option value="{{ $campeonato->id }}">{{ strtoupper($campeonato->nombre) }}</option>
                 @endforeach
             </select>
         </div>
@@ -43,17 +43,17 @@
     </div>
     <flux:separator />
     <!-- Tabla de posiciones -->
-    <div class="p-2 sm:p-4">
+    <div class="p-2 sm:p-4 shadow-md bg-white dark:bg-gray-800 rounded-lg">
         @foreach ($posiciones as $grupoNombre => $tablaGrupo)
         <h2 class="text-lg font-bold mt-4 mb-2 text-center bg-gray-300 dark:bg-gray-600 py-1 rounded">
-            {{ $grupoNombre }}
+            {{ ucwords($grupoNombre) }}
         </h2>
-        <div class="overflow-x-auto mb-6">
-            <table class="w-full text-xs sm:text-sm text-center border border-gray-300">
-                <thead class="bg-gray-200 dark:bg-gray-700 dark:text-[#b8ae2a] dark:font-bold">
+        <div class="overflow-x-auto mb-6 shadow-md">
+            <table class="w-full text-xs sm:text-sm text-center border border-gray-300 ">
+                <thead class="bg-gray-700 text-gray-100 dark:bg-gray-700 dark:text-[#b8ae2a] dark:font-bold">
                     <tr>
-                        <th class="border px-1 md:px-2 py-1 sticky left-0 bg-gray-200 dark:bg-gray-700 z-10">#</th>
-                        <th class="border px-1 md:px-2 py-1 text-left sticky left-12 bg-gray-200 dark:bg-gray-700 z-10 min-w-[100px]">EQUIPOS</th>
+                        <th class="border px-1 md:px-2 py-1 sticky left-0 dark:bg-gray-700 z-10">#</th>
+                        <th class="border px-1 md:px-2 py-1 text-left sticky left-12 dark:bg-gray-700 z-10 min-w-[100px]">EQUIPOS</th>
                         <th class="border px-1 md:px-2 py-1 ">PJ</th>
                         <th class="border px-1 md:px-2 py-1">PG</th>
                         <th class="border px-1 md:px-2 py-1">PE</th>

@@ -1,6 +1,7 @@
 <div>
     {{-- Contenedor principal del componente --}}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-200 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+        {{-- TÍTULO --}}
         {{-- SELECCIONAMOS EL CAMPEONATO --}}
         <div class="mb-4">
             <label class="block font-medium text-base dark:text-[#FFC107]">Torneo</label>
@@ -51,7 +52,7 @@
                     <span class="text-black">{{ strtoupper($this->nombreLocal) }}</span>
                 </h2>
             </div>
-            <div class="max-h-96 overflow-y-auto shadow-lg rounded-lg">
+            <div class="max-h-96 overflow-y-auto  bg-gray-200  rounded-lg shadow-md">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-800 dark:text-gray-100">
                         <tr>
@@ -64,7 +65,11 @@
                     </thead>
                     <tbody>
                         @foreach ($jugadoresLocal as $index => $jugador)
-                        <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                        <tr class="odd:bg-white odd:dark:bg-gray-900 
+           even:bg-gray-100 even:dark:bg-gray-800
+           border-b dark:border-gray-700 border-gray-200
+           transition-colors duration-150
+           hover:bg-blue-100 dark:hover:bg-blue-900">
                             <input type="hidden" wire:model.defer="datosJugadores.{{ $jugador->id }}.equipo_id">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ strtoupper($jugador->apellido) }}, {{ strtoupper($jugador->nombre) }}

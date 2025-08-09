@@ -16,7 +16,8 @@
         </div>
         @endif
     </flux:navbar>
-    <div class="mb-4 grid grid-cols-2 md:grid-cols-2 gap-4">
+    <flux:separator class="bt-2 mb-2" />
+    <div class="mb-4 grid grid-cols-2 md:grid-cols-2 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
         <!-- Año -->
 
         <div>
@@ -46,7 +47,7 @@
     </div>
 
     <!-- Filtros -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
 
         <!-- Fecha -->

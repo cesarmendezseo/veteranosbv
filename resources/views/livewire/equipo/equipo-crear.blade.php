@@ -2,6 +2,7 @@
 
     <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-4 text-3xl font-bold text-gray-900 dark:text-white underline">Crear Equipo</h5>
+        <flux:separator class="mb-2" />
         <form wire:submit.prevent="guardar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
             @csrf
             <div class="grid md:grid-cols-2 md:gap-6">

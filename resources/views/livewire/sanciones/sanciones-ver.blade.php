@@ -1,8 +1,9 @@
 <div class="space-y-4">
 
     {{-- Filtros --}}
-    <div class="flex flex-col sm:flex-row gap-2">
-        <select wire:model.live="campeonato_id" class="border rounded-lg p-2 flex-1 text-sm sm:text-base">
+    <div class="flex flex-col sm:flex-row gap-2 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shawdon-md">
+        {{-- Campeonato --}}
+        <select wire:model.live="campeonato_id" class="border border-gray-500 rounded-lg p-2 flex-1 text-sm sm:text-base">
             <option value="">-- Selecciona un campeonato --</option>
             @foreach ($campeonatos as $camp)
             <option value="{{ $camp->id }}">{{ strtoupper($camp->nombre) }}</option>
@@ -10,13 +11,13 @@
         </select>
 
         <input type="text" wire:model.defer="search" wire:keydown.enter="updateSearch" placeholder="Buscar jugador..."
-            class="border rounded-lg p-2 flex-1 text-sm sm:text-base" />
+            class="border  border-gray-500  rounded-lg p-2 flex-1 text-sm sm:text-base" />
     </div>
 
     {{-- Tabla --}}
     <div class="overflow-x-auto bg-white shadow rounded-lg">
         <table class="w-full text-sm sm:text-base text-left rtl:text-right text-gray-500 dark:text-gray-100">
-            <thead class="text-xs sm:text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-[#FFC107]">
+            <thead class="text-xs sm:text-sm text-gray-50 uppercase bg-gray-700 dark:bg-gray-700 dark:text-[#FFC107]">
                 <tr>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Documento</th>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Jugador</th>

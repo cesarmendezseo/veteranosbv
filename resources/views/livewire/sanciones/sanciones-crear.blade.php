@@ -12,7 +12,7 @@
     <hr class="m-2">
 
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div>
 
             <label for="first_name" class="block m-2 dark:text-[#FFC107]">Buscar por
@@ -26,7 +26,7 @@
             <label class="block m-2 dark:text-[#FFC107]">Jugador</label>
             <select wire:model="jugador_id"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">Seleccionar jugador</option>
+                <option value=""></option>
                 @foreach ($jugadores as $jugador)
                 <option value="{{ $jugador->id }}">
                     {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }} {{strtoupper($jugador->nombre) }}
@@ -50,7 +50,7 @@
         <div>
             <label class="block m-2 dark:text-[#FFC107]">Sanción</label>
             <select wire:model="motivo"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-25 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-50 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">Tipo Sancion</option>
                 <option value="5 amarillas">5 amarillas</option>
                 <option value="doble amarilla">Doble amarilla</option>
@@ -59,7 +59,7 @@
         </div>
     </div>
     <hr class="m-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4  bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
             <div>
                 <label class="block m-2 dark:text-[#FFC107]">Jornada de sanción</label>
