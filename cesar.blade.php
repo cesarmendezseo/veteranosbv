@@ -207,3 +207,9 @@
             </div>
         </div>
     </div>
+
+    $user = new App\Models\User;
+    $user->name = 'Administrador';
+    $user->email = 'cesarmendez.seo@gmail.com';
+    $user->password = bcrypt('C3tr0g4r*30'); // Nunca guardes texto plano
+    $user->save();

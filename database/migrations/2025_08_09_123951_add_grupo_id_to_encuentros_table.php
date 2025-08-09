@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('encuentros', function (Blueprint $table) {
-            $table->dropColumn('equipo_id');
-            $table->dropColumn('estadio');
+            $table->unsignedBigInteger('grupo_id')->nullable()->after('campeonato_id');
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('encuentros', function (Blueprint $table) {
-            //
+            $table->dropColumn('grupo_id');
         });
     }
 };

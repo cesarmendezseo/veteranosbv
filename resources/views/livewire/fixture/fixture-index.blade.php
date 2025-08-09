@@ -89,7 +89,6 @@
 
 
 
-
     <div class="overflow-x-auto bg-gray-100 dark:bg-gray-900 p-4 shadow-md sm:rounded-lg">
         @foreach ($encuentrosAgrupados as $nombreCancha => $encuentros)
         <div class="mb-6">

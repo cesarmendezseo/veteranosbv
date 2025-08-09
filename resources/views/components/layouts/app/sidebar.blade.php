@@ -25,13 +25,17 @@
                     <flux:navlist.item icon="eye" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
                     <flux:navlist.item icon="plus-circle" :href="route('equipo.crear')" :current="request()->routeIs('equipo.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
                 </flux:navlist.group>
-                <flux:navlist.group expandable heading="Jugadores" class="hidden lg:grid">
+                <flux:navlist.group expandable heading="Jugadores" class="hidden lg:grid ">
                     <flux:navlist.item icon="eye" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
                     <flux:navlist.item icon="plus-circle" :href="route('jugadores.crear')" :current="request()->routeIs('jugadores.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
                 </flux:navlist.group>
-                <flux:navlist.group expandable heading="Fixture" class="hidden lg:grid">
+                <flux:navlist.group expandable heading="Fixture" class="hidden lg:grid ">
                     <flux:navlist.item icon="eye" :href="route('fixture.index')" :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
                     <flux:navlist.item icon="plus-circle" :href="route('fixture.crear')" :current="request()->routeIs('fixture.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
+                </flux:navlist.group>
+                <flux:navlist.group expandable heading="Estadistica" class="hidden lg:grid">
+                    <flux:navlist.item icon="eye" :href="route('estadistica.index')" :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
+                    <flux:navlist.item icon="plus-circle" :href="route('estadistica.ver')" :current="request()->routeIs('estadistica.ver')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
                 </flux:navlist.group>
 
                 <flux:navlist.group expandable heading="Config" class="hidden lg:grid">

@@ -23,6 +23,7 @@ use App\Livewire\Fixture\FixtureIndex;
 use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
+use App\Livewire\Sanciones\SancionesIndex;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -89,6 +90,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/exportar-encuentros', [FixtureCrear::class, 'exportar'])->name('encuentros.exportar');
     //==============FIN TABLA DE POSICIONES========================
 
+    //==============SANCIONES========================
+    Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
+    Route::get('/sanciones/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
+    Route::get('/sanciones/actualizar-cumplimientos', [\App\Livewire\Sanciones\SancionesCrear::class, 'actualizarCumplimientosSanciones'])->name('sanciones.actualizar-cumplimientos');
+    //==============FIN SANCIONES========================
+    //==============ESTADISTICA========================
+    Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
+    Route::get('/estadistica/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
 });
 
 require __DIR__ . '/auth.php';
