@@ -5,7 +5,7 @@
         <select wire:model.live="campeonato_id" class="border rounded-lg p-2 flex-1 text-sm sm:text-base">
             <option value="">-- Selecciona un campeonato --</option>
             @foreach ($campeonatos as $camp)
-            <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+            <option value="{{ $camp->id }}">{{ strtoupper($camp->nombre) }}</option>
             @endforeach
         </select>
 
@@ -33,7 +33,7 @@
                     class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                     <td class="px-2 sm:px-4 py-2 hidden sm:table-cell">{{ $jug->jugador->documento }}</td>
                     <td class="px-2 sm:px-4 py-2 hidden sm:table-cell">
-                        {{ $jug->jugador->apellido }}, {{ $jug->jugador->nombre }}
+                        {{ strtoupper($jug->jugador->apellido) }}, {{ strtoupper($jug->jugador->nombre )}}
                     </td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ $jug->fecha_sancion }}</td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ ucwords($jug->motivo) }}</td>
@@ -41,7 +41,7 @@
                     </td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ $jug->partidos_cumplidos }}
                     </td>
-                    <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ $jug->observacion }}</td>
+                    <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ ucfirst($jug->observacion )}}</td>
                 </tr>
 
                 {{-- Fila adicional para móviles que muestra información resumida --}}

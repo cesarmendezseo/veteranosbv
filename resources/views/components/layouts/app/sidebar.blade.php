@@ -20,23 +20,14 @@
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.item icon="shield-ban" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Equipo') }}</flux:navlist.item>
+                <flux:navlist.item icon="users" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Jugadores') }}</flux:navlist.item>
+                <flux:navlist.item icon="circuit-board" :href="route('fixture.index')" :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Fixture') }}</flux:navlist.item>
+                <flux:navlist.item icon="book-user" :href="route('estadistica.index')" :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadistica') }}</flux:navlist.item>
+                <flux:navlist.item icon="id-card" :href="route('sanciones.index')" :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Sanciones') }}</flux:navlist.item>
+                <flux:navlist.item icon="clipboard-list" :href="route('tabla-posiciones')" :current="request()->routeIs('tabla-posiciones')" wire:navigate>{{ __('Tabla Posición') }}</flux:navlist.item>
 
-                <flux:navlist.group expandable heading="Equipo" icon="users" class="hidden lg:grid">
-                    <flux:navlist.item icon="eye" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
-                    <flux:navlist.item icon="plus-circle" :href="route('equipo.crear')" :current="request()->routeIs('equipo.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
-                </flux:navlist.group>
-                <flux:navlist.group expandable heading="Jugadores" class="hidden lg:grid ">
-                    <flux:navlist.item icon="eye" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
-                    <flux:navlist.item icon="plus-circle" :href="route('jugadores.crear')" :current="request()->routeIs('jugadores.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
-                </flux:navlist.group>
-                <flux:navlist.group expandable heading="Fixture" class="hidden lg:grid ">
-                    <flux:navlist.item icon="eye" :href="route('fixture.index')" :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
-                    <flux:navlist.item icon="plus-circle" :href="route('fixture.crear')" :current="request()->routeIs('fixture.crear')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
-                </flux:navlist.group>
-                <flux:navlist.group expandable heading="Estadistica" class="hidden lg:grid">
-                    <flux:navlist.item icon="eye" :href="route('estadistica.index')" :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Ver') }}</flux:navlist.item>
-                    <flux:navlist.item icon="plus-circle" :href="route('estadistica.ver')" :current="request()->routeIs('estadistica.ver')" wire:navigate>{{ __('Crear') }}</flux:navlist.item>
-                </flux:navlist.group>
+
 
                 <flux:navlist.group expandable heading="Config" class="hidden lg:grid">
                     <flux:navlist.item icon="trophy" :href="route('campeonato.index')" :current="request()->routeIs('campeonato.index')" wire:navigate>{{ __('Campeonato') }}</flux:navlist.item>

@@ -17,6 +17,7 @@
          @endif
 
      </flux:navbar>
+     <flux:separator class="mb-2" />
      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
              <tr>

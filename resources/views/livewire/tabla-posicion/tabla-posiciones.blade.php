@@ -14,7 +14,7 @@
 
         <!-- Botones de exportación -->
         @if ($campeonato_id)
-        @role('administrador|comision')
+
         <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
             <a href="{{ route('tabla.pdf', ['campeonato' => $campeonato->id]) }}"
                 class="inline-flex items-center justify-center bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition-colors text-sm sm:text-base w-1/2 sm:w-auto"
@@ -38,10 +38,10 @@
                 <span class="ml-1 hidden sm:inline">Excel</span>
             </button>
         </div>
-        @endrole
+
         @endif
     </div>
-
+    <flux:separator />
     <!-- Tabla de posiciones -->
     <div class="p-2 sm:p-4">
         @foreach ($posiciones as $grupoNombre => $tablaGrupo)
@@ -72,7 +72,7 @@
                             {{ $index + 1 }}
                         </td>
                         <td class="border px-1 md:px-2 py-1 text-left  left-12 dark:text-white {{ $index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700' }} z-10 min-w-[100px]">
-                            {{ $equipo['equipo'] }}
+                            {{ strtoupper($equipo['equipo'] )}}
                         </td>
                         <td class="border px-1 md:px-2 py-1">{{ $equipo['jugados'] }}</td>
                         <td class="border px-1 md:px-2 py-1">{{ $equipo['ganados'] }}</td>
