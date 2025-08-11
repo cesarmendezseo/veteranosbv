@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fixture', FixtureIndex::class)->name('fixture.index');
     Route::get('/fixture/crear', FixtureCrear::class)->name('fixture.crear');
     Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
+    Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');
     //==============FIN ESTADIOS========================
     //==============ASIGNAR EQUIPOS========================
     Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');

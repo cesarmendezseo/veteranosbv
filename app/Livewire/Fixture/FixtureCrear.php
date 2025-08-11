@@ -48,6 +48,7 @@ class FixtureCrear extends Component
 
     public function updatedAnioSeleccionado()
     {
+
         $this->campeonatos = Campeonato::whereYear('created_at', $this->anioSeleccionado)->get();
     }
 

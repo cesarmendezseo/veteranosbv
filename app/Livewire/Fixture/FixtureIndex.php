@@ -89,6 +89,7 @@ class FixtureIndex extends Component
         $this->estadoFiltro = null;
         $this->equipoLocalFiltro = null;
         $this->equipoVisitanteFiltro = null;
+        $this->jornadaFiltro = null;
 
         // Obtener grupos relacionados al campeonato
         $this->grupos = $this->campeonato_id

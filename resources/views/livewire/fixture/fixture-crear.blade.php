@@ -217,5 +217,7 @@
             <span>Volver</span>
         </a>
     </form>
+    @if($campeonatos)
 
+    @endif
 </div>
