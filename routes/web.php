@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FotoJugadorController;
 use App\Http\Controllers\LogoEquipoController;
+use App\Livewire\AtasBajas\AltasBajasIndex;
 use App\Livewire\Campeonato\Campeonatocrear;
 use App\Livewire\Campeonato\CampeonatoEditar;
 use App\Livewire\Campeonato\CampeonatoIndex;
@@ -14,9 +15,7 @@ use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
-use App\Livewire\Estadios\EstadiosCrear;
-use App\Livewire\Estadios\EstadiosEditar;
-use App\Livewire\Estadios\EstadiosIndex;
+
 use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
@@ -28,6 +27,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\TablaPosicion\TablaPosiciones;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -98,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
     //==============ESTADISTICA========================
     Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
     Route::get('/estadistica/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
+    //==============FIN ESTADISTICA========================
+    //==============ALTAS Y BAJAS========================
+    Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');
 });
 
 require __DIR__ . '/auth.php';

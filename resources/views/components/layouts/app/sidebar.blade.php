@@ -26,6 +26,7 @@
                 <flux:navlist.item icon="book-user" :href="route('estadistica.index')" :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadistica') }}</flux:navlist.item>
                 <flux:navlist.item icon="id-card" :href="route('sanciones.index')" :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Sanciones') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-list" :href="route('tabla-posiciones')" :current="request()->routeIs('tabla-posiciones')" wire:navigate>{{ __('Tabla Posición') }}</flux:navlist.item>
+                <flux:navlist.item icon="user-plus" :href="route('altas-bajas.index')" :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}</flux:navlist.item>
 
 
 

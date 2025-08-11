@@ -1,0 +1,163 @@
+<div class="p-4 bg-gray-100 rounded-lg mb-4 shadow-md">
+    <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
+        class="flex-grow bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+    <div class="overflow-x-auto">
+        <table class="w-full border ">
+            <thead class="bg-gray-700 rounded-lg text-gray-100 dark:bg-gray-400 dark:text-gray-900">
+                <tr class="">
+                    <th class="p-2 text-xs">DNI</th>
+                    <th class="p-2 text-xs">Nombre</th>
+                    <th class="p-2 text-xs">Equipo</th>
+                    <th class="p-2 text-xs">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($jugadores as $jugador)
+                <tr class="border-t odd:bg-gray-200 odd:text-gray-800 font-semibold even:text-gray-800 even:bg-gray-300 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                    <td class="p-2 text-sm dark:text-gray-300">{{ $jugador->documento }}</td>
+                    <td class="p-2 text-sm dark:text-gray-300">{{ strtoupper($jugador->nombre) }} {{ strtoupper($jugador->apellido) }}
+                    </td>
+                    <td class="p-2 text-sm dark:text-gray-300">{{ ucwords($jugador->equipo?->nombre ?? '-') }}</td>
+                    <td class="p-2 ">
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <button wire:click="mostrarFormularioAlta({{ $jugador->id }})" title="Alta"
+                                class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                                Alta
+                            </button>
+
+                            <button wire:click="$dispatch('confirmar-baja', { id: {{ $jugador->id }} })"
+                                title="Eliminar"
+                                class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                Baja
+                            </button>
+
+                            <button wire:click="verHistorial({{ $jugador->id }})" title="Historial"
+                                class="text-blue-700 hover:text-white border border-[#FFC107] hover:bg-[#FFC107] focus:ring-4 focus:outline-none focus:ring-[#e7c96d] font-medium rounded-lg text-xs px-3 py-1 dark:border-[#FFC107] dark:text-[#FFC107] dark:hover:text-black dark:hover:bg-[#ecd692] dark:focus:ring-[#f8ca40]">
+                                Historial
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="text-center p-4 text-sm dark:text-gray-300">No hay jugadores</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+        {{ $jugadores->links() }}
+    </div>
+
+    {{-- Sección de alta --}}
+    @if ($mostrarAlta)
+    <div class="mt-4 p-4 bg-gray-100 border rounded">
+        <h3 class="text-base font-bold mb-2">Seleccionar equipo para alta</h3>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <select wire:model="equipoSeleccionado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                >
+                <option value="">-- Selecciona un equipo --</option>
+                @foreach ($equipos->sortBy('nombre') as $equipo)
+                <option value="{{ $equipo->id }}">
+                    {{ strtoupper($equipo->nombre) }}
+                </option>
+                @endforeach
+            </select>
+
+            <button wire:click="darDeAlta" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
+                    <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                    <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                    <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+                </svg> <span>Guardar</span></button>
+            <a href="{{route('altas-bajas.index')}}" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span>Volver</span>
+            </a>
+        </div>
+    </div>
+    @endif
+
+    {{-- Historial --}}
+    @if (count($historial))
+    <div class="mt-4 overflow-x-auto bg-gray-100">
+        <h3 class="font-bold text-lg  bg-accent text-gray-800 dark:text-[#FFC107] p-4 rounded-2xl ">Historial de equipos</h3>
+        <table class="w-full border table-auto text-sm shadow-md">
+            <thead class=" bg-gray-700 dark:bg-gray-500 text-gray-100 dark:text-gray-900 shadow-md">
+                <tr class="">
+                    <th class="p-2">Equipo</th>
+                    <th class="p-2">Fecha de Baja</th>
+                    <th class="p-2">Fecha de Alta</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($historial as $h)
+                <tr class="border-t  odd:bg-gray-200 odd:text-gray-800 font-semibold even:text-gray-800 even:bg-gray-300 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                    <td class="p-2  semi-bold">{{ strtoupper($h->equipo) }}</td>
+                    <td class="p-2 dark:text-gray-100 text-center">
+                        {{ $h->fecha_baja ? \Carbon\Carbon::parse($h->fecha_baja)->format('d/m/Y') : 'ACTUALMENTE ACTIVO' }}
+                    </td>
+                    <td class="p-2 dark:text-gray-100 text-center">
+                        {{ \Carbon\Carbon::parse($h->fecha_alta)->format('d/m/Y') }}
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @endif
+
+
+    @push('js') <script>
+        document.addEventListener('livewire:initialized', () => {
+
+            Livewire.on('equipo-existe', () => {
+                Swal.fire(
+                    'Error',
+                    'El jugador ya tiene equipo asignado, si quiere cambiar de equipo debera dar de baja primero.',
+                    'warning'
+                );
+            });
+
+            Livewire.on('darDeAlta', () => {
+                Swal.fire(
+                    'Ok la Alta!',
+                    'El jugador se dio de alta en el equipo correctamente.',
+                    'success'
+                );
+            });
+
+            Livewire.on('confirmar-baja', ({
+                id
+            }) => {
+                Swal.fire({
+                    title: 'CUIDADO...',
+                    text: "¿Estás seguro de dar de Baja al jugador del equipo?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, dar la Baja'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Llamás al método del componente Livewire y le pasás el parámetro
+                        Livewire.dispatch('dar-de-baja', {
+                            jugadorId: id
+                        });
+                    }
+                });
+            });
+            //========================================
+            Livewire.on('Baja', () => {
+                Swal.fire(
+                    'Ok la Baja!',
+                    'El jugador se dio de baja en el equipo correctamente.',
+                    'success'
+                );
+            });
+        });
+    </script>
+    @endpush
+</div>

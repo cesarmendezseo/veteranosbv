@@ -13,8 +13,8 @@ return new class extends Migration
     {
 
         Schema::table('jugadors', function (Blueprint $table) {
-            $table->unsignedBigInteger('equipo_id'); // Clave foránea
-            $table->foreign('equipo_id')->references('id')->on('equipos')->onDelete('cascade');
+            $table->unsignedBigInteger('equipo_id')->nullable(); // Clave foránea
+            $table->foreign('equipo_id')->references('id')->on('equipos')->onDelete('set null');
         });
 
         Schema::table('encuentros', function (Blueprint $table) {
