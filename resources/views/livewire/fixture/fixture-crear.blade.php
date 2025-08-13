@@ -7,32 +7,20 @@
 
     <form wire:submit.prevent="guardarEncuentro" class="space-y-4 shadow-md sm:rounded-lg bg-gray-100 p-4">
 
-        <select wire:model.live="anioSeleccionado" id="countries"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">-- Selecciona un año --</option>
-            @foreach ($aniosDisponibles as $anio)
-            <option value="{{ $anio }}">{{ $anio }}</option>
-            @endforeach
-        </select>
-
-
-        @if ($campeonatos)
-        <div>
-            <select wire:model.live="campeonatoSeleccionado" id="campeonatoSeleccionado"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">-- Selecciona un campeonato --</option>
-                @foreach ($campeonatos as $campeonato)
-                <option value="{{ $campeonato->id }}">
-                    {{ $campeonato->nombre }} ({{ $campeonato->created_at->format('d/m/Y') }})
-                </option>
-                @endforeach
-            </select>
+        {{-- Título --}}
+        <div class="mb-4 flex items-center justify-center">
+            @if($campeonato)
+            <h1 class="text-base text-blue-900 font-semibold">Creando fixture para Campeonato <span class="text-base text-blue-900 font-semi
+        bold">{{ strtoupper($campeonato->nombre) }}</span></h1>
+            @else
+            <h2>No se encontró el campeonato</h2>
+            @endif
         </div>
-        @endif
-
+        <flux:separator class="mb-2" />
         <!-- Si el campeonato tiene grupos, mostrar select de grupos -->
         @if ($grupos)
         <div class="mb-4">
+            <h3 class="text-base text-blue-900 font-semibold ">Selecione un Grupo</h3>
             <select id="grupo_id" wire:model.live="grupo_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">-- Selecciona un grupo --</option>
                 @foreach ($grupos as $grupo)
@@ -52,7 +40,7 @@
             {{-- Equipo Local --}}
             <div>
                 <label for="equipo_local_id"
-                    class="block text-sm font-medium text-gray-700 dark:text-[#ebee2d]">Equipo
+                    class=" text-base text-blue-900 font-semibold dark:text-[#ebee2d]">Equipo
                     Local</label>
                 <select id="equipo_local_id" wire:model.live="equipo_local_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">-- Selecciona un equipo --</option>
@@ -68,7 +56,7 @@
             {{-- Equipo Visitante (filtrado) --}}
             <div>
                 <label for="equipo_visitante_id"
-                    class="block text-sm font-medium text-gray-700 dark:text-[#ebee2d]">Equipo
+                    class="text-base text-blue-900 font-semibold dark:text-[#ebee2d]">Equipo
                     Visitante</label>
                 <select id="equipo_visitante_id" wire:model="equipo_visitante_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">-- Selecciona un equipo --</option>

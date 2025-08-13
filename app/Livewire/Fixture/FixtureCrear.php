@@ -15,6 +15,8 @@ use App\Services\EncuentroExportService as ServicesEncuentroExportService;
 
 class FixtureCrear extends Component
 {
+    public $campeonatoId;
+    public $campeonato;
     public $anioSeleccionado;
     public $aniosDisponibles = [];
     public $campeonatos = [];
@@ -35,22 +37,17 @@ class FixtureCrear extends Component
     public $estado = 'programado'; // Estado por defecto
     public $jornada;
 
-    public function mount()
+    public function mount($campeonatoId)
     {
-        // Trae todos los años disponibles desde la tabla campeonatos
-        $this->aniosDisponibles = Campeonato::selectRaw('YEAR(created_at) as anio')
-            ->distinct()
-            ->orderBy('anio', 'desc')
-            ->pluck('anio');
+
+        $this->campeonatoId = $campeonatoId;
+        $this->campeonatoSeleccionado = $campeonatoId;
+        $this->campeonato = Campeonato::find($campeonatoId);
 
         $this->canchas = Canchas::all(); // suponiendo que tenés una tabla de canchas
+        $this->updatedCampeonatoSeleccionado();
     }
 
-    public function updatedAnioSeleccionado()
-    {
-
-        $this->campeonatos = Campeonato::whereYear('created_at', $this->anioSeleccionado)->get();
-    }
 
 
     //----------------------------- CAMPEONATO SELECCIONADO ------------------------------
@@ -90,6 +87,7 @@ class FixtureCrear extends Component
                 // Aquí usamos el nombre de la tabla pivote en lugar de 'pivot'
                 $query->where('campeonato_equipo.campeonato_id', $this->campeonato_id)
                     ->where('campeonato_equipo.grupo_id', $this->grupo_id); // Filtramos por grupo_id en la tabla pivote
+
             })->get();
 
             //  dd($this->equipos); // Ver los equipos filtrados

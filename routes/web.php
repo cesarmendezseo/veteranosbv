@@ -19,6 +19,7 @@ use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
+use App\Livewire\Fixture\FixtureVer;
 use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
@@ -78,7 +79,8 @@ Route::middleware(['auth'])->group(function () {
     //==============FIN ESTADIOS========================
     //==============FIXTURE======================== 
     Route::get('/fixture', FixtureIndex::class)->name('fixture.index');
-    Route::get('/fixture/crear', FixtureCrear::class)->name('fixture.crear');
+    Route::get('/fixture/{campeonatoId}/crear', FixtureCrear::class)->name('fixture.crear');
+    Route::get('/fixture/{campeonatoId}/ver', FixtureVer::class)->name('fixture.ver');
     Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
     Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');
     //==============FIN ESTADIOS========================
