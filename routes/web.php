@@ -95,12 +95,12 @@ Route::middleware(['auth'])->group(function () {
 
     //==============SANCIONES========================
     Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
-    Route::get('/sanciones/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
+    Route::get('/sanciones/{campeonatoId}/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
     Route::get('/sanciones/actualizar-cumplimientos', [\App\Livewire\Sanciones\SancionesCrear::class, 'actualizarCumplimientosSanciones'])->name('sanciones.actualizar-cumplimientos');
     //==============FIN SANCIONES========================
     //==============ESTADISTICA========================
     Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
-    Route::get('/estadistica/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
+    Route::get('/estadistica/{campeonatoId}/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
     //==============FIN ESTADISTICA========================
     //==============ALTAS Y BAJAS========================
     Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');

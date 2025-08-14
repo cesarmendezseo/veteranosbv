@@ -30,18 +30,19 @@ class EstadisticaVer extends Component
     public $encuentroJugador; // ID del encuentro para el cual se guardan estadísticas, igual a encuentroSeleccionado
 
 
-    public function mount()
+    public function mount($campeonatoId)
     {
-        $this->campeonatos = Campeonato::orderBy('nombre')->get();
+        $this->campeonatoId = $campeonatoId;
         $this->encuentros = collect(); // Inicializar como colección vacía
         $this->jugadoresLocal = collect(); // Inicializar como colección vacía
         $this->jugadoresVisitante = collect(); // Inicializar como colección vacía
+        $this->updatedCampeonatoId($campeonatoId);
     }
 
-    public function updatedCampeonatoId($value)
+    public function updatedCampeonatoId($campeonatoId)
     {
-        if ($value) {
-            $this->fechasDisponibles = Encuentro::where('campeonato_id', $value)
+        if ($campeonatoId) {
+            $this->fechasDisponibles = Encuentro::where('campeonato_id', $campeonatoId)
                 ->select('fecha_encuentro')
                 ->distinct()
                 ->orderBy('fecha_encuentro')

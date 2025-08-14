@@ -2,28 +2,16 @@
     {{-- Contenedor principal del componente --}}
     <x-navbar titulo="Cargar Estadísticas">
         {{-- Botón para volver a la lista de categorías --}}
-        <a href="{{ route('estadistica.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <a href="{{ route('sanciones.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             Volver</a>
 
     </x-navbar>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-300 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-        {{-- TÍTULO --}}
-        {{-- SELECCIONAMOS EL CAMPEONATO --}}
-        <div class="mb-4">
-            <label class="block font-medium text-base dark:text-[#FFC107]">Torneo</label>
-            <select wire:model.live="campeonatoId"
-                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">Seleccione un torneo</option>
-                @foreach ($campeonatos as $campeonato)
-                <option value="{{ $campeonato->id }}">{{ strtoupper($campeonato->nombre) }}</option>
-                @endforeach
-            </select>
-        </div>
 
-        {{-- SI EXISTE EL CAMPEONATO --}}
-        @if ($campeonatoId)
+
+
         <div class="mb-4">
             <label class="block font-medium text-base dark:text-[#FFC107]">Fecha Jornada</label>
             <select wire:model.live="fechaSeleccionada"
@@ -34,7 +22,7 @@
                 @endforeach
             </select>
         </div>
-        @endif
+
 
         @if ($encuentros)
         <div class="mb-4">

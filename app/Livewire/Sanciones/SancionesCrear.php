@@ -12,8 +12,10 @@ class SancionesCrear extends Component
 {
     public $jugador_id;
     public $campeonato_id;
+    public $campeonatoId;
     public $fecha_sancion;
     public $partidos_sancionados = 1;
+    public $nombreJugador;
 
     public $observacion;
     public $motivo;
@@ -23,16 +25,17 @@ class SancionesCrear extends Component
     public $jugadorBuscadoSancion;
     public $buscarJugador;
 
-    public function mount()
+    public function mount($campeonatoId)
     {
-        $this->index();
+        $this->campeonatoId = $campeonatoId;
+
+        $this->jugadores = [];
     }
 
-    public function index()
+    /*   public function index()
     {
         $this->jugadores = Jugador::with('equipo')->get();
-        $this->campeonatos = Campeonato::all();
-    }
+    } */
 
     //=========================================================
     public function buscarJugadorSancion()
@@ -54,42 +57,43 @@ class SancionesCrear extends Component
     //======================================================================
     public function guardar()
     {
+        try {
+            $this->validate([
+                'jugador_id' => 'required|exists:jugadors,id',
 
-        $this->validate([
-            'jugador_id' => 'required|exists:jugadors,id',
-            'campeonato_id' => 'required|exists:campeonatos,id',
-            'fecha_sancion' => 'required|integer|min:1',
-            'partidos_sancionados' => 'required|integer|min:1',
-            'motivo' => 'required|string',
-            'observacion' => 'nullable|string'
-        ]);
+                'fecha_sancion' => 'required|integer|min:1',
+                'partidos_sancionados' => 'required|integer|min:1',
+                'motivo' => 'required|string',
+                'observacion' => 'nullable|string'
+            ]);
 
+            Sanciones::create([
+                'jugador_id' => $this->jugador_id,
+                'campeonato_id' => $this->campeonatoId,
+                'fecha_sancion' => $this->fecha_sancion,
+                'partidos_sancionados' => $this->partidos_sancionados,
+                'partidos_cumplidos' => 0,
+                'cumplida' => false,
+                'motivo' => $this->motivo,
+                'observacion' => $this->observacion,
+            ]);
 
-        Sanciones::create([
-            'jugador_id' => $this->jugador_id,
-            'campeonato_id' => $this->campeonato_id,
-            'fecha_sancion' => $this->fecha_sancion,
-            'partidos_sancionados' => $this->partidos_sancionados,
-            'partidos_cumplidos' => 0,
-            'cumplida' => false,
-            'motivo' => $this->motivo,
-            'observacion' => $this->observacion,
+            $this->dispatch('guardarSancion');
 
-        ]);
+            $this->reset([
+                'jugador_id',
 
-
-        $this->dispatch('guardar-sancion');
-        $this->resetErrorBag();
-
-        $this->reset([
-            'jugador_id',
-            'campeonato_id',
-            'fecha_sancion',
-            'partidos_sancionados',
-            'motivo',
-            'observacion'
-        ]);
-        $this->index();
+                'fecha_sancion',
+                'partidos_sancionados',
+                'motivo',
+                'observacion'
+            ]);
+            $this->jugadores = [];
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e);
+            // Errores de validación (ya los maneja Livewire automáticamente)
+            $this->setErrorBag($e->validator->getMessageBag());
+        }
     }
 
     //======================================================
