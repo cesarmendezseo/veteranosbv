@@ -78,7 +78,7 @@
                     <tbody class="block md:table-row-group">
                         @foreach ($jugadoresLocal as $jugador)
                         <tr class="block md:table-row odd:bg-white even:bg-gray-300 border-b dark:border-gray-700">
-                            <td data-label="Jugador" class="block md:table-cell px-6 py-4 font-semibold text-gray-900 dark:text-white text-left">
+                            <td data-label="Jugador" class="block md:table-cell px-6 py-4 font-semibold text-gray-900 dark:text-gray-700 text-left">
                                 {{ strtoupper($jugador->apellido) }}, {{ strtoupper($jugador->nombre) }}
                             </td>
                             <td data-label="Gol" class="block md:table-cell px-6 py-4 text-left md:text-center">
@@ -123,7 +123,7 @@
                     <tbody class="block md:table-row-group">
                         @foreach ($jugadoresVisitante as $jugador)
                         <tr class="block md:table-row odd:bg-white even:bg-gray-300 border-b dark:border-gray-700">
-                            <td data-label="Jugador" class="block md:table-cell px-6 py-4 font-semibold text-gray-900 dark:text-white text-left">
+                            <td data-label="Jugador" class="block md:table-cell px-6 py-4 font-semibold text-gray-900 dark:text-gray-700 text-left">
                                 {{ strtoupper($jugador->apellido) }}, {{ strtoupper($jugador->nombre) }}
                             </td>
                             <td data-label="Gol" class="block md:table-cell px-6 py-4 text-left md:text-center">

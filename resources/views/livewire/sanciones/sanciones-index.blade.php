@@ -5,7 +5,7 @@
      <flux:separator class="mb-2" />
      <!-- Para escritorio -->
      <table class="hidden md:table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-         <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
+         <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-white">
              <tr>
                  <th scope="col" class="px-6 py-3">
                      Nombre
@@ -30,7 +30,7 @@
                      <div class="text-base font-semibold">{{ucwords($campeonato->nombre)}}</div>
                  </th>
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="font-normal text-gray-500">
+                     <div class="font-normal ">
                          @if($campeonato->formato === 'todos_contra_todos')
                          Todos contra Todos
                          @else
@@ -38,13 +38,9 @@
                      </div>
                      @endif
                  </th>
-
-
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="font-normal text-gray-500"> {{ucfirst($campeonato->categoria->nombre)}}</div>
+                     <div class="font-normal "> {{ucfirst($campeonato->categoria->nombre)}}</div>
                  </th>
-
-
                  <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
                  <td class="px-6 py-4 text-right">
                      <!-- Para pantallas medianas en adelante -->

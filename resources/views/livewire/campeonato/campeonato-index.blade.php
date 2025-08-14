@@ -13,7 +13,7 @@
 
      </x-navbar>
      <flux:separator class="mb-2" />
-     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+     <table class="hidden md:table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
              <tr>
                  <th scope="col" class="px-6 py-3">
@@ -41,7 +41,7 @@
                      <div class="text-base font-semibold">{{ucwords($campeonato->nombre)}}</div>
                  </th>
                  <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                     <div class="font-normal text-gray-500">
+                     <div class="font-normal ">
                          @if($campeonato->formato === 'todos_contra_todos')
                          Todos contra Todos
                          @else
@@ -53,10 +53,10 @@
                      @if($campeonato->formato === 'todos_contra_todos')
 
                      @foreach ($campeonato->grupos as $grupo)
-                     <div class="font-normal text-gray-500"> {{ $grupo->cantidad_equipos}} </div>
+                     <div class="font-normal "> {{ $grupo->cantidad_equipos}} </div>
                      @endforeach
                      @else
-                     <div class="font-normal text-gray-500"> {{$campeonato->cantidad_equipos_grupo}} x Grupo</div>
+                     <div class="font-normal "> {{$campeonato->cantidad_equipos_grupo}} x Grupo</div>
                      @endif
 
                  </th>
@@ -66,7 +66,7 @@
                  </th>
 
 
-                 <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
+                 <!-- BOTONES  -->
                  <td class="px-6 py-4 text-right">
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-end">
@@ -128,80 +128,45 @@
 
                      </div>
 
-                     <!-- Para móviles: Menú desplegable -->
-                     <div x-data="{ open: false }" class="relative md:hidden">
-                         <button @click="open = !open"
-                             class="text-gray-600 hover:text-black focus:outline-none">
-                             <!-- Icono tres puntos -->
-                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                                 stroke="currentColor" stroke-width="2">
-                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                     d="M12 6v.01M12 12v.01M12 18v.01" />
-                             </svg>
-                         </button>
-
-                         <!-- Menú -->
-                         <div x-show="open" @click.away="open = false"
-                             class="absolute right-0 mt-2   z-50">
-                             <!-- EDITAR -->
-                             <a href="{{ route('campeonato.editar', $campeonato->id) }}"
-                                 class="mb-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
-                            focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
-                            shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
-                            font-medium rounded-full text-sm
-                            h-10 w-10 flex items-center justify-center"
-                                 title="Editar">
-                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                 </svg>
-                             </a>
-
-                             {{-- Borrar --}}
-                             <button wire:click="$dispatch('confirmar-baja', { id: {{ $campeonato->id }} })"
-                                 class="mb-1 text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br
-                                    focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
-                                    shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80
-                                    font-medium rounded-full text-sm
-                                    h-10 w-10 flex items-center justify-center cursor-pointer"
-                                 title="Borrar">
-                                 {{-- SVG Icon --}}
-                             </button>
-                             {{-- ver --}}
-                             <button wire:click="verCampeonato({{ $campeonato->id }})"
-                                 class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
-                                focus:ring-4 focus:outline-none focus:ring-[#d8c897] dark:focus:ring-[#efb810]
-                                shadow-lg shadow-[#efb71096] dark:shadow-lg dark:shadow-[#efb71070]
-                                font-medium rounded-full text-sm h-10 w-10 flex items-center justify-center cursor-pointer"
-                                 title="Ver">
-                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5" stroke="currentColor" class="size-6">
-                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                         d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                 </svg>
-                             </button>
-                             {{-- ASIGNAR EQUIPO --}}
-                             <a href="{{ route('asignar-equipos', $campeonato->id) }}"
-                                 class="mb-1 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
-                            focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
-                            shadow-lg shadow-teal-500/50 dark:shadow-lg dark:shadow-teal-800/80
-                            font-medium rounded-full text-sm
-                            h-10 w-10 flex items-center justify-center"
-                                 title="Equipos">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shirt-icon lucide-shirt">
-                                     <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
-                                 </svg>
-
-                             </a>
-                         </div>
-                     </div>
                  </td>
              </tr>
              @endforeach
          </tbody>
      </table>
 
+     <!-- Para móvil: tarjetas -->
+     <div class="md:hidden space-y-4 min-h-screen">
+         @foreach($campeonatos as $campeonato)
+         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border dark:border-gray-700">
+             <div class="flex justify-between items-center mb-2">
+                 <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span class="text-gray-600 dark:text-accent">Torneo:</span> {{ ucwords($campeonato->nombre) }}</h3>
+                 <div x-data="{ open: false }" class="relative">
+                     <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
+                         </svg>
+                     </button>
+                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
+                         <a href="{{ route('campeonato.editar', $campeonato->id) }}" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Editar</a>
+                         <a wire:click="$dispatch('confirmar-baja', { id: {{ $campeonato->id }} })" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Borrar</a>
+                         <a wire:click="verCampeonato({{ $campeonato->id }})" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Ver</a>
+                         <a href="{{ route('asignar-equipos', $campeonato->id) }}" class="px-3 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Asignar Equipo</a>
+                     </div>
+                 </div>
+             </div>
+             <div class="text-gray-700 dark:text-gray-300">
+                 <p><span class="font-semibold">Formato:</span>
+                     @if($campeonato->formato === 'todos_contra_todos')
+                     Todos contra Todos
+                     @else
+                     {{ ucfirst($campeonato->formato) }}
+                     @endif
+                 </p>
+                 <p><span class="font-semibold">Categoría:</span> {{ ucfirst($campeonato->categoria->nombre) }}</p>
+             </div>
+         </div>
+         @endforeach
+     </div>
      {{-- Modal --}}
      <style>
          [x-cloak] {
