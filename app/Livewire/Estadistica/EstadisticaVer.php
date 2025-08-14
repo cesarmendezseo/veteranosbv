@@ -297,6 +297,7 @@ class EstadisticaVer extends Component
                 'timer' => 4000
             ]);
         }
+        $this->dispatch('ok');
     }
 
     public function render()

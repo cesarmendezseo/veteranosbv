@@ -163,7 +163,7 @@
 
         {{-- BOTÓN GUARDAR --}}
         <button type="submit"
-            class="inline-flex items-center gap-2 mt-4 bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded">
+            class="inline-flex items-center gap-2 cursor-pointer mt-4 bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-save">
@@ -214,6 +214,13 @@
                     '¡Atención!',
                     'Debe seleccionar un Torneo y un encuentro.',
                     'info'
+                );
+            });
+            Livewire.on('ok', () => {
+                Swal.fire(
+                    'Ok!',
+                    'Guardado correctamente.',
+                    'success'
                 );
             });
             //para errroes de validación
