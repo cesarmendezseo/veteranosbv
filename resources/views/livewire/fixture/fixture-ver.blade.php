@@ -1,29 +1,35 @@
 <div>
-    <flux:navbar>
-        <a href="{{route('fixture.index')}}" class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
+    <x-navbar titulo="Fixture">
+        <a href="{{ route('fixture.index') }}"
+            class="px-3 py-2  text-white rounded flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <span>Volver</span>
+            </svg> Volver
         </a>
-        <a href="{{route('fixture.automatico')}}"
-            class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
+
+        <a href="{{ route('fixture.automatico') }}"
+            class="px-3 py-2  text-white rounded flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
                 <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
                 <line x1="12" x2="12" y1="8" y2="16" />
                 <line x1="8" x2="16" y1="12" y2="12" />
-            </svg>
-            Crear Automático
+            </svg> Crear Auto.
         </a>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white ml-4">Fixture</h1>
 
-    </flux:navbar>
-    <flux:separator class="bt-2 mb-2" />
+        <button wire:click="exportar"
+            class="px-3 py-2  text-white rounded disabled:opacity-50 flex items-center gap-1"
+            @disabled(!$jornadaFiltro)>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download">
+                <path d="M12 15V3" />
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="m7 10 5 5 5-5" />
+            </svg>Exportar
+        </button>
+    </x-navbar>
     <div class="mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
         <!-- Filtros -->
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-4 bg-gray-200 p-3 rounded-lg shadow-md">
-
 
             <!-- Fecha -->
             <input wire:model.live="fechaFiltro" type="date"
@@ -64,14 +70,7 @@
             <input wire:model.live="equipoVisitanteFiltro" type="text" placeholder="Equipo Visitante"
                 class="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
-        @if ($campeonato_id && $jornadaFiltro)
-        <div class="mb-4">
-            <a href="{{ route('encuentros.exportar', ['campeonato_id' => $campeonato_id, 'fecha_encuentro' => $jornadaFiltro]) }}"
-                target="_blank" class="px-4 py-2 bg-[#FFC107] hover:bg-[#d6a82b] text-black rounded shadow">
-                📥 Exportar a Excel
-            </a>
-        </div>
-        @endif
+
 
         <!-- Tabla -->
         {{-- @if (isset($encuentros) && $encuentros->count())

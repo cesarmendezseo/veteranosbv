@@ -2,14 +2,18 @@
 
 namespace App\Livewire\Fixture;
 
-
+use App\Exports\EncuentrosExport;
 use App\Models\Campeonato;
 use App\Models\Canchas;
 use App\Models\Encuentro;
 use App\Models\Grupo;
+use App\Services\EncuentroExportService;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class FixtureVer extends Component
 {
@@ -154,6 +158,20 @@ class FixtureVer extends Component
             $encuentro->delete();
             $this->dispatch('eliminado');
         };
+    }
+
+    //=============exportar a exel ===============
+
+    public function exportar(EncuentroExportService $servicio)
+
+    {
+
+        if (!$this->campeonato_id || !$this->jornadaFiltro) {
+            session()->flash('error', 'Debes seleccionar un campeonato y una jornada para exportar.');
+            return;
+        }
+
+        return $servicio->exportarPorCampeonatoYFecha($this->campeonato_id, $this->jornadaFiltro);
     }
 
     public function render()

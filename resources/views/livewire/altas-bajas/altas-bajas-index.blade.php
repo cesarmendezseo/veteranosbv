@@ -1,6 +1,9 @@
 <div class="p-4 bg-gray-100 rounded-lg mb-4 shadow-md">
+    <x-navbar titulo="Altas y Bajas de Jugadores">
+
+    </x-navbar>
     <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
-        class="flex-grow bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
     <div class="overflow-x-auto">
         <table class="w-full border ">
@@ -54,7 +57,7 @@
     <div class="mt-4 p-4 bg-gray-100 border rounded">
         <h3 class="text-base font-bold mb-2">Seleccionar equipo para alta</h3>
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            <select wire:model="equipoSeleccionado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select wire:model="equipoSeleccionado" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 >
                 <option value="">-- Selecciona un equipo --</option>
                 @foreach ($equipos->sortBy('nombre') as $equipo)
@@ -83,8 +86,8 @@
     {{-- Historial --}}
     @if (count($historial))
     <div class="mt-4 overflow-x-auto bg-gray-100">
-        <h3 class="font-bold text-lg  bg-accent text-gray-800 dark:text-[#FFC107] p-4 rounded-2xl ">Historial de equipos</h3>
-        <table class="w-full border table-auto text-sm shadow-md">
+        <h3 class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative font-semibold">Historial de equipos</h3>
+        <table class=" w-full border table-auto text-sm shadow-md">
             <thead class=" bg-gray-700 dark:bg-gray-500 text-gray-100 dark:text-gray-900 shadow-md">
                 <tr class="">
                     <th class="p-2">Equipo</th>

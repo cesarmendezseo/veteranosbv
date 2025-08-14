@@ -1,19 +1,11 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-     <flux:navbar>
+     <x-navbar titulo="Asignar Equipos">
+         <a href="{{ route('categoria.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+             </svg>
+             Volver</a>
 
-         <h1 class="text-2xl font-bold text-gray-900 dark:text-white ml-4">Asignar equipos a los Grupos y/o campeonato</h1>
-         @if (session()->has('error'))
-         <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
-             {{ session('error') }}
-         </div>
-         @endif
-         @if (session()->has('success'))
-         <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
-             {{ session('success') }}
-         </div>
-         @endif
-
-     </flux:navbar>
+     </x-navbar>
 
      <flux:separator />
 

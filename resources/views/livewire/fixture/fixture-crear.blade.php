@@ -5,16 +5,46 @@
     </div>
     @enderror
 
+    <header class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center">
+        <h1 class="text-lg font-bold">Campeonato: <span class="text-base text-white font-semi
+        bold">{{ strtoupper($campeonato->nombre) }}</span></h1>
+
+        {{-- Botón hamburguesa móvil --}}
+        <div class="md:hidden" x-data="{ open: false }">
+            <button @click="open = !open" class="focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            {{-- Menú desplegable móvil --}}
+            <div x-show="open" @click.away="open = false" class="flex flex-col mt-2 space-y-2 bg-blue-900 p-2 rounded">
+                <a href="{{route('fixture.index')}}" class="flex items-center gap-1 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        {{-- Menú escritorio --}}
+        <nav class="hidden md:flex space-x-4">
+            <a href="{{route('fixture.index')}}" class="flex items-center gap-1 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Volver
+            </a>
+        </nav>
+    </header>
     <form wire:submit.prevent="guardarEncuentro" class="space-y-4 shadow-md sm:rounded-lg bg-gray-100 p-4">
 
         {{-- Título --}}
         <div class="mb-4 flex items-center justify-center">
-            @if($campeonato)
-            <h1 class="text-base text-blue-900 font-semibold">Creando fixture para Campeonato <span class="text-base text-blue-900 font-semi
-        bold">{{ strtoupper($campeonato->nombre) }}</span></h1>
-            @else
-            <h2>No se encontró el campeonato</h2>
-            @endif
+
         </div>
         <flux:separator class="mb-2" />
         <!-- Si el campeonato tiene grupos, mostrar select de grupos -->
@@ -198,12 +228,7 @@
                 <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
                 <path d="M7 3v4a1 1 0 0 0 1 1h7" />
             </svg> <span>Guardar</span></button>
-        <a href="{{route('fixture.index')}}" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <span>Volver</span>
-        </a>
+
     </form>
     @if($campeonatos)
 

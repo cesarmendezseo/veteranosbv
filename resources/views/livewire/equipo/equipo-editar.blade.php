@@ -1,8 +1,13 @@
-<div>
+<div><x-navbar titulo="Editar Equipos">
+        <a href="{{ route('equipo.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Volver</a>
+
+    </x-navbar>
     <div class="max-w-sm w-full lg:max-w-full lg:flex">
 
         <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <h5 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white underline m">Editar Equipo</h5>
             <flux:separator class="bt-2" />
             <form wire:submit.prevent="actualizarEquipo" class="max-w-2xl mx-auto mt-4" enctype="multipart/form-data">
                 @csrf
@@ -87,10 +92,7 @@
                         Guardar
                     </button>
 
-                    <a href="{{ route('equipo.index') }}" class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-800"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        Volver</a>
+
                 </div>
             </form>
         </div>

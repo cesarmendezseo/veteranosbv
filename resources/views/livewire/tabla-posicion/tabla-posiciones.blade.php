@@ -1,4 +1,8 @@
 <div>
+    <x-navbar titulo="Tabla de Posiciones">
+
+
+    </x-navbar>
     <!-- Filtros y controles -->
     <div class="p-2 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
         <!-- Selector de campeonato -->
