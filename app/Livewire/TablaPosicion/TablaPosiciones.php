@@ -19,23 +19,14 @@ class TablaPosiciones extends Component
     public $campeonatos;
     public \Illuminate\Support\Collection $posiciones; // Asegúrate de tipar como Collection
 
-    public function mount()
+    public function mount($campeonatoId)
     {
 
-        $this->campeonatos = Campeonato::all();
+        // $this->campeonatos = Campeonato::findOrFail($campeonatoId);
+        $this->campeonato_id = $campeonatoId;
 
-        // Obtener el ultimo campeonato agregado
-        $ultimoCampeonato = Campeonato::latest()->first();
-
-        // Si hay un campeonato, asigna su ID a la propiedad para que se seleccione
-        if ($ultimoCampeonato) {
-            $this->campeonato_id = $ultimoCampeonato->id;
-        } else {
-            // Si no hay campeonatos, asigna null o una cadena vacía para que el select no tenga un valor inválido
-            $this->campeonato_id = null; // O $this->campeonato_id = '';
-        }
         $this->posiciones = collect(); // Inicializa como una colección vacía
-        $this->generarTablaPosiciones();
+        $this->generarTablaPosiciones($campeonatoId);
     }
 
     public function updatedCampeonatoId()
@@ -203,14 +194,36 @@ class TablaPosiciones extends Component
     //=====================EXPORTAR TABLA A EXCEL=========================
     public function exportarPosiciones()
     {
-        $resultado = (new TablaPosicionesService())->generar($this->campeonato_id);
+        $campeonato = Campeonato::find($this->campeonato_id);
+
+        if (!$campeonato) {
+            return;
+        }
+
+        $nombreCampeonato = $campeonato->nombre;
+
+        if ($campeonato->formato === 'grupos') {
+            // Detectar grupos y generar posiciones por grupo
+            $grupos = \App\Models\Grupo::where('campeonato_id', $campeonato->id)->get();
+
+            $posicionesPorGrupo = [];
+
+            foreach ($grupos as $grupo) {
+                $posicionesPorGrupo[$grupo->nombre] = $this->calcularPosicionesPorGrupo($campeonato, $grupo->id);
+            }
+
+            return Excel::download(
+                new \App\Exports\GruposPosicionesExport($posicionesPorGrupo, $nombreCampeonato),
+                'tabla_posiciones_por_grupo.xlsx'
+            );
+        }
+
+        // Todos contra todos
+        $posiciones = $this->calcularPosicionesPorGrupo($campeonato, null);
 
         return Excel::download(
-            new PosicionesExport(
-                is_array($resultado) ? $resultado['posiciones'] : collect(),
-                is_array($resultado) ? $resultado['nombre_campeonato'] : 'Campeonato no disponible'
-            ),
-            'tabla_posiciones.xlsx'
+            new \App\Exports\PosicionesExport($posiciones, $nombreCampeonato, 'General'),
+            'tabla_posiciones_general.xlsx'
         );
     }
 

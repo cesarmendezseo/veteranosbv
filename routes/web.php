@@ -28,7 +28,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Livewire\TablaPosicion\TablaPosiciones;
-
+use App\Livewire\TablaPosicion\TablaPosicionIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -88,7 +88,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');
     //==============FIN ASIGNAR EQUIPOS========================
     //==============TABLA DE POSICIONES========================
-    Route::get('/tabla-posiciones', \App\Livewire\TablaPosicion\TablaPosiciones::class)->name('tabla-posiciones');
+    Route::get('/tabla-posiciones', TablaPosicionIndex::class)->name('tabla-posiciones');
+    Route::get('/tabla-posiciones/{campeonatoId}/ver', \App\Livewire\TablaPosicion\TablaPosiciones::class)->name('tabla-posiciones.ver');
     Route::get('/tabla-posiciones/{campeonato}/tabla-pdf', [TablaPosiciones::class, 'generarTablaPosicionesPDF'])->name('tabla.pdf');
     Route::get('/exportar-encuentros', [FixtureCrear::class, 'exportar'])->name('encuentros.exportar');
     //==============FIN TABLA DE POSICIONES========================

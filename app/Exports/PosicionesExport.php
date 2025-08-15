@@ -16,12 +16,20 @@ class PosicionesExport implements FromCollection, WithEvents, WithTitle
 {
     protected $posiciones;
     protected $nombreCampeonato;
+    protected $tituloHoja;
     protected $highestRow;
 
-    public function __construct($posiciones, $nombreCampeonato)
+
+    public function __construct($posiciones, $nombreCampeonato, $tituloHoja)
     {
         $this->posiciones = $posiciones;
         $this->nombreCampeonato = $nombreCampeonato;
+        $this->tituloHoja = $tituloHoja;
+    }
+
+    public function title(): string
+    {
+        return $this->tituloHoja;
     }
 
     public function collection()
@@ -181,10 +189,5 @@ class PosicionesExport implements FromCollection, WithEvents, WithTitle
         $sheet->getStyle("{$column}3:{$column}{$highestRow}")->getFill()->setRotation(90);
         $sheet->getStyle("{$column}3:{$column}{$highestRow}")->getFill()->setStartColor(new Color($startColor));
         $sheet->getStyle("{$column}3:{$column}{$highestRow}")->getFill()->setEndColor(new Color($endColor));
-    }
-
-    public function title(): string
-    {
-        return 'Posiciones';
     }
 }
