@@ -15,7 +15,7 @@ use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
-
+use App\Livewire\Equipo\ListadoBuenaFe;
 use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
@@ -53,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar');
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
+    Route::get('equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
+
     //==============JUGADORES========================
     Route::get('/jugadores', JugadoresIndex::class)->name('jugadores.index');
     Route::get('/jugadores/{jugadorId}/editar', JugadoresEditar::class)->name('jugadores.editar');
@@ -83,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fixture/{campeonatoId}/ver', FixtureVer::class)->name('fixture.ver');
     Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
     Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');
-    //==============FIN ESTADIOS========================
+    //==============FIN FIXTURE========================
     //==============ASIGNAR EQUIPOS========================
     Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');
     //==============FIN ASIGNAR EQUIPOS========================

@@ -83,6 +83,7 @@
                     <td class="px-6 py-4 text-right">
                         <!-- Para pantallas medianas en adelante -->
                         <div class="hidden md:flex gap-2 justify-end">
+
                             {{-- Editar --}}
                             <a href="{{ route('equipo.editar', $equipo->id) }}"
                                 class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
