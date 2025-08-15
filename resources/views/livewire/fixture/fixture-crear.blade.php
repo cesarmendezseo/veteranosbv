@@ -5,41 +5,19 @@
     </div>
     @enderror
 
-    <header class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center">
-        <h1 class="text-lg font-bold">Campeonato: <span class="text-base text-white font-semi
-        bold">{{ strtoupper($campeonato->nombre) }}</span></h1>
 
-        {{-- Botón hamburguesa móvil --}}
-        <div class="md:hidden" x-data="{ open: false }">
-            <button @click="open = !open" class="focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
 
-            {{-- Menú desplegable móvil --}}
-            <div x-show="open" @click.away="open = false" class="flex flex-col mt-2 space-y-2 bg-blue-900 p-2 rounded">
-                <a href="{{route('fixture.index')}}" class="flex items-center gap-1 hover:underline">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    Volver
-                </a>
-            </div>
-        </div>
+    <x-navbar titulo="Campeonato: {{ strtoupper($campeonato->nombre) }}">
 
-        {{-- Menú escritorio --}}
-        <nav class="hidden md:flex space-x-4">
-            <a href="{{route('fixture.index')}}" class="flex items-center gap-1 hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                Volver
-            </a>
-        </nav>
-    </header>
+
+        <a href="{{route('fixture.index')}}" class="flex items-center gap-1 hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Volver
+        </a>
+
+    </x-navbar>
     <form wire:submit.prevent="guardarEncuentro" class="space-y-4 shadow-md sm:rounded-lg bg-gray-100 p-4">
 
         {{-- Título --}}
@@ -52,7 +30,7 @@
         <div class="mb-4">
             <h3 class="text-base text-blue-900 font-semibold ">Selecione un Grupo</h3>
             <select id="grupo_id" wire:model.live="grupo_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">-- Selecciona un grupo --</option>
+                <option value=""></option>
                 @foreach ($grupos as $grupo)
                 <option value="{{ $grupo->id }}">{{ $grupo->nombre }}</option>
                 @endforeach
@@ -70,10 +48,10 @@
             {{-- Equipo Local --}}
             <div>
                 <label for="equipo_local_id"
-                    class=" text-base text-blue-900 font-semibold dark:text-[#ebee2d]">Equipo
+                    class=" text-base text-blue-900 font-semibold dark:text-gray-800]">Equipo
                     Local</label>
                 <select id="equipo_local_id" wire:model.live="equipo_local_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="">-- Selecciona un equipo --</option>
+                    <option value=""></option>
                     @foreach ($equipos as $equipo)
                     <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre)}}</option>
                     @endforeach
@@ -86,10 +64,10 @@
             {{-- Equipo Visitante (filtrado) --}}
             <div>
                 <label for="equipo_visitante_id"
-                    class="text-base text-blue-900 font-semibold dark:text-[#ebee2d]">Equipo
+                    class="text-base text-blue-900 font-semibold dark:text-gray-800">Equipo
                     Visitante</label>
                 <select id="equipo_visitante_id" wire:model="equipo_visitante_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="">-- Selecciona un equipo --</option>
+                    <option value=""> </option>
                     @foreach ($this->equiposVisitantes as $equipo)
                     <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
                     @endforeach
@@ -104,7 +82,7 @@
         <div class="hidden md:grid grid-cols-5 gap-4">
             {{-- Hora --}}
             <div class="flex flex-col items-start"> <!-- Alineación a la izquierda -->
-                <label class="block dark:text-[#ebee2d]">Hora</label>
+                <label class="block dark:text-gray-800">Hora</label>
                 <input type="time" wire:model="hora" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
                 @error('hora')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -113,7 +91,7 @@
 
             {{-- jornada --}}
             <div class="flex flex-col items-start">
-                <label class="block dark:text-[#ebee2d]">Jornada</label>
+                <label class="block dark:text-gray-800">Jornada</label>
                 <input type="number" wire:model="jornada" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
                 @error('jornada')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -121,7 +99,7 @@
             </div>
             {{-- Fecha --}}
             <div class="flex flex-col">
-                <label class="block dark:text-[#ebee2d]">Fecha</label>
+                <label class="block dark:text-gray-800">Fecha</label>
                 <input type="date" wire:model="fecha" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" placeholder="dd/mm/aaaa" />
                 @error('fecha')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -130,7 +108,7 @@
 
             {{-- Cancha --}}
             <div class="flex flex-col">
-                <label class="block dark:text-[#ebee2d]">Cancha</label>
+                <label class="block dark:text-gray-800">Cancha</label>
                 <select wire:model="cancha_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">-- Selecciona una cancha --</option>
                     @foreach ($canchas as $cancha)
@@ -144,7 +122,7 @@
 
             {{-- Estado --}}
             <div class="flex flex-col">
-                <label class="block dark:text-[#ebee2d]">Estado</label>
+                <label class="block dark:text-gray-800">Estado</label>
                 <select wire:model="estado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value=" programado">Programado</option>
                     <option value="jugado">Jugado</option>
@@ -158,13 +136,13 @@
 
         {{-- ============MOVIL=========================================== --}}
 
-        <div class="block md:hidden space-y-4">
+        <div class="block md:hidden space-y-4 dark:bg-gray-600 rounded shadow p-4">
             <!-- Primera fila: Hora y Jornada en 2 columnas (siempre) -->
             <div class="grid grid-cols-2 gap-4">
                 {{-- Hora --}}
                 <div class="flex flex-col">
-                    <label class="block dark:text-[#ebee2d] ">Hora</label>
-                    <input type="time" wire:model="hora" class="w-full input-chico" />
+                    <label class="block dark:text-gray-100 ">Hora</label>
+                    <input type="time" wire:model="hora" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     @error('hora')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
                     @enderror
@@ -172,8 +150,8 @@
 
                 {{-- Jornada --}}
                 <div class="flex flex-col">
-                    <label class="block dark:text-[#ebee2d]">Jornada</label>
-                    <input type="number" wire:model="jornada" class="w-full input-chico" />
+                    <label class="block dark:text-gray-100">Jornada</label>
+                    <input type="number" wire:model="jornada" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     @error('jornada')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
                     @enderror
@@ -181,10 +159,10 @@
             </div>
 
             <!-- Fecha (ocupa todo el ancho en móvil) -->
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 ">
                 <div class="flex flex-col">
-                    <label class="block dark:text-[#ebee2d]">Fecha</label>
-                    <input type="date" wire:model="fecha" class="w-full fecha" placeholder="dd/mm/aaaa" />
+                    <label class="block dark:text-gray-100">Fecha</label>
+                    <input type="date" wire:model="fecha" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="dd/mm/aaaa" />
                     @error('fecha')
                     <span class="text-red-600 text-sm">{{ $message }}</span>
                     @enderror
@@ -194,9 +172,9 @@
                 <div class="flex flex-col">
                     {{-- Cancha --}}
                     <div class="flex flex-col">
-                        <label class="block dark:text-[#ebee2d]">Cancha</label>
-                        <select wire:model="cancha_id" class="w-full select">
-                            <option value="">-- Selecciona una cancha --</option>
+                        <label class="block dark:text-gray-100">Cancha</label>
+                        <select wire:model="cancha_id" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value=""> </option>
                             @foreach ($canchas as $cancha)
                             <option value="{{ $cancha->id }}">{{ strtoupper($cancha->nombre) }}</option>
                             @endforeach
@@ -208,8 +186,8 @@
                 </div>
                 {{-- Estado --}}
                 <div class="flex flex-col">
-                    <label class="block dark:text-[#ebee2d]">Estado</label>
-                    <select wire:model="estado" class="w-full select">
+                    <label class="block dark:text-gray-100">Estado</label>
+                    <select wire:model="estado" class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="programado">Programado</option>
                         <option value="jugado">Jugado</option>
                         <option value="pendiente">Pendiente</option>

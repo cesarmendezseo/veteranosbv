@@ -1,15 +1,19 @@
-<div> <x-navbar titulo="Cargar un Jugador">
-        {{-- Botón para volver a la lista de categorías --}}
-        <a href="{{ route('jugadores.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Volver</a>
+<div class=" w-full">
+    <div class="flex flex-col min-h-screen">
+        {{-- La barra de navegación se quedará en la parte superior --}}
+        <x-navbar titulo="Cargar un Jugador">
+            {{-- Botón para volver a la lista de categorías --}}
+            <a href="{{ route('jugadores.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Volver
+            </a>
+        </x-navbar>
 
-    </x-navbar>
-    <div class="max-w-sm w-full lg:max-w-full lg:flex">
 
         <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <flux:separator class="bt-2 mb-2" />
+
             <form wire:submit.prevent="guardar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
                 @csrf
                 <div class="grid md:grid-cols-3 md:gap-6">
@@ -188,43 +192,44 @@
                 </div>
             </form>
         </div>
+
+        @push('js')
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('creado', ({
+                    id
+                }) => {
+                    Swal.fire({
+                        title: 'Exito...',
+                        text: "Jugador creado correctamente",
+                        icon: 'succes',
+
+                        confirmButtonColor: '#3085d6',
+
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch('index', {
+                                id: id
+                            });
+                        }
+                    });
+                });
+                //para errroes de validación
+                Livewire.on('alertaError', (event) => {
+                    const message = event.message; // Accede a los datos del evento
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errores de validación',
+                        text: message.replace(/\n/g, '\n'),
+                        customClass: {
+                            popup: 'text-sm'
+                        }
+                    });
+                });
+
+            });
+        </script>
+        @endpush
     </div>
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            Livewire.on('creado', ({
-                id
-            }) => {
-                Swal.fire({
-                    title: 'Exito...',
-                    text: "Jugador creado correctamente",
-                    icon: 'succes',
-
-                    confirmButtonColor: '#3085d6',
-
-                    confirmButtonText: 'Ok'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Livewire.dispatch('index', {
-                            id: id
-                        });
-                    }
-                });
-            });
-            //para errroes de validación
-            Livewire.on('alertaError', (event) => {
-                const message = event.message; // Accede a los datos del evento
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Errores de validación',
-                    text: message.replace(/\n/g, '\n'),
-                    customClass: {
-                        popup: 'text-sm'
-                    }
-                });
-            });
-
-        });
-    </script>
-    @endpush
 </div>

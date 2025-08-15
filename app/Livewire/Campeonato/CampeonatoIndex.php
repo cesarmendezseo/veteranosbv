@@ -2,53 +2,32 @@
 
 namespace App\Livewire\Campeonato;
 
-
 use App\Models\Campeonato;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use SweetAlert2\Laravel\Swal;
+use Livewire\WithPagination;
 
 class CampeonatoIndex extends Component
 {
+    use WithPagination;
 
-
-    public $campeonatos;
     public $campeonatoSeleccionado;
-    public $nombre;
-    public $formato;
-    public $cantidadEquipos;
-    public $cantidadGrupos;
-    public $categoria = 'A';
-    public $puntosGanados;
-    public $puntosEmpatados;
-    public $puntosPerdidos;
-    public $status;
+    public $search = '';
+    protected $listeners = ['refresh' => '$refresh'];
 
-
-
-    public function mount()
+    // Cada vez que se actualiza search, resetea la página
+    public function updatingSearch()
     {
-        //mensaje de otras paginas
-        $this->campeonatos = Campeonato::with('grupos', 'categoria')->get();
+        $this->resetPage();
     }
-
 
     #[On('eliminar-campeonato')]
     public function eliminarCampeonato($id)
     {
-
         Campeonato::findOrFail($id)->delete();
-
         $this->dispatch('baja');
         $this->dispatch('refresh');
     }
-
-    #[On('refresh')]
-    public function refresh()
-    {
-        // No hace falta que pongas nada acá, con solo tener este método, Livewire vuelve a renderizar
-    }
-
 
     public function crear()
     {
@@ -57,14 +36,24 @@ class CampeonatoIndex extends Component
 
     public function verCampeonato($campeonatoId)
     {
-
-        $this->campeonatoSeleccionado = \App\Models\Campeonato::with('grupos', 'criterioDesempate')->find($campeonatoId);
-
+        $this->campeonatoSeleccionado = Campeonato::with('grupos', 'criterioDesempate')->find($campeonatoId);
         $this->dispatch('static-modal');
     }
 
     public function render()
     {
-        return view('livewire.campeonato.campeonato-index');
+        $campeonatos = Campeonato::query()
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhereYear('created_at', $this->search); // búsqueda por año
+                });
+            })
+            ->orderBy('nombre')
+            ->paginate(10);
+
+        return view('livewire.campeonato.campeonato-index', [
+            'campeonatos' => $campeonatos,
+        ]);
     }
 }

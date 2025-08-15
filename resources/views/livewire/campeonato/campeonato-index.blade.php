@@ -1,6 +1,5 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
      <x-navbar titulo="Campeonatos">
-
          <button wire:click="crear"
              class="px-3 py-2  text-white rounded flex items-center gap-1 cursor-pointer">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -9,9 +8,16 @@
                  <line x1="8" x2="16" y1="12" y2="12" />
              </svg> Crear
          </button>
+         <div class="mt-2">
+             <input
+                 type="text"
+                 wire:model.live="search"
 
-
+                 placeholder="Buscar por nombre del campeonato o por año"
+                 class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+         </div>
      </x-navbar>
+
      <flux:separator class="mb-2" />
      <table class="hidden md:table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
@@ -136,6 +142,14 @@
 
      <!-- Para móvil: tarjetas -->
      <div class="md:hidden space-y-4 min-h-screen">
+         <div class="mt-2 ">
+             <input
+                 type="text"
+                 wire:model.live="search"
+
+                 placeholder="Buscar por nombre del campeonato o por año"
+                 class="border border-gray-500 rounded px-3 py-2.5 w-full mb-2" />
+         </div>
          @foreach($campeonatos as $campeonato)
          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border dark:border-gray-700">
              <div class="flex justify-between items-center mb-2">

@@ -1,5 +1,5 @@
 <div>
-    <x-navbar titulo="Fixture">
+    <x-navbar titulo="Ver Encuentros - Fixture ">
         <a href="{{ route('fixture.index') }}"
             class="px-3 py-2  text-white rounded flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -54,7 +54,7 @@
 
             <!-- Grupo -->
             <select wire:model.live="grupoFiltro"
-                class="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                 <option value="">-- Grupo --</option>
                 @foreach ($grupos ?? [] as $grupo)
@@ -81,7 +81,7 @@
 
     </div>
 
-    <div class="overflow-x-auto bg-gray-100 dark:bg-gray-900 p-4 shadow-md sm:rounded-lg">
+    <div class="overflow-x-auto border border-gray-300 dark:bg-gray-900 p-4 shadow-md sm:rounded-lg">
         @foreach ($encuentrosAgrupados as $nombreCancha => $encuentros)
         <div class="mb-6">
             <!-- Nombre de la cancha -->
@@ -220,13 +220,12 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Versión Móvil -->
-            <div class="sm:hidden space-y-2">
-                @foreach ($encuentrosPorCancha as $encuentro)
-                <div class="border border-gray-300 rounded-lg overflow-hidden bg-white dark:bg-gray-800">
+            <!--///////////------ Versión Móvil ////////////////////// -->
+            <div class="sm:hidden space-y-2 ">
+                @foreach ($encuentros as $encuentro)
+                <div class="border border-gray-300 bg-gray-50 shadow-2xs rounded-lg overflow-hidden  text-gray-900 dark:bg-gray-800">
                     <!-- Encabezado con fecha y hora -->
-                    <div class="bg-gray-100 dark:bg-gray-700 p-2 flex justify-between items-center">
+                    <div class="bg-gray-800 dark:bg-gray-500 p-2 flex justify-between items-center">
                         <div class="font-medium text-white dark:text-gray-200">
                             {{ \Carbon\Carbon::parse($encuentro->fecha)->format('d/m/Y') }}
                         </div>
@@ -239,7 +238,7 @@
                             {{ \Carbon\Carbon::parse($encuentro->hora)->format('H:i') }}hs.
                         </div>
                         <div
-                            class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm text-white dark:text-gray-200">
+                            class="px-2 py-1 bg-gray-500 dark:bg-gray-600 rounded text-sm text-white dark:text-gray-200">
 
                             {{ strtoupper($encuentro->estado) }}
                         </div>
@@ -250,18 +249,18 @@
                         <!-- Equipo local -->
                         <div class="flex items-center justify-between mb-2">
                             <span
-                                class="font-medium text-[#e7e40a]">{{ $encuentro->equipoLocal->nombre }}</span>
+                                class="font-semibold text-gray-800 dark:text-gray-100">{{ strtoupper($encuentro->equipoLocal->nombre) }}</span>
                             <input type="number" wire:model="goles_local.{{ $encuentro->id }}"
-                                class="w-16 px-2 py-1 border rounded text-center text-gray-950 bg-red-100"
+                                class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-gray-950 bg-gray-100"
                                 min="0" />
                         </div>
 
                         <!-- Equipo visitante -->
                         <div class="flex items-center justify-between mb-3">
                             <span
-                                class="font-medium text-[#e7e40a]">{{ $encuentro->equipoVisitante->nombre }}</span>
+                                class="font-semibold text-gray-800 dark:text-gray-100">{{ strtoupper($encuentro->equipoVisitante->nombre) }}</span>
                             <input type="number" wire:model="goles_visitante.{{ $encuentro->id }}"
-                                class="w-16 px-2 py-1 border rounded text-center text-gray-950 bg-red-100"
+                                class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-gray-950 bg-gray-100"
                                 min="0" />
                         </div>
 

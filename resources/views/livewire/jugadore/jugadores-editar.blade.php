@@ -7,7 +7,7 @@
              Volver</a>
 
      </x-navbar>
-     <div class="max-w-sm w-full lg:max-w-full lg:flex">
+     <div class=" w-full lg:max-w-full lg:flex">
 
          <div class="w-full p-4 text-center bg-gray-100 border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
              <flux:separator class="bt-2 mb-2" />

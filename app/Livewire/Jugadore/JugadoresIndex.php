@@ -5,18 +5,19 @@ namespace App\Livewire\Jugadore;
 use App\Models\Jugador;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class JugadoresIndex extends Component
 {
-    public $jugadores;
+    use WithPagination;
+
+    public $search = '';
     public $jugadorSeleccionado;
+
     protected $listeners = ['static-modal' => 'abrirModal'];
 
-    public function mount()
-    {
-        // Aquí podrías cargar los jugadores desde la base de datos o cualquier otra fuente
-        $this->jugadores = Jugador::orderBy('apellido')->get(); // Reemplaza esto con la lógica para obtener los jugadores
-    }
+    protected $updatesQueryString = ['search'];
+
     public function abrirModal()
     {
         // Aquí no hace falta nada porque $jugadorSeleccionado ya está cargado
@@ -24,14 +25,13 @@ class JugadoresIndex extends Component
 
     public function borrar($jugadorId)
     {
-
         LivewireAlert::title('ATENCION')
             ->text('Esta por ELIMINAR un jugador, lo confirma?')
             ->asConfirm()
             ->confirmButtonText('Sí, Eliminar ')
             ->cancelButtonText('No, Cancelar')
-            ->confirmButtonColor('#00A321') // Verde (Tailwind green-600)
-            ->cancelButtonColor('#FF6600')  // Rojo (Tailwind red-600)
+            ->confirmButtonColor('#00A321')
+            ->cancelButtonColor('#FF6600')
             ->warning()
             ->onConfirm('deleteItem', ['id' => $jugadorId])
             ->onDeny('keepItem', ['id' => $jugadorId])
@@ -41,7 +41,6 @@ class JugadoresIndex extends Component
     public function deleteItem($data)
     {
         $itemId = $data['id'];
-
         $equipo = Jugador::find($itemId);
 
         if (!$equipo) {
@@ -53,6 +52,7 @@ class JugadoresIndex extends Component
                 ->show();
             return;
         }
+
         $equipo->delete();
 
         LivewireAlert::title('')
@@ -61,25 +61,40 @@ class JugadoresIndex extends Component
             ->toast()
             ->position('top')
             ->show();
-
-        $this->jugadores = Jugador::orderBy('apellido')->get(); // Refresh the list of equipos */
     }
 
-    public function keepItem($data)
+    public function keepItem()
     {
-        $itemId = $data['id'];
-        $this->jugadores = Jugador::orderBy('apellido')->get(); // Refresh the list of jugadores */
-        // Keep logic
+        $this->resetPage();
     }
 
     public function verJugador($jugadorId)
     {
-        $this->jugadorSeleccionado = \App\Models\Jugador::find($jugadorId);
+        $this->jugadorSeleccionado = Jugador::find($jugadorId);
         $this->dispatch('static-modal');
+    }
+
+    // Método para buscar y resetear la paginación
+    public function buscar()
+    {
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.jugadore.jugadores-index');
+        $jugadores = Jugador::query()
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('apellido', 'like', '%' . $this->search . '%')
+                        ->orWhere('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhere('documento', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('apellido')
+            ->paginate(10);
+
+        return view('livewire.jugadore.jugadores-index', [
+            'jugadores' => $jugadores,
+        ]);
     }
 }

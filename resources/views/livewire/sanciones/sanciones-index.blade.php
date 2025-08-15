@@ -1,5 +1,5 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-     <x-navbar titulo="Sanciones">
+     <x-navbar titulo="Estadistica y Sanciones">
 
      </x-navbar>
      <flux:separator class="mb-2" />
@@ -8,7 +8,7 @@
          <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-white">
              <tr>
                  <th scope="col" class="px-6 py-3">
-                     Nombre
+                     Campeonato
                  </th>
                  <th scope="col" class="px-6 py-3">
                      Formato
@@ -17,7 +17,7 @@
                  <th scope="col" class="px-6 py-3">
                      Categoria
                  </th>
-                 <th scope="col" class="px-6 py-3">
+                 <th scope="col" class="px-6 py-3 text-center ">
                      Acciones
                  </th>
              </tr>
@@ -117,7 +117,7 @@
          @foreach($campeonatos as $campeonato)
          <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border dark:border-gray-700">
              <div class="flex justify-between items-center mb-2">
-                 <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span class="text-gray-600 dark:text-accent">Torneo:</span> {{ ucwords($campeonato->nombre) }}</h3>
+                 <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span class="text-gray-600 dark:text-accent">Campeonato:</span> {{ ucwords($campeonato->nombre) }}</h3>
                  <div x-data="{ open: false }" class="relative">
                      <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
                          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
