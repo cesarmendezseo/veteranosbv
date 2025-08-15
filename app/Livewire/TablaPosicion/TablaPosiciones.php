@@ -172,23 +172,19 @@ class TablaPosiciones extends Component
     //=============TABLA PDF============================0
     public function generarTablaPosicionesPDF(Campeonato $campeonato)
     {
-        // Generar las posiciones para el campeonato específico
         $this->generarTablaPosiciones($campeonato->id);
-
-        // Asignar la propiedad a una variable local
         $posiciones = $this->posiciones;
-        // Generar el título para el PDF
         $title = "Tabla de Posiciones - " . $campeonato->nombre;
 
-        // Generar el PDF
-        $pdf = PDF::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'));
+        if ($campeonato->formato === 'grupos') {
+            return PDF::loadView('admin.pdf.posiciones_por_grupo', compact('campeonato', 'posiciones', 'title'))
+                ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
+        }
 
-        // Descargar el PDF
-        //return $pdf->download('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf'); // Mejor nombre de archivo
-
-        // Mostrar el PDF en el navegador
-        return $pdf->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
+        return PDF::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'))
+            ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
     }
+
 
 
     //=====================EXPORTAR TABLA A EXCEL=========================
