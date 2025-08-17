@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar');
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
-    Route::get('equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
+    Route::get('/equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
 
     //==============JUGADORES========================
     Route::get('/jugadores', JugadoresIndex::class)->name('jugadores.index');
