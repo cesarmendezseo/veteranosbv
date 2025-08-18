@@ -36,8 +36,9 @@
                     <flux:navlist.item icon="shield-check" :href="route('categoria.index')" :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}</flux:navlist.item>
                     <flux:navlist.item icon="device-phone-mobile" :href="route('canchas.index')" :current="request()->routeIs('Canchas.index')" wire:navigate>{{ __('Canchas') }}</flux:navlist.item>
                 </flux:navlist.group>
+                @role('role:admin')
                 <flux:navlist.item icon="shield-check" :href="route('rol.panel')" :current="request()->routeIs('rol.panel')" wire:navigate>{{ __('Roles y Permisos') }}</flux:navlist.item>
-
+                @endrole
 
             </flux:navlist.group>
         </flux:navlist>
