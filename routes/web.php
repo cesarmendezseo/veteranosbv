@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
 
     //=========================ROLES Y PERMISOS================================
 
-    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('role:Admin');
+    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('role:admin');
 
     //=========================ROLES Y PERMISOS================================
 
