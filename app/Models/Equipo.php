@@ -5,14 +5,14 @@ namespace App\Models;
 use App\NormalizesAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Illuminate\Testing\Fluent\Concerns\Has;
 
 class Equipo extends Model
 {
     use HasFactory;
     use NormalizesAttributes;
-    use SoftDeletes;
+    //use SoftDeletes;
 
     protected $normalizable = ['nombre', 'ciudad', 'provincia', 'descripcion'];
     protected $fillable = [

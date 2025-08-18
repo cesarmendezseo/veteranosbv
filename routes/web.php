@@ -32,7 +32,7 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\TablaPosicion\TablaPosiciones;
 use App\Livewire\TablaPosicion\TablaPosicionIndex;
 use Illuminate\Support\Facades\Route;
-
+use Spatie\Permission\Middleware\PermissionMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,6 +42,8 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+
+Route::middleware([PermissionMiddleware::class . ':ver-usuarios'])->group(function () {});
 
 
 
