@@ -1,6 +1,6 @@
 <div>
     <x-layouts.app.frontend>
-        <div class=" mt-2 w-full md:w-[600px] lg:w-[950px]">
+        <div class=" mt-2 w-full ">
 
             <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
                 <h1 class="text-lg font-bold">Tabla de posiciones</h1>
