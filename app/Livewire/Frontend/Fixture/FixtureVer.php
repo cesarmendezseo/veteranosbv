@@ -41,6 +41,7 @@ class FixtureVer extends Component
     public $formato;
     public $encuentro;
     public $encuentrosPorCancha = [];
+    public $equipoFiltro;
 
     public function mount($campeonatoId)
     {
@@ -187,20 +188,25 @@ class FixtureVer extends Component
 
         // Obtener los encuentros filtrados
         $encuentros = Encuentro::query()
-            ->with(['equipoLocal', 'equipoVisitante', 'cancha', 'grupo', 'campeonato']) // Agregado campeonato
+            ->with(['equipoLocal', 'equipoVisitante', 'cancha', 'grupo', 'campeonato'])
             ->when($this->campeonato_id, fn($q) => $q->where('campeonato_id', $this->campeonato_id))
             ->when($this->fechaFiltro, fn($q) => $q->whereDate('fecha', $this->fechaFiltro))
-            ->when($this->equipoLocalFiltro, fn($q) => $q->whereHas('equipoLocal', fn($query) =>
-            $query->where('nombre', 'like', '%' . $this->equipoLocalFiltro . '%')))
             ->when($this->jornadaFiltro, fn($q) => $q->where('fecha_encuentro', $this->jornadaFiltro))
-            ->when($this->equipoVisitanteFiltro, fn($q) => $q->whereHas('equipoVisitante', fn($query) =>
-            $query->where('nombre', 'like', '%' . $this->equipoVisitanteFiltro . '%')))
-            ->when($this->grupoFiltro, fn($q) => $q->where('grupo_id', $this->grupoFiltro))
             ->when($this->estadoFiltro, fn($q) => $q->where('estado', $this->estadoFiltro))
+            ->when($this->grupoFiltro, fn($q) => $q->where('grupo_id', $this->grupoFiltro))
+            ->when($this->equipoFiltro, function ($q) {
+                $q->where(function ($subQuery) {
+                    $subQuery->whereHas('equipoLocal', fn($query) =>
+                    $query->where('nombre', 'like', '%' . $this->equipoFiltro . '%'))
+                        ->orWhereHas('equipoVisitante', fn($query) =>
+                        $query->where('nombre', 'like', '%' . $this->equipoFiltro . '%'));
+                });
+            })
             ->orderBy('fecha')
             ->orderBy('cancha_id')
             ->orderBy('hora')
             ->get();
+
 
 
 
