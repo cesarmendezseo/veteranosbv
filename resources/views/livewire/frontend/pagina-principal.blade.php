@@ -1,89 +1,97 @@
 <div>
-    @push('styles')
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-
-    <style>
-        .font-oswald {
-            font-family: 'Oswald', sans-serif;
-        }
-    </style>
-    @endpush
 
     <x-layouts.app.frontend>
-        <section class="bg-gray-100 dark:bg-gray-800 py-16">
-            <div class="max-w-5xl mx-auto text-center px-4">
-                <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-700 dark:text-blue-500 mb-4 tracking-tight font-montserrat">
-                    Fútbol de Veteranos
-                </h1>
-                <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
-                    Organización, fixture y resultados en un solo lugar.
-                </p>
-                <a href="{{route('tabla-posicion-index')}}" class="inline-block bg-blue-700 text-white px-8 py-3 rounded-full hover:bg-blue-800 transition-all duration-300 transform hover:scale-105">
-                    Ver Tabla de Posiciones
-                </a>
-            </div>
-        </section>
+        <!DOCTYPE html>
+        <html lang="es">
 
-        <section class="py-12 bg-white dark:bg-gray-900">
-            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center px-4">
-                <div class="p-8 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-3">🏆</div>
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 font-montserrat">
-                        Campeonatos
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        Explora torneos activos y pasados con todos los detalles.
-                    </p>
-                    <a href="#" class="text-blue-700 dark:text-blue-500 font-semibold hover:underline">
-                        Ver más →
-                    </a>
-                </div>
-                <div class="p-8 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-3">📅</div>
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 font-montserrat">
-                        Fixture
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        Encuentra las fechas, horarios y sedes de los próximos partidos.
-                    </p>
-                    <a href="#" class="text-blue-700 dark:text-blue-500 font-semibold hover:underline">
-                        Ver más →
-                    </a>
-                </div>
-                <div class="p-8 bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-3">⚽</div>
-                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2 font-montserrat">
-                        Resultados
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        Mantente al día con los últimos marcadores y sanciones.
-                    </p>
-                    <a href="#" class="text-blue-700 dark:text-blue-500 font-semibold hover:underline">
-                        Ver más →
-                    </a>
-                </div>
-            </div>
-        </section>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Fútbol de Veteranos</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+            <!-- Tipografías -->
+            <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+            <style>
+                body {
+                    font-family: 'Inter', sans-serif;
+                }
 
-        <section class="py-12 bg-gray-100 dark:bg-gray-800">
-            <div class="max-w-4xl mx-auto text-center px-4">
-                <h2 class="text-3xl font-bold text-blue-700 dark:text-blue-500 mb-4 font-montserrat">
-                    Contacto
-                </h2>
-                <p class="text-gray-700 dark:text-gray-300 mb-2">
-                    ¿Eres delegado o jugador? Escríbenos para registrar tu equipo.
-                </p>
-                <p class="text-gray-600 dark:text-gray-400 text-lg">
-                    Email: <a href="mailto:contacto@ligaveteranos.com.ar" class="text-blue-700 dark:text-blue-500 hover:underline">contacto@ligaveteranos.com.ar</a>
-                </p>
-            </div>
-        </section>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+                h1,
+                h2,
+                h3,
+                h4,
+                h5,
+                h6 {
+                    font-family: 'Bebas Neue', sans-serif;
+                    letter-spacing: 1px;
+                }
+            </style>
+        </head>
+
+        <body class="bg-gray-50 text-gray-800">
+
+
+            <!-- Hero -->
+            <section class="w-full relative bg-[url('{{ asset('images/pagina-principal.jpg') }}')] bg-cover bg-center h-[100vh] flex items-center">
+                <div class="bg-black bg-opacity-60 w-full h-full flex items-center">
+                    <div class="max-w-3xl mx-auto px-6 text-center text-white">
+                        <h2 class="text-6xl mb-4 text-[#FFD700] font-bold">Fútbol de Veteranos</h2>
+                        <p class="text-xl mb-6 text-slate-100 font-bold">Pasión, amistad y competencia para siempre.</p>
+                        <a href="#inscripcion"
+                            class="px-6 py-3 bg-yellow-400 text-green-900 font-bold rounded-lg shadow hover:bg-yellow-500">
+                            Próximos partidos
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Partidos -->
+            <section id="partidos" class="py-16 max-w-6xl mx-auto px-6">
+                <h2 class="text-4xl text-center mb-12">Próximos Partidos</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
+                        <h3 class="text-2xl mb-2">Veteranos Norte</h3>
+                        <p class="text-gray-500 mb-4">vs</p>
+                        <h3 class="text-2xl mb-4">Amigos del Sur</h3>
+                        <p class="text-gray-700">Sábado 20 Ago - 18:00 hs</p>
+                    </div>
+                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
+                        <h3 class="text-2xl mb-2">Unión 79</h3>
+                        <p class="text-gray-500 mb-4">vs</p>
+                        <h3 class="text-2xl mb-4">Veteranos Oeste</h3>
+                        <p class="text-gray-700">Domingo 21 Ago - 17:00 hs</p>
+                    </div>
+                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
+                        <h3 class="text-2xl mb-2">Barrio Centro</h3>
+                        <p class="text-gray-500 mb-4">vs</p>
+                        <h3 class="text-2xl mb-4">Deportivo Viejos</h3>
+                        <p class="text-gray-700">Domingo 21 Ago - 19:00 hs</p>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- Contacto -->
+            <section id="contacto" class="py-16 w-full  mx-auto px-6 bg-[#3561a7]">
+                <div class="w-full max-w-[980px] mx-auto">
+                    <h2 class="text-4xl text-center mb-12 text-slate-100">Contacto</h2>
+                    <form class="grid gap-6">
+                        <input type="text" placeholder="Nombre" class="p-4 rounded-lg border">
+                        <input type="email" placeholder="Email" class="p-4 rounded-lg border">
+                        <textarea placeholder="Mensaje" class="p-4 rounded-lg border"></textarea>
+                        <button class="bg-[#0A2A5E] text-white px-6 py-3 rounded-lg hover:bg-[#3561a7]">Enviar</button>
+                    </form>
+                </div>
+            </section>
+
+
+
+        </body>
+
+        </html>
+
+
     </x-layouts.app.frontend>
-
 </div>
