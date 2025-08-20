@@ -23,7 +23,7 @@
                 <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
                     Organización, fixture y resultados en un solo lugar.
                 </p>
-                <a href="#" class="inline-block bg-blue-700 text-white px-8 py-3 rounded-full hover:bg-blue-800 transition-all duration-300 transform hover:scale-105">
+                <a href="{{route('tabla-posicion-index')}}" class="inline-block bg-blue-700 text-white px-8 py-3 rounded-full hover:bg-blue-800 transition-all duration-300 transform hover:scale-105">
                     Ver Tabla de Posiciones
                 </a>
             </div>

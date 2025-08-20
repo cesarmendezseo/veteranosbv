@@ -40,7 +40,7 @@ use App\Livewire\TablaPosicion\TablaPosicionIndex;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 })->name('home');
 
@@ -48,7 +48,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::get('/inicio', PaginaPrincipal::class)->name('pagina.principal');
+Route::get('/', PaginaPrincipal::class)->name('pagina.principal');
 Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->name('tabla-posicion-index');
 Route::get('/tabla-posicion/{campeonatoId}/ver', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
 Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');

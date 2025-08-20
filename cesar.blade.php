@@ -225,3 +225,26 @@
     $user->email = 'cesarmendez.seo@gmail.com';
     $user->password = bcrypt('C3tr0g4r*30'); // Nunca guardes texto plano
     $user->save();
+
+    <!--LOGIN -->
+
+    <flux:separator />
+    <ul>
+        @if (Route::has('login'))
+        @auth
+        <li class="md:hidden">
+            <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Dashboard</a>
+        </li>
+        @else
+        <li class="md:hidden">
+            <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Log in</a>
+        </li>
+        @if (Route::has('register'))
+        <li class="md:hidden">
+            <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Register</a>
+        </li>
+        @endif
+        @endauth
+        @endif
+    </ul>
+    <!-- FIN LOGIN-->
