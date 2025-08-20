@@ -29,7 +29,7 @@
     <div class="flex-grow w-full">
         <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden">
             <nav
-                x-data="{ open: false }"
+                x-data="{ open: false }" @popstate.window="open = false"
                 class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <!-- Logo -->
@@ -75,24 +75,35 @@
                         class="items-center justify-between w-full md:flex md:w-auto md:order-1"
                         :class="{ 'hidden': !open, 'flex': open }">
                         <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg 
-                       bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 
-                       md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                            bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 
+                            md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
                                 <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Inicio</a>
                             </li>
                             <li>
-                                <a href="{{route('tabla-posicion-index')}}" class="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Tabla Posición</a>
+                                <a href="{{ route('tabla-posicion-index') }}"
+                                    class="
+                                        block py-2 px-3 rounded-sm 
+                                        {{ Route::is('tabla-posicion-index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
+                                    "
+                                    aria-current="{{ Route::is('tabla-posicion-index') ? 'page' : 'false' }}">
+                                    Tabla Posición
+                                </a>
                             </li>
-
                             <li>
-                                <a href="{{route('frontend.fixture.index')}}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Fixture</a>
+                                <a href="{{ route('frontend.fixture.index') }}"
+                                    class="
+                                        block py-2 px-3 rounded-sm 
+                                        {{ Route::is('frontend.fixture.index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
+                                    "
+                                    aria-current="{{ Route::is('frontend.fixture.index') ? 'page' : 'false' }}">
+                                    Fixture
+                                </a>
                             </li>
                             <li>
                                 <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
                             </li>
-
                         </ul>
-
                     </div>
 
                 </div>

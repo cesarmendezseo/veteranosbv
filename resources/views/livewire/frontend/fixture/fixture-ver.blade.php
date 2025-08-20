@@ -138,22 +138,19 @@
                                     <td class="px-2 sm:px-4 py-2 text-center">
                                         {{ \Carbon\Carbon::parse($encuentro->hora)->format('H:i') }}
                                     </td>
-                                    <td class="px-2 sm:px-4 py-2 text-sm text-gray-800 font-semibold  dark:text-gray-200">
+                                    <td class="px-2 sm:px-4 py-2 text-right text-sm text-gray-800 font-semibold  dark:text-gray-200">
                                         {{ strtoupper($encuentro->equipoLocal->nombre) }}
                                     </td>
-                                    <td
-                                        class="w-16 px-1 sm:px-2 py-2 text-center  dark:border-gray-200">
-                                        <input type="number" wire:model="goles_local.{{ $encuentro->id }}"
-                                            class="w-full px-1 sm:px-2 py-1 border border-gray-400 rounded text-center text-gray-950 bg-gray-200"
-                                            min="0" />
-
+                                    <td class="w-16 px-1 sm:px-2 py-2 text-center dark:border-gray-200">
+                                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-950 font-bold mx-auto">
+                                            {{ $goles_local[$encuentro->id] ?? 0 }}
+                                        </div>
                                     </td>
 
-                                    <td
-                                        class="w-16 px-1 sm:px-2 py-2 text-center ">
-                                        <input type="number" wire:model="goles_visitante.{{ $encuentro->id }}"
-                                            class="w-full px-1 sm:px-2 py-1 border  border-gray-400 rounded text-center text-gray-950 bg-gray-200"
-                                            min="0" />
+                                    <td class="w-16 px-1 sm:px-2 py-2 text-center">
+                                        <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-950 font-bold mx-auto">
+                                            {{ $goles_visitante[$encuentro->id] ?? 0 }}
+                                        </div>
                                     </td>
                                     <td class="px-2 sm:px-4 py-2 text-sm font-semibold text-gray-800 dark:text-gray-200">
                                         {{strtoupper( $encuentro->equipoVisitante->nombre )}}
@@ -182,10 +179,7 @@
                                     Fecha:
                                     {{ $encuentro->fecha_encuentro }}
                                 </div>
-                                <div class="font-medium text-white dark:text-gray-200">
 
-                                    {{ \Carbon\Carbon::parse($encuentro->hora)->format('H:i') }}hs.
-                                </div>
                                 <div
                                     class="px-2 py-1 bg-gray-500 dark:bg-gray-600 rounded text-sm text-white dark:text-gray-200">
 

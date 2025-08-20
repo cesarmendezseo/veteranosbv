@@ -86,3 +86,10 @@ select:focus[data-flux-control] {
         page-break-after: always;
     }
 }
+
+/*para active de boton*/
+.active-link {
+    color: blue;
+    font-weight: bold;
+    /* u otros estilos para resaltarlo */
+}
