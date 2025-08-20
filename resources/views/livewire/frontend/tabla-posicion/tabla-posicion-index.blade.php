@@ -112,12 +112,30 @@
                             <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span class="text-gray-600 dark:text-accent">Torneo:</span> {{ ucwords($campeonato->nombre) }}</h3>
                             <div x-data="{ open: false }" class="relative">
                                 <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
+                                        <circle cx="12" cy="6" r="1.5" />
+                                        <circle cx="12" cy="12" r="1.5" />
+                                        <circle cx="12" cy="18" r="1.5" />
                                     </svg>
                                 </button>
-                                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                                    <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Ver</a>
+                                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-gray-200 dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
+                                    <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}"
+                                        class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="20" height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="lucide lucide-eye">
+                                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                        Ver
+                                    </a>
+
 
                                 </div>
                             </div>
