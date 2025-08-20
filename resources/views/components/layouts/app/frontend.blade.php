@@ -32,29 +32,24 @@
                 x-data="{ open: false }" @popstate.window="open = false"
                 class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <!-- Logo -->
                     <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Logo">
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Futbol</span>
                     </a>
-                    <!-- Botón + CTA -->
+
                     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         @if (Route::has('login'))
-                        <nav class="flex items-center justify-end gap-4">
+                        <div class="hidden md:flex items-center justify-end gap-4">
                             @auth
                             <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Dashboard</a>
                             @else
-
                             <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Log in</a>
                             @if (Route::has('register'))
-
                             <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Register</a>
-
                             @endif
                             @endauth
-                        </nav>
+                        </div>
                         @endif
-                        <!-- Botón hamburguesa -->
                         <button
                             @click="open = !open"
                             type="button"
@@ -63,29 +58,27 @@
                             :aria-expanded="open.toString()">
                             <span class="sr-only">Open main menu</span>
                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M1 1h15M1 7h15M1 13h15" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
                             </svg>
                         </button>
                     </div>
 
-                    <!-- Menú -->
                     <div
                         id="navbar-sticky"
-                        class="items-center justify-between w-full md:flex md:w-auto md:order-1"
+                        class="items-center justify-between w-full md:flex md:w-auto md:order-1     "
                         :class="{ 'hidden': !open, 'flex': open }">
-                        <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg 
-                            bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 
-                            md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        <ul class="w-full flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg 
+            bg-gray-200 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 
+            md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                             <li>
-                                <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Inicio</a>
+                                <a href="{{route('pagina.principal')}}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Inicio</a>
                             </li>
                             <li>
                                 <a href="{{ route('tabla-posicion-index') }}"
                                     class="
-                                        block py-2 px-3 rounded-sm 
-                                        {{ Route::is('tabla-posicion-index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
-                                    "
+                            block py-2 px-3 rounded-sm 
+                            {{ Route::is('tabla-posicion-index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:hover:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
+                        "
                                     aria-current="{{ Route::is('tabla-posicion-index') ? 'page' : 'false' }}">
                                     Tabla Posición
                                 </a>
@@ -93,9 +86,9 @@
                             <li>
                                 <a href="{{ route('frontend.fixture.index') }}"
                                     class="
-                                        block py-2 px-3 rounded-sm 
-                                        {{ Route::is('frontend.fixture.index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
-                                    "
+                            block py-2 px-3 rounded-sm 
+                            {{ Route::is('frontend.fixture.index') ? 'text-white bg-blue-700 md:bg-transparent md:text-blue-700 md:p-0 md:dark:hover:text-blue-500' : 'text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent' }}
+                        "
                                     aria-current="{{ Route::is('frontend.fixture.index') ? 'page' : 'false' }}">
                                     Fixture
                                 </a>
@@ -103,9 +96,25 @@
                             <li>
                                 <a href="#" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
                             </li>
+                            <flux:separator />
+                            @if (Route::has('login'))
+                            @auth
+                            <li class="md:hidden">
+                                <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Dashboard</a>
+                            </li>
+                            @else
+                            <li class="md:hidden">
+                                <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Log in</a>
+                            </li>
+                            @if (Route::has('register'))
+                            <li class="md:hidden">
+                                <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Register</a>
+                            </li>
+                            @endif
+                            @endauth
+                            @endif
                         </ul>
                     </div>
-
                 </div>
             </nav>
         </div>
