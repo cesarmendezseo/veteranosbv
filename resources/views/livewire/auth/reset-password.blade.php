@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
+    <x-auth-header :title="__('Restablecer  password')" :description="__('Por favor ingrese su nueva contraseña a continuación')" />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -11,8 +11,7 @@
             :label="__('Email')"
             type="email"
             required
-            autocomplete="email"
-        />
+            autocomplete="email" />
 
         <!-- Password -->
         <flux:input
@@ -22,23 +21,21 @@
             required
             autocomplete="new-password"
             :placeholder="__('Password')"
-            viewable
-        />
+            viewable />
 
         <!-- Confirm Password -->
         <flux:input
             wire:model="password_confirmation"
-            :label="__('Confirm password')"
+            :label="__('Confirmar password')"
             type="password"
             required
             autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
+            :placeholder="__('Confirmar password')"
+            viewable />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Reset password') }}
+                {{ __('Restablecer password') }}
             </flux:button>
         </div>
     </form>

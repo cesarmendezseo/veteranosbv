@@ -118,12 +118,12 @@
                                     <circle cx="12" cy="18" r="1.5" />
                                 </svg>
                             </button>
-                            <div x-show="open" @click.away="open = false" class="absolute bg-gray-200 right-0 mt-2 z-50 flex flex-col gap-2 dark:bg-gray-800 dark:border dark:border-gray-700 p-2 rounded-lg">
+                            <div x-show="open" @click.away="open = false" x-collapse class="absolute bg-[#0A2A5E] right-0 mt-2 z-50 flex flex-col gap-2 dark:bg-gray-800 dark:border dark:border-gray-700 p-2 rounded-l-lg">
 
                                 <a href="{{ route('frontend.fixture.verFixture', $campeonato->id) }}"
-                                    class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2">
+                                    class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        width="20" height="20"
+                                        width="18" height="18"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="currentColor"
@@ -134,8 +134,9 @@
                                         <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
                                         <circle cx="12" cy="12" r="3" />
                                     </svg>
-                                    Ver
+                                    <span class="whitespace-nowrap">Ver</span>
                                 </a>
+
                             </div>
                         </div>
                     </div>

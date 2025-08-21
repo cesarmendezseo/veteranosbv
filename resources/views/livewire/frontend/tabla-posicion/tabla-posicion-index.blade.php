@@ -118,11 +118,14 @@
                                         <circle cx="12" cy="18" r="1.5" />
                                     </svg>
                                 </button>
-                                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-gray-200 dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
+                                <div x-show="open"
+                                    x-collapse
+                                    @click.away="open = false"
+                                    class="absolute right-0 mt-2 bg-[#0A2A5E] dark:bg-gray-700 shadow rounded-l-lg z-50 flex flex-col">
                                     <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}"
-                                        class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2">
+                                        class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            width="20" height="20"
+                                            width="18" height="18"
                                             viewBox="0 0 24 24"
                                             fill="none"
                                             stroke="currentColor"
@@ -135,8 +138,6 @@
                                         </svg>
                                         Ver
                                     </a>
-
-
                                 </div>
                             </div>
                         </div>
@@ -197,7 +198,7 @@
             @endpush
 
         </div>
-</div>
-</x-layouts.app.frontend>
+
+    </x-layouts.app.frontend>
 
 </div>

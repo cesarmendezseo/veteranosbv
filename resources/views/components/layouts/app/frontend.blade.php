@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Futbol</title>
+    <title>Futbol de Veteranos</title>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -25,7 +25,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-[#0a0a0a] text-[#1b1b18] flex flex-col min-h-screen">
+<body class="bg-gray-100 dark:bg-[#0a0a0a] text-[#1b1b18] flex flex-col min-h-screen ">
 
     <div class="flex-grow w-full">
         <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden  id=" navbar-sticky"
@@ -181,21 +181,20 @@
                     </ul>
                 </div>
             </div>
-
-
             </nav>
         </div>
         <!-- FIN MENU-->
-        <div class="bg-gray-100 dark:bg-[#0a0a0a] pt-18 text-[#1b1b18] flex flex-col min-h-screen w-screen">
+        <div class="bg-gray-100 dark:bg-[#0a0a0a] pt-14 md:pt-22 text-[#1b1b18] flex flex-col min-h-screen w-screen">
             <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden">
                 {{ $slot }}
             </div>
-            <footer class="text-center p-4 bg-[#0A2A5E] text-slate-100">
-                &copy; 2025 Futbol de Veteranos Bella Vista. Síguenos en <a href="#">Redes Sociales</a>
-            </footer>
-
         </div>
     </div>
+    <footer class=" flex flex-col text-center p-4 bg-[#0A2A5E] text-slate-100">
+        &copy; 2025 Futbol de Veteranos Bella Vista. Síguenos en <a href="#">Redes Sociales</a>
+    </footer>
+
+
     @livewireScripts
     @stack('js')
     @fluxScripts

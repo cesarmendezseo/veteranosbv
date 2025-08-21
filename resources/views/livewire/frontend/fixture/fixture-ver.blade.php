@@ -287,59 +287,59 @@
             @endforeach
         </div>
 
-
-
-        @push('js')
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-
-
-
-                Livewire.on('confirmar-baja', ({
-                    id
-                }) => {
-                    Swal.fire({
-                        title: 'CUIDADO...',
-                        text: "¿Estás seguro de Eliminar el encuentro?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, Eliminar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Llamás al método del componente Livewire y le pasás el parámetro
-                            Livewire.dispatch('eliminar-encuentro', {
-                                encuentroId: id
-                            });
-                        }
-                    });
-                });
-                //========================================
-                Livewire.on('Baja', () => {
-                    Swal.fire(
-                        'Error!!',
-                        'El encuentro no se puede eliminar porque se encuentra jugado.',
-                        'warning'
-                    );
-                });
-                //========================================
-                Livewire.on('eliminado', () => {
-                    Swal.fire(
-                        '¡Eliminado!',
-                        'El encuentro ha sido eliminado correctamente.',
-                        'success'
-                    ).then(() => {
-                        // Opcional: Recargar la página o hacer alguna acción adicional
-                        Livewire.dispatch('refresh');
-                    });
-                });
-
-
-
-            });
-        </script>
-        @endpush
-        <!--  -->
     </x-layouts.app.frontend>
+
+    @push('js')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+
+
+
+            Livewire.on('confirmar-baja', ({
+                id
+            }) => {
+                Swal.fire({
+                    title: 'CUIDADO...',
+                    text: "¿Estás seguro de Eliminar el encuentro?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, Eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Llamás al método del componente Livewire y le pasás el parámetro
+                        Livewire.dispatch('eliminar-encuentro', {
+                            encuentroId: id
+                        });
+                    }
+                });
+            });
+            //========================================
+            Livewire.on('Baja', () => {
+                Swal.fire(
+                    'Error!!',
+                    'El encuentro no se puede eliminar porque se encuentra jugado.',
+                    'warning'
+                );
+            });
+            //========================================
+            Livewire.on('eliminado', () => {
+                Swal.fire(
+                    '¡Eliminado!',
+                    'El encuentro ha sido eliminado correctamente.',
+                    'success'
+                ).then(() => {
+                    // Opcional: Recargar la página o hacer alguna acción adicional
+                    Livewire.dispatch('refresh');
+                });
+            });
+
+
+
+        });
+    </script>
+    @endpush
+    <!--  -->
+
 </div>

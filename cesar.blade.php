@@ -33,10 +33,10 @@
         </svg>
         Crear
     </button>
+</div>
 
-
-    <!-- //////////////////////////////////////// -->
-
+<!-- ///////////////// SWEETALERT/////////////////////// -->
+<div>
     #[On('eliminar-campeonato')]
     public function eliminarCampeonato($id)
     {
@@ -105,8 +105,10 @@
         });
     </script>
     @endpush
-
-    <!-- VALIDACION -->
+</div>
+<!-- -----------FIN SWEETALERT------------>
+<!-- VALIDACION -->
+<div>
     try {
     $this->validate([
     'documento' => 'required|string|max:20',
@@ -137,114 +139,150 @@
     $this->dispatch('alertaError', message: $errores);
     throw $e; // opcional: si querés que también se muestren los errores normales
     }
-    <!-- MODAL -->
+</div>
+<!-- FIN VALIDACION -->
 
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
-    <div x-data="{ show: false }"
-        x-show="show"
-        x-on:static-modal.window="show = true"
-        x-cloak
-        class="shadow-2xs fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4 sm:p-6">
+<!-- MODAL -->
 
-        <div class="bg-gradient-custom dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-6 sm:p-8 relative transform transition-all scale-100 opacity-100 ease-out duration-300
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+<div x-data="{ show: false }"
+    x-show="show"
+    x-on:static-modal.window="show = true"
+    x-cloak
+    class="shadow-2xs fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4 sm:p-6">
+
+    <div class="bg-gradient-custom dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-6 sm:p-8 relative transform transition-all scale-100 opacity-100 ease-out duration-300
                 max-h-[90vh] overflow-y-auto"> <!-- Clases añadidas aquí -->
-            <!-- Botón de Cierre -->
-            <button @click="show = false"
-                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+        <!-- Botón de Cierre -->
+        <button @click="show = false"
+            class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
 
-            <h2 class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                Detalles del Campeonato
-            </h2>
+        <h2 class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+            Detalles del Campeonato
+        </h2>
 
-            @if($campeonatoSeleccionado)
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
+        @if($campeonatoSeleccionado)
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
 
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
 
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre Campeonato:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos: </strong> {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x Grupo: </strong>{{$campeonatoSeleccionado->cantidad_equipos_grupo}}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong> {{ $campeonatoSeleccionado->puntos_perdido }}
-                    </p>
-                    <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                        Puntos por Tarjeta para Fair Play
-                    </h4>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
-                    </p>
-                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Roja:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
-                    </p>
-                    <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                        Criterios de Desempate
-                    </h4>
-                    <p class=">
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre Campeonato:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos: </strong> {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x Grupo: </strong>{{$campeonatoSeleccionado->cantidad_equipos_grupo}}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong> {{ $campeonatoSeleccionado->puntos_perdido }}
+                </p>
+                <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                    Puntos por Tarjeta para Fair Play
+                </h4>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
+                </p>
+                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Roja:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
+                </p>
+                <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                    Criterios de Desempate
+                </h4>
+                <p class=">
                          <strong class=" font-semibold text-gray-400 dark:text-[#efb810]"></strong>
 
-                        @foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
+                    @foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
 
-                    <div> Prioridad: {{ $criterio->orden }} - {{ ucwords(strtolower($criterio->criterio)) }}</div>
-                    @endforeach
-                    </p>
+                <div> Prioridad: {{ $criterio->orden }} - {{ ucwords(strtolower($criterio->criterio)) }}</div>
+                @endforeach
+                </p>
 
-                </div>
-
-                @else
-                <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún campeonato para mostrar.</p>
-                @endif
             </div>
+
+            @else
+            <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún campeonato para mostrar.</p>
+            @endif
         </div>
     </div>
+</div>
 
-    $user = new App\Models\User;
-    $user->name = 'Administrador';
-    $user->email = 'cesarmendez.seo@gmail.com';
-    $user->password = bcrypt('C3tr0g4r*30'); // Nunca guardes texto plano
-    $user->save();
+$user = new App\Models\User;
+$user->name = 'Administrador';
+$user->email = 'cesarmendez.seo@gmail.com';
+$user->password = bcrypt('C3tr0g4r*30'); // Nunca guardes texto plano
+$user->save();
 
-    <!--LOGIN -->
+<!--LOGIN -->
 
-    <flux:separator />
-    <ul>
-        @if (Route::has('login'))
-        @auth
-        <li class="md:hidden">
-            <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Dashboard</a>
-        </li>
-        @else
-        <li class="md:hidden">
-            <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Log in</a>
-        </li>
-        @if (Route::has('register'))
-        <li class="md:hidden">
-            <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Register</a>
-        </li>
-        @endif
-        @endauth
-        @endif
-    </ul>
-    <!-- FIN LOGIN-->
+<flux:separator />
+<ul>
+    @if (Route::has('login'))
+    @auth
+    <li class="md:hidden">
+        <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Dashboard</a>
+    </li>
+    @else
+    <li class="md:hidden">
+        <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Log in</a>
+    </li>
+    @if (Route::has('register'))
+    <li class="md:hidden">
+        <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Register</a>
+    </li>
+    @endif
+    @endauth
+    @endif
+</ul>
+<!-- FIN LOGIN-->
+
+<!--BOTON 3 PUNTOS -->
+<div x-data="{ open: false }" class="relative">
+    <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="6" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="12" cy="18" r="1.5" />
+        </svg>
+    </button>
+    <div x-show="open"
+        x-collapse
+        @click.away="open = false"
+        class="absolute right-0 mt-2 bg-[#0A2A5E] dark:bg-gray-700 shadow rounded-l-lg z-50 flex flex-col">
+        <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}"
+            class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                width="18" height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye">
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span class="whitespace-nowrap">Ver</span>
+        </a>
+    </div>
+</div>
+<!--FIN BOTON 3 PUNTOS -->
