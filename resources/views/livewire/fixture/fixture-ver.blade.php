@@ -6,6 +6,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg> Volver
         </a>
+        @can('admin')
+
 
         <a href="{{ route('fixture.automatico') }}"
             class="px-3 py-2  text-white rounded flex items-center gap-1">
@@ -25,6 +27,7 @@
                 <path d="m7 10 5 5 5-5" />
             </svg>Exportar
         </button>
+        @endcan
     </x-navbar>
     <div class="mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
@@ -164,7 +167,7 @@
                             <td class="px-2 sm:px-4 py-2 text-center ">
                                 {{ strtoupper($encuentro->estado) }}
                             </td>
-
+                            @can('admin')
                             <td class="px-1 sm:px-3 py-2">
                                 <div class="flex items-center justify-center space-x-1">
                                     <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
@@ -215,6 +218,7 @@
 
                                 </div>
                             </td>
+                            @endcan
                         </tr>
                         @endforeach
                     </tbody>
@@ -265,6 +269,9 @@
                         </div>
 
                         <!-- Botones de acción -->
+                        @can('admin')
+
+
                         <div class="flex justify-between space-x-2">
                             <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
                                 class="flex-1 flex items-center justify-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
@@ -310,8 +317,8 @@
                                 </svg>
                                 <span class="hidden xs:inline">Eliminar</span>
                             </button>
-
                         </div>
+                        @endcan
                     </div>
                 </div>
                 @endforeach

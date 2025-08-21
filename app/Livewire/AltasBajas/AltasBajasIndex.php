@@ -22,6 +22,8 @@ class AltasBajasIndex extends Component
 
     protected $paginationTheme = 'tailwind';
 
+
+
     public function updatedDni()
     {
         $this->resetPage(); // IMPORTANTE: resetea la paginación al cambiar filtro
@@ -97,6 +99,7 @@ class AltasBajasIndex extends Component
 
     public function render()
     {
+
         $jugadores = Jugador::with('equipo')
             ->when($this->dni, fn($q) => $q->where('documento', 'like', '%' . $this->dni . '%'))
             ->paginate(10);

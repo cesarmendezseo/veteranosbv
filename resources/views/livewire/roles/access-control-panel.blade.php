@@ -1,92 +1,94 @@
-<!-- resources/views/livewire/access-control-panel.blade.php -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div>
+    <h2 class="text-2xl font-bold mb-6">Panel de Control de Acceso</h2>
 
-    <!-- Crear roles y permisos -->
-    <div class="space-y-4">
-        <h2 class="text-lg font-bold">Crear Rol</h2>
-        <input type="text" wire:model="roleName" placeholder="Nombre del rol class=" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
+    @if (session()->has('role_success'))
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <p>{{ session('role_success') }}</p>
+    </div>
+    @endif
+    @if (session()->has('permission_success'))
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <p>{{ session('permission_success') }}</p>
+    </div>
+    @endif
+    @if (session()->has('assignment_success'))
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <p>{{ session('assignment_success') }}</p>
+    </div>
+    @endif
 
-        <button wire:click="createRole" class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-                <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-            </svg><span>Crear Rol</span></button>
-
-        <h2 class="text-lg font-bold">Crear Permiso</h2>
-        <input type="text" wire:model="permissionName" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" placeholder="Nombre del permiso" />
-        <button wire:click="createPermission" class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-                <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-            </svg><span>Crear Permiso</span></button>
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h3 class="text-xl font-semibold mb-4">Crear Roles y Permisos</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form wire:submit.prevent="createRole" class="flex flex-col gap-4">
+                <input type="text" wire:model="roleName" placeholder="Nombre del nuevo rol" class="border p-2 rounded w-full">
+                @error('roleName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded">Crear Rol</button>
+            </form>
+            <form wire:submit.prevent="createPermission" class="flex flex-col gap-4">
+                <input type="text" wire:model="permissionName" placeholder="Nombre del nuevo permiso" class="border p-2 rounded w-full">
+                @error('permissionName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <button type="submit" class="bg-green-500 text-white p-2 rounded">Crear Permiso</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Asignar permisos a roles -->
-    <div class="space-y-4">
-        <h2 class="text-lg font-bold">Asignar Permisos a Rol</h2>
-        <select wire:model="selectedRole" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">-- Selecciona un rol --</option>
-            @foreach($roles as $role)
-            <option value="{{ $role->id }}">{{ $role->name }}</option>
-            @endforeach
-        </select>
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h3 class="text-xl font-semibold mb-4">Asignar Permisos a un Rol</h3>
+        <form wire:submit.prevent="assignPermissionsToRole" class="flex flex-col gap-4">
+            <select wire:model.live="selectedRole" class="border p-2 rounded">
+                <option value="">Seleccione un Rol</option>
+                @foreach ($roles as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
+            @error('selectedRole') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
-        <div>
-            @foreach($permissions as $perm)
-            <div class="flex flex-col items-start gap-3">
-                <label>
-                    <input type="checkbox" wire:model="selectedPermissions" value="{{ $perm->name }}" class="size-5 rounded border-gray-300 shadow-sm mb-3">
-                    <span class="font-medium text-gray-700"> {{ ucwords($perm->name) }}</span>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach ($permissions as $permission)
+                <label class="inline-flex items-center">
+                    <input type="checkbox" wire:model="selectedPermissions" value="{{ $permission->id }}" class="form-checkbox text-blue-600 rounded">
+                    <span class="ml-2">{{ $permission->name }}</span>
                 </label>
+                @endforeach
             </div>
-            @endforeach
-        </div>
 
-        <button wire:click="assignPermissionsToRole" class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-                <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-            </svg><span>Asignar Permisos</span></button>
+            <button type="submit" class="bg-purple-500 text-white p-2 rounded">Asignar Permisos</button>
+        </form>
     </div>
 
-    <!-- Asignar roles a usuarios -->
-    <div class="col-span-2 space-y-4">
-        <h2 class="text-lg font-bold">Asignar Rol a Usuario</h2>
-        <input type="text" wire:model="search" placeholder="Buscar usuario por nombre o email" class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <h3 class="text-xl font-semibold mb-4">Asignar Rol a un Usuario</h3>
+        <form wire:submit.prevent="assignRoleToUser" class="flex flex-col gap-4">
+            <input type="text" wire:model.live="search" placeholder="Buscar usuario por nombre o email..." class="border p-2 rounded w-full">
 
-        <select wire:model="selectedUserId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">-- Selecciona un usuario --</option>
-            @foreach($users as $user)
-            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-            @endforeach
-        </select>
+            <div class="bg-gray-50 max-h-48 overflow-y-auto border rounded-md">
+                @if($users->isEmpty() && $search !== '')
+                <p class="p-4 text-sm text-gray-500">No se encontraron usuarios.</p>
+                @else
+                <ul class="divide-y divide-gray-200">
+                    @foreach($users as $user)
+                    <li wire:click="$set('selectedUserId', {{ $user->id }})" class="p-4 cursor-pointer hover:bg-gray-100 {{ $selectedUserId == $user->id ? 'bg-blue-100' : '' }}">
+                        <p class="font-semibold">{{ $user->name }}</p>
+                        <p class="text-sm text-gray-500">{{ $user->email }}</p>
+                    </li>
+                    @endforeach
+                </ul>
+                @endif
+            </div>
 
-        <select wire:model="selectedUserRole" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="">-- Selecciona un rol --</option>
-            @foreach($roles as $role)
-            <option value="{{ $role->name }}">{{ $role->name }}</option>
-            @endforeach
-        </select>
+            <select wire:model="selectedUserRole" class="border p-2 rounded">
+                <option value="">Seleccione un Rol</option>
+                @foreach ($roles as $role)
+                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
+            @error('selectedUserRole') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
-        <button wire:click="assignRoleToUser" class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-                <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-            </svg><span>Asignar Rol</span></button>
-
-        @if($selectedUserId)
-        @php
-        $user = $users->firstWhere('id', $selectedUserId);
-        @endphp
+            <button type="submit" class="bg-indigo-500 text-white p-2 rounded">Asignar Rol</button>
+        </form>
         <div class="mt-4">
-            <h3 class="font-semibold">Rol actual: {{ $user?->getRoleNames()->first() ?? 'Sin rol' }}</h3>
-            <h3 class="font-semibold">Permisos: {{ implode(', ', $user?->getPermissionNames()->toArray() ?? []) }}</h3>
+            {{ $users->links() }}
         </div>
-        @endif
     </div>
-
 </div>
