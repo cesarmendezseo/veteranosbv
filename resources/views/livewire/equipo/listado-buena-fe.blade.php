@@ -1,5 +1,6 @@
 <div>
     <x-navbar titulo="Listado Buena Fe ">
+        @can('admin')
         @if ($equipoElegido)
         <button wire:click="exportarJugadores" title="Imprimir Listado"
             class="cursor-pointer flex items-center px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
@@ -19,7 +20,7 @@
                 <line x1="8" x2="16" y1="12" y2="12" />
             </svg>
             Crear</a>
-
+        @endcan
         <button wire:click="actualizarSanciones"
             class="cursor-pointer flex  px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
             {{-- Added text-sm --}}
@@ -119,9 +120,11 @@
                                 {{ $loop->iteration }}
                             </td> {{-- Hidden on mobile --}}
                             <td
+                                @can('admin')
                                 class="px-3 py-2 border dark:text-gray-200 {{ $estaSancionado ? 'text-red-600 font-bold' : '' }} hidden sm:table-cell">
                                 {{-- Hidden on mobile --}}
                                 {{ $jugador->documento }}
+                                @endcan
                             </td>
                             <td
                                 class="px-3 py-2 border dark:text-gray-200 {{ $estaSancionado ? 'text-red-600 font-bold' : '' }}">

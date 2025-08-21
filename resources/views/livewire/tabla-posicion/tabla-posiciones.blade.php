@@ -11,11 +11,14 @@
     <!-- Filtros y controles -->
     <div class="p-2 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
 
+        @can('admin')
+
 
         <!-- Botones de exportación -->
         @if ($campeonato_id)
 
         <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+
             <a href="{{ route('tabla.pdf', $campeonato_id) }}"
                 class="inline-flex items-center justify-center bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition-colors text-sm sm:text-base w-1/2 sm:w-auto"
                 title="Exportar a PDF">
@@ -40,6 +43,7 @@
         </div>
 
         @endif
+        @endcan
     </div>
     <flux:separator />
     <!-- Tabla de posiciones -->
