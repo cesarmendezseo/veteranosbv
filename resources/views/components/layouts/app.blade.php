@@ -1,5 +1,5 @@
 @auth
-<x-layouts.app.sidebar :title="$title ?? null">
+<x-layouts.app.sidebar :title="$title ?? 'Futbol de Veteranos'">
     <flux:main>
         {{ $slot }}
     </flux:main>

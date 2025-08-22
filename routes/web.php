@@ -72,16 +72,16 @@ Route::middleware(['auth'])->group(function () {
     // Rutas de administración de roles y permisos
 
     Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos')->middleware('admin');
-    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('admin');;
+    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('admin');
 
     //=============== FIN ROLES Y PERMIOS ===========================  
 
 
     Route::get('/equipo', EquipoIndex::class)->name('equipo.index');
-    Route::middleware('permission:admin|')->group(function () {
-        Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear');
-        Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar');
-    });
+
+    Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear')->middleware('admin');
+    Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar')->middleware('admin');
+
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
     Route::get('/equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
