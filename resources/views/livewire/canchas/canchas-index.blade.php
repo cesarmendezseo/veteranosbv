@@ -2,7 +2,7 @@
 
 
      <x-navbar titulo="Canchas">
-         @can('admin')
+         @adminOrCan()
          <button wire:click=" crear"
              class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center  hover:underline focus:ring-4  cursor-pointer rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -12,7 +12,7 @@
              </svg>
              Crear
          </button>
-         @endcan
+         @adminOrCan()
      </x-navbar>
      <flux:separator class="mb-2" />
 
@@ -50,7 +50,7 @@
                  <td class="px-6 py-4 text-center">
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-center">
-                         @can('admin')
+                        @adminOrCan()
 
 
                          {{-- Editar --}}
@@ -78,7 +78,7 @@
                              </svg>
                          </button>
 
-                         @endcan
+                         @endadminOrCan
                          {{-- ver --}}
                          <button wire:click="verEstadio({{ $cancha->id }})"
                              class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
@@ -114,10 +114,10 @@
                          </svg>
                      </button>
                      <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                         @can('admin')
+                         @adminOrCan()
                          <a href="route('canchas.editar', $cancha->id)" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Editar</a>
                          <a wire:click="$dispatch('confirmar-baja',{id: {{ $cancha->id }} })" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Borrar</a>
-                         @endcan
+                         @endadminOrCan
                          <a wire:click="verEstadio({{ $cancha->id }})" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Ver</a>
                      </div>
                  </div>

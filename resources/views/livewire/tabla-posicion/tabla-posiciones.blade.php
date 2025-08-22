@@ -11,7 +11,7 @@
     <!-- Filtros y controles -->
     <div class="p-2 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
 
-        @can('admin')
+      @adminOrCan()
 
 
         <!-- Botones de exportación -->
@@ -43,7 +43,7 @@
         </div>
 
         @endif
-        @endcan
+        @endadminOrCan
     </div>
     <flux:separator />
     <!-- Tabla de posiciones -->

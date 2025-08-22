@@ -1,7 +1,7 @@
 <div>
     <x-navbar titulo="Estadisticas de Jugadores">
 
-
+@adminOrCan()
         <a href="{{route('estadistica.ver')}}"
             class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center  hover:underline focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -11,7 +11,7 @@
             </svg>
             Crear
         </a>
-
+@endadminOrCan
     </x-navbar>
     <div class="flex item-center justify-between mt-2">
 

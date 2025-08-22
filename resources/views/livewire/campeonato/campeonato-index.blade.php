@@ -1,6 +1,6 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
      <x-navbar titulo="Campeonatos">
-         @can('admin')
+    @adminOrCan()
 
 
          <button wire:click="crear"
@@ -11,7 +11,7 @@
                  <line x1="8" x2="16" y1="12" y2="12" />
              </svg> Crear
          </button>
-         @endcan
+        @endadminOrCan
          <div class="mt-2">
              <input
                  type="text"
@@ -80,7 +80,7 @@
                  <td class="px-6 py-4 text-right">
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-end">
-                         @can('admin')
+                        @adminOrCan()
 
 
                          {{-- Editar --}}
@@ -108,7 +108,7 @@
                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                              </svg>
                          </button>
-                         @endcan
+                         @endadminOrCan
                          {{-- ver --}}
                          <button wire:click="verCampeonato({{ $campeonato->id }})"
                              class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
@@ -169,12 +169,10 @@
                          </svg>
                      </button>
                      <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                         @can('admin')
-
-
+                         @adminOrCan()
                          <a href="{{ route('campeonato.editar', $campeonato->id) }}" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Editar</a>
                          <a wire:click="$dispatch('confirmar-baja', { id: {{ $campeonato->id }} })" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Borrar</a>
-                         @endcan
+                         @endadminOrCan
                          <a wire:click="verCampeonato({{ $campeonato->id }})" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Ver</a>
                          <a href="{{ route('asignar-equipos', $campeonato->id) }}" class="px-3 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Asignar Equipo</a>
                      </div>

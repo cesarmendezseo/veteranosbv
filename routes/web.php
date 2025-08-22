@@ -79,7 +79,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/equipo', EquipoIndex::class)->name('equipo.index');
 
-    Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear')->middleware('admin');
+    Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear')->middleware('administrador');
+
     Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar')->middleware('admin');
 
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');

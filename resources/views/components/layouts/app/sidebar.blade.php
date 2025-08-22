@@ -11,20 +11,21 @@
     <flux:sidebar sticky stashable class=" border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        <flux:brand href="#" name="Futsal">
-            <x-slot name="logo" class="size-6 rounded-full bg-cyan-500 text-white text-xs font-bold">
-                <flux:icon name="rocket-launch" variant="micro" />
+        <flux:brand href="#" name="">
+            <x-slot name="logo" class="size-20 pt-1 rounded-full bg-cyan-500 text-white text-xs font-bold">
+                <img src="{{ asset('images/logo.jpeg') }}" alt="Logo" class="h-18 w-18">
+                
             </x-slot>
         </flux:brand>
 
         <flux:navlist variant="outline">
-            <flux:navlist.group :heading="__('Platform')" class="grid">
+            <flux:navlist.group :heading="__('menu')" class="grid">
             @adminOrCan()    
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             @endadminOrCan
-            @adminOrCan()
+         
                 <flux:navlist.item icon="shield-ban" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Equipo') }}</flux:navlist.item>
-               @endadminOrCan
+               
                 @adminOrCan()
                 <flux:navlist.item icon="users" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Jugadores') }}</flux:navlist.item>
                 @endadminOrCan

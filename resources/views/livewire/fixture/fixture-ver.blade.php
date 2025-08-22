@@ -6,7 +6,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg> Volver
         </a>
-        @can('admin')
+        @adminOrCan()
 
 
         <a href="{{ route('fixture.automatico') }}"
@@ -27,7 +27,7 @@
                 <path d="m7 10 5 5 5-5" />
             </svg>Exportar
         </button>
-        @endcan
+        @endadminOrCan
     </x-navbar>
     <div class="mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
@@ -167,7 +167,7 @@
                             <td class="px-2 sm:px-4 py-2 text-center ">
                                 {{ strtoupper($encuentro->estado) }}
                             </td>
-                            @can('admin')
+                            @adminOrCan()
                             <td class="px-1 sm:px-3 py-2">
                                 <div class="flex items-center justify-center space-x-1">
                                     <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
@@ -218,7 +218,7 @@
 
                                 </div>
                             </td>
-                            @endcan
+                            @endadminOrCan
                         </tr>
                         @endforeach
                     </tbody>
@@ -269,7 +269,7 @@
                         </div>
 
                         <!-- Botones de acción -->
-                        @can('admin')
+                      @adminOrCan()
 
 
                         <div class="flex justify-between space-x-2">
@@ -318,7 +318,7 @@
                                 <span class="hidden xs:inline">Eliminar</span>
                             </button>
                         </div>
-                        @endcan
+                        @adminOrCan()
                     </div>
                 </div>
                 @endforeach

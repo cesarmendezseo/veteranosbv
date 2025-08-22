@@ -1,7 +1,7 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
      <x-navbar titulo="Listado de Jugadores">
-         @can('admin')
+        @adminOrCan()
          <a href="{{route('jugadores.crear')}}"
              class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center hover:underline focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:hover:underline dark:focus:ring-blue-800 shadow">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -11,7 +11,7 @@
              </svg>
              Crear
          </a>
-         @endcan
+         @endadminOrCan
          <div class="mt-2 hidden md:table">
              <input
                  type="text"
@@ -69,9 +69,9 @@
                          </th>
                          <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                              <div class="text-base font-semibold">{{strToupper($jugador->apellido)}}, {{strToupper($jugador->nombre)}}</div>
-                             @can('admin')
+                             @adminOrCan()
                              <div class="font-normal text-gray-500">Dni: {{$jugador->documento}} </div>
-                             @endcan
+                             @endadminOrCan
                          </th>
 
                          <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -104,7 +104,7 @@
                          <td class="px-6 py-4 text-right">
                              <!-- Para pantallas medianas en adelante -->
                              <div class="hidden md:flex gap-2 justify-end">
-                                 @can('admin')
+                                @adminOrCan()
                                  {{-- Editar --}}
                                  <a href="{{ route('jugadores.editar', $jugador->id) }}"
                                      class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
@@ -130,7 +130,7 @@
                                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                      </svg>
                                  </button>
-                                 @endcan
+                                 @endadminOrCan
                                  {{-- ver --}}
                                  <button wire:click="verJugador({{ $jugador->id }})"
                                      class="text-white bg-gradient-to-r from-[#efb810] via-[#d4a105] to-[#8f6c03] hover:bg-gradient-to-br
@@ -194,7 +194,7 @@
 
                      <div x-show="open" @click.away="open = false"
                          class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                         @can('admin')
+                         @adminOrCan()
 
 
                          <a href="{{ route('jugadores.editar', $jugador->id) }}"
@@ -205,7 +205,7 @@
                              class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
                              Borrar
                          </a>
-                         @endcan
+                         @endadminOrCan
                          <a wire:click="verJugador({{ $jugador->id }})"
                              class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
                              Ver
@@ -241,9 +241,9 @@
                  <h3 class="text-lg font-bold text-gray-900 dark:text-white">
                      {{ strtoupper($jugador->apellido) }}, {{ strtoupper($jugador->nombre) }}
                  </h3>
-                 @can('admin')
+                 @adminOrCan()
                  <p class="text-gray-500 dark:text-gray-400">DNI: {{ $jugador->documento }}</p>
-                 @endcan
+                 @endadminOrCan
                  <p class="text-gray-600 dark:text-gray-300 font-semibold">{{ strtoupper($jugador->equipo->nombre) }}</p>
              </div>
 
