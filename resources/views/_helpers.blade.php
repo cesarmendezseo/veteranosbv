@@ -1,0 +1,2 @@
+{{-- @adminOrCan('permiso') --}}
+{{-- @endadminOrCan --}}

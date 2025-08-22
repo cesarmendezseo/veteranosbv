@@ -19,28 +19,41 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.group :heading="__('Platform')" class="grid">
-                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+            @adminOrCan()    
+            <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+            @endadminOrCan
+            @adminOrCan()
                 <flux:navlist.item icon="shield-ban" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Equipo') }}</flux:navlist.item>
+               @endadminOrCan
+                @adminOrCan()
                 <flux:navlist.item icon="users" :href="route('jugadores.index')" :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Jugadores') }}</flux:navlist.item>
+                @endadminOrCan
+                @adminOrCan()
                 <flux:navlist.item icon="circuit-board" :href="route('fixture.index')" :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Fixture') }}</flux:navlist.item>
+               @endadminOrCan
+               @adminOrCan()
                 <flux:navlist.item icon="book-user" :href="route('listado-buena-fe')" :current="request()->routeIs('listado-buena-fe')" wire:navigate>{{ __('Listado Buena Fe') }}</flux:navlist.item>
+                @endadminOrCan
 
+                @adminOrCan()
                 <flux:navlist.item icon="id-card" :href="route('sanciones.index')" :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Estadisticas') }}</flux:navlist.item>
+                @endadminOrCan
                 <flux:navlist.item icon="clipboard-list" :href="route('tabla-posiciones')" :current="request()->routeIs('tabla-posiciones')" wire:navigate>{{ __('Tabla Posición') }}</flux:navlist.item>
+                @adminOrCan()   
                 <flux:navlist.item icon="user-plus" :href="route('altas-bajas.index')" :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}</flux:navlist.item>
-
-
-
+                @endadminOrCan
+                @adminOrCan()
                 <flux:navlist.group expandable heading="Config" class="hidden lg:grid">
                     <flux:navlist.item icon="trophy" :href="route('campeonato.index')" :current="request()->routeIs('campeonato.index')" wire:navigate>{{ __('Campeonato') }}</flux:navlist.item>
                     <flux:navlist.item icon="shield-check" :href="route('categoria.index')" :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}</flux:navlist.item>
                     <flux:navlist.item icon="device-phone-mobile" :href="route('canchas.index')" :current="request()->routeIs('Canchas.index')" wire:navigate>{{ __('Canchas') }}</flux:navlist.item>
                 </flux:navlist.group>
-
+                @endadminOrCan
+                @adminOrCan('ver equipo')
                 <flux:navlist.item icon="shield-check" :href="route('rol.panel')" :current="request()->routeIs('rol.panel')" wire:navigate>{{ __('Roles y Permisos') }}</flux:navlist.item>
 
                 <flux:navlist.item icon="shield-check" :href="route('listado.roles.permisos')" :current="request()->routeIs('rol.panel')" wire:navigate>{{ __('Listado Roles y Permisos') }}</flux:navlist.item>
-
+                @endadminOrCan
             </flux:navlist.group>
         </flux:navlist>
 

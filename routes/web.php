@@ -70,8 +70,9 @@ Route::middleware(['auth'])->group(function () {
     //===============ROLES Y PERMIOS ===========================
 
     // Rutas de administración de roles y permisos
-    Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos');
-    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel');
+
+    Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos')->middleware('admin');
+    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('admin');;
 
     //=============== FIN ROLES Y PERMIOS ===========================  
 
