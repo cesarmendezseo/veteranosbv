@@ -48,27 +48,7 @@
 
             <!-- Partidos -->
             <section id="partidos" class="py-16 max-w-6xl mx-auto px-6">
-                <h2 class="text-4xl text-center mb-12">Próximos Partidos</h2>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
-                        <h3 class="text-2xl mb-2">Veteranos Norte</h3>
-                        <p class="text-gray-500 mb-4">vs</p>
-                        <h3 class="text-2xl mb-4">Amigos del Sur</h3>
-                        <p class="text-gray-700">Sábado 20 Ago - 18:00 hs</p>
-                    </div>
-                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
-                        <h3 class="text-2xl mb-2">Unión 79</h3>
-                        <p class="text-gray-500 mb-4">vs</p>
-                        <h3 class="text-2xl mb-4">Veteranos Oeste</h3>
-                        <p class="text-gray-700">Domingo 21 Ago - 17:00 hs</p>
-                    </div>
-                    <div class="bg-white shadow-lg rounded-xl p-6 text-center">
-                        <h3 class="text-2xl mb-2">Barrio Centro</h3>
-                        <p class="text-gray-500 mb-4">vs</p>
-                        <h3 class="text-2xl mb-4">Deportivo Viejos</h3>
-                        <p class="text-gray-700">Domingo 21 Ago - 19:00 hs</p>
-                    </div>
-                </div>
+               <livewire:frontend.proximos-partidos.proximos-partidos-index />
             </section>
 
 
