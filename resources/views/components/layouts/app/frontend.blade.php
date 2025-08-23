@@ -25,10 +25,10 @@
     </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-[#0a0a0a] text-[#1b1b18] flex flex-col min-h-screen ">
+<body class="bg-[#2a5eb1] dark:bg-[#0a0a0a] text-[#1b1b18] flex flex-col min-h-screen ">
 
     <div class="flex-grow w-full">
-        <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden  id=" navbar-sticky"
+        <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden id=" navbar-sticky"
             x-cloak
             :class="{ 'hidden': !open, 'flex': open }"">
             @push('styles')
@@ -42,7 +42,7 @@
                 x-data=" { open: false }"
             @popstate.window="open = false"
             class="bg-[#0A2A5E] dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-[#0A2A5E] dark:border-gray-600">
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-2 sha">
                 <div class="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
                     <a href="#" class="mr-4 block cursor-pointer py-1.5 text-base text-slate-800 font-semibold">
                         <img
@@ -67,25 +67,14 @@
                                 </svg>
                                 <a href="{{route('tabla-posicion-index')}}" class="flex items-center hover:underline">Tabla Posición</a>
                             </li>
-                            <!--  <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                                <a href="#" class="flex items-center hover:underline">Listado</a>
-                            </li> -->
+                       
                             <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
                                 </svg>
                                 <a href="{{route('frontend.fixture.index')}}" class="flex items-center hover:underline">Fixture</a>
                             </li>
-                            <!-- <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-                                </svg>
-                                <a href="#" class="flex items-center hover:underline">Docs</a>
-                            </li>
- -->
+                   
                             <li>
                                 <svg class="text-slate-100" width="2" height="24" viewBox="0 0 2 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1 0V24" stroke="currentColor" stroke-width="2" />
@@ -146,24 +135,14 @@
                             </svg>
                             <a href="{{route('tabla-posicion-index')}}" class="flex items-center hover:underline">Tabla Posición</a>
                         </li>
-                        <!-- <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            <a href="#" class="flex items-center hover:underline">Listado</a>
-                        </li> -->
+                     
                         <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
                             </svg>
                             <a href="{{route('frontend.fixture.index')}}" class="flex items-center hover:underline">Fixture</a>
                         </li>
-                        <!-- <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-slate-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-                            </svg>
-                            <a href="#" class="flex items-center hover:underline">Docs</a>
-                        </li> -->
+                      
                         <flux:separator />
                         <li class="flex items-center p-1 text-sm gap-x-2 text-slate-100">
                             @if (Route::has('login'))
@@ -184,15 +163,39 @@
             </nav>
         </div>
         <!-- FIN MENU-->
-        <div class="bg-gray-100 dark:bg-[#0a0a0a] pt-14 md:pt-22 text-[#1b1b18] flex flex-col min-h-screen w-screen">
+        <div class="bg-[#2a5eb1] dark:bg-[#0a0a0a] pt-14 md:pt-22 text-[#1b1b18] flex flex-col min-h-screen w-screen">
             <div class="w-full max-w-screen-xl mx-auto px-4 overflow-x-hidden">
                 {{ $slot }}
             </div>
         </div>
     </div>
-    <footer class=" flex flex-col text-center p-4 bg-[#0A2A5E] text-slate-100">
-        &copy; 2025 Futbol de Veteranos Bella Vista. Síguenos en <a href="#">Redes Sociales</a>
-    </footer>
+
+<footer class="mt-5 bg-[#2a5eb1] dark:bg-gray-900 text-gray-300 dark:text-gray-300">
+       <!-- Línea divisoria -->
+    <div class="border-t border-gray-300 dark:border-gray-700 mt-6"></div>
+
+            <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between">
+        
+                <!-- Texto -->
+                <p class="text-sm">
+                    © {{ date('Y') }} <span class="font-semibold text-yellow-500">Fútbol de Veteranos</span>. Todos los derechos reservados.
+                </p>
+
+                <!-- Enlaces -->
+                <div class="flex space-x-6 mt-4 md:mt-0">
+           
+                     <div class="text-center py-4 text-sm text-gray-200 dark:text-gray-400">
+                       Diseñado y desarrollado por 
+                     <span class="font-semibold text-yellow-500">César Méndez</span>
+                        </div>
+                </div>
+            </div>
+    </div>
+
+ 
+    <!-- Créditos del diseñador -->
+    
+</footer>
 
 
     @livewireScripts
