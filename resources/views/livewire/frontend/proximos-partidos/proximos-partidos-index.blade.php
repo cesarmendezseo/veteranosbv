@@ -1,6 +1,6 @@
 <div>
    <div class="bg-white rounded-2xl shadow-md p-6 mt-6">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">Próximos Encuentros</h2>
+    <p class="text-xl font-semibold text-gray-700 mb-4">PRÓXIMOS ENCUENTROS</p>
 
     
    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -8,18 +8,18 @@
         <div class="bg-gray-100 dark:bg-gray-900 rounded-xl shadow-lg p-5 flex flex-col gap-4">
     <div class="flex items-center justify-between">
         <div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white uppercase">
+            <p class="text-base font-bold text-gray-900 dark:text-white uppercase">
                 {{ $partido->equipoLocal->nombre }}
-            </h3>
+            </p>
             
         </div>
         <div class="text-center text-gray-600 dark:text-gray-300">
             <span class="block text-xs">VS</span>
         </div>
         <div class="text-right">
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white uppercase">
+            <p class="text-base font-bold text-gray-900 dark:text-white uppercase style="font-family: 'Inter', sans-serif;"">
                 {{ $partido->equipoVisitante->nombre }}
-            </h3>
+            </p>
            
         </div>
     </div>

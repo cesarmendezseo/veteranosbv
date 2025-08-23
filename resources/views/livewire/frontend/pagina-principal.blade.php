@@ -37,7 +37,7 @@
                     <div class="max-w-3xl mx-auto px-6 text-center text-white">
                         <h2 class="text-6xl mb-4 text-[#FFD700] font-bold">Fútbol de Veteranos</h2>
                         <p class="text-xl mb-6 text-slate-100 font-bold">Pasión, amistad y competencia para siempre.</p>
-                        <a href="#inscripcion"
+                        <a href="#partidos"
                             class="px-6 py-3 bg-yellow-400 text-green-900 font-bold rounded-lg shadow hover:bg-yellow-500">
                             Próximos partidos
                         </a>
