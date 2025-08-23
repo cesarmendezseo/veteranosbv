@@ -113,7 +113,8 @@
     @endif
 
 
-    @push('js') <script>
+    @push('js') 
+    <script>
         document.addEventListener('livewire:initialized', () => {
 
             Livewire.on('equipo-existe', () => {
