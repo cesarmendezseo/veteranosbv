@@ -17,7 +17,7 @@ class ProximosPartidosIndex extends Component
         $this->proximos = Encuentro::with(['equipoLocal', 'equipoVisitante'])
             ->whereDate('fecha', '>=', $hoy)   // desde hoy en adelante
             ->orderBy('fecha', 'asc')
-            ->take(5) // opcional: limita a los próximos 5 partidos
+            ->take(15) // opcional: limita a los próximos 5 partidos
             ->get();
     }
     public function render()
