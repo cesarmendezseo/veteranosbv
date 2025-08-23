@@ -1,6 +1,6 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
      <x-navbar titulo="Campeonatos">
-    @adminOrCan()
+    @adminOrCan('comision')
 
 
          <button wire:click="crear"
@@ -80,9 +80,7 @@
                  <td class="px-6 py-4 text-right">
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-end">
-                        @adminOrCan()
-
-
+                        @adminOrCan('comision')
                          {{-- Editar --}}
                          <a href="{{ route('campeonato.editar', $campeonato->id) }}"
                              class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
@@ -169,7 +167,7 @@
                          </svg>
                      </button>
                      <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                         @adminOrCan()
+                         @adminOrCan('comision')
                          <a href="{{ route('campeonato.editar', $campeonato->id) }}" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Editar</a>
                          <a wire:click="$dispatch('confirmar-baja', { id: {{ $campeonato->id }} })" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Borrar</a>
                          @endadminOrCan

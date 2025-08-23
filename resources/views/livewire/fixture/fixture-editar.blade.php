@@ -123,7 +123,7 @@
                     </td>
                     <td class="px-4 py-2 border dark:text-gray-200">
 
-                        @role('administrador|comision')
+                        @adminOrCan('cargar gol')
                         {{-- =======BOTON EDITAR --}}
                         <button wire:click="editEncuentro({{ $encuentro->id }})"
                             class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-[#FFC107] rounded-lg hover:bg-[#FFD54F] focus:ring-4 focus:outline-none focus:ring-[#FFECB3]"
@@ -136,7 +136,8 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </button>
-
+@endadminOrCan
+@adminOrCan('comision')
                         <!-- Botón para borrar -->
                         <button wire:click="$dispatch('delete-prompt', { id: {{ $encuentro->id }} })"
                             class="px-3 py-2 text-sm font-medium text-center inline-flex items-center text-white bg-[#f12019] rounded-lg hover:bg-[#d17d2f] focus:ring-4 focus:outline-none focus:ring-[#FFECB3]"
@@ -151,7 +152,7 @@
                             </svg>
 
                         </button>
-                        @endrole
+                        @endadminOrCan
                     </td>
                     @endif
                 </tr>

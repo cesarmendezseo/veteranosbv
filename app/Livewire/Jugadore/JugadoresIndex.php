@@ -3,6 +3,7 @@
 namespace App\Livewire\Jugadore;
 
 use App\Models\Jugador;
+use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -21,6 +22,12 @@ class JugadoresIndex extends Component
     public function abrirModal()
     {
         // Aquí no hace falta nada porque $jugadorSeleccionado ya está cargado
+    }
+
+    //calculamos la eddad
+    public function getEdadAttribute()
+    {
+        return Carbon::parse($this->fecha_nac)->age;
     }
 
     public function borrar($jugadorId)

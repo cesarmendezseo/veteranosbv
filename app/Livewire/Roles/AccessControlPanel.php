@@ -281,7 +281,7 @@ class AccessControlPanel extends Component
             'create' => 'Crear',
             'assign_permissions' => 'Asignar Permisos',
             'assign_roles' => 'Asignar Roles',
-            'remove_roles' => 'Quitar Roles',
+            'remove_roles' => 'Lista Roles',
             'delete' => 'Eliminar',
         ];
 

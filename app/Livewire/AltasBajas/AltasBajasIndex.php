@@ -6,7 +6,7 @@ use App\Models\Jugador;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Spatie\Permission\Models\Permission;
+
 
 use Livewire\WithPagination;
 

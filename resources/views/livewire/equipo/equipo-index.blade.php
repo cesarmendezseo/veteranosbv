@@ -2,7 +2,7 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div class="mb-2">
             <x-navbar titulo="Equipos">
-                @adminOrCan()
+                @adminOrCan('comision')
 
 
                 <a href="{{ route('equipo.crear') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -87,7 +87,7 @@
                     <td class="px-6 py-4 text-right">
                         <!-- Para pantallas medianas en adelante -->
                         <div class="hidden md:flex gap-2 justify-end">
-                            @adminOrCan('ver equipo')
+                            @adminOrCan('comision')
 
 
                             {{-- Editar --}}
@@ -104,7 +104,7 @@
                             </a>
                             @endadminOrCan
                             {{-- Borrar --}}
-                            @adminOrCan()
+                            @adminOrCan('comision')
                             <button wire:click="borrar({{ $equipo->id }})"
                                 class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br
                                 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800
@@ -117,6 +117,7 @@
                                 </svg>
                             </button>
                             @endadminOrCan
+                            @adminOrCan('comision')
                             {{-- Logo --}}
                             <a href="{{ route('equipo.logo.upload', $equipo->id) }}"
                                 class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br
@@ -130,6 +131,7 @@
                                     <circle cx="12" cy="13" r="3" />
                                 </svg>
                             </a>
+                            @endadminOrCan
 
                         </div>
 

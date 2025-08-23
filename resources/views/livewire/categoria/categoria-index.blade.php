@@ -1,7 +1,7 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
      <x-navbar titulo="Categorías">
-         @adminOrCan()
+         @adminOrCan('comision')
          <button wire:click="crear"
              class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center hover:underline cursor-pointer focus:ring-4 focus:outline-none  rounded-lg text-center  dark:hover:underline  shadow">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -42,7 +42,7 @@
                  <td class="px-6 py-4 text-center">
                      <!-- Para pantallas medianas en adelante -->
                      <div class="hidden md:flex gap-2 justify-center">
-                         @adminOrCan()
+                         @adminOrCan('comision')
                          {{-- Editar --}}
                          <a href="{{ route('categoria.editar', $categoria->id) }}"
                              class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
@@ -104,7 +104,7 @@
                          </svg>
                      </button>
                      <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 bg-white dark:bg-gray-700 shadow rounded-lg z-50 flex flex-col">
-                         @adminOrCan()
+                         @adminOrCan('comision')
                          <a href="{{route('categoria.editar', $categoria->id) }}" class="px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Editar</a>
                          <a wire:click="borrar({{ $categoria->id }})" class="cursor-pointer px-3 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">Borrar</a>
                          @endadminOrCan

@@ -6,9 +6,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg> Volver
         </a>
+       
         @adminOrCan()
-
-
         <a href="{{ route('fixture.automatico') }}"
             class="px-3 py-2  text-white rounded flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
@@ -73,14 +72,6 @@
             <input wire:model.live="equipoVisitanteFiltro" type="text" placeholder="Equipo Visitante"
                 class="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
-
-
-        <!-- Tabla -->
-        {{-- @if (isset($encuentros) && $encuentros->count())
-    @else
-        <p class="mt-4 text-gray-500">No hay encuentros que coincidan con los filtros.</p>
-    @endif --}}
-        {{-- --}}
 
     </div>
 
@@ -167,7 +158,7 @@
                             <td class="px-2 sm:px-4 py-2 text-center ">
                                 {{ strtoupper($encuentro->estado) }}
                             </td>
-                            @adminOrCan()
+                            @adminOrCan('comision|cargar gol')
                             <td class="px-1 sm:px-3 py-2">
                                 <div class="flex items-center justify-center space-x-1">
                                     <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
@@ -182,8 +173,8 @@
                                             <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                                         </svg>
                                     </button>
-
-
+                            @endadminOrCan
+                            @adminOrCan('comision')
                                     <button wire:click="editEncuentro({{ $encuentro->id }})"
                                         class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                         title="Editar">
@@ -269,9 +260,7 @@
                         </div>
 
                         <!-- Botones de acción -->
-                      @adminOrCan()
-
-
+                      @adminOrCan('comision|cargar gol')
                         <div class="flex justify-between space-x-2">
                             <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
                                 class="flex-1 flex items-center justify-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
@@ -286,8 +275,8 @@
                                 </svg>
                                 <span class="hidden xs:inline">Guardar</span>
                             </button>
-
-
+                            @endadminOrCan
+                            @adminOrCan('comision')
                             <button wire:click="editEncuentro({{ $encuentro->id }})"
                                 class="flex-1 flex items-center justify-center text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                 title="Editar">
@@ -318,7 +307,7 @@
                                 <span class="hidden xs:inline">Eliminar</span>
                             </button>
                         </div>
-                        @adminOrCan()
+                        @endadminOrCan()
                     </div>
                 </div>
                 @endforeach

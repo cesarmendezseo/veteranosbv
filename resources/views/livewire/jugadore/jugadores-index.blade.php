@@ -303,9 +303,15 @@
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
                          <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre :</strong> {{ ucwords(strtolower($jugadorSeleccionado->apellido)) }} {{ ucwords(strtolower($jugadorSeleccionado->nombre)) }}
                      </p>
+                     @adminOrCan()
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
                          <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Fecha de Nac:</strong> {{ ucwords(strtolower($jugadorSeleccionado->fecha_nac)) }}
                      </p>
+                     @endadminOrCan
+                     <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Edad:</strong> 
+    {{ $jugadorSeleccionado->edad }} años
+</p>
                      <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
                          <strong class="font-semibold text-gray-400 dark:text-[#efb810]">N° Socio:</strong> {{ ucwords(strtolower($jugadorSeleccionado->num_socio)) }}
                      </p>

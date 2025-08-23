@@ -20,10 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
-        $middleware->alias([
-            'admin' => \App\Http\Middleware\Admin::class,
-        ]);
     })
+    ->withProviders([
+        Spatie\Permission\PermissionServiceProvider::class,
+    ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

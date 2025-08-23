@@ -65,7 +65,7 @@
                          <!-- Para pantallas medianas en adelante -->
                          <div class="hidden md:flex gap-2 justify-end">
                              {{-- Editar --}}
-                    @adminOrCan()
+                    @adminOrCan('comision')
                              <a href="{{ route('fixture.ver', $campeonato->id) }}"
                                  class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br
                             focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800
@@ -94,7 +94,7 @@
                                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                  </svg>
                              </a>
-                             @adminOrCan()
+                             @adminOrCan('comision')
                              {{-- CREAR --}}
                              <a href="{{ route('fixture.crear', $campeonato->id) }}"
                                  class="mb-1 text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br
@@ -138,7 +138,7 @@
                      <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 z-50 flex flex-col gap-2 dark:bg-gray-800 dark:border dark:border-gray-700 p-2 rounded-lg">
 
                          <a href="{{ route('fixture.ver', $campeonato->id) }}" class="hover:underline font-roboto">Ver</a>
-                        @adminOrCan()
+                        @adminOrCan('comision')
                          <a href="{{ route('fixture.crear', $campeonato->id) }}" class="hover:underline font-roboto">Crear</a>
                          @endadminOrCan
                      </div>

@@ -69,27 +69,27 @@ Route::middleware(['auth'])->group(function () {
 
     //===============ROLES Y PERMIOS ===========================
 
-    // Rutas de administración de roles y permisos
-
-    Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos')->middleware('admin');
-    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel')->middleware('admin');
-
+    // Rutas de editaristración de roles y permisos
+    Route::middleware(['permission:comision|administrador'])->group(function () {
+        Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos');
+        Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel');
+    });
     //=============== FIN ROLES Y PERMIOS ===========================  
 
-
+    //===================EQUIPOS ===================================
     Route::get('/equipo', EquipoIndex::class)->name('equipo.index');
-
-    Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear')->middleware('administrador');
-
-    Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar')->middleware('admin');
-
+    Route::middleware(['permission:comision|administrador'])->group(function () {
+        Route::get('/equipo/crear', EquipoCrear::class)->name('equipo.crear');
+        Route::get('/equipo/{equipoId}/editar', EquipoEditar::class)->name('equipo.editar');
+    });
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
     Route::get('/equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
+    //=================FIN EQUIPOS====================
 
     //==============JUGADORES========================
     Route::get('/jugadores', JugadoresIndex::class)->name('jugadores.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/jugadores/{jugadorId}/editar', JugadoresEditar::class)->name('jugadores.editar');
         Route::get('/jugadores/crear', JugadoresCrear::class)->name('jugadores.crear');
     });
@@ -99,21 +99,21 @@ Route::middleware(['auth'])->group(function () {
 
     //==============CAMPEONATO========================
     Route::get('/campeonato', CampeonatoIndex::class)->name('campeonato.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/campeonato/crear', CampeonatoCrear::class)->name('campeonato.crear');
         Route::get('/campeonato/{campeonatoId}/editar', CampeonatoEditar::class)->name('campeonato.editar');
     });
     //==============FIN CAMPEONATO========================
     //==============CATEGORIA========================
     Route::get('/categoria', \App\Livewire\Categoria\CategoriaIndex::class)->name('categoria.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/categoria/crear', CategoriaCrear::class)->name('categoria.crear');
         Route::get('/categoria/{categoriaId}/editar', CategoriaEdit::class)->name('categoria.editar');
     });
     //==============FIN CATEGORIA========================  
     //==============FIN ESTADIOS======================== 
     Route::get('/estadios', CanchasIndex::class)->name('canchas.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/estadios/crear', CanchasCrear::class)->name('canchas.crear');
         Route::get('/estadios/{estadioId}/editar', CanchasEditar::class)->name('canchas.editar');
     });
@@ -121,21 +121,23 @@ Route::middleware(['auth'])->group(function () {
     //==============FIXTURE======================== 
     Route::get('/fixture', FixtureIndex::class)->name('fixture.index');
     Route::get('/fixture/{campeonatoId}/ver', FixtureVer::class)->name('fixture.ver');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/fixture/{campeonatoId}/crear', FixtureCrear::class)->name('fixture.crear');
         Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
+    });
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');
     });
     //==============FIN FIXTURE========================
     //==============ASIGNAR EQUIPOS========================
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');
     });
     //==============FIN ASIGNAR EQUIPOS========================
     //==============TABLA DE POSICIONES========================
     Route::get('/tabla-posiciones', TablaPosicionIndex::class)->name('tabla-posiciones');
     Route::get('/tabla-posiciones/{campeonatoId}/ver', \App\Livewire\TablaPosicion\TablaPosiciones::class)->name('tabla-posiciones.ver');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/tabla-posiciones/{campeonato}/tabla-pdf', [TablaPosiciones::class, 'generarTablaPosicionesPDF'])->name('tabla.pdf');
         Route::get('/exportar-encuentros', [FixtureCrear::class, 'exportar'])->name('encuentros.exportar');
     });
@@ -143,20 +145,20 @@ Route::middleware(['auth'])->group(function () {
 
     //==============SANCIONES========================
     Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/sanciones/{campeonatoId}/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
         Route::get('/sanciones/actualizar-cumplimientos', [\App\Livewire\Sanciones\SancionesCrear::class, 'actualizarCumplimientosSanciones'])->name('sanciones.actualizar-cumplimientos');
     });
     //==============FIN SANCIONES========================
     //==============ESTADISTICA========================
     Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/estadistica/{campeonatoId}/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
     });
     //==============FIN ESTADISTICA========================
 
     //==============ALTAS Y BAJAS========================
-    Route::middleware('permission:admin|')->group(function () {
+    Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');
     });
 });
