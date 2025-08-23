@@ -68,12 +68,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
     //===============ROLES Y PERMIOS ===========================
-
+    Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos');
+    Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel');
     // Rutas de editaristración de roles y permisos
-    Route::middleware(['permission:comision|administrador'])->group(function () {
-        Route::get('/roles-y-permisos', UserList::class)->name('listado.roles.permisos');
-        Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel');
-    });
+    Route::middleware(['permission:comision|administrador'])->group(function () {});
     //=============== FIN ROLES Y PERMIOS ===========================  
 
     //===================EQUIPOS ===================================
