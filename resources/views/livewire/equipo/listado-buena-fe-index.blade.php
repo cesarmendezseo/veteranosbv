@@ -1,6 +1,6 @@
  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
-     <x-navbar titulo="Fixture">
+     <x-navbar titulo="Listado Buena Fe">
 
      </x-navbar>
      <div class="hidden sm:block">
@@ -115,7 +115,7 @@
                                      class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                                      :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                                      <!--VER-->
-                                     <a href="{{ route('fixture.ver', $campeonato->id) }}"
+                                     <a href="{{ route('listado-buena-fe.ver', $campeonato->id) }}"
                                          class="flex items-center gap-2 hover:underline">
                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -126,22 +126,7 @@
                                          </svg>
                                          <span class="ml-1">Ver</span>
                                      </a>
-                                     <!-- CREAR -->
-                                     @adminOrCan('comision')
-                                         <a href="{{ route('fixture.crear', $campeonato->id) }}"
-                                             class="flex items-center gap-2 hover:underline">
-                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                 stroke-linecap="round" stroke-linejoin="round"
-                                                 class="lucide lucide-badge-plus">
-                                                 <path
-                                                     d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                                 <line x1="12" x2="12" y1="8" y2="16" />
-                                                 <line x1="8" x2="16" y1="12" y2="12" />
-                                             </svg>
-                                             <span>Crear</span>
-                                         </a>
-                                     @endadminOrCan
+
                                  </div>
                              </div>
 
@@ -215,7 +200,7 @@
                              class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                              :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                              <!--VER-->
-                             <a href="{{ route('fixture.ver', $campeonato->id) }}"
+                             <a href="{{ route('listado-buena-fe.ver', $campeonato->id) }}"
                                  class="flex items-center gap-2 hover:underline">
                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -226,21 +211,7 @@
                                  </svg>
                                  <span class="ml-1">Ver</span>
                              </a>
-                             <!-- CREAR -->
-                             @adminOrCan('comision')
-                                 <a href="{{ route('fixture.crear', $campeonato->id) }}"
-                                     class="flex items-center gap-2 hover:underline">
-                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus">
-                                         <path
-                                             d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                         <line x1="12" x2="12" y1="8" y2="16" />
-                                         <line x1="8" x2="16" y1="12" y2="12" />
-                                     </svg>
-                                     <span>Crear</span>
-                                 </a>
-                             @endadminOrCan
+
                          </div>
                      </div>
                  </div>
@@ -254,143 +225,8 @@
      </div>
 
 
-     {{-- --------------MODAL-------------------- --}}
-     <style>
-         [x-cloak] {
-             display: none !important;
-         }
-     </style>
-     <div x-data="{ show: false }" x-show="show" x-on:static-modal.window="show = true" x-cloak
-         class="shadow-2xs fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4 sm:p-6">
-
-         <div
-             class="bg-gradient-custom dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-6 sm:p-8 relative transform transition-all scale-100 opacity-100 ease-out duration-300
-                max-h-[90vh] overflow-y-auto">
-             <!-- Clases añadidas aquí -->
-             <!-- Botón de Cierre -->
-             <button @click="show = false"
-                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
-                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                         d="M6 18L18 6M6 6l12 12" />
-                 </svg>
-             </button>
-
-             <h2
-                 class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                 Detalles del Campeonato
-             </h2>
-
-             @if ($campeonatoSeleccionado)
-                 <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
-
-                     <div
-                         class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
-
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre
-                                 Campeonato:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos:
-                             </strong> {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x
-                                 Grupo: </strong>{{ $campeonatoSeleccionado->cantidad_equipos_grupo }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong>
-                             {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong>
-                             {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong>
-                             {{ $campeonatoSeleccionado->puntos_perdido }}
-                         </p>
-                         <h4
-                             class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                             Puntos por Tarjeta para Fair Play
-                         </h4>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta
-                                 Amarilla:</strong>
-                             {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble
-                                 Amarilla:</strong>
-                             {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
-                         </p>
-                         <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta
-                                 Roja:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
-                         </p>
-                         <h4
-                             class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                             Criterios de Desempate
-                         </h4>
-                         <p class=">
-                         <strong class=" font-semibold text-gray-400
-                             dark:text-[#efb810]"></strong>
-
-                             @foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
-                                 <div> Prioridad: {{ $criterio->orden }} -
-                                     {{ ucwords(strtolower($criterio->criterio)) }}</div>
-                             @endforeach
-                         </p>
-
-                     </div>
-                 @else
-                     <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún
-                         campeonato para mostrar.</p>
-             @endif
-         </div>
-     </div>
  </div>
 
 
-
- @push('js')
-     <script>
-         document.addEventListener('livewire:initialized', () => {
-
-
-
-             Livewire.on('confirmar-baja', ({
-                 id
-             }) => {
-
-
-                 Swal.fire({
-                     title: 'CUIDADO...',
-                     text: "¿Estás seguro de borrar al el Campeonato?",
-                     icon: 'warning',
-                     showCancelButton: true,
-                     confirmButtonColor: '#3085d6',
-                     cancelButtonColor: '#d33',
-                     confirmButtonText: 'Sí, Borrar'
-                 }).then((result) => {
-                     if (result.isConfirmed) {
-                         Livewire.dispatch('eliminar-campeonato', {
-                             id: id
-                         });
-                     }
-                 });
-             });
-
-             Livewire.on('Baja', () => {
-                 Swal.fire(
-                     '¡Baja exitosa!',
-                     'El campeonato se ha borrado correctamente.',
-                     'success'
-                 );
-             });
-         });
-     </script>
- @endpush
 
  </div>

@@ -22,6 +22,7 @@ class FixtureVer extends Component
     public $campeonatoId;
     public $campeonato_id;
     public $campeonatos;
+    public $jornadas;
     public $anioSeleccionado;
     public $aniosDisponibles = [];
     public $fechaFiltro, $estadoFiltro, $grupoFiltro;
@@ -97,6 +98,10 @@ class FixtureVer extends Component
         $this->formato = $this->campeonato_id
             ? Campeonato::find($this->campeonato_id)->formato
             : null;
+        $this->jornadas = Encuentro::where('campeonato_id', $this->campeonato_id)
+            ->distinct()
+            ->orderBy('fecha_encuentro')
+            ->pluck('fecha_encuentro');
     }
 
     public function guardarGoles($encuentroId)

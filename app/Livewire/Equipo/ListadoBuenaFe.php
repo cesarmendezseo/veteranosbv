@@ -29,9 +29,11 @@ class ListadoBuenaFe extends Component
     public $nombreTorneo;
     public $fecha;
     public $equipoElegido;
+    public $campeonatoId;
 
-    public function mount()
+    public function mount($campeonatoId)
     {
+
         $this->campeonatos = Campeonato::all();
 
         // Obtener el último campeonato
@@ -52,8 +54,8 @@ class ListadoBuenaFe extends Component
             : null;
 
         // Cargar equipos si hay un campeonato válido
-        if ($this->campeonato_id) {
-            $campeonato = Campeonato::find($this->campeonato_id);
+        if ($this->campeonatoId) {
+            $campeonato = Campeonato::find($this->campeonatoId);
             $this->equiposDelGrupo = $campeonato->equipos->sortBy('nombre');
         } else {
             $this->equiposDelGrupo = collect(); // o []
@@ -70,7 +72,7 @@ class ListadoBuenaFe extends Component
     public function updatedCampeonatoId()
     {
 
-        $campeonatos = Campeonato::find($this->campeonato_id);
+        $campeonatos = Campeonato::find($this->campeonatoId);
 
         $this->equiposDelGrupo = $campeonatos->equipos->sortBy('nombre');
     }

@@ -16,6 +16,7 @@ use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Equipo\ListadoBuenaFe;
+use App\Livewire\Equipo\ListadoBuenaFeIndex;
 use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
@@ -82,7 +83,9 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'upload'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
-    Route::get('/equipo/listado-buena-fe', ListadoBuenaFe::class)->name('listado-buena-fe');
+    Route::get('/equipo/listado-buena-fe', ListadoBuenaFeIndex::class)->name('listado-buena-fe');
+    Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver', ListadoBuenaFe::class)->name('listado-buena-fe.ver');
+
     //=================FIN EQUIPOS====================
 
     //==============JUGADORES========================

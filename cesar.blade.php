@@ -1,8 +1,9 @@
 <!-- BOTON GUARDAR Y VOLVER -->
 <div class="flex justify-between mt-4">
-    <button type="submit" class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:bg-blue-800">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hard-drive-upload">
+    <button type="submit"
+        class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:bg-blue-800">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hard-drive-upload">
             <path d="m16 6-4-4-4 4" />
             <path d="M12 2v8" />
             <rect width="20" height="8" x="2" y="14" rx="2" />
@@ -11,29 +12,171 @@
         </svg>
         Guardar Imagen
     </button>
-    <button type="submit" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+    <button type="submit"
+        class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-save-icon lucide-save">
+            <path
+                d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
             <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
             <path d="M7 3v4a1 1 0 0 0 1 1h7" />
         </svg> <span>Guardar</span></button>
-    <a href="{{route('campeonato.index')}}" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    <a href="{{ route('campeonato.index') }}"
+        class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
         <span>Volver</span>
     </a>
 
     <button wire:click="crear"
         class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center bg-blue-950 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus-icon lucide-badge-plus">
-            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-badge-plus-icon lucide-badge-plus">
+            <path
+                d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
             <line x1="12" x2="12" y1="8" y2="16" />
             <line x1="8" x2="16" y1="12" y2="12" />
         </svg>
         Crear
     </button>
 </div>
+
+<!-- 0000000000000000000--MENU 3 PUNTOS MOVIL--000000000000000000000000000000000-->
+{{-- Menú acciones móvil (abre hacia arriba si no hay espacio) --}}
+
+<div x-data="{ open: false, dropUp: false, alignRight: false }" class="relative inline-block text-left">
+    <!-- Botón -->
+    <button x-ref="trigger"
+        @click="
+                                            dropUp = false;
+                                            alignRight = false;
+                                            open = !open;
+                                            $nextTick(() => {
+                                                const menu = $refs.menu;
+                                                const rect = menu.getBoundingClientRect();
+                                                
+                                                // Ajustar vertical
+                                                if (rect.bottom > window.innerHeight) dropUp = true;
+
+                                                // Ajustar horizontal
+                                                const spaceRight = window.innerWidth - rect.left;
+                                                if (spaceRight < rect.width + 8) alignRight = true;
+                                            });
+                                        "
+        class="px-4 py-2  text-gray-800 rounded cursor-pointer">
+        <!-- Icono tres puntos -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
+        </svg>
+    </button>
+
+    <!-- Menú -->
+    <div x-show="open" x-ref="menu" x-transition x-cloak
+        :class="[
+            dropUp ? 'bottom-full mb-2' : 'top-full mt-2',
+            alignRight ? 'right-0 left-auto' : 'left-0'
+        ]"
+        class="absolute w-48 bg-white border border-gray-200 rounded shadow-lg z-50 overflow-auto"
+        style="max-height: calc(100vh - 4rem);" @click.outside="open = false">
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 1</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 2</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 3</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 4</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 5</a>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Opción 6</a>
+    </div>
+</div>
+
+
+<!--//////////////////////////////////////////////////////////////////////-->
+<!-- BOTONES EDITAR-VER-CREAR-->
+<!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
+<td class="px-6 py-4 text-right">
+    <!-- Para pantallas medianas en adelante -->
+    <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false" @scroll.window="open=false">
+        <button x-ref="trigger"
+            @click="
+                            open = !open;
+                            $nextTick(() => {
+                                const btn = $refs.trigger;
+                                const rect = btn.getBoundingClientRect();
+                                const menu = $refs.menu;
+
+                                // Mostrar temporalmente para medir tamaño real
+                                const prevDisplay = menu.style.display;
+                                const prevVisibility = menu.style.visibility;
+                                menu.style.visibility = 'hidden';
+                                menu.style.display = 'block';
+
+                                const mh = menu.offsetHeight;
+                                const mw = menu.offsetWidth;
+
+                                // Restaurar estado
+                                menu.style.display = prevDisplay;
+                                menu.style.visibility = prevVisibility;
+
+                                // Posición por defecto: debajo del botón
+                                let top = rect.bottom + 8;
+                                let left = rect.right - mw;
+
+                                // Si no entra abajo, abrir arriba
+                                if (top + mh > window.innerHeight) {
+                                    top = rect.top - mh - 8;
+                                }
+
+                                // Limitar a bordes laterales
+                                left = Math.max(8, Math.min(left, window.innerWidth - mw - 8));
+
+                                $data.top = top;
+                                $data.left = left;
+                            });
+                        "
+            class="text-gray-600 hover:text-black focus:outline-none dark:text-white cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
+            </svg>
+        </button>
+
+        <div x-ref="menu" x-cloak x-show="open" @click.away="open=false"
+            class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
+            :style="`top:${top}px; left:${left}px`" x-transition.opacity>
+            <!--VER-->
+            <a href="{{ route('sanciones.crear', $campeonato->id) }}" class="flex items-center gap-2 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <span class="ml-1">Sanciones</span>
+            </a>
+            <!-- CREAR -->
+            @adminOrCan('comision')
+                <a href="{{ route('estadistica.ver', $campeonato->id) }}" class="flex items-center gap-2 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="lucide lucide-badge-plus">
+                        <path
+                            d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                        <line x1="12" x2="12" y1="8" y2="16" />
+                        <line x1="8" x2="16" y1="12" y2="12" />
+                    </svg>
+                    <span>Estadistica</span>
+                </a>
+            @endadminOrCan
+        </div>
+    </div>
+
+</td>
+
+
 
 <!-- ///////////////// SWEETALERT/////////////////////// -->
 <div>
@@ -56,54 +199,54 @@
     wire:click="$dispatch('confirmar-baja', { id: '{{ $campeonato->id }}' })"
 
     @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+        <script>
+            document.addEventListener('livewire:initialized', () => {
 
 
 
-            Livewire.on('confirmar-baja', ({
-                id
-            }) => {
+                Livewire.on('confirmar-baja', ({
+                    id
+                }) => {
 
 
-                Swal.fire({
-                    title: 'CUIDADO...',
-                    text: "¿Estás seguro de borrar al el Campeonato?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, Borrar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Livewire.dispatch('eliminar-campeonato', {
-                            id: id
-                        });
-                    }
+                    Swal.fire({
+                        title: 'CUIDADO...',
+                        text: "¿Estás seguro de borrar al el Campeonato?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, Borrar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Livewire.dispatch('eliminar-campeonato', {
+                                id: id
+                            });
+                        }
+                    });
+                });
+
+                Livewire.on('Baja', () => {
+                    Swal.fire(
+                        '¡Baja exitosa!',
+                        'El campeonato se ha borrado correctamente.',
+                        'success'
+                    );
+                });
+                //para errroes de validación
+                Livewire.on('alertaError', (event) => {
+                    const message = event.message; // Accede a los datos del evento
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errores de validación',
+                        text: message.replace(/\n/g, '\n'),
+                        customClass: {
+                            popup: 'text-sm'
+                        }
+                    });
                 });
             });
-
-            Livewire.on('Baja', () => {
-                Swal.fire(
-                    '¡Baja exitosa!',
-                    'El campeonato se ha borrado correctamente.',
-                    'success'
-                );
-            });
-            //para errroes de validación
-            Livewire.on('alertaError', (event) => {
-                const message = event.message; // Accede a los datos del evento
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Errores de validación',
-                    text: message.replace(/\n/g, '\n'),
-                    customClass: {
-                        popup: 'text-sm'
-                    }
-                });
-            });
-        });
-    </script>
+        </script>
     @endpush
 </div>
 <!-- -----------FIN SWEETALERT------------>
@@ -149,14 +292,13 @@
         display: none !important;
     }
 </style>
-<div x-data="{ show: false }"
-    x-show="show"
-    x-on:static-modal.window="show = true"
-    x-cloak
+<div x-data="{ show: false }" x-show="show" x-on:static-modal.window="show = true" x-cloak
     class="shadow-2xs fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4 sm:p-6">
 
-    <div class="bg-gradient-custom dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-6 sm:p-8 relative transform transition-all scale-100 opacity-100 ease-out duration-300
-                max-h-[90vh] overflow-y-auto"> <!-- Clases añadidas aquí -->
+    <div
+        class="bg-gradient-custom dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-6 sm:p-8 relative transform transition-all scale-100 opacity-100 ease-out duration-300
+                max-h-[90vh] overflow-y-auto">
+        <!-- Clases añadidas aquí -->
         <!-- Botón de Cierre -->
         <button @click="show = false"
             class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1">
@@ -165,64 +307,79 @@
             </svg>
         </button>
 
-        <h2 class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+        <h2
+            class="text-2xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
             Detalles del Campeonato
         </h2>
 
-        @if($campeonatoSeleccionado)
-        <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
+        @if ($campeonatoSeleccionado)
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-gray-700 dark:text-[#efb810]">
 
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
+                <div
+                    class="grid grid-cols-1 md:grid-cols-1 gap-y-4 gap-x-6 text-[#efb810] font-semibold dark:text-gray-300">
 
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre Campeonato:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos: </strong> {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x Grupo: </strong>{{$campeonatoSeleccionado->cantidad_equipos_grupo}}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong> {{ $campeonatoSeleccionado->puntos_perdido }}
-                </p>
-                <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                    Puntos por Tarjeta para Fair Play
-                </h4>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble Amarilla:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
-                </p>
-                <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
-                    <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Roja:</strong> {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
-                </p>
-                <h4 class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
-                    Criterios de Desempate
-                </h4>
-                <p class=">
-                         <strong class=" font-semibold text-gray-400 dark:text-[#efb810]"></strong>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Nombre Campeonato:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->nombre)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Grupos: </strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->cantidad_grupos)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Cantidad de Equipo x Grupo:
+                        </strong>{{ $campeonatoSeleccionado->cantidad_equipos_grupo }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Ganados:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->puntos_ganado)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Empatados:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->puntos_empatado)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Ptos Perdidos:</strong>
+                        {{ $campeonatoSeleccionado->puntos_perdido }}
+                    </p>
+                    <h4
+                        class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                        Puntos por Tarjeta para Fair Play
+                    </h4>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta
+                            Amarilla:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_amarilla)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Doble Amarilla:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->puntos_doble_amarilla)) }}
+                    </p>
+                    <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Puntos Tarjeta Roja:</strong>
+                        {{ ucwords(strtolower($campeonatoSeleccionado->puntos_tarjeta_roja)) }}
+                    </p>
+                    <h4
+                        class="text-1xl font-extrabold mb-6 text-white dark:text-gray-100 text-center border-b pb-3 border-gray-200 dark:border-gray-700">
+                        Criterios de Desempate
+                    </h4>
+                    <p class=">
+                         <strong class=" font-semibold text-gray-400
+                        dark:text-[#efb810]"></strong>
 
-                    @foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
+                        @foreach ($campeonatoSeleccionado->criterioDesempate as $criterio)
+                            <div> Prioridad: {{ $criterio->orden }} - {{ ucwords(strtolower($criterio->criterio)) }}
+                            </div>
+                        @endforeach
+                    </p>
 
-                <div> Prioridad: {{ $criterio->orden }} - {{ ucwords(strtolower($criterio->criterio)) }}</div>
-                @endforeach
-                </p>
-
-            </div>
-
+                </div>
             @else
-            <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún campeonato para mostrar.</p>
-            @endif
-        </div>
+                <p class="text-center text-gray-600 dark:text-gray-400 py-4">No se ha seleccionado ningún campeonato
+                    para mostrar.</p>
+        @endif
     </div>
+</div>
 </div>
 
 $user = new App\Models\User;
@@ -236,20 +393,26 @@ $user->save();
 <flux:separator />
 <ul>
     @if (Route::has('login'))
-    @auth
-    <li class="md:hidden">
-        <a href="{{ url('/dashboard') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Dashboard</a>
-    </li>
-    @else
-    <li class="md:hidden">
-        <a href="{{ route('login') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Log in</a>
-    </li>
-    @if (Route::has('register'))
-    <li class="md:hidden">
-        <a href="{{ route('register') }}" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" x-on:click="open = false">Register</a>
-    </li>
-    @endif
-    @endauth
+        @auth
+            <li class="md:hidden">
+                <a href="{{ url('/dashboard') }}"
+                    class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    x-on:click="open = false">Dashboard</a>
+            </li>
+        @else
+            <li class="md:hidden">
+                <a href="{{ route('login') }}"
+                    class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                    x-on:click="open = false">Log in</a>
+            </li>
+            @if (Route::has('register'))
+                <li class="md:hidden">
+                    <a href="{{ route('register') }}"
+                        class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                        x-on:click="open = false">Register</a>
+                </li>
+            @endif
+        @endauth
     @endif
 </ul>
 <!-- FIN LOGIN-->
@@ -257,28 +420,22 @@ $user->save();
 <!--BOTON 3 PUNTOS -->
 <div x-data="{ open: false }" class="relative">
     <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" viewBox="0 0 24 24" fill="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" viewBox="0 0 24 24"
+            fill="currentColor">
             <circle cx="12" cy="6" r="1.5" />
             <circle cx="12" cy="12" r="1.5" />
             <circle cx="12" cy="18" r="1.5" />
         </svg>
     </button>
-    <div x-show="open"
-        x-collapse
-        @click.away="open = false"
+    <div x-show="open" x-collapse @click.away="open = false"
         class="absolute right-0 mt-2 bg-[#0A2A5E] dark:bg-gray-700 shadow rounded-l-lg z-50 flex flex-col">
         <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}"
             class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                width="18" height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-eye">
-                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="lucide lucide-eye">
+                <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
                 <circle cx="12" cy="12" r="3" />
             </svg>
             <span class="whitespace-nowrap">Ver</span>
@@ -286,3 +443,10 @@ $user->save();
     </div>
 </div>
 <!--FIN BOTON 3 PUNTOS -->
+
+<!--<div x-data="{ open: false }" class="relative md:hidden">
+                            <button @click="open = !open"
+                                class="text-gray-600 hover:text-black focus:outline-none">
+                                <!-- Icono tres puntos -->
+
+</div>-->
