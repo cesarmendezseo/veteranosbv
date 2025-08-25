@@ -150,7 +150,7 @@
                                              :class="[dropUp ? 'bottom-full mb-2' : 'top-full mt-2', alignRight ?
                                                  'right-0 left-auto' : 'left-0'
                                              ]"
-                                             class="absolute w-48 bg-white border border-gray-200 rounded shadow-lg z-50 overflow-auto"
+                                             class="absolute w-48 bg-white border dark:bg-gray-700 dark:text-gray-100 rounded shadow-lg z-50 overflow-auto"
                                              style="max-height: calc(100vh - 4rem);" @click.outside="open = false">
 
                                              {{-- VER --}}
@@ -260,7 +260,7 @@
                                                     if (spaceRight < rect.width + 8) alignRight = true;
                                                 });
                                                 "
-                                 class="px-4 py-2 text-gray-800 rounded cursor-pointer">
+                                 class="px-4 py-2 text-gray-800 dark:text-gray-100 rounded cursor-pointer">
                                  <!-- Icono tres puntos -->
                                  <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none"
                                      viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -274,12 +274,12 @@
                                  :class="[dropUp ? 'bottom-full mb-2' : 'top-full mt-2', alignRight ?
                                      'right-0 left-auto' : 'left-0'
                                  ]"
-                                 class="absolute w-48 bg-white border border-gray-200 rounded shadow-lg z-50 overflow-auto"
+                                 class="absolute w-48 bg-white border  dark:bg-gray-700 dark:text-gray-100 rounded shadow-lg z-50 overflow-auto"
                                  style="max-height: calc(100vh - 4rem);" @click.outside="open = false">
 
                                  {{-- VER --}}
                                  <a wire:click="verJugador({{ $jugador->id }})"
-                                     class="cursor-pointer flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
+                                     class="cursor-pointer flex items-center w-full px-4 py-2  hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
                                      title="Ver">
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
@@ -294,7 +294,7 @@
                                  {{-- EDITAR --}}
                                  @adminOrCan('comision')
                                      <a href="{{ route('jugadores.editar', $jugador->id) }}"
-                                         class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
+                                         class="flex items-center w-full px-4 py-2  hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
                                          title="Editar">
                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -306,9 +306,9 @@
                                  @endadminOrCan
 
                                  {{-- BORRAR --}}
-                                 @adminOrCan('comision')
+                                 @adminOrCan()
                                      <a wire:click="borrar({{ $jugador->id }})"
-                                         class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2 cursor-pointer"
+                                         class="flex items-center w-full px-4 py-2  hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2 cursor-pointer"
                                          title="Borrar">
                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                              stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -321,7 +321,7 @@
 
                                  {{-- FOTO --}}
                                  <a href="{{ route('jugadores.foto.upload', $jugador->id) }}"
-                                     class="flex items-center w-full px-4 py-2 text-gray-800 hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
+                                     class="flex items-center w-full px-4 py-2  hover:bg-gray-100 hover:underline font-medium rounded-lg mb-2"
                                      title="Subir foto">
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                          stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">

@@ -1,49 +1,72 @@
 <div>
     <x-navbar titulo="Listado Buena Fe ">
-        @adminOrCan('comision|imprimir')
-            @if ($equipoElegido)
-                <button wire:click="exportarJugadores" title="Imprimir Listado"
-                    class="cursor-pointer flex items-center px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="mr-2 lucide lucide-printer-icon lucide-printer">
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                        <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                        <rect x="6" y="14" width="12" height="8" rx="1" />
-                    </svg>
-                    Imprimir
-                </button>
-            @endif
-        @endadminOrCan
-        @adminOrCan('comision')
-            <a href="{{ route('equipo.crear') }}"
-                class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-badge-plus-icon lucide-badge-plus">
-                    <path
-                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                    <line x1="12" x2="12" y1="8" y2="16" />
-                    <line x1="8" x2="16" y1="12" y2="12" />
-                </svg>
-                Crear</a>
-        @endadminOrCan
-        <button wire:click="actualizarSanciones"
-            class="cursor-pointer flex  px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
-            {{-- Added text-sm --}}
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="mr-1 lucide lucide-refresh-ccw-dot-icon lucide-refresh-ccw-dot">
-                {{-- Changed mr-2 to mr-1 to save space --}}
-                <path d="M3 2v6h6" />
-                <path d="M21 12A9 9 0 0 0 6 5.3L3 8" />
-                <path d="M21 22v-6h-6" />
-                <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" />
-                <circle cx="12" cy="12" r="1" />
-            </svg>
-            Actualizar Sanciones
-        </button>
+        <div class="md:hidden flex">
+            @adminOrCan('comision|imprimir')
+                @if ($equipoElegido)
+                    <button wire:click="exportarJugadores" title="Imprimir Listado"
+                        class="cursor-pointer flex items-center px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="mr-2 lucide lucide-printer-icon lucide-printer">
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                            <rect x="6" y="14" width="12" height="8" rx="1" />
+                        </svg>
 
+                    </button>
+                @endif
+            @endadminOrCan
+
+            <button wire:click="actualizarSanciones"
+                class="cursor-pointer flex  px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
+                {{-- Added text-sm --}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="mr-1 lucide lucide-refresh-ccw-dot-icon lucide-refresh-ccw-dot">
+                    {{-- Changed mr-2 to mr-1 to save space --}}
+                    <path d="M3 2v6h6" />
+                    <path d="M21 12A9 9 0 0 0 6 5.3L3 8" />
+                    <path d="M21 22v-6h-6" />
+                    <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" />
+                    <circle cx="12" cy="12" r="1" />
+                </svg>
+
+            </button>
+        </div>
+        <!-- escritorio -->
+        <div class="hidden md:flex">
+            @adminOrCan('comision|imprimir')
+                @if ($equipoElegido)
+                    <button wire:click="exportarJugadores" title="Imprimir Listado"
+                        class="cursor-pointer flex items-center px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="mr-2 lucide lucide-printer-icon lucide-printer">
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                            <rect x="6" y="14" width="12" height="8" rx="1" />
+                        </svg>
+                        Imprimir
+                    </button>
+                @endif
+            @endadminOrCan
+
+            <button wire:click="actualizarSanciones"
+                class="cursor-pointer flex  px-4 py-2 hover:underline text-white rounded hover:bg-blue-700 text-sm">
+                {{-- Added text-sm --}}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="mr-1 lucide lucide-refresh-ccw-dot-icon lucide-refresh-ccw-dot">
+                    {{-- Changed mr-2 to mr-1 to save space --}}
+                    <path d="M3 2v6h6" />
+                    <path d="M21 12A9 9 0 0 0 6 5.3L3 8" />
+                    <path d="M21 22v-6h-6" />
+                    <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7" />
+                    <circle cx="12" cy="12" r="1" />
+                </svg>
+                Actualizar Sanciones
+            </button>
+        </div>
 
     </x-navbar>
     <flux:separator />

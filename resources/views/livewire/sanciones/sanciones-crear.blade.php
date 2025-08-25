@@ -5,18 +5,24 @@
 
     <x-navbar titulo="Registrar Sanciones">
         {{-- Botón para volver a la lista de categorías --}}
-        <a href="{{ route('sanciones.index') }}" class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        <a href="{{ route('sanciones.index') }}"
+            class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             Volver</a>
 
-        <button wire:click="actualizarCumplimientosSanciones"
-            class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
-            Actualizar Sanciones
-        </button>
+        <div class="hidden md:flex"><button wire:click="actualizarCumplimientosSanciones"
+                class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
+                Actualizar Sanciones
+            </button>
+        </div>
     </x-navbar>
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+    <div
+        class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div>
 
             <label for="first_name" class="block m-2 dark:text-[#FFC107]">Buscar por
@@ -31,10 +37,11 @@
             <select wire:model="jugador_id"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 @foreach ($jugadores as $jugador)
-                <option value="{{ $jugador->id }}">
-                    {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }} {{strtoupper($jugador->nombre) }}
-                    - ({{ ucfirst($jugador->equipo->nombre )?? 'Sin equipo' }})
-                </option>
+                    <option value="{{ $jugador->id }}">
+                        {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }}
+                        {{ strtoupper($jugador->nombre) }}
+                        - ({{ ucfirst($jugador->equipo->nombre) ?? 'Sin equipo' }})
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -53,7 +60,8 @@
         </div>
     </div>
     <hr class="m-5">
-    <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4  bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+    <div
+        class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4  bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
             <div>
                 <label class="block m-2 dark:text-[#FFC107]">Jornada de sanción</label>
@@ -79,36 +87,45 @@
     </div>
 
 
+    <div class="flex gap-4 items-center">
+        <button wire:click="guardar"
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-save-icon lucide-save">
+                <path
+                    d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+            </svg> <span>Guardar</span></button>
 
-    <button wire:click="guardar" class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-            <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-            <path d="M7 3v4a1 1 0 0 0 1 1h7" />
-        </svg> <span>Guardar</span></button>
+        <button wire:click="actualizarCumplimientosSanciones"
+            class=" md:hidden cursor-pointer inline-flex items-center gap-2 mt-4 font-semibold  bg-[#fce307] hover:bg-[#5a5207] hover:text-gray-300 text-black  px-4 py-2 rounded">
+            Actualizar Sanciones
+        </button>
 
-
+    </div>
     @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+        <script>
+            document.addEventListener('livewire:initialized', () => {
 
-            Livewire.on('guardarSancion', () => {
-                Swal.fire({
-                    'title': 'Guardado',
-                    'text': 'La sanción ha sido guardado correctamente',
-                    'icon': 'success'
+                Livewire.on('guardarSancion', () => {
+                    Swal.fire({
+                        'title': 'Guardado',
+                        'text': 'La sanción ha sido guardado correctamente',
+                        'icon': 'success'
+                    });
                 });
-            });
 
-            Livewire.on('actualizar-sancion', () => {
-                Swal.fire({
-                    'title': 'Correcto!',
-                    'text': 'La sanción ha sido actualizado correctamente',
-                    'icon': 'success'
+                Livewire.on('actualizar-sancion', () => {
+                    Swal.fire({
+                        'title': 'Correcto!',
+                        'text': 'La sanción ha sido actualizado correctamente',
+                        'icon': 'success'
+                    });
                 });
-            });
 
 
-        })
-    </script>
+            })
+        </script>
     @endpush

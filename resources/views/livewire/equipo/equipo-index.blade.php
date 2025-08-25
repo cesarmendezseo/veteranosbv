@@ -118,9 +118,9 @@
                                                 if (spaceRight < rect.width + 8) alignRight = true;
                                             });
                                         "
-                                    class="px-4 py-2  text-gray-800 rounded cursor-pointer">
+                                    class="px-4 py-2  text-gray-800 dark:text-gray-100 rounded cursor-pointer">
                                     <!-- Icono tres puntos -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none"
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 " fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M12 6v.01M12 12v.01M12 18v.01" />
@@ -133,10 +133,10 @@
                                         dropUp ? 'bottom-full mb-2' : 'top-full mt-2',
                                         alignRight ? 'right-0 left-auto' : 'left-0'
                                     ]"
-                                    class="absolute w-48 bg-white border border-gray-200 rounded shadow-lg z-50 overflow-auto"
+                                    class="absolute w-48 bg-white   dark:bg-gray-700 dark:text-gray-100 rounded shadow-lg z-50 overflow-auto"
                                     style="max-height: calc(100vh - 4rem);" @click.outside="open = false">
                                     <a href="{{ route('equipo.editar', $equipo->id) }}"
-                                        class="block px-4 py-2 hover:bg-gray-100 text-gray-800 hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
+                                        class="block px-4 py-2 hover:bg-gray-100  hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
                                         title="Editar">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -147,7 +147,7 @@
 
                                     {{-- Borrar --}}
                                     <button wire:click="borrar({{ $equipo->id }})"
-                                        class="block px-4 py-2 hover:bg-gray-100 text-gray-800 hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
+                                        class="block px-4 py-2 hover:bg-gray-100  hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
                                         title="Borrar">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -158,7 +158,7 @@
 
                                     {{-- Logo --}}
                                     <a href="{{ route('equipo.logo.upload', $equipo->id) }}"
-                                        class="block px-4 py-2 hover:bg-gray-100 text-gray-800 hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
+                                        class="block px-4 py-2 hover:bg-gray-100  hover:underline   font-medium rounded-lg text-sm px-2 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55  mb-2"
                                         title="Subir logo">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             fill="none" stroke="currentColor" stroke-width="2"

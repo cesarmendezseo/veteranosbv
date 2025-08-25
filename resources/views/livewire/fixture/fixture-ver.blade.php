@@ -1,37 +1,75 @@
 <div>
-    <x-navbar titulo="Ver Encuentros - Fixture ">
-        <a href="{{ route('fixture.index') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg> Volver
-        </a>
-
-        @adminOrCan()
-            <a href="{{ route('fixture.automatico') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-badge-plus-icon lucide-badge-plus">
-                    <path
-                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                    <line x1="12" x2="12" y1="8" y2="16" />
-                    <line x1="8" x2="16" y1="12" y2="12" />
-                </svg> Crear Auto.
+    <x-navbar titulo="Ver Encuentros ">
+        <!--movil-->
+        <div class="md:hidden flex ">
+            <a href="{{ route('fixture.index') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
             </a>
 
-            <button wire:click="exportar"
-                class="cursor-pointer px-3 py-2  text-white rounded disabled:opacity-50 flex items-center gap-1"
-                @disabled(!$jornadaFiltro)>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-download-icon lucide-download">
-                    <path d="M12 15V3" />
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <path d="m7 10 5 5 5-5" />
-                </svg>Exportar
-            </button>
-        @endadminOrCan
+            @adminOrCan()
+                <a href="{{ route('fixture.automatico') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-badge-plus-icon lucide-badge-plus">
+                        <path
+                            d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                        <line x1="12" x2="12" y1="8" y2="16" />
+                        <line x1="8" x2="16" y1="12" y2="12" />
+                    </svg><span class="text-xs">Automatico</span>
+                </a>
+
+                <button wire:click="exportar"
+                    class="cursor-pointer px-3 py-2  text-white rounded disabled:opacity-50 flex items-center gap-1"
+                    @disabled(!$jornadaFiltro)>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-download-icon lucide-download">
+                        <path d="M12 15V3" />
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="m7 10 5 5 5-5" />
+                    </svg>
+                </button>
+            @endadminOrCan
+        </div>
+        <!-- escritorio-->
+        <div class="hidden md:flex  gap-4">
+            <a href="{{ route('fixture.index') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg> Volver
+            </a>
+
+            @adminOrCan()
+                <a href="{{ route('fixture.automatico') }}" class="px-3 py-2  text-white rounded flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-badge-plus-icon lucide-badge-plus">
+                        <path
+                            d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                        <line x1="12" x2="12" y1="8" y2="16" />
+                        <line x1="8" x2="16" y1="12" y2="12" />
+                    </svg> Crear Auto.
+                </a>
+
+                <button wire:click="exportar"
+                    class="cursor-pointer px-3 py-2  text-white rounded disabled:opacity-50 flex items-center gap-1"
+                    @disabled(!$jornadaFiltro)>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-download-icon lucide-download">
+                        <path d="M12 15V3" />
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="m7 10 5 5 5-5" />
+                    </svg>Exportar
+                </button>
+            @endadminOrCan
+        </div>
     </x-navbar>
     <div class="mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
@@ -102,7 +140,8 @@
                         <line x1="32" y1="0" x2="32" y2="40" stroke="white"
                             stroke-width="1" />
                         <!-- Círculo central -->
-                        <circle cx="32" cy="20" r="5" stroke="white" stroke-width="1" fill="none" />
+                        <circle cx="32" cy="20" r="5" stroke="white" stroke-width="1"
+                            fill="none" />
                         <circle cx="32" cy="20" r="1" fill="white" />
                         <!-- Áreas grandes -->
                         <rect x="0" y="10" width="6" height="20" stroke="white" stroke-width="1"
