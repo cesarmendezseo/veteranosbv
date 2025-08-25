@@ -36,7 +36,7 @@ class Campeonato extends Model
     ];
     public function criterioDesempate()
     {
-        return $this->hasMany(criterios_desempate::class)->orderBy('orden');
+        return $this->hasMany(Criterios_desempate::class)->orderBy('orden');
     }
 
     public function categoria()
