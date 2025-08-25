@@ -3,6 +3,7 @@
 namespace App\Livewire\Campeonato;
 
 use App\Models\Campeonato;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -24,7 +25,33 @@ class CampeonatoIndex extends Component
     #[On('eliminar-campeonato')]
     public function eliminarCampeonato($id)
     {
-        Campeonato::findOrFail($id)->delete();
+        $campeonato = Campeonato::find($id);
+
+        if (!$campeonato) {
+
+            LivewireAlert::title('Error')
+                ->text('El campeonato no existe.')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+            return;
+        }
+
+        // Verifico si tiene equipos asignados
+        if ($campeonato->equipos()->exists()) {
+            LivewireAlert::title('Error')
+                ->text('No se puede eliminar el campeonato porque tiene equipos asignados..')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+
+            return;
+        }
+
+        $campeonato->delete();
+
         $this->dispatch('baja');
         $this->dispatch('refresh');
     }

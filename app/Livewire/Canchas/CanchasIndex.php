@@ -3,6 +3,7 @@
 namespace App\Livewire\Canchas;
 
 use App\Models\Canchas;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -43,9 +44,42 @@ class CanchasIndex extends Component
     #[On('eliminar-estadio')]
     public function eliminarEstadio($id)
     {
-        Canchas::findOrFail($id)->delete();
+        $cancha = Canchas::find($id);
+
+        if (!$cancha) {
+            LivewireAlert::title('Error')
+                ->text('La cancha no existe..')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+
+            return;
+        }
+
+        // Verificar si la cancha está asociada a encuentros
+        if ($cancha->encuentros()->exists()) {
+            LivewireAlert::title('Error')
+                ->text('No se puede eliminar la cancha porque está asociada a uno o más encuentros...')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+
+            return;
+        }
+
+        // Si no está asociada, eliminar
+        $cancha->delete();
 
         $this->dispatch('refresh');
+
+        LivewireAlert::title('Ok')
+            ->text('Cancha eliminada correctament')
+            ->success()
+            ->toast()
+            ->position('top')
+            ->show();
     }
 
     #[On('refresh')]

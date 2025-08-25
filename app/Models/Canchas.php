@@ -20,4 +20,9 @@ class Canchas extends Model
         'cod_pos',
         'otros',
     ];
+    // Relación: una cancha tiene muchos encuentros
+    public function encuentros()
+    {
+        return $this->hasMany(Encuentro::class, 'cancha_id');
+    }
 }

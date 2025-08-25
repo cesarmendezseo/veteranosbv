@@ -51,7 +51,7 @@ class Campeonato extends Model
 
     public function equipos()
     {
-        return $this->belongsToMany(Equipo::class, 'campeonato_equipo')
+        return $this->belongsToMany(Equipo::class, 'campeonato_equipo', 'campeonato_id', 'equipo_id')
             ->withPivot('grupo_id')
             ->withTimestamps();
     }

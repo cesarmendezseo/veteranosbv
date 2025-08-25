@@ -95,7 +95,7 @@
 
 
 <!--//////////////////////////////////////////////////////////////////////-->
-<!-- BOTONES EDITAR-VER-CREAR-->
+
 <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
 <td class="px-6 py-4 text-right">
     <!-- Para pantallas medianas en adelante -->
@@ -450,3 +450,12 @@ $user->save();
                                 <!-- Icono tres puntos -->
 
 </div>-->
+
+<!--ALERT LIVEWIRE ---->
+LivewireAlert::title('Error')
+->text('Equipo no encontrado.')
+->error()
+->toast()
+->position('top')
+->show();
+<!-- /////////////////////////////////////  -->
