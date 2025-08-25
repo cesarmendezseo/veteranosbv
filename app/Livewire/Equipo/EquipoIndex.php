@@ -47,6 +47,19 @@ class EquipoIndex extends Component
                 ->show();
             return;
         }
+
+        // Verificar si el equipo tiene jugadores asociados
+        if ($equipo->jugadores()->exists()) {
+            LivewireAlert::title('Atención')
+                ->text('No se puede eliminar el equipo porque tiene jugadores asociados.')
+                ->error()
+                ->toast()
+                ->position('top')
+                ->show();
+            return;
+        }
+
+        // Si no tiene jugadores, se elimina
         $equipo->delete();
 
         LivewireAlert::title('')
@@ -57,8 +70,9 @@ class EquipoIndex extends Component
             ->timer(15000)
             ->show();
 
-        $this->equipos = Equipo::orderBy('nombre')->get(); // Refresh the list of equipos */
+        $this->equipos = Equipo::orderBy('nombre')->get(); // refrescar la lista
     }
+
 
     public function keepItem($data)
     {
