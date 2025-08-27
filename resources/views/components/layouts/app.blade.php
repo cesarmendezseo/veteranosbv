@@ -12,13 +12,15 @@
                     </svg>
                 </button>
             </div>
+            @PwaHead
             {{ $slot }}
+            @RegisterServiceWorkerScript
         </flux:main>
     </x-layouts.app.sidebar>
 @else
     {{-- Si el usuario no está autenticado, solo renderiza el contenido sin el sidebar. --}}
-
+    @PwaHead
 
     {{ $slot }}
-
+    @RegisterServiceWorkerScript
 @endauth

@@ -1,0 +1,16 @@
+{
+    "name": "Mi Torneo F\u00fatbol",
+    "short_name": "Torneo",
+    "background_color": "#ffffff",
+    "theme_color": "#1d4ed8",
+    "display": "standalone",
+    "description": "App instalable para gestionar torneos.",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
