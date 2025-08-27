@@ -6,7 +6,7 @@
         class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
     <div class="overflow-x-auto">
-        <table class="w-full border ">
+        <table class="w-full border hidden ">
             <thead class="bg-gray-700 rounded-lg text-gray-100 dark:bg-gray-400 dark:text-gray-900">
                 <tr class="">
                     <th class="p-2 text-xs">DNI</th>
@@ -130,6 +130,107 @@
         </table>
         {{ $jugadores->links() }}
     </div>
+
+    <!-- movil -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        @forelse($jugadores as $jugador)
+            <div
+                class="rounded-xl shadow-md bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 p-4 flex justify-between items-start">
+
+                <!-- Datos del jugador -->
+                <div>
+                    <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        DNI: {{ $jugador->documento }}
+                    </p>
+                    <p class="text-base font-bold text-gray-900 dark:text-white">
+                        {{ strtoupper($jugador->nombre) }} {{ strtoupper($jugador->apellido) }}
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-400">
+                        Equipo: {{ ucwords($jugador->equipo?->nombre ?? '-') }}
+                    </p>
+                </div>
+
+                <!-- Menú de acciones -->
+                <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false"
+                    @scroll.window="open=false">
+                    <button x-ref="trigger"
+                        @click="
+                        open = !open;
+                        $nextTick(() => {
+                            const btn = $refs.trigger;
+                            const rect = btn.getBoundingClientRect();
+                            const menu = $refs.menu;
+                            const prevDisplay = menu.style.display;
+                            const prevVisibility = menu.style.visibility;
+                            menu.style.visibility = 'hidden';
+                            menu.style.display = 'block';
+                            const mh = menu.offsetHeight;
+                            const mw = menu.offsetWidth;
+                            menu.style.display = prevDisplay;
+                            menu.style.visibility = prevVisibility;
+                            let top = rect.bottom + 8;
+                            let left = rect.right - mw;
+                            if (top + mh > window.innerHeight) {
+                                top = rect.top - mh - 8;
+                            }
+                            left = Math.max(8, Math.min(left, window.innerWidth - mw - 8));
+                            $data.top = top;
+                            $data.left = left;
+                        });
+                    "
+                        class="text-gray-600 hover:text-black dark:text-white focus:outline-none cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01" />
+                        </svg>
+                    </button>
+
+                    <div x-ref="menu" x-cloak x-show="open" @click.away="open=false"
+                        class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border dark:border-gray-700"
+                        :style="`top:${top}px; left:${left}px`" x-transition.opacity>
+                        <!-- ALTA -->
+                        <a wire:click="mostrarFormularioAlta({{ $jugador->id }})"
+                            class="cursor-pointer flex items-center gap-2 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-plus">
+                                <path
+                                    d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                <line x1="12" x2="12" y1="8" y2="16" />
+                                <line x1="8" x2="16" y1="12" y2="12" />
+                            </svg>
+                            <span>Alta</span>
+                        </a>
+                        <!-- BAJA -->
+                        <a wire:click="$dispatch('confirmar-baja', { id: {{ $jugador->id }} })"
+                            class="cursor-pointer flex items-center gap-2 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span>Baja</span>
+                        </a>
+                        <!-- HISTORIAL -->
+                        <a wire:click="verHistorial({{ $jugador->id }})"
+                            class="cursor-pointer flex items-center gap-2 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            <span>Historial</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-center p-4 text-sm dark:text-gray-300">No hay jugadores</p>
+        @endforelse
+    </div>
+
 
     {{-- Sección de alta --}}
     @if ($mostrarAlta)
