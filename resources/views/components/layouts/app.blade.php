@@ -1,6 +1,9 @@
 @auth
     <x-layouts.app.sidebar :title="$title ?? 'Futbol de Veteranos'">
         <flux:main>
+
+            @PwaHead
+            {{ $slot }}
             <div x-data="{ show: false }" x-init="window.addEventListener('scroll', () => { show = window.scrollY > 200 })" class="fixed bottom-3 right-3 z-50">
                 <button x-show="show" @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
                     class="p-3 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 "
@@ -12,8 +15,6 @@
                     </svg>
                 </button>
             </div>
-            @PwaHead
-            {{ $slot }}
             @RegisterServiceWorkerScript
         </flux:main>
     </x-layouts.app.sidebar>
