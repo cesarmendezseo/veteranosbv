@@ -35,8 +35,8 @@ return [
         ],
     ], */
     'manifest' => [
-        'name' => 'Mi Torneo Fútbol',
-        'short_name' => 'Torneo',
+        'name' => 'Futbol de Veteranos BV',
+        'short_name' => 'Veteranos BV',
         'background_color' => '#ffffff',
         'theme_color' => '#1d4ed8',
         // Recomendado: 'standalone' para verse como app
