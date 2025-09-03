@@ -19,7 +19,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    @livewireScripts
+   
     <style>
         html,
         body {
@@ -242,7 +242,7 @@
 
     @livewireScripts
     @stack('js')
-    @fluxScripts
+ 
 
 </body>
 
