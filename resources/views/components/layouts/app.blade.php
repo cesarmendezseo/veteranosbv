@@ -20,8 +20,10 @@
     </x-layouts.app.sidebar>
 @else
     {{-- Si el usuario no está autenticado, solo renderiza el contenido sin el sidebar. --}}
+    <flux:main>
     @PwaHead
 
     {{ $slot }}
     @RegisterServiceWorkerScript
+    </flux:main>
 @endauth
