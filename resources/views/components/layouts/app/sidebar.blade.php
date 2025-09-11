@@ -17,36 +17,36 @@
             <flux:navlist.group :heading="__('Platform')" class="grid">
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('jugadores.index')"
+                <flux:navlist.item icon="shirt" :href="route('jugadores.index')"
                     :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Jugadores') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('canchas.index')"
+                <flux:navlist.item icon="ticket" :href="route('canchas.index')"
                     :current="request()->routeIs('canchas.index')" wire:navigate>{{ __('Canchas') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('fixture.index')"
+                <flux:navlist.item icon="git-fork" :href="route('fixture.index')"
                     :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Fixture') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('tabla-posiciones')"
+                <flux:navlist.item icon="table-2" :href="route('tabla-posiciones')"
                     :current="request()->routeIs('tabla-posiciones')" wire:navigate>{{ __('Tabla de Posición') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('sanciones.index')"
+                <flux:navlist.item icon="pencil-line" :href="route('sanciones.index')"
                     :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Sanciones') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('altas-bajas.index')"
+                <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
                     :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('categoria.index')"
+                <flux:navlist.item icon="album" :href="route('categoria.index')"
                     :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
-                    wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('campeonato.index')"
+
+                <flux:navlist.item icon="medal" :href="route('campeonato.index')"
                     :current="request()->routeIs('campeonato.index')" wire:navigate>{{ __('Campeonato') }}
                 </flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('equipo.index')"
+                <flux:navlist.item icon="shield" :href="route('equipo.index')"
                     :current="request()->routeIs('equipo.index')" wire:navigate>{{ __('Equipos') }}</flux:navlist.item>
-                <flux:navlist.item icon="home" :href="route('rol.panel')" :current="request()->routeIs('rol.panel')"
-                    wire:navigate>{{ __('Roles y Permisos') }}</flux:navlist.item>
+                <flux:navlist.item icon="user-plus" :href="route('rol.panel')"
+                    :current="request()->routeIs('rol.panel')" wire:navigate>{{ __('Roles y Permisos') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 
