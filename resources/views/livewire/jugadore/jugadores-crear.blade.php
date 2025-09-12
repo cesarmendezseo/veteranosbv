@@ -1,30 +1,33 @@
 <div class=" w-full">
     <div class="flex flex-col min-h-screen">
         {{-- La barra de navegación se quedará en la parte superior --}}
-        <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Cargar Jugador') }}
-        </h2>
-        <div class="flex items-center space-x-4">
+        <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
+            {{ __('Crear Jugador') }}
+            </h2>
             {{-- Botón para volver a la lista de categorías --}}
-            <a href="{{ route('jugadores.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            <a href="{{ route('jugadores.index') }}"
+                class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 Volver
             </a>
         </div>
-         </x-slot>
 
 
-        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div
+            class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
 
             <form wire:submit.prevent="guardar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
                 @csrf
                 <div class="grid md:grid-cols-3 md:gap-6">
                     <!-- NOMBRE -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="nombre" type="text" name="nombre" id="floating_first_name" value="{{ old('nombre') }}"
+                        <input wire:model="nombre" type="text" name="nombre" id="floating_first_name"
+                            value="{{ old('nombre') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " required />
                         <label for="floating_first_name"
@@ -36,7 +39,8 @@
                     </div>
                     <!-- APELLIDO -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="apellido" type="text" name="ciudad" id="floating_last_name" value="{{ old('ciudad') }}"
+                        <input wire:model="apellido" type="text" name="ciudad" id="floating_last_name"
+                            value="{{ old('ciudad') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('apellido') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_last_name"
@@ -48,7 +52,8 @@
                     <!-- TIPO DOCUMENTO -->
                     <div class="relative z-0 w-full mb-5 group">
 
-                        <select wire:model="tipo_documento" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select wire:model="tipo_documento" id="countries"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <!--  <option value="">Tipo</option> -->
                             <option value="dni">DNI</option>
                             <option value="cuil">CUIL</option>
@@ -58,7 +63,8 @@
 
                     <!-- DOCUMENTO -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="documento" type="number" name="documento" id="floating_first_name" value="{{ old('documento') }}"
+                        <input wire:model="documento" type="number" name="documento" id="floating_first_name"
+                            value="{{ old('documento') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -70,27 +76,34 @@
                     <div class="relative z-0 w-full mb-5 group">
                         <div class="relative max-w-sm">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input wire:model="nacimiento" datepicker id="default-datepicker" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                            <input wire:model="nacimiento" datepicker id="default-datepicker" type="date"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Select date">
                         </div>
 
                     </div>
                     <!-- SOCIO -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="socio" type="number" name="socio" id="floating_first_name" value="{{ old('socio') }}"
+                        <input wire:model="socio" type="number" name="socio" id="floating_first_name"
+                            value="{{ old('socio') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">N° Socio
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">N°
+                            Socio
                         </label>
                     </div>
 
                     <!-- TELEFONO -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="telefono" type="number" name="telefono" id="floating_first_name" value="{{ old('telefono') }}"
+                        <input wire:model="telefono" type="number" name="telefono" id="floating_first_name"
+                            value="{{ old('telefono') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -100,7 +113,8 @@
 
                     <!-- EMAIL -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="email" type="email" name="email" id="floating_first_name" value="{{ old('email') }}"
+                        <input wire:model="email" type="email" name="email" id="floating_first_name"
+                            value="{{ old('email') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -110,7 +124,8 @@
 
                     <!-- direccion -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="direccion" type="text" name="direccion" id="floating_first_name" value="{{ old('direccion') }}"
+                        <input wire:model="direccion" type="text" name="direccion" id="floating_first_name"
+                            value="{{ old('direccion') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -120,7 +135,8 @@
 
                     <!-- CIUDAD -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="ciudad" type="text" name="ciudad" id="floating_first_name" value="{{ old('ciudad') }}"
+                        <input wire:model="ciudad" type="text" name="ciudad" id="floating_first_name"
+                            value="{{ old('ciudad') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -132,7 +148,8 @@
                     @enderror
                     <!-- PROVINCIA -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="provincia" type="text" name="provincia" id="floating_first_name" value="{{ old('provincia') }}"
+                        <input wire:model="provincia" type="text" name="provincia" id="floating_first_name"
+                            value="{{ old('provincia') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -144,11 +161,13 @@
                     @enderror
                     <!-- COD POS -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="cod_pos" type="number" name="cod_pos" id="floating_first_name" value="{{ old('cod_pos') }}"
+                        <input wire:model="cod_pos" type="number" name="cod_pos" id="floating_first_name"
+                            value="{{ old('cod_pos') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('provincia') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cod. Pos.
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cod.
+                            Pos.
                         </label>
                     </div>
                     @error('cod_pos')
@@ -156,7 +175,8 @@
                     @enderror
                     <!-- EQUIPO -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <select wire:model="equipo_seleccionado" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select wire:model="equipo_seleccionado" id="countries"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value="">Seleccionar equipo</option>
                             @foreach ($equipos as $equipo)
                             <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
@@ -170,7 +190,9 @@
                     </div>
                     <label class="inline-flex items-center cursor-pointer">
                         <input wire:model="activo" type="checkbox" value="" class="sr-only peer">
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
+                        </div>
                         <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Activo</span>
                     </label>
                 </div>

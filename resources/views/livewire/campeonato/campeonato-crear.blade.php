@@ -1,17 +1,19 @@
 <div class="container mx-auto p-4">
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Campeonato Crear') }}
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
+        {{ __('Campeonato Crear') }}
         </h2>
-        <div class="flex items-center space-x-4">
-        <a href="{{route('campeonato.index')}}" class="inline-flex items-center gap-2 mt-4 hover:underline text-white px-4 py-2 rounded ">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        <a href="{{route('campeonato.index')}}"
+            class="inline-flex items-center gap-2 mt-4 hover:underline text-white px-4 py-2 rounded ">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <span>Volver</span>
         </a>
-        </div>
-     </x-slot>
+    </div>
+
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         @if (session()->has('success'))
         <div class="p-2 mb-4 bg-green-100 border text-green-800 rounded">
@@ -171,8 +173,7 @@
             <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje tarjeta amarilla</label>
-                    <input type="number" wire:model.defer="puntos_tarjeta_amarilla"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
+                    <input type="number" wire:model.defer="puntos_tarjeta_amarilla" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                     @error('puntos_tarjeta_amarilla')
@@ -182,8 +183,7 @@
 
                 <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje doble amarilla</label>
-                    <input type="number" wire:model.defer="puntos_doble_amarilla"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
+                    <input type="number" wire:model.defer="puntos_doble_amarilla" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                     @error('puntos_doble_amarilla')
@@ -193,8 +193,7 @@
 
                 <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje tarjeta roja directa</label>
-                    <input type="number" wire:model.defer="puntos_tarjeta_roja"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
+                    <input type="number" wire:model.defer="puntos_tarjeta_roja" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
                 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                     @error('puntos_tarjeta_roja')
@@ -202,15 +201,22 @@
                     @enderror
                 </div>
             </div>
-            <button type="submit" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save-icon lucide-save">
-                    <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+            <button type="submit"
+                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-save-icon lucide-save">
+                    <path
+                        d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
                     <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
                     <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                 </svg> <span>Guardar</span></button>
-            <a href="{{route('campeonato.index')}}" class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            <a href="{{route('campeonato.index')}}"
+                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 <span>Volver</span>
             </a>

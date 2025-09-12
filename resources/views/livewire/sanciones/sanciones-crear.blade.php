@@ -1,27 +1,25 @@
 <div>
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Registrar Sanciones') }}
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
+        {{ __('Registrar Sanciones') }}
         </h2>
-        <div class="flex items-center space-x-4">
-            {{-- Botón para volver a la lista de categorías --}}
-            <a href="{{ route('sanciones.index') }}"
-                class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                Volver</a>
+        {{-- Botón para volver a la lista de categorías --}}
+        <a href="{{ route('sanciones.index') }}"
+            class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Volver</a>
 
-            <div class="hidden md:flex"><button wire:click="actualizarCumplimientosSanciones"
-                    class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
-                    Actualizar Sanciones
-                </button>
-            </div>
+        <div class="hidden md:flex"><button wire:click="actualizarCumplimientosSanciones"
+                class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
+                Actualizar Sanciones
+            </button>
         </div>
-    </x-slot>
+    </div>
 
     <div
         class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
@@ -39,11 +37,11 @@
             <select wire:model="jugador_id"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 @foreach ($jugadores as $jugador)
-                    <option value="{{ $jugador->id }}">
-                        {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }}
-                        {{ strtoupper($jugador->nombre) }}
-                        - ({{ ucfirst($jugador->equipo->nombre) ?? 'Sin equipo' }})
-                    </option>
+                <option value="{{ $jugador->id }}">
+                    {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }}
+                    {{ strtoupper($jugador->nombre) }}
+                    - ({{ ucfirst($jugador->equipo->nombre) ?? 'Sin equipo' }})
+                </option>
                 @endforeach
             </select>
         </div>
@@ -108,8 +106,8 @@
 
     </div>
     @push('js')
-        <script>
-            document.addEventListener('livewire:initialized', () => {
+    <script>
+        document.addEventListener('livewire:initialized', () => {
 
                 Livewire.on('guardarSancion', () => {
                     Swal.fire({
@@ -129,6 +127,6 @@
 
 
             })
-        </script>
+    </script>
     @endpush
 </div>

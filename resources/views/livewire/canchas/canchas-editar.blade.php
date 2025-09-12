@@ -1,23 +1,30 @@
-<div> <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Editar Canchas') }}
+<div>
+
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
+        {{ __('Editar Canchas') }}
         </h2>
-        <div class="flex items-center space-x-4">
-        <a href="{{ route('canchas.index') }}" class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        <a href="{{ route('canchas.index') }}"
+            class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             Volver</a>
-        </div>
-    </x-slot>
+    </div>
+
     <div class="max-w-sm w-full lg:max-w-full lg:flex">
 
-        <div class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div
+            class="w-full p-4 text-center bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <form wire:submit.prevent="actualizar" class="max-w-2xl mx-auto" enctype="multipart/form-data">
                 @csrf
                 <div class="grid md:grid-cols-2 md:gap-6">
                     <!-- NOMBRE -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="nombre" type="text" name="nombre" id="floating_first_name" value="{{ old('nombre') }}"
+                        <input wire:model="nombre" type="text" name="nombre" id="floating_first_name"
+                            value="{{ old('nombre') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " required />
                         <label for="floating_first_name"
@@ -30,7 +37,8 @@
                     </div>
                     <!-- CIUDAD -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="ciudad" type="text" name="nombre" id="floating_first_name" value="{{ old('ciudad') }}"
+                        <input wire:model="ciudad" type="text" name="nombre" id="floating_first_name"
+                            value="{{ old('ciudad') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -45,7 +53,8 @@
                 <div class="grid md:grid-cols-3 md:gap-6">
                     <!-- PROVINCIA -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="provincia" type="text" name="nombre" id="floating_first_name" value="{{ old('provincia') }}"
+                        <input wire:model="provincia" type="text" name="nombre" id="floating_first_name"
+                            value="{{ old('provincia') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -58,7 +67,8 @@
                     </div>
                     <!-- COD POS -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="cod_pos" type="text" name="nombre" id="floating_first_name" value="{{ old('cod_pos') }}"
+                        <input wire:model="cod_pos" type="text" name="nombre" id="floating_first_name"
+                            value="{{ old('cod_pos') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -73,7 +83,8 @@
                     {{-- DIRECCION --}}
                     <!-- DIRECCION -->
                     <div class="relative z-0 w-full mb-5 group">
-                        <input wire:model="direccion" type="text" name="direccion" id="floating_first_name" value="{{ old('direccion') }}"
+                        <input wire:model="direccion" type="text" name="direccion" id="floating_first_name"
+                            value="{{ old('direccion') }}"
                             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('nombre') border-red-500 @enderror"
                             placeholder=" " />
                         <label for="floating_first_name"
@@ -104,8 +115,12 @@
 
                         Guardar
                     </button>
-                    <a href="{{ route('canchas.index') }}" class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-800"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    <a href="{{ route('canchas.index') }}"
+                        class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-800"> <svg
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                         Volver</a>
                 </div>
