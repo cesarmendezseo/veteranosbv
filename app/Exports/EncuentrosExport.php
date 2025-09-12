@@ -13,8 +13,8 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class EncuentrosExport {}
-/* {
+class EncuentrosExport implements FromCollection, WithHeadings, WithStyles, WithEvents
+{
     protected $encuentros;
     protected $torneoNombre;
     protected $fechaEncuentro;
@@ -217,4 +217,4 @@ class EncuentrosExport {}
             AfterSheet::class => [self::class, 'afterSheet'],
         ];
     }
-} */
+}

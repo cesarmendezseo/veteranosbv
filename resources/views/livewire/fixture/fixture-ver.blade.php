@@ -76,7 +76,7 @@
         </button>
         @endadminOrCan
     </div>
-    </x-slot>
+
     <div class="mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">
 
         <!-- Filtros -->

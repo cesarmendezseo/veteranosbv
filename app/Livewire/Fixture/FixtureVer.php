@@ -224,11 +224,13 @@ class FixtureVer extends Component
         });
 
 
+
         // Pasar los goles almacenados en la base de datos al componente
         foreach ($encuentros as $encuentro) {
             $this->goles_local[$encuentro->id] = $encuentro->gol_local;
             $this->goles_visitante[$encuentro->id] = $encuentro->gol_visitante;
         }
+
 
 
         return view('livewire.fixture.fixture-ver', compact('encuentrosAgrupados'));
