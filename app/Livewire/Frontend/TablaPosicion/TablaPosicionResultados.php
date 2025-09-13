@@ -171,7 +171,7 @@ class TablaPosicionResultados extends Component
 
 
     //=============TABLA PDF============================0
-    public function generarTablaPosicionesPDF(Campeonato $campeonato)
+    /*   public function generarTablaPosicionesPDF(Campeonato $campeonato)
     {
         $this->generarTablaPosiciones($campeonato->id);
         $posiciones = $this->posiciones;
@@ -184,7 +184,7 @@ class TablaPosicionResultados extends Component
 
         return PDF::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'))
             ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
-    }
+    } */
 
 
 

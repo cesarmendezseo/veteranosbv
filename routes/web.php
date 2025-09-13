@@ -20,6 +20,11 @@ use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
 use App\Livewire\Fixture\FixtureVer;
+use App\Livewire\Frontend\Fixture\FixtureIndex as FixtureFixtureIndex;
+use App\Livewire\Frontend\Fixture\FixtureVer as FixtureFixtureVer;
+use App\Livewire\Frontend\PaginaPrincipal;
+use App\Livewire\Frontend\TablaPosicion\TablaPosicionIndex as TablaPosicionTablaPosicionIndex;
+use App\Livewire\Frontend\TablaPosicion\TablaPosicionResultados;
 use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
@@ -32,10 +37,16 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
-Route::get('/', function () {
+Route::get('/home', function () {
     return view('welcome');
 })->name('home');
 
+
+Route::get('/', PaginaPrincipal::class);
+Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->name('tabla-posicion-index');
+Route::get('/tabla-posicion/{campeonatoId}/ver', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
+Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');
+Route::get('/fixture/{campeonatoId}/ver-fixture', FixtureFixtureVer::class)->name('frontend.fixture.verFixture');
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

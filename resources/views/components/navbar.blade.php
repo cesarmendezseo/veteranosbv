@@ -5,6 +5,7 @@
     {{-- Menú escritorio --}}
     <nav class="hidden md:flex space-x-4">
         {{ $slot }}
+
     </nav>
     <nav class="md:hidden  space-x-4">
         {{ $slot }}
