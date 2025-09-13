@@ -94,6 +94,13 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+        <form method="POST" action="{{ route('logout') }}" class="w-full">
+            @csrf
+            <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle"
+                class="w-full cursor-pointer">
+                {{ __('Log Out') }}
+            </flux:menu.item>
+        </form>
     </flux:sidebar>
 
     <!-- Mobile User Menu -->
@@ -141,6 +148,7 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+
     </flux:header>
 
     {{ $slot }}
