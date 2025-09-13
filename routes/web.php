@@ -42,7 +42,7 @@ Route::get('/home', function () {
 })->name('home');
 
 
-Route::get('/', PaginaPrincipal::class);
+Route::get('/', PaginaPrincipal::class)->name('pagina-principal-index');
 Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->name('tabla-posicion-index');
 Route::get('/tabla-posicion/{campeonatoId}/ver', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
 Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');

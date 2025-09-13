@@ -58,19 +58,19 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-red-500 dark:bg-zinc-800">
+<body class="min-h-screen flex flex-col bg-white dark:bg-zinc-800">
     <!-- Navbar principal -->
     <nav
         class="fixed top-0 left-0 w-full z-50  hidden md:flex items-center justify-between px-6 py-4 bg-white dark:bg-zinc-900 shadow">
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-2">
             <img src="{{ asset('images/logo.jpeg') }}" alt="Logo del Club" class="h-10 w-10 rounded-full">
-            <span class="text-xl font-bold text-gray-800 dark:text-white">AbvFutsal</span>
+            <span class="text-xl font-bold text-gray-800 dark:text-white">ACFVBV</span>
         </a>
 
         <!-- Enlaces de navegación -->
         <div class="space-x-8 hidden md:flex items-center">
-            <a href="#"
+            <a href="{{ route('pagina-principal-index') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Inicio</a>
             <a href="{{ route('tabla-posicion-index') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Tabla de
@@ -123,7 +123,8 @@
     <!-- Menú desplegable -->
     <div id="mobile-menu"
         class="fixed top-16 left-0 w-full bg-white dark:bg-zinc-900 shadow-md px-4 py-4 space-y-4 hidden md:hidden z-40">
-        <a href="#" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Inicio</a>
+        <a href="{{ route('pagina-principal-index') }}"
+            class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Inicio</a>
         <a href="{{ route('tabla-posicion-index') }}"
             class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Tabla de Posición</a>
         <a href="#" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Equipos</a>
@@ -149,13 +150,13 @@
     </nav>
 
     <!-- Contenido dinámico -->
-    <main class="pt-4 px-6 w-full mx-auto">
+    <main class="flex-grow pt-4 px-6 w-full mx-auto ">
         {{ $slot }}
     </main>
     <footer class="bg-gray-800 text-white py-4">
         <div class="container mx-auto text-center">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2025 ASFVBV. Todos los derechos reservados.</p>
+                <p>&copy; 2025 ACFVBV. Todos los derechos reservados.</p>
                 <p class="mt-2"> Tel: +54 3777 - 111111</p>
             </div>
             <!-- Agregado el "Diseñado por" -->
