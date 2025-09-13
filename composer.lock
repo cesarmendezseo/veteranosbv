@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "baf19fa28d1943beb4c8873d485415ae",
+    "content-hash": "579a82b20a391d4a49a0a0305966f2d5",
     "packages": [
         {
             "name": "brick/math",
@@ -664,6 +664,71 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "emkcloud/livewire-tweak",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/emkcloud/livewire-tweak.git",
+                "reference": "8af1411c554963156de3bae9d66d2cc3bf4087f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/emkcloud/livewire-tweak/zipball/8af1411c554963156de3bae9d66d2cc3bf4087f0",
+                "reference": "8af1411c554963156de3bae9d66d2cc3bf4087f0",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^12.0",
+                "livewire/livewire": "^3.5.19"
+            },
+            "conflict": {
+                "livewire/flux": ">=3.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22",
+                "livewire/flux": "^2.1",
+                "orchestra/testbench": "^10.2",
+                "pestphp/pest": "^3.8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Emkcloud\\LivewireTweak\\Providers\\LivewireTweakServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Emkcloud\\LivewireTweak\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Massimo Della Rovere",
+                    "email": "dellarovere@duck.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tweaks and overrides for Livewire packages",
+            "homepage": "https://github.com/emkcloud/livewire-tweak",
+            "keywords": [
+                "assets",
+                "flux",
+                "laravel",
+                "livewire"
+            ],
+            "support": {
+                "issues": "https://github.com/emkcloud/livewire-tweak/issues",
+                "source": "https://github.com/emkcloud/livewire-tweak/tree/1.5.0"
+            },
+            "time": "2025-05-12T07:24:20+00:00"
         },
         {
             "name": "erag/laravel-pwa",
