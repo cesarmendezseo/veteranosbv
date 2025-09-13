@@ -145,7 +145,7 @@
 
     {{ $slot }}
 
-    @livewireTweakFluxScripts
+    @fluxScripts
 </body>
 
 </html>
