@@ -163,6 +163,7 @@
             <p class="mt-2 text-sm text-gray-200">Diseñado por César Méndez</p>
         </div>
     </footer>
+    @livewireScripts
     @fluxScripts
     <!-- Script para toggle -->
     <script>
