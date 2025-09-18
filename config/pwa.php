@@ -19,8 +19,8 @@ return [
     */
 
     'manifest' => [
-        'name' => 'APP cweb',
-        'short_name' => 'cweb',
+        'name' => 'APP Veteranosbv',
+        'short_name' => 'ACFVBV',
         'background_color' => '#6777ef',
         'display' => 'standalone',
         'description' => 'App webFull.',
