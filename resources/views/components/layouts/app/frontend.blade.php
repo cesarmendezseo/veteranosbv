@@ -165,6 +165,7 @@
     </footer>
     @livewireScripts
     @fluxScripts
+    @RegisterServiceWorkerScript
     <!-- Script para toggle -->
     <script>
         document.getElementById('mobile-menu-toggle').addEventListener('click', function () {

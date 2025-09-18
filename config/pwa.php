@@ -20,7 +20,7 @@ return [
 
     'manifest' => [
         'name' => 'APP cweb',
-        'short_name' => 'LPT',
+        'short_name' => 'cweb',
         'background_color' => '#6777ef',
         'display' => 'standalone',
         'description' => 'App webFull.',
@@ -51,5 +51,5 @@ return [
     | Livewire-specific PWA optimizations or features.
     */
 
-    'livewire-app' => true,
+    'livewire-app' => false,
 ];
