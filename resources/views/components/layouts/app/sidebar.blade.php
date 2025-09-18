@@ -27,6 +27,9 @@
             <flux:navlist.item icon="git-fork" :href="route('fixture.index')"
                 :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Fixture') }}
             </flux:navlist.item>
+            <flux:navlist.item icon="numbered-list" :href="route('listado-buena-fe')"
+                :current="request()->routeIs('listado-buena-fe')" wire:navigate>{{ __('Listado Buena fe') }}
+            </flux:navlist.item>
             <flux:navlist.item icon="table-2" :href="route('tabla-posiciones')"
                 :current="request()->routeIs('tabla-posiciones')" wire:navigate>{{ __('Tabla de Posición') }}
             </flux:navlist.item>

@@ -3,120 +3,71 @@
 namespace App\Livewire\Equipo;
 
 use App\Exports\ListadoBuenaFeExport;
-use App\Livewire\JugadoresTable;
 use App\Models\Campeonato;
 use App\Models\Encuentro;
 use App\Models\Equipo;
-use App\Models\Grupo;
 use App\Models\Jugador;
 use App\Models\Sanciones;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str; // Para Str::slug()
+use Illuminate\Support\Str;
 
 class ListadoBuenaFe extends Component
 {
-    public $aniosDisponibles;
-    public $campeonatos;
-    public $campeonato_id;
-    public $grupos = [];
-    public $grupoSeleccionado;
-    public $equiposDelGrupo = [];
-    public $mensajeAnioSeleccionado = '';
-    public $anioSeleccionado;
-    public $equiposSeleccionado;
-    public $jugadoresEquipos = [];
-    public $nombreTorneo;
+    public $campeonato;            // un solo campeonato
+    public $campeonatoId;          // id recibido
+    public $equiposDelCampeonato;  // equipos del campeonato
+    public $equipoSeleccionado;    // id del equipo elegido
+    public $jugadoresEquipos = []; // jugadores del equipo
     public $fecha;
-    public $equipoElegido;
-    public $campeonatoId;
 
     public function mount($campeonatoId)
     {
+        // Guardo el id
+        $this->campeonatoId = $campeonatoId;
 
-        $this->campeonatos = Campeonato::all();
+        // Cargo el campeonato con sus equipos
+        $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
 
-        // Obtener el último campeonato
-        $ultimoCampeonato = Campeonato::latest()->first();
-
-        // Selecciona el ID si hay
-        $this->campeonato_id = $ultimoCampeonato ? $ultimoCampeonato->id : null;
-
-        // Años disponibles
-        $this->aniosDisponibles = Campeonato::selectRaw('YEAR(created_at) as anio')
-            ->distinct()
-            ->orderByDesc('anio')
-            ->pluck('anio')
-            ->toArray();
-
-        $this->anioSeleccionado = !empty($this->aniosDisponibles)
-            ? $this->aniosDisponibles[0]
-            : null;
-
-        // Cargar equipos si hay un campeonato válido
-        if ($this->campeonatoId) {
-            $campeonato = Campeonato::find($this->campeonatoId);
-            $this->equiposDelGrupo = $campeonato->equipos->sortBy('nombre');
-        } else {
-            $this->equiposDelGrupo = collect(); // o []
-        }
-    }
-    //===================================================================================
-    public function updatedAnioSeleccionado($nuevoValor)
-    {
-
-        $this->campeonatos = Campeonato::whereYear('created_at', $nuevoValor)->get();
+        // Si existe, cargo los equipos ordenados
+        $this->equiposDelCampeonato = $this->campeonato
+            ? $this->campeonato->equipos->sortBy('nombre')
+            : collect();
     }
 
-    //================================================================================
-    public function updatedCampeonatoId()
+    // Cuando se elige un equipo en el select
+    public function updatedEquipoSeleccionado($equipoId)
     {
-
-        $campeonatos = Campeonato::find($this->campeonatoId);
-
-        $this->equiposDelGrupo = $campeonatos->equipos->sortBy('nombre');
-    }
-
-    //=================================================================================
-    public function updatedEquiposSeleccionado()
-    {
-
         $this->jugadoresEquipos = Jugador::with(['sanciones' => function ($q) {
             $q->where('cumplida', false);
         }])
-            ->where('equipo_id', $this->equiposSeleccionado)
+            ->where('equipo_id', $equipoId)
             ->where('is_active', true)
             ->orderBy('apellido', 'asc')
             ->get();
-
-        $this->equipoElegido = $this->equiposSeleccionado;
     }
 
-    //=================================================================================
+    // Exportar a Excel
     public function exportarJugadores()
     {
-        //obtengo el nombre del torneo
-        $nombreTorneo = $this->campeonatos->first()->nombre;
-        $equipo = Equipo::find($this->equiposSeleccionado);
-        $fecha = $this->fecha;
-
+        $equipo = Equipo::find($this->equipoSeleccionado);
+        $nombreTorneo = $this->campeonato->nombre;
 
         return Excel::download(
             new ListadoBuenaFeExport(
-                $this->equiposSeleccionado,
+                $this->equipoSeleccionado,
                 $nombreTorneo,
-                $this->campeonato_id,
+                $this->campeonatoId,
                 $this->fecha
             ),
-            'Fecha-' . $fecha . ' ' . Str::slug($equipo->nombre) . '.xlsx' // Nombre legible y sin espacios
+            'Fecha-' . $this->fecha . ' ' . Str::slug($equipo->nombre) . '.xlsx'
         );
     }
 
-    //=================================================================
+    // Actualizar sanciones
     public function actualizarSanciones()
     {
         $sanciones = Sanciones::where('cumplida', false)->get();
-
 
         foreach ($sanciones as $sancion) {
             $jugador = $sancion->jugador;
@@ -138,10 +89,10 @@ class ListadoBuenaFe extends Component
             $sancion->cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
             $sancion->save();
         }
+
         $this->dispatch('actualizar-sancion');
     }
 
-    //=================================================================
     public function render()
     {
         return view('livewire.equipo.listado-buena-fe');
