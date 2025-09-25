@@ -6,6 +6,7 @@ use App\Models\Campeonato;
 use App\Models\Categoria;
 use App\Models\Criterios_desempate;
 use App\Models\Grupo;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use SweetAlert2\Laravel\Swal;
 use Livewire\Component;
 
@@ -163,13 +164,11 @@ class CampeonatoCrear extends Component
             ]);
         }
 
-
-        Swal::toast([
-            'title' => 'Perfecto!!',
-            'text' => 'Campeonato creado correctamente.',
-            'icon' => 'success',
-            'confirmButtonText' => 'OK'
-        ]);
+        LivewireAlert::title('Perfecto!!')
+            ->text('Campeonato creado correctamente')
+            ->success()
+            ->toast()
+            ->show();
 
 
 

@@ -4,6 +4,7 @@ namespace App\Livewire\AltasBajas;
 
 use App\Models\Jugador;
 use Illuminate\Support\Facades\DB;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -20,6 +21,7 @@ class AltasBajasIndex extends Component
     public $equipoSeleccionado;
     public $historial = [];
     public $equipos;
+    public $itemId;
 
     protected $paginationTheme = 'tailwind';
 
@@ -93,23 +95,53 @@ class AltasBajasIndex extends Component
 
             // 🔹 Limpiar variables y reset
             $this->reset(['mostrarAlta', 'equipoSeleccionado', 'jugadorSeleccionado']);
-            $this->dispatch('darDeAlta');
+
+            LivewireAlert::title('Correcto')
+                ->text('Jugador dado de alta en el equipo.')
+                ->success()
+                ->toast()
+                ->timer(5000)
+                ->position('top')
+                ->show();
             $this->resetPage();
         }
     }
 
-
-    #[On('dar-de-baja')]
     public function darDeBaja($jugadorId)
     {
+
+        $this->itemId = $jugadorId;
+
+        LivewireAlert::title('Dar de Baja')
+            ->text('Estas seguro de dar de baja el jugador?')
+            ->asConfirm()
+            ->onConfirm('bajaJugador', ['id' => $this->itemId])
+            ->onDeny('keepItem', ['id' => $this->itemId])
+            ->show();
+    }
+
+
+
+
+    public function bajaJugador($jugadorData)
+    {
+
+        $jugadorId = is_array($jugadorData) ? $jugadorData['id'] : $jugadorData;
         // Buscar el equipo "Sin equipo"
         $equipoPorDefecto = DB::table('equipos')->where('nombre', 'Sin equipo')->first();
 
         if (!$equipoPorDefecto) {
             // Si no existe, mostrar mensaje y salir
             $this->dispatch('error', 'Debe crear un equipo llamado "Sin equipo" antes de dar de baja.');
+            LivewireAlert::title('!Atención')
+                ->text('Debe crear un equipo llamado "Sin equipo" antes de dar de baja.')
+                ->error()
+                ->toast()
+                ->timer(5000)
+                ->show();
             return;
         }
+
 
         $equipoId = $equipoPorDefecto->id;
 
@@ -119,24 +151,43 @@ class AltasBajasIndex extends Component
             ->whereNull('fecha_baja')
             ->update(['fecha_baja' => now()->toDateString()]);
 
+
         // Insertar nuevo registro en historial con el equipo por defecto
-        DB::table('jugador_equipos')->insert([
-            'jugador_id' => $jugadorId,
-            'equipo_id' => $equipoId,
-            'fecha_alta' => now()->toDateString(),
-            'fecha_baja' => null,
-        ]);
+        try {
+            DB::table('jugador_equipos')->insert([
+                'jugador_id' => $jugadorId,
+                'equipo_id' => $equipoId,
+                'fecha_alta' => now()->toDateString(),
+                'fecha_baja' => null,
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
 
         // Actualizar el jugador
         DB::table('jugadors')
             ->where('id', $jugadorId)
             ->update(['equipo_id' => $equipoId]);
 
-        $this->dispatch('Baja');
+        LivewireAlert::text('Correcto!')
+            ->text('El jugador de dío de baja correctamente!')
+            ->success()
+            ->toast()
+            ->position('top')
+            ->show();
+    }
+
+    public function keepItem($data)
+    {
+        $itemId = $data['id'];
     }
 
     public function verHistorial($jugadorId)
     {
+
+        //  $jugadorId = $data['jugadorId'];
+
         $this->historial = DB::table('jugador_equipos')
             ->join('equipos', 'jugador_equipos.equipo_id', '=', 'equipos.id')
             ->where('jugador_equipos.jugador_id', $jugadorId)

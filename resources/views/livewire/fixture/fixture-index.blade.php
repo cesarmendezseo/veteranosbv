@@ -35,7 +35,7 @@
                         <div class="text-base font-semibold">{{ ucwords($campeonato->nombre) }}</div>
                     </th>
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="font-normal text-gray-500">
+                        <div class="font-normal text-gray-500 dark:text-white">
                             @if ($campeonato->formato === 'todos_contra_todos')
                             Todos contra Todos
                             @else
@@ -46,16 +46,18 @@
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         @if ($campeonato->formato === 'todos_contra_todos')
                         @foreach ($campeonato->grupos as $grupo)
-                        <div class="font-normal text-gray-500"> {{ $grupo->cantidad_equipos }} </div>
+                        <div class="font-normal text-gray-500 dark:text-white"> {{ $grupo->cantidad_equipos }} </div>
                         @endforeach
                         @else
-                        <div class="font-normal text-gray-500"> {{ $campeonato->cantidad_equipos_grupo }} x
+                        <div class="font-normal text-gray-500 dark:text-white"> {{ $campeonato->cantidad_equipos_grupo
+                            }} x
                             Grupo</div>
                         @endif
                     </th>
 
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}</div>
+                        <div class="font-normal text-gray-500 dark:text-white"> {{
+                            strtoupper($campeonato->categoria->nombre) }}</div>
                     </th>
 
 

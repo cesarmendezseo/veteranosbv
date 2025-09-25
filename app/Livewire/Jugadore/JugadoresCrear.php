@@ -3,6 +3,7 @@
 namespace App\Livewire\Jugadore;
 
 use App\Models\Jugador;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
@@ -69,23 +70,39 @@ class JugadoresCrear extends Component
             throw $e; // opcional: si querés que también se muestren los errores normales
         }
 
+        try {
+            // Crear jugador y obtener el modelo con su id
+            $jugador = Jugador::create([
+                'nombre'         => $this->nombre,
+                'apellido'       => $this->apellido,
+                'documento'      => $this->documento,
+                'tipo_documento' => $this->tipo_documento,
+                'num_socio'      => $this->socio,
+                'telefono'       => $this->telefono,
+                'email'          => $this->email,
+                'direccion'      => $this->direccion,
+                'ciudad'         => $this->ciudad,
+                'provincia'      => $this->provincia,
+                'fecha_nac'      => $this->nacimiento,
+                'cod_pos'        => $this->cod_pos,
+                'is_active'      => $this->activo,
+                'equipo_id'      => $this->equipo_seleccionado,
+            ]);
 
-        Jugador::create([
-            'nombre' => $this->nombre,
-            'apellido' => $this->apellido,
-            'documento' => $this->documento,
-            'tipo_documento' => $this->tipo_documento, // Assuming a default type, adjust as necessary
-            'num_socio' => $this->socio,
-            'telefono' => $this->telefono,
-            'email' => $this->email,
-            'direccion' => $this->direccion,
-            'ciudad' => $this->ciudad,
-            'provincia' => $this->provincia,
-            'fecha_nac' => $this->nacimiento,
-            'cod_pos' => $this->cod_pos,
-            'is_active' => $this->activo,
-            'equipo_id' => $this->equipo_seleccionado, // Assuming you have a relation to the team
-        ]);
+            // Ahora podés acceder al id directamente
+            $jugadorId = $jugador->id;
+            $equipoId  = $this->equipo_seleccionado;
+
+            // Insertar en historial
+            DB::table('jugador_equipos')->insert([
+                'jugador_id' => $jugadorId,
+                'equipo_id'  => $equipoId,
+                'fecha_alta' => now()->toDateString(),
+                'fecha_baja' => null,
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
 
         $this->reset(); // Limpia todo
         $this->dispatch('creado');

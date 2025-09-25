@@ -5,7 +5,7 @@
         </h2>
     </div>
     <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
-        class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+        class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
     <div class="overflow-x-auto">
         <table class="w-full border hidden ">
@@ -25,7 +25,8 @@
                     <td class="p-2 text-sm dark:text-gray-300">{{ strtoupper($jugador->nombre) }}
                         {{ strtoupper($jugador->apellido) }}
                     </td>
-                    <td class="p-2 text-sm dark:text-gray-300">{{ ucwords($jugador->equipo?->nombre ?? '-') }}</td>
+                    <td class="p-2 text-sm dark:text-gray-300">{{ strtoupper($jugador->equipo?->nombre ?? '-') }}
+                    </td>
 
                     <td class="px-6 py-4 text-right">
                         <!-- Para pantallas medianas en adelante -->
@@ -92,7 +93,7 @@
                                 </a>
                                 <!-- BAJA -->
 
-                                <a wire:click="$dispatch('confirmar-baja', { id: {{ $jugador->id }} })"
+                                <a wire:click="darDeBaja( {{ $jugador->id }} )"
                                     class="cursor-pointer  flex items-center gap-2 hover:underline">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -145,7 +146,7 @@
                     {{ strtoupper($jugador->nombre) }} {{ strtoupper($jugador->apellido) }}
                 </p>
                 <p class="text-sm text-gray-700 dark:text-gray-400">
-                    Equipo: {{ ucwords($jugador->equipo?->nombre ?? '-') }}
+                    Equipo: {{ strtoupper($jugador->equipo?->nombre ?? '-') }}
                 </p>
             </div>
 
@@ -199,7 +200,7 @@
                         <span>Alta</span>
                     </a>
                     <!-- BAJA -->
-                    <a wire:click="$dispatch('confirmar-baja', { id: {{ $jugador->id }} })"
+                    <a wire:click="darDeBaja({{ $jugador->id }} )"
                         class="cursor-pointer flex items-center gap-2 hover:underline">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-5 h-5">
@@ -231,8 +232,8 @@
 
     {{-- Sección de alta --}}
     @if ($mostrarAlta)
-    <div class="mt-4 p-4 bg-gray-100 border rounded">
-        <h3 class="text-base font-bold mb-2">Seleccionar equipo para alta</h3>
+    <div class="mt-4 p-4 bg-gray-100 border rounded dark:bg-gray-400">
+        <h3 class="text-base font-bold mb-2 dark:text-gray-900">Seleccionar equipo para alta</h3>
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
             <select wire:model="equipoSeleccionado"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -275,7 +276,7 @@
             class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative font-semibold">
             Historial de equipos</h3>
         <table class=" w-full border table-auto text-sm shadow-md">
-            <thead class=" bg-gray-700 dark:bg-gray-500 text-gray-100 dark:text-gray-900 shadow-md">
+            <thead class=" bg-gray-700 dark:bg-gray-500 text-gray-100 dark:text-black shadow-md">
                 <tr class="">
                     <th class="p-2">Equipo</th>
                     <th class="p-2">Fecha de Baja</th>
@@ -286,10 +287,18 @@
                 @foreach ($historial as $h)
                 <tr
                     class="border-t  odd:bg-gray-200 odd:text-gray-800 font-semibold even:text-gray-800 even:bg-gray-300 dark:odd:bg-gray-900 dark:even:bg-gray-800">
-                    <td class="p-2  semi-bold">{{ strtoupper($h->equipo) }}</td>
+                    <td class="p-2  semi-bold dark:text-white">{{ strtoupper($h->equipo) }}</td>
                     <td class="p-2 dark:text-gray-100 text-center">
-                        {{ $h->fecha_baja ? \Carbon\Carbon::parse($h->fecha_baja)->format('d/m/Y') : 'ACTUALMENTE
-                        ACTIVO' }}
+                        @if ($h->fecha_baja)
+                        {{ \Carbon\Carbon::parse($h->fecha_baja)->format('d/m/Y') }}
+                        @else
+                        <div class="flex justify-center">
+                            <svg class="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        @endif
                     </td>
                     <td class="p-2 dark:text-gray-100 text-center">
                         {{ \Carbon\Carbon::parse($h->fecha_alta)->format('d/m/Y') }}
@@ -302,55 +311,5 @@
     @endif
 
 
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
 
-                Livewire.on('equipo-existe', () => {
-                    Swal.fire(
-                        'Error',
-                        'El jugador ya tiene equipo asignado, si quiere cambiar de equipo debera dar de baja primero.',
-                        'warning'
-                    );
-                });
-
-                Livewire.on('darDeAlta', () => {
-                    Swal.fire(
-                        'Ok la Alta!',
-                        'El jugador se dio de alta en el equipo correctamente.',
-                        'success'
-                    );
-                });
-
-                Livewire.on('confirmar-baja', ({
-                    id
-                }) => {
-                    Swal.fire({
-                        title: 'CUIDADO...',
-                        text: "¿Estás seguro de dar de Baja al jugador del equipo?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, dar la Baja'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Llamás al método del componente Livewire y le pasás el parámetro
-                            Livewire.dispatch('dar-de-baja', {
-                                jugadorId: id
-                            });
-                        }
-                    });
-                });
-                //========================================
-                Livewire.on('Baja', () => {
-                    Swal.fire(
-                        'Ok la Baja!',
-                        'El jugador se dio de baja en el equipo correctamente.',
-                        'success'
-                    );
-                });
-            });
-    </script>
-    @endpush
 </div>

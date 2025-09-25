@@ -3,7 +3,9 @@
 namespace App\Livewire\Canchas;
 
 use App\Models\Canchas;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class CanchasEditar extends Component
@@ -18,7 +20,7 @@ class CanchasEditar extends Component
     public $provincia;
     public $cod_pos;
     public $otros;
-
+    public bool $redirigir = false;
 
 
     public function mount($estadioId)
@@ -47,7 +49,8 @@ class CanchasEditar extends Component
             'otros' => 'nullable|string|max:255',
         ]);
 
-
+        // Normalizar el nombre a minúsculas
+        $nombre = Str::lower(trim($this->nombre));
 
         $this->canchaSeleccionada->update([
             'nombre' => $this->nombre,
@@ -58,14 +61,26 @@ class CanchasEditar extends Component
             'otros' => $this->otros,
         ]);
 
-        $this->dispatch('editar');
+        LivewireAlert::title('Ok')
+            ->text('Se guardo correctamente la modificación.')
+            ->success()
+            ->toast()
+            ->timer(2000)
+            ->position('top')
+            ->show();
+        $this->reset(['nombre', 'direccion', 'ciudad', 'provincia', 'cod_pos', 'otros']);
+        //redirigir a canchas index
+        $this->redirigir = true;
     }
 
-    #[On('return')]
-    public function return()
+    public function verificarRedireccion()
     {
-        $this->redirectRoute('canchas.index');
+        if ($this->redirigir) {
+            $this->redirigir = false;
+            return redirect()->route('canchas.index');
+        }
     }
+
 
     public function render()
     {

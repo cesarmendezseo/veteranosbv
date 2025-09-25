@@ -15,6 +15,8 @@ class CampeonatoIndex extends Component
     public $campeonatoSeleccionado;
     public $search = '';
     protected $listeners = ['refresh' => '$refresh'];
+    public $itemId;
+    public $campeonato;
 
     // Cada vez que se actualiza search, resetea la página
     public function updatingSearch()
@@ -22,9 +24,10 @@ class CampeonatoIndex extends Component
         $this->resetPage();
     }
 
-    #[On('eliminar-campeonato')]
+
     public function eliminarCampeonato($id)
     {
+
         $campeonato = Campeonato::find($id);
 
         if (!$campeonato) {
@@ -50,11 +53,41 @@ class CampeonatoIndex extends Component
             return;
         }
 
+
+        $this->eliminar($id);
+    }
+
+    public function eliminar($id)
+    {
+
+
+        $this->itemId = $id;
+
+        LivewireAlert::title('Atención')
+            ->text('Estas seguro de querer borrar el campeonato?')
+            ->asConfirm()
+            ->onConfirm('deleteItem', ['id' => $this->itemId])
+            ->onDeny('keepItem', ['id' => $this->itemId])
+            ->show();
+    }
+
+    public function deleteItem($data)
+    {
+
+        $campeonatoId = $data['id'];
+
+
+        $campeonato = Campeonato::find($campeonatoId);
         $campeonato->delete();
 
-        $this->dispatch('baja');
-        $this->dispatch('refresh');
+        LivewireAlert::title('OK')
+            ->text('El campeonato se borro correctamente')
+            ->toast()
+            ->success()
+            ->show();
     }
+
+    public function keepItem() {}
 
     public function crear()
     {

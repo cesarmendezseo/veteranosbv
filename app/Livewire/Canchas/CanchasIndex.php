@@ -20,6 +20,7 @@ class CanchasIndex extends Component
     public $provincia;
     public $cod_pos;
     public $otros;
+    public $itemId;
 
 
     public function mount()
@@ -41,10 +42,27 @@ class CanchasIndex extends Component
     }
 
 
-    #[On('eliminar-estadio')]
-    public function eliminarEstadio($id)
+    /* #[On('eliminar-estadio')] */
+
+
+
+
+
+    public function eliminarEstadio($itemId)
     {
-        $cancha = Canchas::find($id);
+        $this->itemId = $itemId;
+        LivewireAlert::title('Borrar Cancha')
+            ->text('Estas seguro de querer borrar esta cancha?')
+            ->asConfirm()
+            ->onConfirm('deleteItem', ['id' => $this->itemId])
+            ->onDeny('keepItem', ['id' => $this->itemId])
+            ->show();
+    }
+    public function deleteItem($data)
+    {
+        $itemId = $data['id'];
+        // Delete logic
+        $cancha = Canchas::find($itemId);
 
         if (!$cancha) {
             LivewireAlert::title('Error')
@@ -56,7 +74,6 @@ class CanchasIndex extends Component
 
             return;
         }
-
         // Verificar si la cancha está asociada a encuentros
         if ($cancha->encuentros()->exists()) {
             LivewireAlert::title('Error')
@@ -72,22 +89,24 @@ class CanchasIndex extends Component
         // Si no está asociada, eliminar
         $cancha->delete();
 
-        $this->dispatch('refresh');
-
         LivewireAlert::title('Ok')
             ->text('Cancha eliminada correctament')
             ->success()
             ->toast()
             ->position('top')
             ->show();
+
+        return redirect()->route('canchas.index'); // recarga la página
     }
 
-    #[On('refresh')]
-    public function refresh()
+    public function keepItem($data)
     {
-        $this->dispatch('baja');
-        // No hace falta que pongas nada acá, con solo tener este método, Livewire vuelve a renderizar
+        $itemId = $data['id'];
+        // Keep logic
     }
+
+
+
 
     public function render()
     {

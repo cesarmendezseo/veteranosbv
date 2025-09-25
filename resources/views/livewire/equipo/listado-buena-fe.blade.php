@@ -22,23 +22,23 @@
 
     <!-- Tabla de jugadores -->
     @if (!empty($jugadoresEquipos))
-    <table class="min-w-full bg-white border">
+    <table class="min-w-full bg-white border dark:bg-gray-500">
         <thead>
-            <tr class="bg-gray-200 text-left">
-                <th class="px-4 py-2">#</th>
-                <th class="px-4 py-2">DNI</th>
-                <th class="px-4 py-2">Apellido</th>
-                <th class="px-4 py-2">Nombre</th>
-                <th class="px-4 py-2">Sanciones</th>
+            <tr class="bg-gray-200 text-left dark:bg-gray-900">
+                <th class="px-4 py-2 text-center ">#</th>
+                <th class="px-4 py-2 text-center ">DNI</th>
+                <th class="px-4 py-2 text-center ">Apellido</th>
+                <th class="px-4 py-2 text-center ">Nombre</th>
+                <th class="px-4 py-2 text-center ">Sanciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($jugadoresEquipos as $jugador)
             <tr>
-                <td class="border px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="border px-4 py-2">{{ $jugador->documento }}</td>
-                <td class="border px-4 py-2">{{ $jugador->apellido }}</td>
-                <td class="border px-4 py-2">{{ $jugador->nombre }}</td>
+                <td class="border px-4 py-2">{{ strtoupper($loop->iteration) }}</td>
+                <td class="border px-4 py-2">{{ strtoupper($jugador->documento )}}</td>
+                <td class="border px-4 py-2">{{ strtoupper($jugador->apellido) }}</td>
+                <td class="border px-4 py-2">{{ strtoupper($jugador->nombre) }}</td>
                 <td>
                     @if ($jugador->sanciones->isNotEmpty())
                     @foreach ($jugador->sanciones as $sancion)

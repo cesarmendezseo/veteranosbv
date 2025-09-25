@@ -41,10 +41,11 @@
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="text-base font-semibold">{{ ucwords($categoria->nombre) }}</div>
+                    <div class="text-base font-semibold dark:text-white ">{{ ucwords($categoria->nombre) }}</div>
                 </th>
                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="font-normal text-gray-500"> {{ ucfirst($categoria->descripcion) }}</div>
+                    <div class="font-normal text-gray-500 dark:text-white "> {{ ucfirst($categoria->descripcion) }}
+                    </div>
                 </th>
                 <!-- BOTONES DE ACCION  -->
 
@@ -100,7 +101,7 @@
                             :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                             <!--VER-->
                             <a wire:click="verCategoria({{ $categoria->id }})"
-                                class="cursor-pointer flex items-center gap-2 hover:underline">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -113,7 +114,7 @@
                             <!-- EDITAR -->
                             @adminOrCan('comision')
                             <a href="{{ route('categoria.editar', $categoria->id) }}"
-                                class="cursor-pointer flex items-center gap-2 hover:underline">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -123,7 +124,7 @@
                             </a>
                             <!-- BORRAR -->
                             <a wire:click="borrar({{ $categoria->id }})"
-                                class="cursor-pointer flex items-center gap-2 hover:underline">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"

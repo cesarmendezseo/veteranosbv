@@ -36,7 +36,7 @@
                         <div class="text-base font-semibold">{{ ucwords($campeonato->nombre) }}</div>
                     </th>
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="font-normal text-gray-500">
+                        <div class="font-normal text-gray-500 dark:text-white">
                             @if ($campeonato->formato === 'todos_contra_todos')
                             Todos contra Todos
                             @else
@@ -47,16 +47,18 @@
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         @if ($campeonato->formato === 'todos_contra_todos')
                         @foreach ($campeonato->grupos as $grupo)
-                        <div class="font-normal text-gray-500"> {{ $grupo->cantidad_equipos }} </div>
+                        <div class="font-normal text-gray-500 dark:text-white"> {{ $grupo->cantidad_equipos }} </div>
                         @endforeach
                         @else
-                        <div class="font-normal text-gray-500"> {{ $campeonato->cantidad_equipos_grupo }} x
+                        <div class="font-normal text-gray-500 dark:text-white"> {{ $campeonato->cantidad_equipos_grupo
+                            }} x
                             Grupo</div>
                         @endif
                     </th>
 
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}</div>
+                        <div class="font-normal text-gray-500 dark:text-white"> {{
+                            ucfirst($campeonato->categoria->nombre) }}</div>
                     </th>
 
 
@@ -113,7 +115,7 @@
                                 :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                                 <!--VER-->
                                 <a href="{{ route('listado-buena-fe.ver', $campeonato->id) }}"
-                                    class="flex items-center gap-2 hover:underline text-sm">
+                                    class="flex items-center gap-2 hover:underline text-sm dark:text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-5">
                                         <path stroke-linecap="round" stroke-linejoin="round"

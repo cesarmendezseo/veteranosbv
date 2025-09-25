@@ -60,7 +60,8 @@
                 </th>
 
                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}</div>
+                    <div class="font-normal text-gray-500 dark:text-white"> {{ ucfirst($campeonato->categoria->nombre)
+                        }}</div>
                 </th>
 
                 <td class="px-6 py-4 text-right">
@@ -115,7 +116,7 @@
                             :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                             <!--VER-->
                             <a href="{{ route('tabla-posiciones.ver', $campeonato->id) }}"
-                                class="flex items-center gap-2 hover:underline">
+                                class="flex items-center gap-2 hover:underline dark:text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"

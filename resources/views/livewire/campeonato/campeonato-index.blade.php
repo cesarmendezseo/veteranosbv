@@ -87,7 +87,8 @@
                 </th>
 
                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}</div>
+                    <div class="font-normal text-gray-500 dark:text-white "> {{ ucfirst($campeonato->categoria->nombre)
+                        }}</div>
                 </th>
 
 
@@ -145,7 +146,8 @@
                             @adminOrCan('comision')
                             {{-- Editar --}}
                             <a href="{{ route('campeonato.editar', $campeonato->id) }}"
-                                class="cursor-pointer flex items-center gap-2 hover:underline" title="Editar">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
+                                title="Editar">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -155,7 +157,8 @@
 
                             {{-- BORRAR --}}
                             <button wire:click="$dispatch('confirmar-baja', { id: '{{ $campeonato->id }}' })"
-                                class="cursor-pointer flex items-center gap-2 hover:underline" title="Borrar">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
+                                title="Borrar">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -165,7 +168,8 @@
                             @endadminOrCan
                             {{-- ver --}}
                             <button wire:click="verCampeonato({{ $campeonato->id }})"
-                                class="cursor-pointer flex items-center gap-2 hover:underline" title="Ver">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
+                                title="Ver">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -176,7 +180,8 @@
                             </button>
                             {{-- ASIGNAR EQUIPO --}}
                             <a href="{{ route('asignar-equipos', $campeonato->id) }}"
-                                class="cursor-pointer flex items-center gap-2 hover:underline" title="Equipos">
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
+                                title="Equipos">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-shirt-icon lucide-shirt">
@@ -265,7 +270,7 @@
                         </a>
 
                         {{-- BORRAR --}}
-                        <button wire:click="$dispatch('confirmar-baja', { id: '{{ $campeonato->id }}' })"
+                        <button wire:click="eliminarCampeonato({{ $campeonato->id }})"
                             class="cursor-pointer flex items-center gap-2 hover:underline" title="Borrar">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="h-6 w-6">
@@ -407,46 +412,4 @@
             </div>
         </div>
     </div>
-
-
-
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-
-
-
-             Livewire.on('confirmar-baja', ({
-                 id
-             }) => {
-
-
-                 Swal.fire({
-                     title: 'CUIDADO...',
-                     text: "¿Estás seguro de borrar al el Campeonato?",
-                     icon: 'warning',
-                     showCancelButton: true,
-                     confirmButtonColor: '#3085d6',
-                     cancelButtonColor: '#d33',
-                     confirmButtonText: 'Sí, Borrar'
-                 }).then((result) => {
-                     if (result.isConfirmed) {
-                         Livewire.dispatch('eliminar-campeonato', {
-                             id: id
-                         });
-                     }
-                 });
-             });
-
-             Livewire.on('Baja', () => {
-                 Swal.fire(
-                     '¡Baja exitosa!',
-                     'El campeonato se ha borrado correctamente.',
-                     'success'
-                 );
-             });
-         });
-    </script>
-    @endpush
-
 </div>

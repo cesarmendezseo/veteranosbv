@@ -5,6 +5,8 @@ namespace App\Livewire\Canchas;
 use App\Models\Canchas;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class CanchasCrear extends Component
 {
@@ -17,6 +19,8 @@ class CanchasCrear extends Component
     public $provincia;
     public $cod_pos;
     public $otros;
+    public bool $redirigir = false;
+
 
     public function guardar()
     {
@@ -29,6 +33,15 @@ class CanchasCrear extends Component
             'otros' => 'nullable|string|max:255',
         ]);
 
+        // Normalizar el nombre a minúsculas
+        $nombre = Str::lower(trim($this->nombre));
+
+        // Verificar si ya existe
+        if (Canchas::where('nombre', $nombre)->exists()) {
+            $this->addError('nombre', 'Ya existe una cancha con este nombre.');
+            return;
+        }
+
         Canchas::create([
             'nombre' => $this->nombre,
             'direccion' => $this->direccion,
@@ -38,15 +51,27 @@ class CanchasCrear extends Component
             'otros' => $this->otros,
         ]);
 
-        $this->dispatch('crear');
+
+        LivewireAlert::title('Correcto')
+            ->text('Cancha creada.')
+            ->success()
+            ->toast()
+            ->timer(5000)
+            ->position('top')
+            ->show();
+        $this->reset(['nombre', 'direccion', 'ciudad', 'provincia', 'cod_pos', 'otros']);
+
+        $this->redirigir = true;
     }
 
-    #[On('return')]
-    public function return()
+    public function verificarRedireccion()
     {
-        return redirect()->route('canchas.index');
-        // No hace falta que pongas nada acá, con solo tener este método, Livewire vuelve a renderizar
+        if ($this->redirigir) {
+            $this->redirigir = false;
+            return redirect()->route('canchas.index');
+        }
     }
+
 
 
     public function render()

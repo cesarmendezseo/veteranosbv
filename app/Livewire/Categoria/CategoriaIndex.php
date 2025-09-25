@@ -13,6 +13,7 @@ class CategoriaIndex extends Component
     public $descripcion;
     public $categoriaSeleccionada;
     public $categoriaId;
+    public $itemId;
 
 
     public function mount()
@@ -22,7 +23,7 @@ class CategoriaIndex extends Component
 
     public function crear()
     {
-        dd('gola');
+
         return redirect()->route('categoria.crear');
     }
 
@@ -59,10 +60,26 @@ class CategoriaIndex extends Component
 
             return;
         }
+
+        $this->itemId = $categoriaId;
+        LivewireAlert::title('Borrar Categoria')
+            ->text('Estas seguro de querer borrar esta la categoria?')
+            ->asConfirm()
+            ->onConfirm('deleteItem', ['id' => $this->itemId])
+            ->onDeny('keepItem', ['id' => $this->itemId])
+            ->show();
+    }
+
+    public function deleteItem($data)
+    {
+        $categoriaId = $data['id'];
+        // Delete logic
         // Eliminar si no tiene campeonatos asociados
+        $categoria = Categoria::find($categoriaId);
         $categoria->delete();
 
         $this->categorias = Categoria::all();
+
         LivewireAlert::title('Ok')
             ->text('Categoría eliminada correctamente.')
             ->success()
@@ -70,6 +87,8 @@ class CategoriaIndex extends Component
             ->position('top')
             ->show();
     }
+
+    public function keepItem() {}
 
     public function render()
     {

@@ -5,19 +5,20 @@
         {{ __('Registrar Sanciones') }}
         </h2>
         {{-- Botón para volver a la lista de categorías --}}
-        <a href="{{ route('sanciones.index') }}"
-            class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            Volver</a>
+        <div class="flex"><a href="{{ route('sanciones.index') }}"
+                class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Volver</a>
 
-        <div class="hidden md:flex"><button wire:click="actualizarCumplimientosSanciones"
-                class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
-                Actualizar Sanciones
-            </button>
+            <div class="hidden md:flex"><button wire:click="actualizarCumplimientosSanciones"
+                    class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800     font-bold py-2 px-4 mb-2 rounded">
+                    Actualizar Sanciones
+                </button>
+            </div>
         </div>
     </div>
 
@@ -25,15 +26,15 @@
         class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div>
 
-            <label for="first_name" class="block m-2 dark:text-[#FFC107]">Buscar por
+            <label for="first_name" class="block m-2 dark:text-white ">Buscar por
                 DNI</label>
             <input type="text" wire:model="buscarJugador" wire:keydown.enter="buscarJugadorSancion"
-                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Ingrese documento y presione Enter">
 
         </div>
         <div class="md:col-span-2">
-            <label class="block m-2 dark:text-[#FFC107]">Jugador</label>
+            <label class="block m-2 dark:text-white ">Jugador</label>
             <select wire:model="jugador_id"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 @foreach ($jugadores as $jugador)
@@ -49,7 +50,7 @@
 
 
         <div>
-            <label class="block m-2 dark:text-[#FFC107]">Sanción</label>
+            <label class="block m-2 dark:text-white ">Sanción</label>
             <select wire:model="motivo"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-50 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value="">Tipo </option>
@@ -64,14 +65,14 @@
         class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4  bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
             <div>
-                <label class="block m-2 dark:text-[#FFC107]">Jornada de sanción</label>
+                <label class="block m-2 dark:text-white ">Jornada de sanción</label>
                 <input type="number" wire:model="fecha_sancion"
                     class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="fecha jornada de encuentro " required />
             </div>
 
             <div>
-                <label class="block m-2 dark:text-[#FFC107]">Cantidad de fechas</label>
+                <label class="block m-2 dark:text-white ">Cantidad de fechas</label>
                 <input type="number" wire:model="partidos_sancionados"
                     class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder=" 1 " required min="1" />
@@ -79,7 +80,7 @@
 
         </div>
         <div>
-            <label class="block m-2 dark:text-[#FFC107]">Observacion</label>
+            <label class="block m-2 dark:text-white ">Observacion</label>
             <textarea wire:model="observacion" id="message" rows="4"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Escriba aquí una observación..."></textarea>

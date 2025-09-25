@@ -115,45 +115,11 @@
 
                         Guardar
                     </button>
-                    <a href="{{ route('canchas.index') }}"
-                        class="bg-blue-950 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-blue-800"> <svg
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        Volver</a>
+
                 </div>
             </form>
         </div>
+        <div wire:poll.2000ms="verificarRedireccion"></div>
     </div>
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
 
-
-
-            Livewire.on('editar', ({
-                id
-            }) => {
-
-
-                Swal.fire({
-                    title: 'Exito...',
-                    text: "El estadio se ha actualizado correctamente.",
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ok'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Livewire.dispatch('return');
-                    }
-                });
-            });
-
-
-
-        });
-    </script>
-    @endpush
 </div>

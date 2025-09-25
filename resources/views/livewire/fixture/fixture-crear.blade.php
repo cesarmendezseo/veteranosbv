@@ -21,13 +21,10 @@
         </a>
     </div>
 
-    <form wire:submit.prevent="guardarEncuentro" class="space-y-4 shadow-md sm:rounded-lg bg-gray-100 p-4">
+    <form wire:submit.prevent="guardarEncuentro"
+        class="space-y-4 shadow-md sm:rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
 
-        {{-- Título --}}
-        <div class="mb-4 flex items-center justify-center">
 
-        </div>
-        <flux:separator class="mb-2" />
         <!-- Si el campeonato tiene grupos, mostrar select de grupos -->
         @if ($grupos)
         <div class="mb-4">
@@ -48,10 +45,10 @@
         {{-- Botón --}}
 
         @if ($equipos && count($equipos))
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 dark:bg-gray-800">
             {{-- Equipo Local --}}
             <div>
-                <label for="equipo_local_id" class=" text-base text-blue-900 font-semibold dark:text-gray-800]">Equipo
+                <label for="equipo_local_id" class=" text-base text-blue-900 font-semibold dark:text-gray-100 ]">Equipo
                     Local</label>
                 <select id="equipo_local_id" wire:model.live="equipo_local_id"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -67,7 +64,7 @@
 
             {{-- Equipo Visitante (filtrado) --}}
             <div>
-                <label for="equipo_visitante_id" class="text-base text-blue-900 font-semibold dark:text-gray-800">Equipo
+                <label for="equipo_visitante_id" class="text-base text-blue-900 font-semibold dark:text-gray-100">Equipo
                     Visitante</label>
                 <select id="equipo_visitante_id" wire:model="equipo_visitante_id"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -87,9 +84,9 @@
             {{-- Hora --}}
             <div class="flex flex-col items-start">
                 <!-- Alineación a la izquierda -->
-                <label class="block dark:text-gray-800">Hora</label>
+                <label class="block dark:text-gray-100">Hora</label>
                 <input type="time" wire:model="hora"
-                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
+                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" />
                 @error('hora')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
                 @enderror
@@ -97,18 +94,18 @@
 
             {{-- jornada --}}
             <div class="flex flex-col items-start">
-                <label class="block dark:text-gray-800">Jornada</label>
+                <label class="block dark:text-gray-100">Jornada</label>
                 <input type="number" wire:model="jornada"
-                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm" />
+                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" />
                 @error('jornada')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
                 @enderror
             </div>
             {{-- Fecha --}}
             <div class="flex flex-col">
-                <label class="block dark:text-gray-800">Fecha</label>
+                <label class="block dark:text-gray-100">Fecha</label>
                 <input type="date" wire:model="fecha"
-                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm"
+                    class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:text-sm  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     placeholder="dd/mm/aaaa" />
                 @error('fecha')
                 <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -117,7 +114,7 @@
 
             {{-- Cancha --}}
             <div class="flex flex-col">
-                <label class="block dark:text-gray-800">Cancha</label>
+                <label class="block dark:text-gray-100">Cancha</label>
                 <select wire:model="cancha_id"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">-- Selecciona una cancha --</option>
@@ -132,7 +129,7 @@
 
             {{-- Estado --}}
             <div class="flex flex-col">
-                <label class="block dark:text-gray-800">Estado</label>
+                <label class="block dark:text-gray-100">Estado</label>
                 <select wire:model="estado"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value=" programado">Programado</option>

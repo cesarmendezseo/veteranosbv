@@ -98,7 +98,7 @@
                             :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                             <!--VER-->
                             <a href="{{ route('sanciones.crear', $campeonato->id) }}"
-                                class="flex items-center gap-2 hover:underline">
+                                class="flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -111,7 +111,7 @@
                             <!-- CREAR -->
                             @adminOrCan('comision')
                             <a href="{{ route('estadistica.ver', $campeonato->id) }}"
-                                class="flex items-center gap-2 hover:underline">
+                                class="flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-badge-plus">
