@@ -5,7 +5,7 @@
         </h2>
 
         <a href="{{route('campeonato.index')}}"
-            class="inline-flex items-center gap-2 hover:underline text-white  rounded ">
+            class="inline-flex items-center gap-2 hover:underline text-white  rounded ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -42,13 +42,18 @@
                         <option value="">-- Selecciona una opción --</option>
                         <option value="todos_contra_todos">Todos contra todos</option>
                         <option value="grupos">Por grupos</option>
+                        {{-- INCLUIR NUEVOS FORMATOS --}}
+                        <option value="eliminacion_simple">Eliminación Simple</option>
+                        <option value="eliminacion_doble">Doble Eliminación</option>
                     </select>
                     @error('formato')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>
 
-                @if ($formato === 'todos_contra_todos')
+                {{-- MODIFICADO: Mostrar para todos los formatos que NO son grupos --}}
+                @if ($formato === 'todos_contra_todos' || $formato === 'eliminacion_simple' || $formato ===
+                'eliminacion_doble')
                 <div class="relative z-0 w-full group">
                     <label for="total_equipos"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad total de
@@ -99,7 +104,8 @@
                 @enderror
             </div>
 
-            {{-- configuracion de puntos --}}
+            {{-- configuracion de puntos y desempate: SOLO para formatos de liga/grupos --}}
+            @if ($formato === 'todos_contra_todos' || $formato === 'grupos')
             <h1
                 class="text-xl my-7 text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                 Configurar puntajes</h1>
@@ -161,9 +167,9 @@
 
                             </span>
                             <div class="flex space-x-2">
-                                <button type="button" wire:click="moveCriterioUp({{  $loop->index}})"
+                                <button type="button" wire:click="moveCriterioUp({{  $loop->index}})"
                                     class="text-blue-600 hover:underline">↑</button>
-                                <button type="button" wire:click="moveCriterioDown({{  $loop->index}})"
+                                <button type="button" wire:click="moveCriterioDown({{  $loop->index}})"
                                     class="text-blue-600 hover:underline">↓</button>
                             </div>
                         </li>
@@ -171,14 +177,16 @@
                     </ul>
                 </div>
             </div>
+            @endif
+            {{-- FIN CONFIGURAR CRITERIO DESEMPATE --}}
 
-            {{-- CONFIGURAR FAIR PLAY --}}
+            {{-- CONFIGURAR FAIR PLAY (Se mantiene para todos los formatos) --}}
             <h1
                 class="text-xl my-7 text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer">
                 Configurar Fair Play</h1>
 
             <div class="grid gap-6 mb-6 md:grid-cols-2">
-                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
+                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje tarjeta amarilla</label>
                     <input type="number" wire:model.defer="puntos_tarjeta_amarilla" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
@@ -188,7 +196,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
+                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje doble amarilla</label>
                     <input type="number" wire:model.defer="puntos_doble_amarilla" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
@@ -198,7 +206,7 @@
                     @enderror
                 </div>
 
-                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
+                <div class="mb-3  text-gray-900 md:text-4xl dark:text-white">
                     <label class="text-sm">Puntaje tarjeta roja directa</label>
                     <input type="number" wire:model.defer="puntos_tarjeta_roja" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2
                 border-gray-300 appearance-none dark:text-white dark:border-gray-600
@@ -210,7 +218,7 @@
             </div>
 
             <button type="submit"
-                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-save-icon lucide-save">
@@ -220,7 +228,7 @@
                     <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                 </svg> <span>Guardar</span></button>
             <a href="{{route('campeonato.index')}}"
-                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"

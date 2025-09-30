@@ -6,6 +6,7 @@ use App\Models\Campeonato;
 use App\Models\Equipo;
 use App\Models\Grupo;
 use Illuminate\Support\Facades\DB;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
 
 class AsignarEquipos extends Component
@@ -26,11 +27,13 @@ class AsignarEquipos extends Component
 
     public function cargarCampeonato()
     {
+        // Se mantiene igual
         $this->campeonato = Campeonato::with(['grupos', 'equipos'])->findOrFail($this->campeonatoId);
     }
 
     public function cargarEquiposDisponibles()
     {
+        // Se mantiene igual
         $equiposAsignadosIds = DB::table('campeonato_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->pluck('equipo_id')
@@ -41,20 +44,44 @@ class AsignarEquipos extends Component
 
     public function updatedGrupoSeleccionado()
     {
+        // Se mantiene igual
         $this->equiposSeleccionados = [];
     }
 
     public function asignarEquiposAGrupo()
     {
         if (empty($this->equiposSeleccionados)) {
-
             $this->dispatch('selecionarEquipos');
             return;
         }
 
-        // TODOS CONTRA TODOS
-        if ($this->campeonato->formato === 'todos_contra_todos') {
+        // 1. Definir los formatos que NO usan grupos
+        $formatosSinGrupos = ['todos_contra_todos', 'eliminacion_simple', 'eliminacion_doble'];
+
+        // 2. Comprobar si el formato actual NO usa grupos
+        if (in_array($this->campeonato->formato, $formatosSinGrupos)) {
+            // Lógica unificada para TODOS CONTRA TODOS y ELIMINACIÓN
+
+            // VALIDACIÓN DEL LÍMITE DE EQUIPOS PARA ELIMINACIÓN
+            // Asumiendo que la columna 'cantidad_equipos' contiene el límite para la eliminación.
+            $limiteEquipos = $this->campeonato->total_equipos;
+            $totalActual = DB::table('campeonato_equipo')
+                ->where('campeonato_id', $this->campeonatoId)
+                ->count();
+            $totalAAgregar = count($this->equiposSeleccionados);
+
+            if ($limiteEquipos > 0 && ($totalActual + $totalAAgregar) > $limiteEquipos) {
+                session()->flash('error', "No puedes asignar más de {$limiteEquipos} equipos a este campeonato.");
+                LivewireAlert::title('AtenciónError')
+                    ->title('No puedes asignar más equipos a este campeonato, ya asigno todo.')
+                    ->warning()
+                    ->toast()
+                    ->show();
+                return;
+            }
+
             foreach ($this->equiposSeleccionados as $equipoId) {
+                // Validación: Si ya está asignado al campeonato (independientemente del grupo, que es null)
                 $yaAsignado = DB::table('campeonato_equipo')
                     ->where('campeonato_id', $this->campeonatoId)
                     ->where('equipo_id', $equipoId)
@@ -62,11 +89,11 @@ class AsignarEquipos extends Component
 
                 if ($yaAsignado) {
                     $equipo = Equipo::find($equipoId);
-                    session()->flash('error', "El equipo '{$equipo->nombre}' ya está asignado.");
-
+                    session()->flash('error', "El equipo '{$equipo->nombre}' ya está asignado al campeonato.");
                     return;
                 }
 
+                // Inserción: Se asigna al campeonato sin grupo
                 DB::table('campeonato_equipo')->insert([
                     'campeonato_id' => $this->campeonatoId,
                     'equipo_id' => $equipoId,
@@ -96,12 +123,12 @@ class AsignarEquipos extends Component
 
             if ($totalActual + $totalAAgregar > $limite) {
                 $grupoNombre = ucwords($grupo->nombre);
-
                 $this->dispatch('errorEquipoAsignado', $grupoNombre);
                 return;
             }
 
             foreach ($this->equiposSeleccionados as $equipoId) {
+                // Validación: Si ya está asignado al campeonato (en cualquier grupo)
                 $yaAsignado = DB::table('campeonato_equipo')
                     ->where('campeonato_id', $this->campeonatoId)
                     ->where('equipo_id', $equipoId)
@@ -113,6 +140,7 @@ class AsignarEquipos extends Component
                     return;
                 }
 
+                // Inserción: Se asigna al grupo seleccionado
                 DB::table('campeonato_equipo')->insert([
                     'campeonato_id' => $this->campeonatoId,
                     'equipo_id' => $equipoId,
@@ -123,28 +151,38 @@ class AsignarEquipos extends Component
             }
         }
 
+        // Finalización
         $this->equiposSeleccionados = [];
         $this->grupoSeleccionado = '';
         $this->cargarCampeonato();
         $this->cargarEquiposDisponibles();
 
-
+        session()->flash('success', 'Equipos asignados correctamente.');
         $this->dispatch('equiposAsignados');
     }
 
+    // El método removerEquipoDeGrupo() se mantiene igual ya que se usa 'grupo_id' en la eliminación.
 
-    public function removerEquipoDeGrupo($equipoId, $grupoId)
+    public function removerEquipoDeGrupo($equipoId, $grupoId = null)
     {
-        DB::table('campeonato_equipo')
+        // Se puede adaptar para que funcione con null (sin grupo) o con un ID de grupo
+        $query = DB::table('campeonato_equipo')
             ->where('campeonato_id', $this->campeonatoId)
-            ->where('grupo_id', $grupoId)
-            ->where('equipo_id', $equipoId)
-            ->delete();
+            ->where('equipo_id', $equipoId);
+
+        // Si grupoId es 0 o null, buscamos donde grupo_id es null (para eliminación/TCT)
+        if (empty($grupoId)) {
+            $query->whereNull('grupo_id');
+        } else {
+            $query->where('grupo_id', $grupoId);
+        }
+
+        $query->delete();
 
         $this->cargarCampeonato();
         $this->cargarEquiposDisponibles();
 
-        session()->flash('success', 'Equipo removido del grupo.');
+        session()->flash('success', 'Equipo removido del campeonato.');
     }
 
     public function render()

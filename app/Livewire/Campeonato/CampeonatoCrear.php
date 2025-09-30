@@ -26,6 +26,7 @@ class CampeonatoCrear extends Component
     public $equipos_por_grupo;
     public $categoria_id;
     public $categorias;
+    public $total = 0;
 
 
     public $criterios = [
@@ -46,7 +47,7 @@ class CampeonatoCrear extends Component
 
         $rules = [
             'nombre' => 'required|string|max:255',
-            'formato' => 'required|in:todos_contra_todos,grupos',
+            'formato' => 'required|in:todos_contra_todos,grupos,eliminacion_simple,eliminacion_doble',
             'categoria_id' => 'required|exists:categorias,id',
             'puntos_ganado' => 'required|integer',
             'puntos_empatado' => 'required|integer',
@@ -58,10 +59,14 @@ class CampeonatoCrear extends Component
         ];
 
         if ($this->formato === 'todos_contra_todos') {
-            $rules['total_equipos'] = 'required|integer|min:2';
+            $rules['total_equipos'] = 'required|integer|min:2'; // Total equipos para liga
         } elseif ($this->formato === 'grupos') {
             $rules['cantidad_grupos'] = 'required|integer|min:1';
             $rules['equipos_por_grupo'] = 'required|integer|min:1';
+            // ¡NUEVO! Validación para formatos de Eliminación
+        } elseif ($this->formato === 'eliminacion_simple' || $this->formato === 'eliminacion_doble') {
+            // Necesitas el total de equipos para el bracket de eliminación
+            $rules['total_equipos'] = 'required|integer|min:2';
         }
 
         return $rules; // Ejecuta las reglas de validación definidas en el método rules()
@@ -120,32 +125,53 @@ class CampeonatoCrear extends Component
     {
 
         $this->validate();
+        // Determinar los valores por defecto para los campos relacionados con grupos
+        $isGrupos = $this->formato === 'grupos';
+        $isEliminacion = in_array($this->formato, ['eliminacion_simple', 'eliminacion_doble']);
+        $isTodosContraTodos = $this->formato === 'todos_contra_todos';
+
+        // Determinar el status inicial
+        $statusInicial = 'todos_contra_todos'; // Por defecto, el de la BD
+        if ($isGrupos) {
+            $statusInicial = 'fase_de_grupos';
+        } elseif ($isEliminacion) {
+            $statusInicial = 'eliminacion_directa';
+        }
 
         $campeonato = Campeonato::create([
+
             'nombre' => $this->nombre,
             'formato' => $this->formato,
-            'cantidad_grupos' => $this->formato === 'grupos' ? (int) $this->cantidad_grupos : 1,
-            'cantidad_equipos_grupo' => $this->formato === 'grupos' ? (int) $this->equipos_por_grupo : null,
+            // Asignar null o 1 a los campos de grupos si no es formato 'grupos'
+            'cantidad_grupos' => $isGrupos ? (int) $this->cantidad_grupos : 1,
+            'cantidad_equipos_grupo' => $isGrupos ? (int) $this->equipos_por_grupo : 0,
+            // **CORRECCIÓN PRINCIPAL**: Asegurarse de que el total de equipos sea INT
+            'total_equipos' => intval($this->total_equipos),
 
             'puntos_ganado' => $this->puntos_ganado,
             'puntos_empatado' =>  $this->puntos_empatado,
             'puntos_perdido' => $this->puntos_perdido,
-            'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
-            'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
-            'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
             'categoria_id' => (int) $this->categoria_id,
+            'status' => $statusInicial, // Asignar el status inicial
+
         ]);
-        // Guardar criterios de desempate
-        foreach ($this->criterios as $index => $criterio) {
-            Criterios_desempate::create([
-                'campeonato_id' => $campeonato->id,
-                'criterio' => $criterio,
-                'orden' => $index + 1,
-            ]);
+
+        // Guardar criterios de desempate (Solo son relevantes para liga/grupos)
+        if ($isGrupos || $isTodosContraTodos) {
+            foreach ($this->criterios as $index => $criterio) {
+                Criterios_desempate::create([
+                    'campeonato_id' => $campeonato->id,
+                    'criterio' => $criterio,
+                    'orden' => $index + 1,
+                ]);
+            }
         }
-        // Crear los grupos
-        if ($this->formato === 'grupos') {
-            $letras = range('A', 'Z'); // para nombres como Grupo A, B, C...
+
+
+        // Crear los grupos/la "llave"
+        if ($isGrupos) {
+            // Lógica existente para crear N grupos (A, B, C...)
+            $letras = range('A', 'Z');
 
             for ($i = 0; $i < $this->cantidad_grupos; $i++) {
                 Grupo::create([
@@ -154,16 +180,25 @@ class CampeonatoCrear extends Component
                     'cantidad_equipos' => $this->cantidad_equipos_grupo,
                 ]);
             }
-        } elseif ($this->formato === 'todos_contra_todos') {
-
-            Grupo::create([
-
+        } /* elseif ($isTodosContraTodos) {
+            // Lógica existente para "Todos contra todos" (un solo grupo)
+            Campeonato::create([
                 'campeonato_id' => $campeonato->id,
                 'nombre' => 'Todos contra todos',
                 'cantidad_equipos' => $this->total_equipos ?? 0,
             ]);
-        }
+            // ¡NUEVO! Crear un grupo/llave para la eliminación
+        } elseif ($isEliminacion) {
 
+            Grupo::create([
+                'campeonato_id' => $campeonato->id,
+                'nombre' => 'Llave de Eliminación',
+                'cantidad_equipos' => $this->total_equipos ?? 0,
+                // Puedes añadir un campo 'es_llave_eliminacion' en el modelo Grupo si lo necesitas
+            ]);
+        } */
+
+        // ... Alerta de éxito y redirección
         LivewireAlert::title('Perfecto!!')
             ->text('Campeonato creado correctamente')
             ->success()

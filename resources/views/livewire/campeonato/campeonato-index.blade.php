@@ -76,12 +76,12 @@
                     @endif
                 </th>
                 <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    @if ($campeonato->formato === 'todos_contra_todos')
-                    @foreach ($campeonato->grupos as $grupo)
-                    <div class="font-normal "> {{ $grupo->cantidad_equipos }} </div>
-                    @endforeach
+                    @if ($campeonato->formato === 'grupos')
+
+                    <div class="font-normal "> {{ $campeonato->cantidad_equipos_grupo }} x Grupo </div>
+
                     @else
-                    <div class="font-normal "> {{ $campeonato->cantidad_equipos_grupo }} x Grupo</div>
+                    <div class="font-normal "> {{ $campeonato->total_equipos}}</div>
                     @endif
 
                 </th>
@@ -156,7 +156,7 @@
                             </a>
 
                             {{-- BORRAR --}}
-                            <button wire:click="$dispatch('confirmar-baja', { id: '{{ $campeonato->id }}' })"
+                            <button wire:click="eliminarCampeonato({{ $campeonato->id }})"
                                 class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
                                 title="Borrar">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

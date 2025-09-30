@@ -24,6 +24,7 @@ class Campeonato extends Model
         'puntos_tarjeta_roja',
         'cantidad_equipos_grupo',
         'cantidad_grupos',
+        'total_equipos',
         'status',
     ];
     protected $casts = [
