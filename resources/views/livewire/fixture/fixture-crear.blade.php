@@ -1,23 +1,26 @@
-<div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     @error('general')
-    <div class="bg-red-100 text-red-800 p-2 rounded mb-2">
+    <div class=" bg-red-100 text-red-800 p-2 rounded mb-2">
         {{ $message }}
     </div>
     @enderror
 
-    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+    <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
         {{ __('Crear Fixture') }}
         </h2>
-        <a href="{{route('fixture.index')}}"
+        <a href="{{ route('fixture.index') }}"
             class="flex items-center gap-1 hover:underline text-gray-100 dark:text-gray-100">
+
             {{-- Icono de volver --}}
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
-            Volver
+
+            {{-- Texto visible solo en pantallas medianas o más grandes --}}
+            <span class="hidden sm:inline">Volver</span>
         </a>
     </div>
 
@@ -80,7 +83,7 @@
         </div>
         {{-- --}}
         @endif
-        <div class="hidden md:grid grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             {{-- Hora --}}
             <div class="flex flex-col items-start">
                 <!-- Alineación a la izquierda -->
@@ -142,76 +145,6 @@
             </div>
         </div>
 
-        {{-- ============MOVIL=========================================== --}}
-
-        <div class="block md:hidden space-y-4 dark:bg-gray-600 rounded shadow p-4">
-            <!-- Primera fila: Hora y Jornada en 2 columnas (siempre) -->
-            <div class="grid grid-cols-2 gap-4">
-                {{-- Hora --}}
-                <div class="flex flex-col">
-                    <label class="block dark:text-gray-100 ">Hora</label>
-                    <input type="time" wire:model="hora"
-                        class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    @error('hora')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- Jornada --}}
-                <div class="flex flex-col">
-                    <label class="block dark:text-gray-100">Jornada</label>
-                    <input type="number" wire:model="jornada"
-                        class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    @error('jornada')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-
-            <!-- Fecha (ocupa todo el ancho en móvil) -->
-            <div class="grid grid-cols-2 gap-4 ">
-                <div class="flex flex-col">
-                    <label class="block dark:text-gray-100">Fecha</label>
-                    <input type="date" wire:model="fecha"
-                        class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="dd/mm/aaaa" />
-                    @error('fecha')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <!-- Cancha y Estado: 1 columna en móvil, 2 en desktop -->
-                <div class="flex flex-col">
-                    {{-- Cancha --}}
-                    <div class="flex flex-col">
-                        <label class="block dark:text-gray-100">Cancha</label>
-                        <select wire:model="cancha_id"
-                            class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value=""> </option>
-                            @foreach ($canchas as $cancha)
-                            <option value="{{ $cancha->id }}">{{ strtoupper($cancha->nombre) }}</option>
-                            @endforeach
-                        </select>
-                        @error('cancha_id')
-                        <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-                {{-- Estado --}}
-                <div class="flex flex-col">
-                    <label class="block dark:text-gray-100">Estado</label>
-                    <select wire:model="estado"
-                        class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="programado">Programado</option>
-                        <option value="jugado">Jugado</option>
-                        <option value="pendiente">Pendiente</option>
-                    </select>
-                    @error('estado')
-                    <span class="text-red-600 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-        </div>
         <hr>
         {{-- Botón --}}
         <button type="submit"

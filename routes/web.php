@@ -16,6 +16,8 @@ use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Equipo\ListadoBuenaFe;
 use App\Livewire\Equipo\ListadoBuenaFeIndex;
+use App\Livewire\Fixture\Eliminatoria;
+use App\Livewire\Fixture\EliminatoriaVer;
 use App\Livewire\Fixture\FixtureCrear;
 use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
@@ -121,6 +123,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/fixture/{campeonatoId}/crear', FixtureCrear::class)->name('fixture.crear');
         Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
+        Route::get('/fixture/{campeonatoId}/eliminatorias', Eliminatoria::class)->name('fixture.eliminatoria');
+        Route::get('/fixture/{campeonatoId}/eliminatorias/editar', EliminatoriaVer::class)->name('fixture.eliminatoria.ver');
     });
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');

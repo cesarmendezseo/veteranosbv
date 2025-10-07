@@ -56,4 +56,9 @@ class Campeonato extends Model
             ->withPivot('grupo_id')
             ->withTimestamps();
     }
+
+    public function eliminatoria()
+    {
+        return $this->hasMany(Eliminatoria::class);
+    }
 }

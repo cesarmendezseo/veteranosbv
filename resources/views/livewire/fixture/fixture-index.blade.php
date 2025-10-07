@@ -110,7 +110,7 @@
                                 class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                                 :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                                 <!--VER-->
-                                <a href="{{ route('fixture.ver', $campeonato->id) }}"
+                                <button wire:click="ver({{ $campeonato->id }})"
                                     class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -120,11 +120,12 @@
                                             d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                     </svg>
                                     <span class="ml-1">Ver</span>
-                                </a>
+                                </button>
                                 <!-- CREAR -->
                                 @adminOrCan('comision')
-                                <a href="{{ route('fixture.crear', $campeonato->id) }}"
-                                    class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100">
+
+                                <button wire:click="crear({{ $campeonato->id }})"
+                                    class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100 cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round" class="lucide lucide-badge-plus">
@@ -134,7 +135,8 @@
                                         <line x1="8" x2="16" y1="12" y2="12" />
                                     </svg>
                                     <span>Crear</span>
-                                </a>
+                                </button>
+
                                 @endadminOrCan
                             </div>
                         </div>
@@ -218,7 +220,7 @@
                         </a>
                         <!-- CREAR -->
                         @adminOrCan('comision')
-                        <a href="{{ route('fixture.crear', $campeonato->id) }}"
+                        <button wire:click="crear({{ $campeonato->id }})"
                             class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100 text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -229,7 +231,7 @@
                                 <line x1="8" x2="16" y1="12" y2="12" />
                             </svg>
                             <span>Crear</span>
-                        </a>
+                        </button>
                         @endadminOrCan
                     </div>
                 </div>

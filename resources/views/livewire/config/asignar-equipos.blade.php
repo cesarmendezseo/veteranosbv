@@ -35,14 +35,14 @@
 
     {{-- Selección de equipos: Muestra el selector si NO es por grupos O si SÍ es por grupos y ya seleccionaste uno --}}
     @if (in_array($campeonato->formato, $formatosSinGrupos) || $grupoSeleccionado)
-    <div class="mb-4 bg-gray-900  p-4 rounded-lg dark:bg-gray-600">
-        <label class="block mb-2 text-basic font-medium text-gray-100 dark:text-white dark:bg-gray-900 p-4">
+    <div class="mb-4  bg-gray-200  p-4 rounded-lg dark:bg-gray-600">
+        <label class="block mb-2 text-basic font-medium bg-gray-500 text-gray-100 dark:text-white dark:bg-gray-900 p-4">
             Seleccionar equipos
             {{ $campeonato->formato === 'grupos' ? 'para el grupo' : 'para el campeonato' }}
             <span> (Puedes seleccionar múltiples equipos)</span>
         </label>
         <select wire:model="equiposSeleccionados" multiple
-            class="block w-full border-gray-100  bg-gray-100  dark:text-gray-900 p-2 dark:border-gray-100 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 "
+            class="block cursor-pointer w-full border border-gray-400  bg-gray-100  dark:text-gray-900 p-2 dark:border-gray-100 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 "
             size="8">
             @foreach ($equiposDisponibles as $equipo)
             <option value="{{ $equipo->id }}">{{ ucwords($equipo->nombre) }}</option>
@@ -107,12 +107,12 @@
     {{-- Mostrar equipos asignados directamente al campeonato (Todos contra todos Y Eliminación) --}}
     @if (in_array($campeonato->formato, $formatosSinGrupos))
     <div class="mt-6">
-        <h2 class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
+        <h2 class="block mb-2 text-lg bg-gray-500 p-4 text-gray-100 font-medium  dark:text-white">
             Equipos del Campeonato ({{ $campeonato->formato === 'todos_contra_todos' ? 'Todos contra todos' :
             'Eliminación' }})
         </h2>
-        <div class="p-4 border rounded-lg bg-gray-50 ">
-            <ul class="list-none space-y-1 dark:text-gray-900">
+        <div class="p-4 border rounded-lg bg-gray-300 dark:bg-gray-600  ">
+            <ul class="list-none space-y-1 dark:text-gray-100">
                 {{-- Filtramos los equipos que no tienen grupo asignado (grupo_id es null) --}}
                 @forelse ($campeonato->equipos->where('pivot.grupo_id', null) as $equipo)
                 <li>
@@ -121,7 +121,7 @@
                     @adminOrCan('comision')
                     {{-- Pasamos 'null' como segundo argumento para indicar que no tiene grupo --}}
                     <button type="button" wire:click="removerEquipoDeGrupo({{ $equipo->id }}, null)"
-                        class="text-red-600 hover:underline text-sm ml-2 cursor-pointer">
+                        class="text-red-600 hover:underline text-sm ml-2 cursor-pointer dark:bg-white rounded-4xl dark:p-1 dark:shadow-2xl bg-gray-200  p-1 shadow-lg">
                         {{-- Icono de eliminar --}}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="h-5 w-5 shasow-lg">

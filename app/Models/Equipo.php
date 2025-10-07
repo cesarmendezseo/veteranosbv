@@ -41,6 +41,8 @@ class Equipo extends Model
     {
         return $this->hasMany(Encuentro::class, 'visitante_id');
     }
+
+
     public function campeonatos()
     {
         return $this->belongsToMany(Campeonato::class, 'campeonato_equipo', 'equipo_id', 'campeonato_id')
@@ -59,5 +61,17 @@ class Equipo extends Model
         return $this->belongsToMany(Jugador::class, 'jugador_equipo')
             ->withPivot('fecha_alta', 'fecha_baja')
             ->withTimestamps();
+    }
+
+    // Relación con encuentros donde fue local para partidos de eliminatorias
+    public function encuentrosLocal()
+    {
+        return $this->hasMany(Encuentro::class, 'equipo_local_id');
+    }
+
+    // Relación con encuentros donde fue visitante para partidos de eliminatorias
+    public function encuentrosVisitante()
+    {
+        return $this->hasMany(Encuentro::class, 'equipo_visitante_id');
     }
 }

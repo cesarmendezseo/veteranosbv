@@ -39,7 +39,10 @@ class AsignarEquipos extends Component
             ->pluck('equipo_id')
             ->toArray();
 
-        $this->equiposDisponibles = Equipo::whereNotIn('id', $equiposAsignadosIds)->get();
+        // Traer los equipos no asignados, ordenados alfabéticamente
+        $this->equiposDisponibles = Equipo::whereNotIn('id', $equiposAsignadosIds)
+            ->orderBy('nombre', 'asc')
+            ->get();
     }
 
     public function updatedGrupoSeleccionado()
