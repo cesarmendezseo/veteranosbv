@@ -9,6 +9,7 @@ use App\Models\Eliminatoria;
 use App\Models\Encuentro;
 use App\Models\Grupo;
 use App\Services\EncuentroExportService;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -44,6 +45,9 @@ class EliminatoriaVer extends Component
     public $encuentrosPorCancha = [];
     public $penal_visitante = [];
     public $penal_local = [];
+    public $faseFiltro;
+    public $fases;
+    public $mostrarFiltros = false;
 
     public function mount($campeonatoId)
     {
@@ -54,6 +58,10 @@ class EliminatoriaVer extends Component
         $this->campeonato_id = $campeonatoId;
         $this->campeonatos = $this->campeonatoId;
         $this->updatedCampeonatoId();
+        $this->fases = Eliminatoria::where('campeonato_id', $this->campeonato_id)
+            ->distinct()
+            ->pluck('fase')
+            ->toArray();
     }
 
     //==================================0ORDENAMIENTO========================================
@@ -124,7 +132,13 @@ class EliminatoriaVer extends Component
             $encuentro->save();
 
             // Mensaje de éxito
-            session()->flash('message', 'Goles guardados y estado actualizado a "Jugado".');
+            LivewireAlert::title('Éxito')
+                ->text('Goles guardados y estado actualizado a "Jugado".')
+                ->success()
+                ->asConfirm('Ok', '#3085d6')
+                ->toast()
+                ->timer(3000)
+                ->show();
         }
     }
     // ==================================0EDITAR ENCUENTRO========================================
@@ -154,20 +168,43 @@ class EliminatoriaVer extends Component
         ]);
 
         $this->reset(['showEditModal', 'encuentroEditandoId', 'editFecha', 'editHora', 'editEstado', 'editCanchaId']);
+        // Mensaje de éxito
+        LivewireAlert::title('Éxito')
+            ->text('Actualización exitosa.')
+            ->success()
+            ->asConfirm('Ok', '#3085d6')
+            ->toast()
+            ->timer(3000)
+            ->show();
     }
 
 
-    #[On('eliminar-encuentro')]
+
     public function eliminarEncuentro($encuentroId) // The parameter name should match the key in your dispatch payload (Id)
     {
 
         $encuentro = Eliminatoria::findOrFail($encuentroId);
 
         if ($encuentro->estado === 'Jugado') {
-            $this->dispatch('Baja');
+            // Mensaje de éxito
+            LivewireAlert::title('Error')
+                ->text('No se puede borrar el encuentro porque el mismo ya se encuentra jugado".')
+                ->warning()
+                ->asConfirm('Ok', '#3085d6')
+                ->toast()
+
+                ->show();
         } else {
             $encuentro->delete();
-            $this->dispatch('eliminado');
+
+            // Mensaje de éxito
+            LivewireAlert::title('Éxito')
+                ->text('Encuentro eliminado correctamente.')
+                ->success()
+                ->asConfirm('Ok', '#3085d6')
+                ->toast()
+                ->timer(3000)
+                ->show();
         };
     }
 
@@ -177,13 +214,20 @@ class EliminatoriaVer extends Component
 
     {
 
-        if (!$this->campeonato_id || !$this->jornadaFiltro) {
+
+        if (!$this->campeonato_id || !$this->faseFiltro) {
             session()->flash('error', 'Debes seleccionar un campeonato y una jornada para exportar.');
             return;
         }
 
-        return $servicio->exportarPorCampeonatoYFecha($this->campeonato_id, $this->jornadaFiltro);
+        return $servicio->exportarEliminatoria($this->campeonato_id, $this->faseFiltro);
     }
+
+
+
+
+
+
 
     public function render()
     {
@@ -207,6 +251,7 @@ class EliminatoriaVer extends Component
             $query->where('nombre', 'like', '%' . $this->equipoVisitanteFiltro . '%')))
             ->when($this->grupoFiltro, fn($q) => $q->where('grupo_id', $this->grupoFiltro))
             ->when($this->estadoFiltro, fn($q) => $q->where('estado', $this->estadoFiltro))
+            ->when($this->faseFiltro, fn($q) => $q->where('fase', $this->faseFiltro))
             ->orderBy('fecha')
             ->orderBy('cancha')
             ->orderBy('hora')
@@ -214,20 +259,12 @@ class EliminatoriaVer extends Component
 
 
 
-
-
-
-        // Agrupar los encuentros por cancha y obtener el nombre del grupo
         $encuentrosAgrupados = $encuentros->groupBy(function ($encuentro) {
-            $nombreCancha = $encuentro->cancha->nombre ?? 'Sin cancha';
-            $nombreGrupo = $encuentro->grupo?->nombre ?? '';
-
-            // Puedes retornar un string combinado si quieres agrupar por ambos, por ejemplo:
-            //return $nombreCancha . ' _ ' . $nombreGrupo;
-
-            // O simplemente devolver un array para luego usar ambos nombres
-            return $nombreCancha;
+            return ($encuentro->canchas instanceof \App\Models\Canchas)
+                ? $encuentro->canchas->nombre
+                : 'Sin cancha';
         });
+
 
 
 

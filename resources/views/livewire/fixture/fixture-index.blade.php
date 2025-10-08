@@ -111,7 +111,7 @@
                                 :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                                 <!--VER-->
                                 <button wire:click="ver({{ $campeonato->id }})"
-                                    class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100">
+                                    class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100 cursor-pointer">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -207,7 +207,7 @@
                         class="fixed z-50 flex flex-col gap-2 p-4 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700 dark:border dark:border-gray-700"
                         :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                         <!--VER-->
-                        <a href="{{ route('fixture.ver', $campeonato->id) }}"
+                        <button wire:click="ver({{ $campeonato->id }})"
                             class="flex items-center gap-2 hover:underline mb-2 dark:text-gray-100 text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
@@ -217,7 +217,7 @@
                                     d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
                             <span class="ml-1">Ver</span>
-                        </a>
+                        </button>
                         <!-- CREAR -->
                         @adminOrCan('comision')
                         <button wire:click="crear({{ $campeonato->id }})"

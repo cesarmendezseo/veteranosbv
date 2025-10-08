@@ -6,11 +6,12 @@ use App\Models\Campeonato;
 use App\Models\Canchas;
 use App\Models\Eliminatoria as ModelsEliminatoria;
 use App\Models\Equipo;
+use App\Services\EncuentroExportService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Illuminate\Validation\ValidationException;
-
+use Jantinnerezo\LivewireAlert\LivewireAlert as LivewireAlertLivewireAlert;
 use Livewire\Component;
 
 class Eliminatoria extends Component
@@ -18,7 +19,16 @@ class Eliminatoria extends Component
     public $campeonato;
     public $campeonato_id;
     public $fase_actual;
-    public $fases = ['dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'final'];
+    public $fases = [
+        'sesentaicuatroavos',
+        'treintaidosavos',
+        'dieciseisavos',
+        'octavos',
+        'cuartos',
+        'semifinal',
+        '3er y 4to',
+        'final'
+    ];
     public $equiposDisponibles = [];
     public $encuentros = [];
     public $canchas = [];
@@ -57,6 +67,10 @@ class Eliminatoria extends Component
         if ($totalEquipos <= 8) return ['cuartos', 'semifinal', 'final'];
         if ($totalEquipos <= 16) return ['octavos', 'cuartos', 'semifinal', 'final'];
         if ($totalEquipos <= 32) return ['dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'final'];
+        if ($totalEquipos <= 64) return ['treintaidosavos', 'dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'final'];
+        if ($totalEquipos <= 128) return ['sesentaicuatroavos', 'treintaidosavos', 'dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'final'];
+
+
         return ['fase previa', 'dieciseisavos', 'octavos', 'cuartos', 'semifinal', 'final'];
     }
 
@@ -103,21 +117,56 @@ class Eliminatoria extends Component
                 ->orderBy('equipos.nombre', 'asc')
                 ->get();
         } else {
+
             $faseAnterior = $this->fases[$faseIndex - 1];
 
-            $ganadoresIds = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
-                ->where('fase', $faseAnterior)
-                ->where('estado', 'jugado')
-                ->get()
-                ->map(fn($e) => optional($e->ganador())->id) // solo el ID
-                ->filter()
-                ->unique()
-                ->values()
-                ->toArray();
+            if ($faseAnterior !== 'semifinal') {
+                /* se pasa los equipos ganadores si la fase antoerior no es = a semifinal */
 
-            $this->equiposDisponibles = Equipo::whereIn('id', $ganadoresIds)
-                ->orderBy('nombre', 'asc')
-                ->get();
+                $ganadoresIds = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+                    ->where('fase', $faseAnterior)
+                    ->where('estado', 'jugado')
+                    ->get()
+                    ->map(fn($e) => optional($e->ganador())->id) // solo el ID
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->toArray();
+
+
+                $this->equiposDisponibles = Equipo::whereIn('id', $ganadoresIds)
+                    ->orderBy('nombre', 'asc')
+                    ->get();
+            } else {
+                /* se pasa los perdedores y ganadores por que quiere decir que es la final y hay que crear el encuentro por el 3er y 4to puesto y la final */
+                $ganadores = collect();
+                $perdedores = collect();
+
+                $encuentros = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+                    ->where('fase', $faseAnterior)
+                    ->where('estado', 'jugado')
+                    ->with(['equipoLocal', 'equipoVisitante']) // importante para acceder a los modelos
+                    ->get();
+
+                foreach ($encuentros as $e) {
+                    $ganador = $e->ganador();
+
+                    if ($ganador) {
+                        $ganadores->push($ganador);
+
+                        $perdedor = $ganador->id === $e->equipoLocal->id
+                            ? $e->equipoVisitante
+                            : $e->equipoLocal;
+
+                        $perdedores->push($perdedor);
+                    }
+                }
+                $ganadores = $ganadores->unique('id')->sortBy('nombre')->values();
+                $perdedores = $perdedores->unique('id')->sortBy('nombre')->values();
+
+                //Creo la final y el partido por el tercer puesto automatico    
+                $this->crearFinal($ganadores, $perdedores);
+            }
         }
     }
 
@@ -126,10 +175,19 @@ class Eliminatoria extends Component
     // =========================================================
     public function cargarEncuentros()
     {
-        $this->encuentros = ModelsEliminatoria::with(['equipoLocal', 'equipoVisitante', 'canchas'])
-            ->where('campeonato_id', $this->campeonato_id)
-            ->where('fase', $this->fase_actual)
-            ->get();
+        if ($this->fase_actual === 'final') {
+            $this->encuentros = ModelsEliminatoria::with(['equipoLocal', 'equipoVisitante', 'canchas'])
+                ->where('campeonato_id', $this->campeonato_id)
+                ->where('estado', 'programado')
+                ->get();
+        } else
+
+
+            $this->encuentros = ModelsEliminatoria::with(['equipoLocal', 'equipoVisitante', 'canchas'])
+                ->where('campeonato_id', $this->campeonato_id)
+                ->where('fase', $this->fase_actual)
+                ->get();
+
 
         foreach ($this->encuentros as $e) {
             $this->goles_local[$e->id] = $e->goles_local;
@@ -189,10 +247,68 @@ class Eliminatoria extends Component
     }
 
     // =========================================================
-    /**
-     * Verifica si hay conflictos de programación antes de crear un encuentro.
-     * @return bool Retorna true si no hay conflictos, false si hay alguno.
-     */
+    public function crearFinal($ganadores, $perdedores)
+    {
+        // 1. Verificar si la FINAL ya existe
+        $finalExiste = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+            ->where('fase', 'final')
+            ->exists();
+
+        // 2. Verificar si el 3er y 4to Puesto ya existe
+        $tercerPuestoExiste = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+            ->where('fase', 'tercer y cuarto puesto')
+            ->exists();
+
+        // 3. Crear los encuentros solo si NO existen
+        if (!$finalExiste && !$tercerPuestoExiste) {
+            // Convertir hora base a objeto Carbon
+            $horaBase = Carbon::parse($this->nueva_hora);
+
+            // Horario para perdedores
+            $horaPerdedores = $horaBase->copy();
+            // Horario para ganadores (1h más tarde)
+            $horaGanadores = $horaBase->copy()->addHour();
+
+            // Armar encuentros por pares
+            $paresPerdedores = $perdedores->chunk(2);
+            $paresGanadores = $ganadores->chunk(2);
+
+            foreach ($paresPerdedores as $par) {
+                if ($par->count() === 2) {
+                    ModelsEliminatoria::create([
+                        'campeonato_id' => $this->campeonato_id,
+                        'fase' => '3er y 4to',
+                        'equipo_local_id' => $par[0]->id,
+                        'equipo_visitante_id' => $par[1]->id,
+                        'fecha' => $this->nueva_fecha ?: '2055-12-31',
+                        'hora' => $horaPerdedores->format('H:i'),
+                        'cancha' => 'sin definir',
+                        'estado' => 'pendiente',
+                    ]);
+                }
+            }
+
+            foreach ($paresGanadores as $par) {
+                if ($par->count() === 2) {
+                    ModelsEliminatoria::create([
+                        'campeonato_id' => $this->campeonato_id,
+                        'fase' => 'final',
+                        'equipo_local_id' => $par[0]->id,
+                        'equipo_visitante_id' => $par[1]->id,
+                        'fecha' =>  $this->nueva_fecha ?: '2055-12-31',
+                        'hora' => $horaGanadores->format('H:i'),
+                        'cancha' => 'sin definir',
+                        'estado' => 'pendiente',
+                    ]);
+                }
+            }
+
+            $this->cargarEncuentros();
+        }
+    }
+
+    // =========================================================
+
     private function verificarConflictosProgramacion(): bool
     {
         // =========================================================
@@ -258,6 +374,11 @@ class Eliminatoria extends Component
         // Si pasa ambas verificaciones
         return true;
     }
+
+
+
+    //=============exportar a exel ===============
+
 
     public function render()
     {

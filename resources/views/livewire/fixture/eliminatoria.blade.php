@@ -1,10 +1,65 @@
 <div class="p-4">
-    <div class="p-6 space-y-6">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Fase actual: <span class="bg-gray-500 p-2 rounded-2xl">{{ ucfirst($fase_actual) }}</span>
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
+        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
+            {{ __('Fixture Eliminatoria ver') }}
         </h2>
 
+        <div class="flex gap-2">
+            <a href="{{ route('fixture.index') }}"
+                class="md:hidden px-3 py-2 text-white rounded flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </a>
+            @adminOrCan()
+            <button wire:click="exportar"
+                class="md:hidden cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                    <path d="M12 15V3" />
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="m7 10 5 5 5-5" />
+                </svg>
+            </button>
+            @endadminOrCan
+
+
+            <div class="hidden md:flex gap-4">
+                <a href="{{ route('fixture.index') }}" class="px-3 py-2 text-white rounded flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Volver
+                </a>
+                @adminOrCan()
+                <button wire:click="exportar"
+                    class="cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                        <path d="M12 15V3" />
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="m7 10 5 5 5-5" />
+                    </svg>
+                    Exportar
+                </button>
+                @endadminOrCan
+            </div>
+        </div>
+    </div>
+    <div class="p-6 space-y-6">
+        <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                Fase actual: <span class="bg-gray-500 dark:text-white text-gray-100 p-2 rounded-2xl">{{
+                    ucfirst($fase_actual) }}</span>
+            </h2>
+        </div>
+
         {{-- ================= CREAR ENCUENTRO ================= --}}
+        @if($fase_actual !== 'final')
         <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
 
 
@@ -62,32 +117,35 @@
                 </button>
             </div>
         </div>
-
+        @endif
         {{-- ================= ENCUENTROS ================= --}}
         <div class="mt-6">
             <h3 class="text-lg font-semibold mb-2">Encuentros registrados</h3>
 
             @foreach ($encuentros as $encuentro)
             <div class="flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
+                <span class="flex-1 pl-2"> {{ ucwords($encuentro->fase) }}</span>
+
                 <span class="flex-1 text-right pr-2">{{ $encuentro->equipoLocal->nombre }} </span>
 
 
 
-                <span class="font-bold rounded-4xl bg-white text-gray-900 p-2">vs </span>
+                <span class="font-bold rounded-4xl bg-white text-gray-900 p-2 dark:text-gray-100">vs </span>
 
 
                 <span class="flex-1 pl-2"> {{ $encuentro->equipoVisitante->nombre }}</span>
 
-                <span class="flex-1  text-sm text-gray-200">
+                <span class="flex-1  text-sm text-gray-900 dark:text-gray-100">
                     {{ \Carbon\Carbon::parse($encuentro->fecha . ' ' . $encuentro->hora)->format('d/m/Y H:i') }}hs
                 </span>
-                <span class=" flex-1 text-sm text-gray-200">
-                    {{ $encuentro->canchas->nombre }}
+                <span class=" flex-1 text-sm text-gray-900 dark:text-gray-100">
+                    {{ $encuentro->cancha->nombre ?? "Sin cancha asignada" }}
                 </span>
 
             </div>
             @endforeach
         </div>
+
     </div>
 
 </div>
