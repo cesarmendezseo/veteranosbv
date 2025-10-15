@@ -216,7 +216,13 @@ class EliminatoriaVer extends Component
 
 
         if (!$this->campeonato_id || !$this->faseFiltro) {
-            session()->flash('error', 'Debes seleccionar un campeonato y una jornada para exportar.');
+            LivewireAlert::title('Atencion')
+                ->text('Debe seleccionar una FASE.')
+                ->error()
+                ->asConfirm('Ok', '#3085d6')
+                ->toast()
+                ->timer(3000)
+                ->show();
             return;
         }
 
