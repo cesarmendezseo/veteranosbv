@@ -190,6 +190,21 @@
                                 </svg><span class="ml-1">Asignar Equipos</span>
 
                             </a>
+                            {{-- CLONAR EQUIPO --}}
+
+                            <a href="{{ route('copiar-listado-buena-fe') }}"
+                                class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
+                                title="Equipos">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-book-copy-icon lucide-book-copy">
+                                    <path d="M5 7a2 2 0 0 0-2 2v11" />
+                                    <path d="M5.803 18H5a2 2 0 0 0 0 4h9.5a.5.5 0 0 0 .5-.5V21" />
+                                    <path
+                                        d="M9 15V4a2 2 0 0 1 2-2h9.5a.5.5 0 0 1 .5.5v14a.5.5 0 0 1-.5.5H11a2 2 0 0 1 0-4h10" />
+                                </svg><span class="ml-1">Clonar Listado</span>
+
+                            </a>
                         </div>
                     </div>
 

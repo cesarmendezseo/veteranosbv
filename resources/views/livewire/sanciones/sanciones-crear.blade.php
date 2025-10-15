@@ -26,28 +26,36 @@
         class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div>
 
-            <label for="first_name" class="block m-2 dark:text-white ">Buscar por
-                DNI</label>
+            <label for="first_name" class="block m-2 dark:text-white ">Buscar Jugador
+            </label>
             <input type="text" wire:model="buscarJugador" wire:keydown.enter="buscarJugadorSancion"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Ingrese documento y presione Enter">
-
-        </div>
-        <div class="md:col-span-2">
-            <label class="block m-2 dark:text-white ">Jugador</label>
-            <select wire:model="jugador_id"
-                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @foreach ($jugadores as $jugador)
-                <option value="{{ $jugador->id }}">
-                    {{ $jugador->documento }} __ {{ strtoupper($jugador->apellido) }}
-                    {{ strtoupper($jugador->nombre) }}
-                    - ({{ ucfirst($jugador->equipo->nombre) ?? 'Sin equipo' }})
-                </option>
-                @endforeach
-            </select>
         </div>
 
-
+    </div>
+    @if($buscarJugador && count($jugadores) > 0)
+    <div
+        class="mb-4 bg-gray-500 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        @foreach($jugadores as $jug)
+        <div class="flex justify-between items-center border-b py-1">
+            <span>{{ $jug->apellido }}, {{ $jug->nombre }} - DNI ( {{ $jug->documento }} )</span>
+            <button wire:click="agregarJugador({{ $jug->id }})"
+                class="bg-green-500 text-white hover:bg-green-400 px-2 py-1 rounded cursor-pointer">Seleccionar</button>
+        </div>
+        @endforeach
+    </div>
+    @endif
+    @if($jugadorSeleccionado)
+    <div class="bg-blue-100 border border-blue-300 text-blue-900 rounded-lg p-4 mb-4">
+        <strong>{{ $jugadorSeleccionado['apellido'] }}, {{ $jugadorSeleccionado['nombre'] }}</strong><br>
+        DNI: {{ $jugadorSeleccionado['documento'] }}
+        {{-- Podés agregar más datos o botones aquí --}}
+    </div>
+    @endif
+    <hr class="m-5">
+    <div
+        class="grid grid-cols-1 md:grid-cols-3 mt-4 gap-4  bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
 
         <div>
             <label class="block m-2 dark:text-white ">Sanción</label>
@@ -59,33 +67,29 @@
                 <option value="roja directa">Roja directa</option>
             </select>
         </div>
-    </div>
-    <hr class="m-5">
-    <div
-        class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4  bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
-        <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
-            <div>
-                <label class="block m-2 dark:text-white ">Jornada de sanción</label>
-                <input type="number" wire:model="fecha_sancion"
-                    class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="fecha jornada de encuentro " required />
-            </div>
 
-            <div>
-                <label class="block m-2 dark:text-white ">Cantidad de fechas</label>
-                <input type="number" wire:model="partidos_sancionados"
-                    class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=" 1 " required min="1" />
-            </div>
-
-        </div>
         <div>
-            <label class="block m-2 dark:text-white ">Observacion</label>
-            <textarea wire:model="observacion" id="message" rows="4"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Escriba aquí una observación..."></textarea>
+            <label class="block m-2 dark:text-white ">Jornada de sanción</label>
+            <input type="number" wire:model="fecha_sancion"
+                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="fecha jornada de encuentro " required />
         </div>
+
+        <div>
+            <label class="block m-2 dark:text-white ">Cantidad de fechas</label>
+            <input type="number" wire:model="partidos_sancionados"
+                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder=" 1 " required min="1" />
+        </div>
+
     </div>
+    <div>
+        <label class="block m-2 dark:text-white ">Observacion</label>
+        <textarea wire:model="observacion" id="message" rows="4"
+            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-500 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Escriba aquí una observación..."></textarea>
+    </div>
+
 
 
     <div class="flex gap-4 items-center">
@@ -106,28 +110,5 @@
         </button>
 
     </div>
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
 
-                Livewire.on('guardarSancion', () => {
-                    Swal.fire({
-                        'title': 'Guardado',
-                        'text': 'La sanción ha sido guardado correctamente',
-                        'icon': 'success'
-                    });
-                });
-
-                Livewire.on('actualizar-sancion', () => {
-                    Swal.fire({
-                        'title': 'Correcto!',
-                        'text': 'La sanción ha sido actualizado correctamente',
-                        'icon': 'success'
-                    });
-                });
-
-
-            })
-    </script>
-    @endpush
 </div>

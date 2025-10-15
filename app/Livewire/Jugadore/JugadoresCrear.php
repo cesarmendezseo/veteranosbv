@@ -86,7 +86,7 @@ class JugadoresCrear extends Component
                 'fecha_nac'      => $this->nacimiento,
                 'cod_pos'        => $this->cod_pos,
                 'is_active'      => $this->activo,
-                'equipo_id'      => $this->equipo_seleccionado,
+                'equipo_id'      => null, // No asignamos equipo aquí
             ]);
 
             // Ahora podés acceder al id directamente

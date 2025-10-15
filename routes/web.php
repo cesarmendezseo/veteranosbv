@@ -11,11 +11,14 @@ use App\Livewire\Canchas\CanchasIndex;
 use App\Livewire\Categoria\CategoriaCrear;
 use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Config\AsignarEquipos;
+use App\Livewire\Config\CopiarListadoBuenaFe;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
 use App\Livewire\Equipo\ListadoBuenaFe;
+use App\Livewire\Equipo\ListadoBuenaFeCrear;
 use App\Livewire\Equipo\ListadoBuenaFeIndex;
+use App\Livewire\Equipo\ListadoBuenaFeVer;
 use App\Livewire\Fixture\Eliminatoria;
 use App\Livewire\Fixture\EliminatoriaVer;
 use App\Livewire\Fixture\FixtureCrear;
@@ -83,6 +86,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
     Route::get('/equipo/listado-buena-fe', ListadoBuenaFeIndex::class)->name('listado-buena-fe');
     Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver', ListadoBuenaFe::class)->name('listado-buena-fe.ver');
+    Route::get('/equipo/listado-buena-fe/{campeonatoId}/crear', ListadoBuenaFeCrear::class)->name('listado-buena-fe.crear');
+    Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver1', ListadoBuenaFeVer::class)->name('listado-buena-fe.ver1');
 
     //=================FIN EQUIPOS====================
 
@@ -133,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
     //==============ASIGNAR EQUIPOS========================
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/campeonato/{campeonatoId}/asignar-equipos', AsignarEquipos::class)->name('asignar-equipos');
+        Route::get('/campeonato/listado-buena-fe/copiar-listado', CopiarListadoBuenaFe::class)->name('copiar-listado-buena-fe');
     });
     //==============FIN ASIGNAR EQUIPOS========================
     //==============TABLA DE POSICIONES========================

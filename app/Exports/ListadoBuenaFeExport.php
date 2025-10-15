@@ -128,7 +128,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
 
                 // 2. Agregar títulos
                 $sheet->mergeCells('A1:I1');
-                $sheet->setCellValue('A1', $this->torneoNombre);
+                $sheet->setCellValue('A1', strtoupper($this->torneoNombre));
 
                 $sheet->mergeCells('B2:C2');
                 $sheet->setCellValue('B2', 'FECHA: ' .  $this->fecha);

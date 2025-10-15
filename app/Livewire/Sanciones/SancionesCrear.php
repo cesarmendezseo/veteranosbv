@@ -23,7 +23,10 @@ class SancionesCrear extends Component
     public $jugadores;
     public $campeonatos;
     public $jugadorBuscadoSancion;
+
     public $buscarJugador;
+
+    public $jugadorSeleccionado = null;
 
     public function mount($campeonatoId)
     {
@@ -53,10 +56,20 @@ class SancionesCrear extends Component
             $this->jugadores = [];
         }
     }
+    //======================================================================
+
+    public function agregarJugador($jugadorId)
+    {
+        $this->jugadorSeleccionado = $this->jugadores->firstWhere('id', $jugadorId);
+        $this->jugador_id = $jugadorId;
+        $this->nombreJugador = $this->jugadorSeleccionado->nombreCompleto . ' - ' . $this->jugadorSeleccionado->equipo->nombre;
+        $this->buscarJugador = ""; // oculta el listado
+    }
 
     //======================================================================
     public function guardar()
     {
+
         try {
             $this->validate([
                 'jugador_id' => 'required|exists:jugadors,id',

@@ -121,8 +121,6 @@ class AltasBajasIndex extends Component
     }
 
 
-
-
     public function bajaJugador($jugadorData)
     {
 
@@ -146,7 +144,7 @@ class AltasBajasIndex extends Component
         $equipoId = $equipoPorDefecto->id;
 
         // Cerrar la relación actual en historial
-        DB::table('jugador_equipos')
+        DB::table('campeonato_jugador_equipo')
             ->where('jugador_id', $jugadorId)
             ->whereNull('fecha_baja')
             ->update(['fecha_baja' => now()->toDateString()]);
@@ -154,9 +152,11 @@ class AltasBajasIndex extends Component
 
         // Insertar nuevo registro en historial con el equipo por defecto
         try {
-            DB::table('jugador_equipos')->insert([
+            DB::table('campeonato_jugador_equipo')->insert([
                 'jugador_id' => $jugadorId,
                 'equipo_id' => $equipoId,
+                'campeonato_id' => 1, // Ajusta esto según tu lógica
+                'categoria_id' => 1, // Ajusta esto según tu lógica
                 'fecha_alta' => now()->toDateString(),
                 'fecha_baja' => null,
             ]);
@@ -188,14 +188,16 @@ class AltasBajasIndex extends Component
 
         //  $jugadorId = $data['jugadorId'];
 
-        $this->historial = DB::table('jugador_equipos')
-            ->join('equipos', 'jugador_equipos.equipo_id', '=', 'equipos.id')
-            ->where('jugador_equipos.jugador_id', $jugadorId)
+        $this->historial = DB::table('campeonato_jugador_equipo')
+            ->join('equipos', 'campeonato_jugador_equipo.equipo_id', '=', 'equipos.id')
+            ->join('campeonatos', 'campeonato_jugador_equipo.campeonato_id', '=', 'campeonatos.id')
+            ->where('campeonato_jugador_equipo.jugador_id', $jugadorId)
             ->orderByRaw('fecha_baja IS NOT NULL, fecha_baja DESC')
             ->get([
                 'equipos.nombre as equipo',
-                'jugador_equipos.fecha_alta',
-                'jugador_equipos.fecha_baja',
+                'campeonatos.nombre as campeonato',
+                'campeonato_jugador_equipo.fecha_alta',
+                'campeonato_jugador_equipo.fecha_baja',
             ]);
     }
 

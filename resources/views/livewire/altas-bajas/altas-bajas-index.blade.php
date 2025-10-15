@@ -1,8 +1,11 @@
 <div class="p-4 bg-gray-100 rounded-lg mb-4 shadow-md">
-    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
+    <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
         {{ __('Altas y Bajas') }}
         </h2>
+        <div>
+            <a href="{{ route('copiar-listado-buena-fe') }}" class="cursor-pointer hover:underline">Clonar Listado</a>
+        </div>
     </div>
     <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
         class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -279,6 +282,7 @@
             <thead class=" bg-gray-700 dark:bg-gray-500 text-gray-100 dark:text-black shadow-md">
                 <tr class="">
                     <th class="p-2">Equipo</th>
+                    <th class="p-2">Campeonato</th>
                     <th class="p-2">Fecha de Baja</th>
                     <th class="p-2">Fecha de Alta</th>
                 </tr>
@@ -288,6 +292,8 @@
                 <tr
                     class="border-t  odd:bg-gray-200 odd:text-gray-800 font-semibold even:text-gray-800 even:bg-gray-300 dark:odd:bg-gray-900 dark:even:bg-gray-800">
                     <td class="p-2  semi-bold dark:text-white">{{ strtoupper($h->equipo) }}</td>
+                    <td class="p-2  semi-bold dark:text-white">{{ strtoupper($h->campeonato) }}</td>
+
                     <td class="p-2 dark:text-gray-100 text-center">
                         @if ($h->fecha_baja)
                         {{ \Carbon\Carbon::parse($h->fecha_baja)->format('d/m/Y') }}

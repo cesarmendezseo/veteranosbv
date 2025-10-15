@@ -37,9 +37,7 @@
                             <th scope="col" class="px-6 py-3">
                                 Nombre y Apellido
                             </th>
-                            <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                                Equipo
-                            </th>
+
                             <th scope="col" class="px-6 py-3 hidden sm:table-cell">
                                 Activo
                             </th>
@@ -85,12 +83,7 @@
                                 @endadminOrCan
                             </th>
 
-                            <th scope=" row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 
-                                <div class="text-base font-semibold">{{ strToupper($jugador->equipo->nombre) }}</div>
-
-                            </th>
                             <th class="text-center align-center px-6 py-4">
                                 <p class="flex items-center">
                                     @if ($jugador->is_active)
@@ -347,8 +340,8 @@
                     @adminOrCan()
                     <p class="text-gray-500 dark:text-gray-400">DNI: {{ $jugador->documento }}</p>
                     @endadminOrCan
-                    <p class="text-gray-600 dark:text-gray-300 font-semibold">
-                        {{ strtoupper($jugador->equipo->nombre) }}</p>
+                    {{-- <p class="text-gray-600 dark:text-gray-300 font-semibold">
+                        {{ strtoupper($jugador->equipo->nombre) }}</p> --}}
                 </div>
                 <div class="flex justify-center my-2">
                     @if ($jugador->is_active)
@@ -434,10 +427,10 @@
                             {{ ucwords(strtolower($jugadorSeleccionado->cod_pos)) }}
                         </p>
 
-                        <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
+                        {{-- <p class="pb-2 mb-2 border-b border-gray-200 dark:border-gray-700">
                             <strong class="font-semibold text-gray-400 dark:text-[#efb810]">Equipo:</strong>
                             {{ ucwords(strtolower($jugadorSeleccionado->equipo->nombre ?? 'Sin equipo')) }}
-                        </p>
+                        </p> --}}
                     </div>
                 </div>
                 @else

@@ -173,6 +173,7 @@
                     @error('cod_pos')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
+                    {{--
                     <!-- EQUIPO -->
                     <div class="relative z-0 w-full mb-5 group">
                         <select wire:model="equipo_seleccionado" id="countries"
@@ -183,11 +184,11 @@
                             @endforeach
                         </select>
 
-                        {{-- Mostrar error justo debajo --}}
+                        {{-- Mostrar error justo debajo --}
                         @error('equipo_seleccionado')
                         <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
                     <label class="inline-flex items-center cursor-pointer">
                         <input wire:model="activo" type="checkbox" value="" class="sr-only peer">
                         <div
