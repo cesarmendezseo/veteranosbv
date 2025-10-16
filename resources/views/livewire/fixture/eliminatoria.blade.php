@@ -14,8 +14,6 @@
                 </svg>
             </a>
 
-
-
             <div class="hidden md:flex gap-4">
                 <a href="{{ route('fixture.index') }}" class="px-3 py-2 text-white rounded flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
@@ -29,16 +27,17 @@
             </div>
         </div>
     </div>
-    <div class="p-6 space-y-6">
-        <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10">
+    <div class="mt-2 ">
+        <div class="bg-blue-900 text-white p-4 shadow-md  flex justify-between items-center relative z-10">
             <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 Fase actual: <span class="bg-gray-500 dark:text-white text-gray-100 p-2 rounded-2xl">{{
                     ucfirst($fase_actual) }}</span>
             </h2>
         </div>
 
+        {{-- ================= EQUIPO LIBRE ================= --}}
         @if ($esCantidadImpar)
-        <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
+        <div class="mb-2 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
             <div class="mt-4">
                 <label for="equipoLibre">Seleccionar equipo libre:</label>
                 <select wire:model.live="equipoLibreId" id="equipoLibre"
@@ -61,8 +60,6 @@
         {{-- ================= CREAR ENCUENTRO ================= --}}
         @if($fase_actual !== 'final')
         <div class="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow">
-
-
             <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
                 <div>
                     <label class="text-sm font-medium">Equipo Local</label>
@@ -127,11 +124,11 @@
         {{-- ================= ENCUENTROS ================= --}}
         <div class="mt-6">
 
-
-            @foreach ($encuentros as $encuentro)
             <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
                 <h3 class="text-lg font-semibold mb-2">Encuentros registrados</h3>
             </div>
+            @foreach ($encuentros as $encuentro)
+
             <div class="flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
                 <span class="flex-1 pl-2"> {{ ucwords($encuentro->fase) }}</span>
 
@@ -148,7 +145,7 @@
                     {{ \Carbon\Carbon::parse($encuentro->fecha . ' ' . $encuentro->hora)->format('d/m/Y H:i') }}hs
                 </span>
                 <span class=" flex-1 text-sm text-gray-900 dark:text-gray-100">
-                    {{ $encuentro->cancha->nombre ?? "Sin cancha asignada" }}
+                    {{ $encuentro->canchas->nombre ?? "Sin cancha asignada" }}
                 </span>
 
             </div>
