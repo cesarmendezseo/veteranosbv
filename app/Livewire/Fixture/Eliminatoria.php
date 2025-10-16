@@ -13,6 +13,7 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Illuminate\Validation\ValidationException;
 use Jantinnerezo\LivewireAlert\LivewireAlert as LivewireAlertLivewireAlert;
 use Livewire\Component;
+use Livewire\Volt\LivewireManager;
 
 class Eliminatoria extends Component
 {
@@ -29,7 +30,8 @@ class Eliminatoria extends Component
         '3er y 4to',
         'final'
     ];
-    public $equiposDisponibles = [];
+    //public $equiposDisponibles = [];
+    public $equiposDisponibles;
     public $encuentros = [];
     public $canchas = [];
 
@@ -45,6 +47,11 @@ class Eliminatoria extends Component
     public $goles_visitante = [];
     public $penal_local = [];
     public $penal_visitante = [];
+
+    public $cantidadEquipos;
+    public $esCantidadImpar;
+    public $equipoLibreId;
+
 
     public function mount($campeonatoId)
     {
@@ -89,12 +96,12 @@ class Eliminatoria extends Component
             return $this->fases[0];
         }
 
-        $pendientes = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+        $programado = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
             ->where('fase', $ultimaFase)
             ->where('estado', '!=', 'jugado')
             ->count();
 
-        if ($pendientes > 0) return $ultimaFase;
+        if ($programado > 0) return $ultimaFase;
 
         $index = array_search($ultimaFase, $this->fases);
         return $index !== false && isset($this->fases[$index + 1])
@@ -168,6 +175,9 @@ class Eliminatoria extends Component
                 $this->crearFinal($ganadores, $perdedores);
             }
         }
+
+        $this->cantidadEquipos = $this->equiposDisponibles->count();
+        $this->esCantidadImpar = $this->cantidadEquipos % 2 !== 0;
     }
 
     // =========================================================
@@ -227,7 +237,12 @@ class Eliminatoria extends Component
             ->exists();
 
         if ($yaJugados) {
-            $this->dispatch('error', ['message' => 'Uno de los equipos ya tiene un encuentro en esta fase.']);
+            LivewireAlert::title('Conflicto de Equipo')
+                ->text('Uno de los equipos ya tiene un encuentro en esta fase.')
+                ->error()
+                ->toast()
+                ->show();
+
             return;
         }
 
@@ -239,10 +254,69 @@ class Eliminatoria extends Component
             'fecha' => $this->nueva_fecha,
             'hora' => $this->nueva_hora,
             'cancha' => $this->nueva_cancha,
-            'estado' => 'pendiente',
+            'estado' => 'programado',
         ]);
 
+
+
+
+
         $this->reset(['nuevo_local', 'nuevo_visitante', 'nueva_fecha', 'nueva_hora', 'nueva_cancha']);
+        $this->cargarEncuentros();
+    }
+    //===========================================================
+    //          CARGAMOS EQUIPO LIBRE
+    //==========================================================
+
+    public function registrarEquipoLibre()
+    {
+
+        $equipoSinNombre = Equipo::where('nombre', 'sin equipo')->first();
+
+        if ($equipoSinNombre) {
+            $id = $equipoSinNombre->id;
+        }
+
+        // Validación quirúrgica
+        $yaTieneEncuentro = ModelsEliminatoria::where('campeonato_id', $this->campeonato_id)
+            ->where('fase', $this->fase_actual)
+            ->where(function ($q) {
+                $q->where('equipo_local_id', $this->equipoLibreId)
+                    ->orWhere('equipo_visitante_id', $this->equipoLibreId);
+            })
+            ->exists();
+
+        if ($yaTieneEncuentro) {
+            LivewireAlert::title('Conflicto de Equipo')
+                ->text('El equipo libre ya tiene un encuentro registrado en esta fase.')
+                ->error()
+                ->toast()
+                ->show();
+
+            return;
+        }
+
+        ModelsEliminatoria::create([
+            'campeonato_id' => $this->campeonato_id,
+            'fase' => $this->fase_actual,
+            'equipo_local_id' => $this->equipoLibreId,
+            'equipo_visitante_id' => $id,
+            'estado' => 'jugado',
+            'goles_local' => 2,
+            'goles_visitante' => 0,
+            'fecha' => now()->toDateString(),
+            'hora' => now()->format('H:i'),
+            'cancha' => 'Libre',
+        ]);
+
+        LivewireAlert::title('Éxito')
+            ->text('Equipo libre registrado correctamente.')
+            ->success()
+            ->asConfirm('Ok', '#3085d6')
+            ->toast()
+            ->timer(3000)
+            ->show();
+
         $this->cargarEncuentros();
     }
 
@@ -283,7 +357,7 @@ class Eliminatoria extends Component
                         'fecha' => $this->nueva_fecha ?: '2055-12-31',
                         'hora' => $horaPerdedores->format('H:i'),
                         'cancha' => 'sin definir',
-                        'estado' => 'pendiente',
+                        'estado' => 'programado',
                     ]);
                 }
             }
@@ -298,7 +372,7 @@ class Eliminatoria extends Component
                         'fecha' =>  $this->nueva_fecha ?: '2055-12-31',
                         'hora' => $horaGanadores->format('H:i'),
                         'cancha' => 'sin definir',
-                        'estado' => 'pendiente',
+                        'estado' => 'programado',
                     ]);
                 }
             }
