@@ -48,6 +48,7 @@ class EliminatoriaVer extends Component
     public $faseFiltro;
     public $fases;
     public $mostrarFiltros = false;
+    public $encuentroId;
 
 
     public function mount($campeonatoId)
@@ -201,6 +202,7 @@ class EliminatoriaVer extends Component
 
         $encuentro = Eliminatoria::findOrFail($encuentroId);
 
+        $this->encuentroId = $encuentroId;
         if ($encuentro->estado === 'Jugado') {
             // Mensaje de éxito
             LivewireAlert::title('Error')
@@ -211,17 +213,39 @@ class EliminatoriaVer extends Component
 
                 ->show();
         } else {
-            $encuentro->delete();
 
-            // Mensaje de éxito
-            LivewireAlert::title('Éxito')
-                ->text('Encuentro eliminado correctamente.')
-                ->success()
-                ->asConfirm('Ok', '#3085d6')
-                ->toast()
-                ->timer(3000)
+            LivewireAlert::title('Atención !!! ')
+                ->text('Esta seguro de borrar el encuentro?')
+                ->asConfirm()
+                ->onConfirm('deleteItem', ['id' => $this->encuentroId])
+                ->onDeny('keepItem', ['id' => $this->encuentroId])
                 ->show();
         };
+    }
+
+    public function deleteItem($data)
+    {
+
+        $itemId = $data['id'];
+        $encuentro = Eliminatoria::findOrFail($itemId);
+
+        $encuentro->delete();
+
+        // Mensaje de éxito
+        LivewireAlert::title('Éxito')
+            ->text('Encuentro eliminado correctamente.')
+            ->success()
+            ->asConfirm('Ok', '#3085d6')
+            ->toast()
+            ->timer(3000)
+            ->show();
+        // Cancel logic
+    }
+
+    public function keepItem($data)
+    {
+        $itemId = $data['id'];
+        // Keep logic
     }
 
     //=============exportar a exel ===============

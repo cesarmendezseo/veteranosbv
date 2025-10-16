@@ -129,12 +129,10 @@
             </div>
             @foreach ($encuentros as $encuentro)
 
-            <div class="flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
+            <div class=" hidden lg:flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
                 <span class="flex-1 pl-2"> {{ ucwords($encuentro->fase) }}</span>
 
                 <span class="flex-1 text-right pr-2">{{ $encuentro->equipoLocal->nombre }} </span>
-
-
 
                 <span class="font-bold rounded-4xl bg-white text-gray-900 p-2 dark:text-gray-900">vs </span>
 
@@ -149,7 +147,35 @@
                 </span>
 
             </div>
+
+            {{-- ================MOVIL================ --}}
+            <div
+                class="lg:hidden bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4 text-gray-900 dark:text-gray-100">
+                <div class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                    {{ ucwords($encuentro->fase) }}
+                </div>
+                <hr class="border-gray-300 dark:border-gray-600 mb-2">
+                <div class="flex flex-col space-y-1">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">{{ $encuentro->equipoLocal->nombre }}</span>
+                        <span
+                            class="text-xs font-bold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-2 py-1 rounded-full">vs</span>
+                        <span class="font-medium">{{ $encuentro->equipoVisitante->nombre }}</span>
+                    </div>
+                    <hr class="border-gray-300 dark:border-gray-600 mb-2">
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        {{ \Carbon\Carbon::parse($encuentro->fecha . ' ' . $encuentro->hora)->format('d/m/Y H:i') }} hs
+                    </div>
+
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        {{ $encuentro->canchas->nombre ?? "Sin cancha asignada" }}
+                    </div>
+                </div>
+            </div>
             @endforeach
+
+
+
         </div>
 
     </div>

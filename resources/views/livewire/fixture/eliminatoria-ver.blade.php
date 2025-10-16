@@ -315,7 +315,7 @@
                                 <span class="hidden xs:inline">Editar</span>
                             </button>
 
-                            <button wire:click="$dispatch('confirmar-baja', { id: {{ $encuentro->id }} })"
+                            <button wire:click="eliminarEncuentro({{ $encuentro->id }})"
                                 class="flex-1 flex items-center justify-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                                 title="Eliminar">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
