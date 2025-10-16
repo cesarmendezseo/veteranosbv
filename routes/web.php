@@ -11,6 +11,7 @@ use App\Livewire\Canchas\CanchasIndex;
 use App\Livewire\Categoria\CategoriaCrear;
 use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Config\AsignarEquipos;
+use App\Livewire\Config\ConfigIndex;
 use App\Livewire\Config\CopiarListadoBuenaFe;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
@@ -168,6 +169,12 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');
     });
+    //==============FIN ALTAS Y BAJAS========================
+    //==============CONFIGURACION========================
+    Route::middleware(['permission:comision|administrador'])->group(function () {
+        Route::get('/configuracion', ConfigIndex::class)->name('config.index');
+    });
+    //==============FIN CONFIGURACION========================
 });
 
 require __DIR__ . '/auth.php';

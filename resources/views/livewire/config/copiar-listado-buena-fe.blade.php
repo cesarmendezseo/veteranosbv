@@ -7,56 +7,7 @@
             <a href="{{ route('altas-bajas.index') }}" class="cursor-pointer hover:underline">Volver</a>
         </div>
     </div>
-    {{-- @adminOrCan('administrador')
-    <div class="flex items-center space-x-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Seleccionar campeonato</label>
-            <select wire:model="campeonato_id" class="border rounded p-2 dark:bg-gray-900">
-                <option value="">-- Seleccione --</option>
-                @foreach (\App\Models\Campeonato::all() as $camp)
-                <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
 
-        <button wire:click="copiar" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Copiar jugadores
-        </button>
-    </div>
-    @endadminOrCan
-
-    <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0 mt-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Seleccionar campeonato que quiere copiar
-            </label>
-            <select wire:model="campeonato_id" class="border rounded p-2 dark:bg-gray-900 w-full">
-                <option value="">-- Seleccione --</option>
-                @foreach (\App\Models\Campeonato::all() as $camp)
-                <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-                Seleccionar campeonato al que quiere copiar
-            </label>
-            <select wire:model="campeonato_id2" class="border rounded p-2 dark:bg-gray-900 w-full">
-                <option value="">-- Seleccione --</option>
-                @foreach (\App\Models\Campeonato::all() as $camp)
-                <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="mt-4 flex justify-center">
-        <button wire:click="duplicarListado"
-            class="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Clonar Listado
-        </button>
-    </div> --}}
 
 
     {{-- ////////////////////// --}}

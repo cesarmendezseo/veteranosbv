@@ -49,6 +49,11 @@
             <flux:navlist.item icon="shield" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')"
                 wire:navigate>{{ __('Equipos') }}</flux:navlist.item>
             @endrole
+            @role('administrador|comision')
+            <flux:navlist.item icon="cog" :href="route('config.index')" :current="request()->routeIs('config.index')"
+                wire:navigate>{{ __('Config') }}
+            </flux:navlist.item>
+            @endrole
             @role('administrador')
             <flux:navlist.item icon="user-plus" :href="route('rol.panel')" :current="request()->routeIs('rol.panel')"
                 wire:navigate>{{ __('Roles y Permisos') }}

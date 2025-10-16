@@ -23,6 +23,7 @@ class Eliminatoria extends Model
         'definido_por_penales',
         'penales_local',
         'penales_visitante',
+        'estado',
     ];
 
     /* -------------------------

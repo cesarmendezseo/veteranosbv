@@ -35,7 +35,7 @@ class EliminatoriaVer extends Component
     public $equipoVisitanteFiltro;
     public $goles_local = [];
     public $goles_visitante = [];
-    public $encuentroEditandoId = null;
+    public $encuentroEditandoId;
     public $editFecha, $editHora, $editEstado, $editCanchaId;
     public $showEditModal = false;
     public $canchas = [];
@@ -48,6 +48,7 @@ class EliminatoriaVer extends Component
     public $faseFiltro;
     public $fases;
     public $mostrarFiltros = false;
+
 
     public function mount($campeonatoId)
     {
@@ -149,7 +150,9 @@ class EliminatoriaVer extends Component
         $this->encuentroEditandoId = $id;
         $this->editFecha = $encuentro->fecha;
         $this->editHora = $encuentro->hora;
+
         $this->editEstado = $encuentro->estado;
+
         $this->editCanchaId = $encuentro->cancha;
         $this->canchas = Canchas::all();
 
@@ -158,7 +161,20 @@ class EliminatoriaVer extends Component
 
     public function guardarEdicion()
     {
-        $encuentro = Eliminatoria::findOrFail($this->encuentroEditandoId);
+
+        /*  $encuentro = Eliminatoria::findOrFail($this->encuentroEditandoId); */
+        $encuentro = Eliminatoria::find($this->encuentroEditandoId);
+
+        if (!$encuentro) {
+            LivewireAlert::title('Error')
+                ->text('No se encontro el encuentro a editar.')
+                ->error()
+                ->asConfirm('Ok', '#3085d6')
+                ->toast()
+                ->timer(3000)
+                ->show();
+            return;
+        }
 
         $encuentro->update([
             'fecha' => $this->editFecha,

@@ -197,7 +197,7 @@
                                             <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                                         </svg>
                                     </button>
-
+                                    {{-- EDITAR --}}
                                     @adminOrCan('comision')
                                     <button wire:click="editEncuentro({{ $encuentro->id }})"
                                         class="cursor-pointer text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
@@ -211,7 +211,7 @@
                                                 d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                                         </svg>
                                     </button>
-
+                                    {{-- ELIMINAR --}}
                                     <button wire:click="eliminarEncuentro({{ $encuentro->id }})"
                                         class="cursor-pointer text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                                         title="Eliminar">
@@ -360,13 +360,17 @@
 
                 <div class="mb-4">
                     <label class="block text-sm dark:text-gray-200">Estado:</label>
-                    <select wire:model.defer="editEstado"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="editEstado" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+               focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 
+               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+               dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="">Seleccione un estado</option>
                         <option value="programado">Programado</option>
                         <option value="pendiente">Pendiente</option>
                         <option value="jugado">Jugado</option>
                     </select>
                 </div>
+
                 <div class="mb-4">
                     <label class="block text-sm dark:text-gray-200">Cancha:</label>
                     <select wire:model.defer="editCanchaId"
