@@ -49,7 +49,7 @@ class Eliminatoria extends Model
     }
     public function canchas()
     {
-        return $this->belongsTo(Canchas::class, 'cancha');
+        return $this->belongsTo(Canchas::class,  'cancha', 'id');
     }
     public function eventos()
     {

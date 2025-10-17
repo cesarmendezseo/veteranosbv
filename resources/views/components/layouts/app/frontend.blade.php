@@ -75,8 +75,8 @@
             <a href="{{ route('tabla-posicion-index') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Tabla de
                 Posición</a>
-            <a href="#"
-                class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Equipos</a>
+            <a href="{{ route('frontend.eliminatoria.index') }}"
+                class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Eliminatoria</a>
             <a href="#"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Contacto</a>
 
@@ -127,7 +127,8 @@
             class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Inicio</a>
         <a href="{{ route('tabla-posicion-index') }}"
             class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Tabla de Posición</a>
-        <a href="#" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Equipos</a>
+        <a href="{{ route('frontend.eliminatoria.index') }}"
+            class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Eliminatoria</a>
         <a href="#" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Contacto</a>
 
         @if (Route::has('login'))
