@@ -25,7 +25,8 @@
       <div class="flex items-center justify-between">
         {{-- Equipo Local --}}
         <div class="flex items-center gap-2">
-          <img src="{{ $fencuentro->equipoLocal->logo }}" alt="Logo Local" class="w-8 h-8 object-contain">
+          <img src="{{ asset('storage/' . $fencuentro->equipoLocal->logo) }}" alt="Logo Local"
+            class="w-8 h-8 object-contain">
           <span class="font-semibold text-blue-900 dark:text-white">{{ $fencuentro->equipoLocal->nombre }}</span>
         </div>
         <span class="text-lg font-bold text-gray-800 dark:text-white">{{ $fencuentro->goles_local }}</span>
@@ -34,7 +35,8 @@
       <div class="flex items-center justify-between">
         {{-- Equipo Visitante --}}
         <div class="flex items-center gap-2">
-          <img src="{{ $fencuentro->equipoVisitante->logo }}" alt="Logo Visitante" class="w-8 h-8 object-contain">
+          <img src="{{ asset('storage/' . $fencuentro->equipoVisitante->logo) }}" alt="Logo Visitante"
+            class="w-8 h-8 object-contain">
           <span class="font-semibold text-blue-900 dark:text-white">{{ $fencuentro->equipoVisitante->nombre }}</span>
         </div>
         <span class="text-lg font-bold text-gray-800 dark:text-white">{{ $fencuentro->goles_visitante }}</span>
