@@ -28,6 +28,8 @@ use App\Livewire\Fixture\FixtureIndex;
 use App\Livewire\Fixture\FixtureVer;
 use App\Livewire\Frontend\Fixture\FixtureIndex as FixtureFixtureIndex;
 use App\Livewire\Frontend\Fixture\FixtureVer as FixtureFixtureVer;
+use App\Livewire\Frontend\Fixture\FrontEliminatoria;
+use App\Livewire\Frontend\Fixture\FrontEliminatoriaVer;
 use App\Livewire\Frontend\PaginaPrincipal;
 use App\Livewire\Frontend\TablaPosicion\TablaPosicionIndex as TablaPosicionTablaPosicionIndex;
 use App\Livewire\Frontend\TablaPosicion\TablaPosicionResultados;
@@ -53,6 +55,9 @@ Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->nam
 Route::get('/tabla-posicion/{campeonatoId}/ver', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
 Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');
 Route::get('/fixture/{campeonatoId}/ver-fixture', FixtureFixtureVer::class)->name('frontend.fixture.verFixture');
+Route::get('/eliminatoria/{campeonatoId}', FrontEliminatoriaVer::class)->name('frontend.eliminatoria.ver');
+Route::get('/eliminatoria', FrontEliminatoria::class)->name('frontend.eliminatoria.index');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
