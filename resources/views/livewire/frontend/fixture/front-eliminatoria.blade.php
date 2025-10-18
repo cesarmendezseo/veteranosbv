@@ -80,7 +80,7 @@
 
                                 <a href="{{ route('frontend.eliminatoria.ver', $campeonato->id) }}" wire:navigate
                                     type="button"
-                                    class="text-[#0638a3] hover:underline   font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55 me-2 mb-2">
+                                    class="text-[#0638a3] hover:underline   font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55 me-2 mb-2 dark:text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -88,7 +88,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                     </svg>
-                                    <span class="ml-2">Ver</span>
+                                    <span class="ml-2 ">Ver</span>
                                 </a>
 
                             </div>
@@ -110,9 +110,9 @@
 
                     {{-- Menú acciones móvil --}}
                     <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900" viewBox="0 0 24 24"
-                                fill="currentColor">
+                        <button @click="open = !open" class="text-gray-600 dark:text-white focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900 dark:text-white"
+                                viewBox="0 0 24 24" fill="currentColor">
                                 <circle cx="12" cy="6" r="1.5" />
                                 <circle cx="12" cy="12" r="1.5" />
                                 <circle cx="12" cy="18" r="1.5" />

@@ -19,6 +19,7 @@
 
     <!-- Partidos -->
     <section id="partidos" class="py-16 max-w-6xl mx-auto px-6">
+        <livewire:frontend.fixture.front-eliminatoria />
         <livewire:frontend.proximos-partidos.proximos-partidos-index />
     </section>
 

@@ -39,65 +39,65 @@
                     </thead>
                     <tbody>
                         @foreach ($campeonatos as $campeonato)
-                            <tr
-                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <tr
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
 
-                                <th scope=" row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="text-base font-semibold">{{ ucwords($campeonato->nombre) }}</div>
-                                </th>
-                                <th scope=" row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    <div class="font-normal ">
-                                        @if ($campeonato->formato === 'todos_contra_todos')
-                                            Todos contra Todos
-                                        @else
-                                            {{ ucfirst($campeonato->formato) }}
-                                    </div>
-                        @endif
-                        </th>
-                        <th scope=" row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if ($campeonato->formato === 'todos_contra_todos')
+                            <th scope=" row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="text-base font-semibold">{{ ucwords($campeonato->nombre) }}</div>
+                            </th>
+                            <th scope=" row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="font-normal ">
+                                    @if ($campeonato->formato === 'todos_contra_todos')
+                                    Todos contra Todos
+                                    @else
+                                    {{ ucfirst($campeonato->formato) }}
+                                </div>
+                                @endif
+                            </th>
+                            <th scope=" row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                @if ($campeonato->formato === 'todos_contra_todos')
                                 @foreach ($campeonato->grupos as $grupo)
-                                    <div class="font-normal "> {{ $grupo->cantidad_equipos }} </div>
+                                <div class="font-normal "> {{ $grupo->cantidad_equipos }} </div>
                                 @endforeach
-                            @else
+                                @else
                                 <div class="font-normal "> {{ $campeonato->cantidad_equipos_grupo }} x Grupo</div>
-                            @endif
+                                @endif
 
-                        </th>
+                            </th>
 
-                        <th scope=" row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}
-                            </div>
-                        </th>
-
-
-                        <!-- BOTONES  -->
-                        <td class="px-6 py-4 text-right">
-                            <!-- Para pantallas medianas en adelante -->
-                            <div class="hidden md:flex gap-2 justify-end">
-                                {{-- Editar --}}
+                            <th scope=" row"
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="font-normal text-gray-500"> {{ ucfirst($campeonato->categoria->nombre) }}
+                                </div>
+                            </th>
 
 
-                                <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}" wire:navigate
-                                    type="button"
-                                    class="text-[#0638a3] hover:underline   font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55 me-2 mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
-                                    <span class="ml-2">Ver</span>
-                                </a>
+                            <!-- BOTONES  -->
+                            <td class="px-6 py-4 text-right">
+                                <!-- Para pantallas medianas en adelante -->
+                                <div class="hidden md:flex gap-2 justify-end">
+                                    {{-- Editar --}}
 
-                            </div>
 
-                        </td>
+                                    <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}" wire:navigate
+                                        type="button"
+                                        class="text-[#0638a3] hover:underline   font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55 me-2 mb-2 dark:text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+                                        <span class="ml-2">Ver</span>
+                                    </a>
+
+                                </div>
+
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -109,49 +109,48 @@
 
                 </div>
                 @foreach ($campeonatos as $campeonato)
-                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border dark:border-gray-700">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span
-                                    class="text-gray-600 dark:text-accent">Torneo:</span>
-                                {{ ucwords($campeonato->nombre) }}</h3>
-                            <div x-data="{ open: false }" class="relative">
-                                <button @click="open = !open"
-                                    class="text-gray-600 dark:text-gray-300 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900"
-                                        viewBox="0 0 24 24" fill="currentColor">
-                                        <circle cx="12" cy="6" r="1.5" />
-                                        <circle cx="12" cy="12" r="1.5" />
-                                        <circle cx="12" cy="18" r="1.5" />
+                <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 border dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span
+                                class="text-gray-600 dark:text-accent">Torneo:</span>
+                            {{ ucwords($campeonato->nombre) }}</h3>
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" class="text-gray-600 dark:text-gray-300 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-gray-900 dark:text-white"
+                                    viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="6" r="1.5" />
+                                    <circle cx="12" cy="12" r="1.5" />
+                                    <circle cx="12" cy="18" r="1.5" />
+                                </svg>
+                            </button>
+                            <div x-show="open" x-collapse @click.away="open = false"
+                                class="absolute right-0 mt-2 bg-[#0A2A5E] dark:bg-gray-700 shadow rounded-l-lg z-50 flex flex-col">
+                                <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}" wire:navigate
+                                    class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-eye">
+                                        <path
+                                            d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                        <circle cx="12" cy="12" r="3" />
                                     </svg>
-                                </button>
-                                <div x-show="open" x-collapse @click.away="open = false"
-                                    class="absolute right-0 mt-2 bg-[#0A2A5E] dark:bg-gray-700 shadow rounded-l-lg z-50 flex flex-col">
-                                    <a href="{{ route('tabla-posicion-resultados', $campeonato->id) }}" wire:navigate
-                                        class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
-                                            <path
-                                                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                                            <circle cx="12" cy="12" r="3" />
-                                        </svg>
-                                        Ver
-                                    </a>
-                                </div>
+                                    Ver
+                                </a>
                             </div>
                         </div>
-                        <div class="text-gray-700 dark:text-gray-300">
-                            <p><span class="font-semibold">Formato:</span>
-                                @if ($campeonato->formato === 'todos_contra_todos')
-                                    Todos contra Todos
-                                @else
-                                    {{ ucfirst($campeonato->formato) }}
-                                @endif
-                            </p>
-                            <p><span class="font-semibold">Categoría:</span>
-                                {{ ucfirst($campeonato->categoria->nombre) }}</p>
-                        </div>
                     </div>
+                    <div class="text-gray-700 dark:text-gray-300">
+                        <p><span class="font-semibold">Formato:</span>
+                            @if ($campeonato->formato === 'todos_contra_todos')
+                            Todos contra Todos
+                            @else
+                            {{ ucfirst($campeonato->formato) }}
+                            @endif
+                        </p>
+                        <p><span class="font-semibold">Categoría:</span>
+                            {{ ucfirst($campeonato->categoria->nombre) }}</p>
+                    </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -159,8 +158,8 @@
 
 
         @push('js')
-            <script>
-                document.addEventListener('livewire:initialized', () => {
+        <script>
+            document.addEventListener('livewire:initialized', () => {
 
 
 
@@ -194,7 +193,7 @@
                         );
                     });
                 });
-            </script>
+        </script>
         @endpush
 
     </div>

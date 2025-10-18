@@ -108,7 +108,7 @@
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-2">
             <img src="{{ asset('images/logo.jpeg') }}" alt="Logo del Club" class="h-10 w-10 rounded-full">
-            <span class="text-xl font-bold text-gray-800 dark:text-white">AbvFutsal</span>
+            <span class="text-xl font-bold text-gray-800 dark:text-white">A.C.F.V.B.V</span>
         </a>
 
         <!-- Botón de menú -->
