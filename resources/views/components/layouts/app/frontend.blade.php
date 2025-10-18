@@ -151,7 +151,7 @@
     </nav>
 
     <!-- Contenido dinámico -->
-    <main class="flex-grow pt-4 px-6 w-full mx-auto ">
+    <main class="flex-grow pt-[80px] px-6 w-full mx-auto">
         {{ $slot }}
     </main>
     <footer class="bg-gray-800 text-white py-4">
