@@ -1,9 +1,12 @@
 <div class="w-full overflow-x-hidden">
     <div class="bg-opacity-0 rounded-2xl shadow-md p-4 sm:p-6 mt-2 w-full max-w-7xl mx-auto">
+        @if($proximos)
         <div class="bg-gray-500 rounded-2xl shadow-2xl p-2 mb-6">
-            <span class="text-xl font-semibold text-gray-100">PRÓXIMOS ENCUENTROS</span>
-        </div>
 
+            <span class="text-xl font-semibold text-gray-100">PRÓXIMOS ENCUENTROS</span>
+
+        </div>
+        @endif
         <div class="space-y-10">
             {{-- Próximos partidos --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -37,9 +40,10 @@
                     </div>
                 </div>
                 @empty
-                <p class="text-gray-500 text-sm col-span-full text-center">
-                    No hay próximos partidos programados.
-                </p>
+                <span class="font-leyenda tbg-gray-500 rounded-2xl shadow-2xl p-2 mb-6">
+                    “Donde las viejas glorias siguen escribiendo nuevas historias.
+                    Fútbol de veteranos — pasión sin fecha de vencimiento.”
+                </span>
                 @endforelse
             </div>
 
@@ -75,8 +79,8 @@
                     </div>
                 </div>
                 @empty
-                <p class="text-gray-500 text-sm col-span-full text-center">
-                    No hay próximos partidos programados.
+                <p class="bg-gray-500 rounded-2xl shadow-2xl p-2 mb-6">
+
                 </p>
                 @endforelse
             </div>

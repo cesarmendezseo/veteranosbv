@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Knewave&display=swap');
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
@@ -21,6 +22,7 @@
     --font-front: 'Fugaz One', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-titulo: 'Titillium Web', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-select: 'Racing Sans One', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-leyenda: 'Knewave', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
