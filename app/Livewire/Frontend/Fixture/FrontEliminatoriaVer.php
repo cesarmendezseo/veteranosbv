@@ -30,29 +30,46 @@ class FrontEliminatoriaVer extends Component
             ->unique()
             ->values();
 
-        // Verificar si la fase "3er y 4to" está programada
-        $faseTercerCuarto = Eliminatoria::where('campeonato_id', $campeonatoId)
-            ->where('fase', '3er y 4to')
+        // Buscar la primera fase programada
+        $faseProgramada = Eliminatoria::where('campeonato_id', $campeonatoId)
             ->where('estado', 'Programado')
-            ->exists();
+            ->orderBy('fase')
+            ->value('fase');
 
-        // Cargar encuentros según condición
-        if ($faseTercerCuarto) {
-            $this->faseElegida = '3er y 4to';
+        // Si no hay programada, buscar la última jugada
+        $this->faseElegida = $faseProgramada ?? Eliminatoria::where('campeonato_id', $campeonatoId)
+            ->where('estado', 'Jugado')
+            ->orderByDesc('fecha')
+            ->value('fase');
 
-            $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
-                ->whereIn('fase', ['3er y 4to', 'Final'])
-                ->with(['equipoLocal', 'equipoVisitante'])
-                ->get();
-        } else {
-            $this->faseElegida = 'Final';
+        // Si la fase elegida es "Final", verificar si también está programado "3er y 4to"
+        if ($this->faseElegida === '3er y 4to') {
+            $tercerCuartoProgramado = Eliminatoria::where('campeonato_id', $campeonatoId)
+                ->where('fase', '3er y 4to')
+                ->where('estado', 'Programado')
+                ->exists();
 
-            $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
-                ->where('fase', 'Final')
-                ->with(['equipoLocal', 'equipoVisitante'])
-                ->get();
+            if ($tercerCuartoProgramado) {
+                $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
+                    ->where('estado', 'Programado')
+                    ->whereIn('fase', ['Final', '3er y 4to'])
+                    ->with(['equipoLocal', 'equipoVisitante'])
+                    ->get();
+                return;
+            } else {
+            }
         }
+
+        // Cargar encuentros de la fase elegida
+        $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
+            ->where('fase', $this->faseElegida)
+            ->with(['equipoLocal', 'equipoVisitante'])
+            ->get();
     }
+
+
+
+
 
     public function updatedFaseElegida($fase)
     {

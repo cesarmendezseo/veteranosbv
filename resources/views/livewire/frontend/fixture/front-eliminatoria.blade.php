@@ -119,7 +119,7 @@
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false" x-collapse
-                            class="absolute bg-[#0A2A5E] right-0 mt-2 z-50 flex flex-col gap-2 dark:bg-gray-800 dark:border dark:border-gray-700 p-2 rounded-l-lg">
+                            class="absolute bg-[#0A2A5E] right-0 mt-2 z-50 flex flex-col gap-2 dark:bg-gray-800 dark:border dark:border-gray-700 dark:text-white p-2 rounded-l-lg">
 
                             <a href="{{ route('frontend.eliminatoria.ver', $campeonato->id) }}"
                                 class="px-3 py-2 text-gray-100 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-4 text-sm">
