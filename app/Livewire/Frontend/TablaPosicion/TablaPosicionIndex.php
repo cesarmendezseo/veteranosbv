@@ -24,10 +24,11 @@ class TablaPosicionIndex extends Component
     public function render()
     {
         $campeonatos = Campeonato::query()
+            ->whereIn('formato', ['todos_contra_todos', 'grupos']) // filtro fijo
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%')
-                        ->orWhereYear('created_at', $this->search); // búsqueda por año
+                        ->orWhereYear('created_at', $this->search);
                 });
             })
             ->orderBy('nombre')

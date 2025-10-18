@@ -20,11 +20,26 @@ class LogoEquipoController extends Controller
     // Guardar logo
     public function guardarLogo(Request $request, $equipoId)
     {
+
         $equipo = Equipo::findOrFail($equipoId);
 
         $request->validate([
             'logo' => 'required|image|max:2048',
+        ], [
+            'logo.required' => 'Debés seleccionar una imagen.',
+            'logo.image' => 'El archivo debe ser una imagen válida (JPG, PNG, etc).',
+            'logo.max' => 'La imagen no puede superar los 2MB.',
         ]);
+
+        try {
+            $request->validate([
+                'logo' => 'required|image|max:2048',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors(['logo' => 'Hubo un problema con la imagen.'])->withInput();
+        }
+
+
 
         if ($request->hasFile('logo')) {
             $ruta = $request->file('logo')->store('logos', 'public');
@@ -33,12 +48,14 @@ class LogoEquipoController extends Controller
                 Storage::disk('public')->delete($equipo->logo);
             }
 
+
             $equipo->logo = $ruta;
             $equipo->save();
 
             return redirect()->route('equipo.index')
                 ->with('success', 'Logo actualizado correctamente.');
         }
+
 
         return back()->withErrors(['logo' => 'No se pudo subir el archivo.']);
     }

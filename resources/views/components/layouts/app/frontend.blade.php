@@ -63,13 +63,13 @@
     <nav
         class="fixed top-0 left-0 w-full z-50  hidden md:flex items-center justify-between px-6 py-4 bg-white dark:bg-zinc-900 shadow">
         <!-- Logo -->
-        <a href="#" class="flex items-center space-x-2">
+        <a href="#" class="flex items-center  space-x-2 font-titulo text-lg">
             <img src="{{ asset('images/logo.jpeg') }}" alt="Logo del Club" class="h-10 w-10 rounded-full">
-            <span class="text-xl font-bold text-gray-800 dark:text-white">ACFVBV</span>
+            <span class="text-xl font-bold text-gray-800 dark:text-white">A.C.F.V.B.V</span>
         </a>
 
         <!-- Enlaces de navegación -->
-        <div class="space-x-8 hidden md:flex items-center">
+        <div class="space-x-8 hidden md:flex items-center font-titulo text-lg">
             <a href="{{ route('pagina-principal-index') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Inicio</a>
             <a href="{{ route('tabla-posicion-index') }}"

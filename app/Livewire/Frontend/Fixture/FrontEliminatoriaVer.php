@@ -22,11 +22,36 @@ class FrontEliminatoriaVer extends Component
     {
         $this->campeonatoId = $campeonatoId;
         $this->campeonato = Campeonato::findOrFail($campeonatoId);
-        // Cargar encuentros por fases
+
+        // Cargar todas las fases disponibles
         $this->fases = Eliminatoria::where('campeonato_id', $campeonatoId)
-            ->select('fase')
-            ->distinct()
-            ->pluck('fase');
+            ->orderBy('estado')
+            ->pluck('fase')
+            ->unique()
+            ->values();
+
+        // Verificar si la fase "3er y 4to" está programada
+        $faseTercerCuarto = Eliminatoria::where('campeonato_id', $campeonatoId)
+            ->where('fase', '3er y 4to')
+            ->where('estado', 'Programado')
+            ->exists();
+
+        // Cargar encuentros según condición
+        if ($faseTercerCuarto) {
+            $this->faseElegida = '3er y 4to';
+
+            $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
+                ->whereIn('fase', ['3er y 4to', 'Final'])
+                ->with(['equipoLocal', 'equipoVisitante'])
+                ->get();
+        } else {
+            $this->faseElegida = 'Final';
+
+            $this->encuentros = Eliminatoria::where('campeonato_id', $campeonatoId)
+                ->where('fase', 'Final')
+                ->with(['equipoLocal', 'equipoVisitante'])
+                ->get();
+        }
     }
 
     public function updatedFaseElegida($fase)

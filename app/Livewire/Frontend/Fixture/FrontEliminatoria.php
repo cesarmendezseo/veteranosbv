@@ -13,7 +13,8 @@ class FrontEliminatoria extends Component
 
     public function mount()
     {
-        $this->campeonatos = Campeonato::with('grupos', 'categoria')->get();
+        //$this->campeonatos = Campeonato::with('grupos', 'categoria')->get();
+        $this->campeonatos = Campeonato::whereIn('formato', ['eliminacion_simple', 'eliminacion_doble'])->get();
     }
 
     public function render()
