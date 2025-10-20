@@ -4,6 +4,7 @@ namespace App\Livewire\Jugadore;
 
 
 use Illuminate\Validation\ValidationException;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -81,6 +82,11 @@ class JugadoresEditar extends Component
         } catch (ValidationException $e) {
             $errores = collect($e->validator->errors()->all())->implode("\n");
             $this->dispatch('alertaError', message: $errores);
+            LivewireAlert::title('Error!!!')
+                ->text('Verifique esta teniendo un error en lo siguiente: $errores')
+                ->asConfirm()
+                ->error()
+                ->show();
             throw $e; // opcional: si querés que también se muestren los errores normales
         }
 
@@ -104,6 +110,10 @@ class JugadoresEditar extends Component
         ]);
 
         $this->dispatch('actualizado');
+        LivewireAlert::title('Actualizado!!!')
+            ->text('El jugador a sido actualizado correctamente')
+            ->success()
+            ->show();
     }
 
     #[On('index')]

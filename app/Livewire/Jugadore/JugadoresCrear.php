@@ -26,7 +26,7 @@ class JugadoresCrear extends Component
     public $tipo_documento = 'DNI'; // Default value, can be changed as needed
     public $equipo; // Default value, can be changed as needed
     public $equipos = [];
-    public $equipo_seleccionado;
+    public $equipo_seleccionado = 1;
 
     public function mount()
     {
@@ -50,7 +50,7 @@ class JugadoresCrear extends Component
                 'provincia' => 'nullable|string|max:255',
                 'nacimiento' => 'nullable|date',
                 'cod_pos' => 'nullable|string|max:10',
-                'equipo_seleccionado' => 'required|exists:equipos,id',
+
 
             ], [
                 'documento.unique' => 'El número de documento ya está registrado.',
@@ -62,11 +62,16 @@ class JugadoresCrear extends Component
                 'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
                 'email.email' => 'El correo electrónico no es válido.',
                 'equipo_seleccionado.required' => 'Debe seleccionar un equipo.',
-                'equipo_seleccionado.exists' => 'El equipo seleccionado no es válido.',
+
             ]);
         } catch (ValidationException $e) {
             $errores = collect($e->validator->errors()->all())->implode("\n");
             $this->dispatch('alertaError', message: $errores);
+            LivewireAlert::title('Error!!!')
+                ->text('Verifique esta teniendo un error en lo siguiente: $errores')
+                ->asConfirm()
+                ->error()
+                ->show();
             throw $e; // opcional: si querés que también se muestren los errores normales
         }
 
@@ -86,7 +91,7 @@ class JugadoresCrear extends Component
                 'fecha_nac'      => $this->nacimiento,
                 'cod_pos'        => $this->cod_pos,
                 'is_active'      => $this->activo,
-                'equipo_id'      => null, // No asignamos equipo aquí
+                'equipo_id'      => $this->equipo_seleccionado, // No asignamos equipo aquí
             ]);
 
             // Ahora podés acceder al id directamente
@@ -101,12 +106,20 @@ class JugadoresCrear extends Component
                 'fecha_baja' => null,
             ]);
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            LivewireAlert::title('Error!!!')
+                ->text('Verifique esta teniendo un error en lo siguiente: $e')
+                ->asConfirm()
+                ->error()
+                ->show();
         }
 
-        $this->reset(); // Limpia todo
-        $this->dispatch('creado');
+
+        LivewireAlert::title('Buenisimo!!')
+            ->text('El jugador se creo correctamente.')
+            ->success()
+            ->show();
         // Dispatch an event to notify other components
+        $this->reset(); // Limpia todo
 
     }
 
