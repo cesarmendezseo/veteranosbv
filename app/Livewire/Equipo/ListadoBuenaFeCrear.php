@@ -54,6 +54,11 @@ class ListadoBuenaFeCrear extends Component
                 'documento' => $jugador->documento,
             ];
         }
+        // limpiar input Livewire si existe
+        $this->buscar = '';
+
+        // enviar evento al frontend (Livewire 3)
+        $this->dispatch('focus-input');
     }
 
     public function quitarJugador($index)
@@ -66,11 +71,37 @@ class ListadoBuenaFeCrear extends Component
     {
         $this->validate([
             'equipoSeleccionado' => 'required|exists:equipos,id',
-
             'jugadoresSeleccionados' => 'required|array|min:1',
         ]);
 
+        // Verificación previa
+        $jugadoresIds = collect($this->jugadoresSeleccionados)->pluck('id');
 
+        $jugadoresYaAsignados = DB::table('campeonato_jugador_equipo')
+            ->where('campeonato_id', $this->campeonatoId)
+            ->whereIn('jugador_id', $jugadoresIds)
+            ->where('equipo_id', '!=', $this->equipoSeleccionado)
+            ->pluck('jugador_id') //lista de Ids en confilctos
+            ->toArray();
+
+        if (!empty($jugadoresYaAsignados)) {
+            $nombres = Jugador::whereIn('id', $jugadoresYaAsignados)
+                ->get(['nombre', 'apellido'])
+                ->map(fn($j) => "{$j->apellido} {$j->nombre}")
+                ->implode(', ');
+
+            LivewireAlert::title('Error')
+                ->text("Los siguientes jugadores ya están asignados a otro equipo en este campeonato:  $nombres")
+                ->error()
+                ->asConfirm()
+                ->toast()
+                ->position('top')
+                ->show();
+
+            return;
+        }
+
+        // Si todo está OK, guardamos
         DB::transaction(function () {
             foreach ($this->jugadoresSeleccionados as $jugador) {
                 DB::table('campeonato_jugador_equipo')->updateOrInsert(
@@ -87,8 +118,7 @@ class ListadoBuenaFeCrear extends Component
                     ]
                 );
 
-                // Actualizo el equipo actual del jugador
-                Jugador::where('id', $jugador['id'])
+                Jugador::where('id', $jugador['id']) // nombres para mostrar en alerta
                     ->update(['equipo_id' => $this->equipoSeleccionado]);
             }
         });
@@ -102,6 +132,7 @@ class ListadoBuenaFeCrear extends Component
             ->position('top')
             ->show();
     }
+
 
     public function render()
     {
