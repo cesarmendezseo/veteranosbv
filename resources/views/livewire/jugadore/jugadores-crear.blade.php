@@ -170,25 +170,8 @@
                             Pos.
                         </label>
                     </div>
-                    @error('cod_pos')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                    {{--
-                    <!-- EQUIPO -->
-                    <div class="relative z-0 w-full mb-5 group">
-                        <select wire:model="equipo_seleccionado" id="countries"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="">Seleccionar equipo</option>
-                            @foreach ($equipos as $equipo)
-                            <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
-                            @endforeach
-                        </select>
 
-                        {{-- Mostrar error justo debajo --}
-                        @error('equipo_seleccionado')
-                        <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
-                        @enderror
-                    </div> --}}
+
                     <label class="inline-flex items-center cursor-pointer">
                         <input wire:model="activo" type="checkbox" value="" class="sr-only peer">
                         <div

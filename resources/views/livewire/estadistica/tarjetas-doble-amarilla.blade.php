@@ -2,8 +2,8 @@
 
 
     <div class="flex items-center space-x-2">
-        <input type="text" {{-- wire:model.defer="buscar" placeholder="Buscar..." --}} wire:model.defer="buscarAmarillas"
-            wire:keydown.enter="buscarJugadorAmarilla"
+        <input type="text" {{-- wire:model.defer="buscar" placeholder="Buscar..." --}}
+            wire:model.defer="buscarAmarillas" wire:keydown.enter="buscarJugadorAmarilla"
             class="flex-grow bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             style="max-width: 300px;"> <button wire:click="buscarJugadorAmarilla"
             class="px-4 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -17,7 +17,7 @@
         </button>
     </div>
 
-    @if ($jugadorBuscadoDobleAmarilla && $jugadorBuscadoDobleAmarilla->isNotEmpty())
+    @if ($jugadorBuscadoAmarilla && $jugadorBuscadoAmarilla->isNotEmpty())
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-2">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -47,8 +47,7 @@
                         {{ $estadistica->jugador->documento }}
                     </td>
 
-                    <td scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ $estadistica->jugador->apellido }} {{ $estadistica->jugador->nombre }}
                     </td>
                     <td class="px-6 py-4">
@@ -100,9 +99,9 @@
                         {{ $estadistica->jugador->documento }}
                     </td>
 
-                    <td scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ strtoupper($estadistica->jugador->apellido) }} {{ strtoupper($estadistica->jugador->nombre) }}
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ strtoupper($estadistica->jugador->apellido) }} {{ strtoupper($estadistica->jugador->nombre)
+                        }}
                     </td>
                     <td class="px-6 py-4">
                         {{ ucwords($estadistica->jugador->equipo->nombre) }}

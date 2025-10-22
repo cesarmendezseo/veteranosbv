@@ -3,7 +3,14 @@
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
         {{ __('Agragar jugador a Listado de Buena Fe') }}
         </h2>
-
+        <a href="{{ route('listado-buena-fe') }}"
+            class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Volver</a>
     </div>
     <div class="grid grid-cols-3 gap-4 mb-4 bg-gray-500 m-2 text-white p-2 rounded ">
 
@@ -33,7 +40,8 @@
             class="mb-4 bg-gray-800 border border-gray-300 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             @foreach($jugadores as $jug)
             <div class="flex justify-between items-center border-b py-1">
-                <span>{{ $jug->apellido }}, {{ $jug->nombre }} - DNI ( {{ $jug->documento }} )</span>
+                <span>{{ strtoupper($jug->apellido) }}, {{ strtoupper($jug->nombre) }} - DNI ( {{ $jug->documento }}
+                    )</span>
                 <button wire:click="agregarJugador({{ $jug->id }})"
                     class="bg-green-700 text-white hover:bg-green-500 rounded-full font-semibold hover:text-black px-2 py-2  cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -62,8 +70,8 @@
                 @foreach($jugadoresSeleccionados as $i => $jug)
                 <tr class="bg-gray-500 border border-gray-300 text-gray-100">
                     <td class="border px-2">{{ $i + 1 }}</td>
-                    <td class="border px-2">{{ $jug['apellido'] }}, {{ $jug['nombre'] }}</td>
-                    <td class="border px-2">{{ $jug['documento'] }}</td>
+                    <td class="border px-2">{{ strtoupper($jug['apellido']) }}, {{ $jug['nombre'] }}</td>
+                    <td class="border px-2">{{ strtoupper($jug['documento']) }}</td>
                     <td class="border px-2 text-center">
                         <button wire:click="quitarJugador({{ $i }})"
                             class="bg-red-500 text-white px-2 m-1 py-2 hover:bg-red-400 rounded-full cursor-pointer"><svg

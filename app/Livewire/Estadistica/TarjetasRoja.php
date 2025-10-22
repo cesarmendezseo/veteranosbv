@@ -7,51 +7,69 @@ use Livewire\Component;
 
 class TarjetasRoja extends Component
 {
-    public $rojas;
-    public $jugadorBuscado;
-    public $dni;
+    public $campeonatoId;
+    public $rojas = [];
     public $buscarRoja;
-    public $dniJugador;
-    public $jugadorBuscadoAmarilla;
+    public $jugadorBuscado = [];
     public $search;
 
-    public function mount()
+    public function mount($campeonatoId = null)
     {
-        $this->rojas = EstadisticaJugadorEncuentro::with('jugador', 'encuentro')
+        $this->campeonatoId = $campeonatoId;
+        $this->cargarRojas();
+    }
+
+    public function updatedCampeonatoId()
+    {
+        $this->cargarRojas();
+    }
+
+    /**
+     * Carga todas las tarjetas rojas del campeonato seleccionado
+     */
+    public function cargarRojas()
+    {
+        $this->rojas = EstadisticaJugadorEncuentro::with('jugador')
             ->where('tarjeta_roja', '>=', 1)
+            ->when($this->campeonatoId, fn($q) => $q->where('campeonato_id', $this->campeonatoId))
             ->orderByDesc('jugador_id')
             ->get();
     }
 
+    /**
+     * Reinicia la paginación (si la usás)
+     */
     public function buscar()
     {
-        if (trim($this->search) === '') {
-            // Si la búsqueda está vacía, simplemente se reinicia la paginación
-            $this->resetPage();
-        } else {
-            // Si hay texto, también reinicia la página para mostrar resultados desde la primera página
-            $this->resetPage();
-        }
+        $this->resetPage();
     }
 
     public function updatingSearch()
     {
-        $this->resetPage(); // Resetea a la primera página cuando se cambia el filtro
+        $this->resetPage();
     }
 
-    public function buscarJugadorAmarilla()
+    /**
+     * Búsqueda por documento, apellido o nombre
+     */
+    public function buscarJugadorRoja()
     {
-        if (!empty($this->buscarAmarillas)) {
-            $this->jugadorBuscadoAmarilla = EstadisticaJugadorEncuentro::with('jugador')
+        if (!empty($this->buscarRoja)) {
+            $this->jugadorBuscado = EstadisticaJugadorEncuentro::with('jugador')
                 ->whereHas('jugador', function ($query) {
-                    $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
-                        ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
-                        ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
+                    $query->where('documento', 'like', '%' . $this->buscarRoja . '%')
+                        ->orWhere('apellido', 'like', '%' . $this->buscarRoja . '%')
+                        ->orWhere('nombre', 'like', '%' . $this->buscarRoja . '%');
                 })
                 ->where('tarjeta_roja', '>=', 1)
+                ->when($this->campeonatoId, function ($query) {
+                    $query->whereHas('encuentro', function ($q) {
+                        $q->where('campeonato_id', $this->campeonatoId);
+                    });
+                })
                 ->get();
         } else {
-            $this->jugadorBuscadoAmarilla = [];
+            $this->jugadorBuscado = [];
         }
     }
 

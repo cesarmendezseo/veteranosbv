@@ -25,4 +25,23 @@ class EstadisticaJugadorEncuentro extends Model
     {
         return $this->belongsTo(Equipo::class);
     }
+    public function eliminatoria()
+    {
+        return $this->belongsTo(Eliminatoria::class, 'eliminatoria_id');
+    }
+
+
+    // Accessor para obtener el "evento" correspondiente
+    public function getEventoAttribute()
+    {
+        if ($this->encuentro) {
+            return $this->encuentro->fecha_encuentro;
+        }
+
+        if ($this->eliminatoria) {
+            return $this->eliminatoria->fase;
+        }
+
+        return '-';
+    }
 }

@@ -6,7 +6,7 @@
 
 
         @adminOrCan()
-        <a href="{{route('estadistica.ver')}}"
+        {{-- <a href="{{route('estadistica.ver')}}"
             class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center  hover:underline focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 shadow">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -17,12 +17,22 @@
                 <line x1="8" x2="16" y1="12" y2="12" />
             </svg>
             Crear
-        </a>
+        </a> --}}
         @endadminOrCan
     </div>
 
     <div class="flex item-center justify-between mt-2">
 
+        <div class="relative z-0 w-full mb-5 group">
+
+            <select wire:model.live="campeonatoId" id="countries"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="">Seleccione Campeonato</option>
+                @foreach ($campeonatos as $campeonato)
+                <option value="{{ $campeonato->id }}">{{ $campeonato->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
 
         <div class="inline-flex rounded-md shadow-xs bg-gray-900 p-0.5" role="group">
             <button type="button" wire:click="$set('vistaActual', 'goleadores')"
@@ -94,17 +104,35 @@
 
     </div>
     <flux:separator />
+    @if ($campeonatoId)
     <div class="mt-4">
         @if ($vistaActual === 'goleadores')
-        @livewire('estadistica.goleador')
+        @livewire('estadistica.goleador',['campeonatoId' => $campeonatoId], key('goleadores-' . $campeonatoId))
         @elseif ($vistaActual === 'amarillas')
-        @livewire('estadistica.tarjetas-amarilla')
+        @livewire('estadistica.tarjetas-amarilla', ['campeonatoId' => $campeonatoId], key('amarillas-' . $campeonatoId))
         @elseif ($vistaActual === 'dobleAmarillas')
-        @livewire('estadistica.tarjetas-doble-amarilla')
+        @livewire('estadistica.tarjetas-doble-amarilla', ['campeonatoId' => $campeonatoId], key('doble-amarillas' .
+        $campeonatoId))
         @elseif ($vistaActual === 'rojas')
-        @livewire('estadistica.tarjetas-roja')
+        @livewire('estadistica.tarjetas-roja', ['campeonatoId' => $campeonatoId], key('rojas-' . $campeonatoId))
         @elseif ($vistaActual === 'cinco-amarillas')
-        @livewire('estadistica.cincoAmarilla')
+        @livewire('estadistica.cincoAmarilla', ['campeonatoId' => $campeonatoId], key('cinco-amarillas-' .
+        $campeonatoId))
         @endif
     </div>
+    @endif
+    {{-- Botones de vista --}}
+    {{-- @if ($campeonatoId)
+
+
+    <div class="mt-4">
+        @if ($vistaActual === 'goleadores')
+        @livewire('estadistica.goleador', ['campeonatoId' => $campeonatoId], key('goleadores-' . $campeonatoId))
+        @elseif ($vistaActual === 'amarillas')
+        @livewire('estadistica.tarjetas-amarilla', ['campeonatoId' => $campeonatoId], key('amarillas-' . $campeonatoId))
+        @elseif ($vistaActual === 'rojas')
+        @livewire('estadistica.tarjetas-roja', ['campeonatoId' => $campeonatoId], key('rojas-' . $campeonatoId))
+        @endif
+    </div>
+    @endif --}}
 </div>

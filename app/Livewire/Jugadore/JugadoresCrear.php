@@ -66,9 +66,9 @@ class JugadoresCrear extends Component
             ]);
         } catch (ValidationException $e) {
             $errores = collect($e->validator->errors()->all())->implode("\n");
-            $this->dispatch('alertaError', message: $errores);
+
             LivewireAlert::title('Error!!!')
-                ->text('Verifique esta teniendo un error en lo siguiente: $errores')
+                ->text(" '$errores'")
                 ->asConfirm()
                 ->error()
                 ->show();
