@@ -27,7 +27,7 @@
             </a>
 
             <!-- Tarjeta Estadísticas -->
-            <a href="{{ route('sanciones.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
+            <a href="{{ route('estadistica.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
                     hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-700">Estadísticas</h2>
@@ -35,6 +35,17 @@
                 </div>
                 <div ">
      <img src=" {{ asset('images/estadistica.png') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
+                </div>
+            </a>
+            <!-- Tarjeta Sanciones -->
+            <a href="{{ route('sanciones.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
+                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700">Sanciones</h2>
+
+                </div>
+                <div ">
+     <img src=" {{ asset('images/sanciones.jpg') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
                 </div>
             </a>
             <!-- Listado Buena Fe -->
