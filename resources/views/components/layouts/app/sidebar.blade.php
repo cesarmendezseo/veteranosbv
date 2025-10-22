@@ -36,6 +36,9 @@
             <flux:navlist.item icon="pencil-line" :href="route('sanciones.index')"
                 :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Sanciones') }}
             </flux:navlist.item>
+            <flux:navlist.item icon="identidication" :href="route('estadistica.index')"
+                :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadisticas') }}
+            </flux:navlist.item>
             <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
                 :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}
             </flux:navlist.item>

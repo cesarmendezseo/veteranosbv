@@ -11,7 +11,18 @@ class EstadisticaJugadorEncuentro extends Model
     use HasFactory;
 
 
-    protected $fillable = ['jugador_id', 'encuentro_id', 'equipo_id', 'campeonato_id', 'goles', 'tarjeta_amarilla', 'tarjeta_roja', 'tarjeta_doble_amarilla'];
+    protected $fillable = [
+        'jugador_id',
+        'encuentro_id',
+        'equipo_id',
+        'campeonato_id',
+        'goles',
+        'tarjeta_amarilla',
+        'tarjeta_roja',
+        'tarjeta_doble_amarilla',
+        'estadisticable_id',
+        'estadisticable_type'
+    ];
 
     public function jugador()
     {
@@ -30,18 +41,9 @@ class EstadisticaJugadorEncuentro extends Model
         return $this->belongsTo(Eliminatoria::class, 'eliminatoria_id');
     }
 
-
-    // Accessor para obtener el "evento" correspondiente
-    public function getEventoAttribute()
+    //relacion polimorfica
+    public function estadisticable()
     {
-        if ($this->encuentro) {
-            return $this->encuentro->fecha_encuentro;
-        }
-
-        if ($this->eliminatoria) {
-            return $this->eliminatoria->fase;
-        }
-
-        return '-';
+        return $this->morphTo();
     }
 }

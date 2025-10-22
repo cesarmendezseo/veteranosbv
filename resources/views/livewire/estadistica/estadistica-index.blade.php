@@ -19,11 +19,7 @@
             Crear
         </a> --}}
         @endadminOrCan
-    </div>
-
-    <div class="flex item-center justify-between mt-2">
-
-        <div class="relative z-0 w-full mb-5 group">
+        <div class="relative z-0 w-55  group">
 
             <select wire:model.live="campeonatoId" id="countries"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -33,6 +29,11 @@
                 @endforeach
             </select>
         </div>
+
+    </div>
+
+    <div class="flex item-center justify-between mt-2">
+
 
         <div class="inline-flex rounded-md shadow-xs bg-gray-900 p-0.5" role="group">
             <button type="button" wire:click="$set('vistaActual', 'goleadores')"
@@ -56,8 +57,9 @@
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
                 </svg>
-
-                Amarilla
+                <span class="hidden sm:inline">
+                    Amarilla
+                </span>
             </button>
             <button type="button" wire:click="$set('vistaActual', 'dobleAmarillas')"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
@@ -74,8 +76,8 @@
                         clip-rule="evenodd" />
 
                 </svg>
-
-                Doble Amarilla
+                <span class="hidden sm:inline">
+                    Doble Amarilla</span>
             </button>
             <button type="button" wire:click="$set('vistaActual', 'rojas')"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
@@ -85,11 +87,13 @@
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
                 </svg>
-
-                Roja
+                <span class="hidden sm:inline">
+                    Roja
+                </span>
             </button>
             <button type="button" wire:click="$set('vistaActual', '5amarillas')"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                <span class="sm:hidden">5</span>
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                     width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path fill="yellow" fill-rule="evenodd"
@@ -98,7 +102,7 @@
 
                 </svg>
 
-                5 Amarillas
+                <span class="hidden sm:inline">5 Amarillas</span>
             </button>
         </div>
 
@@ -115,24 +119,11 @@
         $campeonatoId))
         @elseif ($vistaActual === 'rojas')
         @livewire('estadistica.tarjetas-roja', ['campeonatoId' => $campeonatoId], key('rojas-' . $campeonatoId))
-        @elseif ($vistaActual === 'cinco-amarillas')
-        @livewire('estadistica.cincoAmarilla', ['campeonatoId' => $campeonatoId], key('cinco-amarillas-' .
+        @elseif ($vistaActual === '5amarillas')
+        @livewire('estadistica.cinco-amarillas', ['campeonatoId' => $campeonatoId], key('5amarillas-' .
         $campeonatoId))
         @endif
     </div>
     @endif
-    {{-- Botones de vista --}}
-    {{-- @if ($campeonatoId)
 
-
-    <div class="mt-4">
-        @if ($vistaActual === 'goleadores')
-        @livewire('estadistica.goleador', ['campeonatoId' => $campeonatoId], key('goleadores-' . $campeonatoId))
-        @elseif ($vistaActual === 'amarillas')
-        @livewire('estadistica.tarjetas-amarilla', ['campeonatoId' => $campeonatoId], key('amarillas-' . $campeonatoId))
-        @elseif ($vistaActual === 'rojas')
-        @livewire('estadistica.tarjetas-roja', ['campeonatoId' => $campeonatoId], key('rojas-' . $campeonatoId))
-        @endif
-    </div>
-    @endif --}}
 </div>

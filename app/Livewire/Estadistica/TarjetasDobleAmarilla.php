@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Estadistica;
 
+use App\Models\Campeonato;
 use App\Models\EstadisticaJugadorEncuentro;
 use Livewire\Component;
 
 class TarjetasDobleAmarilla extends Component
 {
+
     public $campeonatoId;
     public $dobleAmarillas = [];
     public $buscarAmarillas;
@@ -29,16 +31,28 @@ class TarjetasDobleAmarilla extends Component
      */
     public function cargarDobleAmarillas()
     {
-        $this->dobleAmarillas = EstadisticaJugadorEncuentro::with('jugador')
+        $campeonato = Campeonato::find($this->campeonatoId);
+
+        if (!$campeonato) {
+            $this->dobleAmarillas = collect();
+            return;
+        }
+
+        $formato = $campeonato->formato;
+        $tipoModelo = in_array($formato, ['todos_contra_todos', 'grupos'])
+            ? \App\Models\Encuentro::class
+            : \App\Models\Eliminatoria::class;
+
+        $this->dobleAmarillas = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'estadisticable'])
             ->where('tarjeta_doble_amarilla', '>=', 1)
-            ->when($this->campeonatoId, fn($q) => $q->where('campeonato_id', $this->campeonatoId))
+            ->where('estadisticable_type', $tipoModelo)
+            ->whereHasMorph('estadisticable', [$tipoModelo], function ($q) use ($campeonato) {
+                $q->where('campeonato_id', $campeonato->id);
+            })
             ->orderByDesc('jugador_id')
             ->get();
     }
 
-    /**
-     * Reinicia la paginación (si usás paginación)
-     */
     public function buscar()
     {
         $this->resetPage();
@@ -54,23 +68,30 @@ class TarjetasDobleAmarilla extends Component
      */
     public function buscarJugadorAmarilla()
     {
-        if (!empty($this->buscarAmarillas)) {
-            $this->jugadorBuscadoAmarilla = EstadisticaJugadorEncuentro::with('jugador')
-                ->whereHas('jugador', function ($query) {
-                    $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
-                        ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
-                        ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
-                })
-                ->where('tarjeta_doble_amarilla', '>=', 1)
-                ->when($this->campeonatoId, function ($query) {
-                    $query->whereHas('encuentro', function ($q) {
-                        $q->where('campeonato_id', $this->campeonatoId);
-                    });
-                })
-                ->get();
-        } else {
+        $campeonato = Campeonato::find($this->campeonatoId);
+
+        if (!$campeonato || empty($this->buscarAmarillas)) {
             $this->jugadorBuscadoAmarilla = [];
+            return;
         }
+
+        $formato = $campeonato->formato;
+        $tipoModelo = in_array($formato, ['todos_contra_todos', 'grupos'])
+            ? \App\Models\Encuentro::class
+            : \App\Models\Eliminatoria::class;
+
+        $this->jugadorBuscadoAmarilla = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'estadisticable'])
+            ->where('tarjeta_doble_amarilla', '>=', 1)
+            ->where('estadisticable_type', $tipoModelo)
+            ->whereHas('jugador', function ($query) {
+                $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
+                    ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
+                    ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
+            })
+            ->whereHasMorph('estadisticable', [$tipoModelo], function ($q) use ($campeonato) {
+                $q->where('campeonato_id', $campeonato->id);
+            })
+            ->get();
     }
 
     public function render()

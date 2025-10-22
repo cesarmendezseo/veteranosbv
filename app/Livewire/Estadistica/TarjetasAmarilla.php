@@ -3,6 +3,8 @@
 namespace App\Livewire\Estadistica;
 
 use App\Models\Campeonato;
+use App\Models\Eliminatoria;
+use App\Models\Encuentro;
 use App\Models\EstadisticaJugadorEncuentro;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
@@ -33,8 +35,6 @@ class TarjetasAmarilla extends Component
 
     public function cargarAmarillas()
     {
-
-        // Obtenemos el campeonato seleccionado
         $campeonato = Campeonato::find($this->campeonatoId);
 
         if (!$campeonato) {
@@ -42,49 +42,30 @@ class TarjetasAmarilla extends Component
             return;
         }
 
-        if ($campeonato->formato === 'todos_contra_todos' || $campeonato->formato === 'grupos') {
-            $this->amarillas = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'encuentro'])
-                ->where('tarjeta_amarilla', '>=', 1)
-                ->whereHas('jugador', function ($query) {
-                    // Opcional: si querés búsqueda por jugador
-                    if (!empty($this->buscarAmarillas)) {
-                        $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
-                            ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
-                            ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
-                    }
-                })
-                ->whereHas('encuentro', function ($q) use ($campeonato) {
-                    // Filtramos según el formato
-                    if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
-                        $q->where('campeonato_id', $campeonato->id);
-                    } elseif (in_array($campeonato->formato, ['eliminacion_simple', 'eliminacion_doble'])) {
-                        $q->where('campeonato_id', $campeonato->id);
-                        // Si querés, podés filtrar por fase específica aquí
-                    }
-                })
-                ->orderByDesc('jugador_id')
-                ->get();
-        } else {
-            $this->amarillas = EstadisticaJugadorEncuentro::with([
-                'jugador.equipo',
-                'encuentro.eliminatoria' // <- relación agregada
-            ])
-                ->where('tarjeta_amarilla', '>=', 1)
-                ->whereHas('jugador', function ($query) {
-                    if (!empty($this->buscarAmarillas)) {
-                        $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
-                            ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
-                            ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
-                    }
-                })
-                ->whereHas('encuentro', function ($q) use ($campeonato) {
-                    $q->where('campeonato_id', $campeonato->id);
-                })
-                ->orderByDesc('jugador_id')
-                ->get();
-            dd($this->amarillas);
-        }
+        $formato = $campeonato->formato;
+
+        // Definir tipo polimórfico
+        $tipoModelo = in_array($formato, ['todos_contra_todos', 'grupos'])
+            ? \App\Models\Encuentro::class
+            : \App\Models\Eliminatoria::class;
+
+        $this->amarillas = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'estadisticable'])
+            ->where('tarjeta_amarilla', '>=', 1)
+            ->where('estadisticable_type', $tipoModelo)
+            ->whereHas('jugador', function ($query) {
+                if (!empty($this->buscarAmarillas)) {
+                    $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
+                        ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
+                        ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
+                }
+            })
+            ->whereHasMorph('estadisticable', [$tipoModelo], function ($q) use ($campeonato) {
+                $q->where('campeonato_id', $campeonato->id);
+            })
+            ->orderByDesc('jugador_id')
+            ->get();
     }
+
 
     public function buscar()
     {
@@ -95,6 +76,8 @@ class TarjetasAmarilla extends Component
     {
         $this->resetPage();
     }
+
+
 
     public function buscarJugadorAmarilla()
     {
@@ -110,26 +93,22 @@ class TarjetasAmarilla extends Component
             return;
         }
 
-        $this->jugadorBuscadoAmarilla = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'encuentro', 'eliminatoria'])
+        // Detectar tipo de modelo según formato
+        $tipoModelo = in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])
+            ? Encuentro::class
+            : Eliminatoria::class;
+
+        $this->jugadorBuscadoAmarilla = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'estadisticable'])
             ->where('tarjeta_amarilla', '>=', 1)
             ->whereHas('jugador', function ($query) {
                 $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')
                     ->orWhere('apellido', 'like', '%' . $this->buscarAmarillas . '%')
                     ->orWhere('nombre', 'like', '%' . $this->buscarAmarillas . '%');
             })
-            ->when($this->campeonatoId, function ($query) use ($campeonato) {
-                if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
-                    $query->whereHas('encuentro', function ($q) use ($campeonato) {
-                        $q->where('campeonato_id', $campeonato->id);
-                    });
-                } elseif (in_array($campeonato->formato, ['eliminacion_simple', 'eliminacion_doble'])) {
-                    $query->whereHas('eliminatoria', function ($q) use ($campeonato) {
-                        $q->where('campeonato_id', $campeonato->id);
-                    });
-                }
+            ->whereHasMorph('estadisticable', [$tipoModelo], function ($query) use ($campeonato) {
+                $query->where('campeonato_id', $campeonato->id);
             })
             ->get();
-        dd($this->jugadorBuscadoAmarilla);
     }
 
 

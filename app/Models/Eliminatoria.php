@@ -60,10 +60,7 @@ class Eliminatoria extends Model
     {
         return $this->belongsTo(Grupo::class);
     }
-    public function estadisticas()
-    {
-        return $this->hasMany(\App\Models\EstadisticaJugadorEncuentro::class, 'encuentro_id');
-    }
+
 
     public function ganador()
     {
@@ -89,5 +86,10 @@ class Eliminatoria extends Model
         }
 
         return null;
+    }
+    //relacion polinorfica
+    public function estadisticas()
+    {
+        return $this->morphMany(EstadisticaJugadorEncuentro::class, 'estadisticable');
     }
 }

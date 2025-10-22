@@ -52,12 +52,14 @@ class Encuentro extends Model
     {
         return $this->belongsTo(Grupo::class);
     }
-    public function estadisticas()
-    {
-        return $this->hasMany(\App\Models\EstadisticaJugadorEncuentro::class, 'encuentro_id');
-    }
+
     public function campeonato()
     {
         return $this->belongsTo(Campeonato::class);
+    }
+    //relacion polimorfica
+    public function estadisticas()
+    {
+        return $this->morphMany(EstadisticaJugadorEncuentro::class, 'estadisticable');
     }
 }

@@ -32,6 +32,7 @@ class EstadisticaVer extends Component
     public $equipoVisitante_id;
     public $encuentroJugador; // ID del encuentro para el cual se guardan estadísticas, igual a encuentroSeleccionado
     public $formatoCampeonato;
+    public $tipoEncuentro;
 
 
     public function mount($campeonatoId)
@@ -43,9 +44,23 @@ class EstadisticaVer extends Component
         $this->updatedCampeonatoId($campeonatoId);
     }
 
-    public function updatedCampeonatoId($campeonatoId)
+    //helper  para obtener el tipo polimórfico correcto según el formato del campeonato
+    private function getPolymorphicType(): string
     {
 
+        return match ($this->formatoCampeonato) {
+            'todos_contra_todos', 'grupos' => \App\Models\Encuentro::class,
+            'eliminacion_simple', 'eliminacion_doble' => \App\Models\Eliminatoria::class,
+            default => throw new \Exception('Formato de campeonato desconocido: ' . $this->formatoCampeonato),
+        };
+    }
+
+
+
+
+
+    public function updatedCampeonatoId($campeonatoId)
+    {
 
 
         $campeonato = Campeonato::where('id', $this->campeonatoId)->first();
@@ -85,6 +100,7 @@ class EstadisticaVer extends Component
     public function updatedFechaSeleccionada($value)
     {
 
+
         if ($value && $this->campeonatoId) {
             if ($this->formatoCampeonato === 'todos_contra_todos' || $this->formatoCampeonato === 'grupos') {
                 $this->encuentros = Encuentro::where('campeonato_id', $this->campeonatoId)
@@ -116,135 +132,81 @@ class EstadisticaVer extends Component
 
     public function updatedEncuentroSeleccionado($value)
     {
+        $this->resetEncuentroData();
 
-        if ($this->formatoCampeonato === 'todos_contra_todos' || $this->formatoCampeonato === 'grupos') {
-            if ($value) {
-                $encuentro = Encuentro::with([
-                    'equipoLocal.jugadores',
-                    'equipoVisitante.jugadores'
-                ])->find($value);
+        if (!$value) return;
 
-                if ($encuentro) {
-                    $this->nombreLocal = $encuentro->equipoLocal->nombre ?? 'Sin nombre';
-                    $this->nombreVisitante = $encuentro->equipoVisitante->nombre ?? 'Sin nombre';
-                    $this->equipoLocal_id = $encuentro->equipoLocal->id;
-                    $this->equipoVisitante_id = $encuentro->equipoVisitante->id;
-                    $this->encuentroJugador = $encuentro->id; // ID del encuentro actual
+        // Obtener el modelo polimórfico según el formato del campeonato
+        $modelo = $this->getPolymorphicType();
 
-                    $this->jugadoresLocal = $encuentro->equipoLocal->jugadores ?? collect();
-                    $this->jugadoresVisitante = $encuentro->equipoVisitante->jugadores ?? collect();
 
-                    // 1. Recolectar todos los IDs de jugadores de ambos equipos
-                    $playerIds = $this->jugadoresLocal->pluck('id')
-                        ->merge($this->jugadoresVisitante->pluck('id'))
-                        ->unique()
-                        ->filter(); // Asegurarse de que no haya IDs nulos o vacíos
+        // Cargar el partido con jugadores
+        $partido = $modelo::with([
+            'equipoLocal.jugadores',
+            'equipoVisitante.jugadores'
+        ])->find($value);
 
-                    // 2. Obtener estadísticas existentes para estos jugadores en este encuentro
-                    $existingStats = collect(); // Por defecto, colección vacía
-                    if ($playerIds->isNotEmpty()) {
-                        $existingStats = EstadisticaJugadorEncuentro::where('encuentro_id', $this->encuentroJugador)
-                            ->whereIn('jugador_id', $playerIds)
-                            ->get()
-                            ->keyBy('jugador_id'); // Clave por jugador_id para búsqueda fácil
-                    }
+        if (!$partido) return;
 
-                    $this->datosJugadores = []; // Reinicializar datos para el nuevo encuentro
+        // Setear datos base
+        $this->tipoEncuentro = class_basename($modelo); // 'Encuentro' o 'Eliminatoria'
+        $this->encuentroJugador = $partido->id;
+        $this->nombreLocal = $partido->equipoLocal->nombre ?? 'Sin nombre';
+        $this->nombreVisitante = $partido->equipoVisitante->nombre ?? 'Sin nombre';
+        $this->equipoLocal_id = $partido->equipoLocal->id;
+        $this->equipoVisitante_id = $partido->equipoVisitante->id;
+        $this->jugadoresLocal = $partido->equipoLocal->jugadores ?? collect();
+        $this->jugadoresVisitante = $partido->equipoVisitante->jugadores ?? collect();
 
-                    // 3. Poblar datosJugadores para el equipo local
-                    foreach ($this->jugadoresLocal as $jugador) {
-                        $stats = $existingStats->get($jugador->id); // Obtener estadísticas si existen para este jugador
-                        $this->datosJugadores[$jugador->id] = [
-                            'equipo_id' => $this->equipoLocal_id,
-                            'goles' => $stats ? $stats->goles : 0,
-                            'amarilla' => $stats ? (bool)$stats->tarjeta_amarilla : false,
-                            'doble_amarilla' => $stats ? (bool)$stats->tarjeta_doble_amarilla : false,
-                            'roja' => $stats ? (bool)$stats->tarjeta_roja : false,
-                        ];
-                    }
+        // IDs de jugadores
+        $playerIds = $this->jugadoresLocal->pluck('id')
+            ->merge($this->jugadoresVisitante->pluck('id'))
+            ->unique()
+            ->filter();
 
-                    // 4. Poblar datosJugadores para el equipo visitante
-                    foreach ($this->jugadoresVisitante as $jugador) {
-                        $stats = $existingStats->get($jugador->id); // Obtener estadísticas si existen para este jugador
-                        $this->datosJugadores[$jugador->id] = [
-                            'equipo_id' => $this->equipoVisitante_id,
-                            'goles' => $stats ? $stats->goles : 0,
-                            'amarilla' => $stats ? (bool)$stats->tarjeta_amarilla : false,
-                            'doble_amarilla' => $stats ? (bool)$stats->tarjeta_doble_amarilla : false,
-                            'roja' => $stats ? (bool)$stats->tarjeta_roja : false,
-                        ];
-                    }
-                } else {
-                    // Encuentro no encontrado, limpiar datos
-                    $this->resetEncuentroData();
-                }
-            } else {
-                // No hay encuentro seleccionado, limpiar datos
-                $this->resetEncuentroData();
-            }
-        } else {
-            //eliminatoria
-            $encuentro = Eliminatoria::with([
-                'equipoLocal.jugadores',
-                'equipoVisitante.jugadores'
-            ])->find($value);
+        // Buscar estadísticas polimórficas
+        $existingStats = collect();
+        if ($playerIds->isNotEmpty()) {
+            $existingStats = EstadisticaJugadorEncuentro::where('estadisticable_id', $this->encuentroJugador)
+                ->where('estadisticable_type', $modelo)
+                ->whereIn('jugador_id', $playerIds)
+                ->get()
+                ->keyBy('jugador_id');
+        }
+        /*   dd([
+            'encuentro_id' => $this->encuentroJugador,
+            'tipo' => $this->getPolymorphicType(),
+            'jugadores' => $playerIds->toArray()
+        ]);
+ */
+        // Poblar datos jugadores
+        foreach ($this->jugadoresLocal as $jugador) {
+            $stats = $existingStats->get($jugador->id);
+            $this->datosJugadores[$jugador->id] = [
+                'equipo_id' => $this->equipoLocal_id,
+                'goles' => $stats?->goles ?? 0,
+                'amarilla' => (bool)($stats?->tarjeta_amarilla ?? false),
+                'doble_amarilla' => (bool)($stats?->tarjeta_doble_amarilla ?? false),
+                'roja' => (bool)($stats?->tarjeta_roja ?? false),
+            ];
+        }
 
-            if ($encuentro) {
-                $this->nombreLocal = $encuentro->equipoLocal->nombre ?? 'Sin nombre';
-                $this->nombreVisitante = $encuentro->equipoVisitante->nombre ?? 'Sin nombre';
-                $this->equipoLocal_id = $encuentro->equipoLocal->id;
-                $this->equipoVisitante_id = $encuentro->equipoVisitante->id;
-                $this->encuentroJugador = $encuentro->id; // ID del encuentro actual
-
-                $this->jugadoresLocal = $encuentro->equipoLocal->jugadores ?? collect();
-                $this->jugadoresVisitante = $encuentro->equipoVisitante->jugadores ?? collect();
-
-                // 1. Recolectar todos los IDs de jugadores de ambos equipos
-                $playerIds = $this->jugadoresLocal->pluck('id')
-                    ->merge($this->jugadoresVisitante->pluck('id'))
-                    ->unique()
-                    ->filter(); // Asegurarse de que no haya IDs nulos o vacíos
-
-                // 2. Obtener estadísticas existentes para estos jugadores en este encuentro
-                $existingStats = collect(); // Por defecto, colección vacía
-                if ($playerIds->isNotEmpty()) {
-                    $existingStats = EstadisticaJugadorEncuentro::where('encuentro_id', $this->encuentroJugador)
-                        ->whereIn('jugador_id', $playerIds)
-                        ->get()
-                        ->keyBy('jugador_id'); // Clave por jugador_id para búsqueda fácil
-                }
-
-                $this->datosJugadores = []; // Reinicializar datos para el nuevo encuentro
-
-                // 3. Poblar datosJugadores para el equipo local
-                foreach ($this->jugadoresLocal as $jugador) {
-                    $stats = $existingStats->get($jugador->id); // Obtener estadísticas si existen para este jugador
-                    $this->datosJugadores[$jugador->id] = [
-                        'equipo_id' => $this->equipoLocal_id,
-                        'goles' => $stats ? $stats->goles : 0,
-                        'amarilla' => $stats ? (bool)$stats->tarjeta_amarilla : false,
-                        'doble_amarilla' => $stats ? (bool)$stats->tarjeta_doble_amarilla : false,
-                        'roja' => $stats ? (bool)$stats->tarjeta_roja : false,
-                    ];
-                }
-
-                // 4. Poblar datosJugadores para el equipo visitante
-                foreach ($this->jugadoresVisitante as $jugador) {
-                    $stats = $existingStats->get($jugador->id); // Obtener estadísticas si existen para este jugador
-                    $this->datosJugadores[$jugador->id] = [
-                        'equipo_id' => $this->equipoVisitante_id,
-                        'goles' => $stats ? $stats->goles : 0,
-                        'amarilla' => $stats ? (bool)$stats->tarjeta_amarilla : false,
-                        'doble_amarilla' => $stats ? (bool)$stats->tarjeta_doble_amarilla : false,
-                        'roja' => $stats ? (bool)$stats->tarjeta_roja : false,
-                    ];
-                }
-            } else {
-                // Encuentro no encontrado, limpiar datos
-                $this->resetEncuentroData();
-            }
+        foreach ($this->jugadoresVisitante as $jugador) {
+            $stats = $existingStats->get($jugador->id);
+            $this->datosJugadores[$jugador->id] = [
+                'equipo_id' => $this->equipoVisitante_id,
+                'goles' => $stats?->goles ?? 0,
+                'amarilla' => (bool)($stats?->tarjeta_amarilla ?? false),
+                'doble_amarilla' => (bool)($stats?->tarjeta_doble_amarilla ?? false),
+                'roja' => (bool)($stats?->tarjeta_roja ?? false),
+            ];
         }
     }
+
+
+
+
+
 
     private function resetEncuentroData()
     {
@@ -261,8 +223,7 @@ class EstadisticaVer extends Component
 
     public function guardarDatos()
     {
-
-        if (!$this->encuentroJugador || !$this->campeonatoId) {
+        if (!$this->encuentroJugador || !$this->campeonatoId || !$this->tipoEncuentro) {
             $this->dispatch('seleccionar-campeonato');
 
             return;
@@ -271,14 +232,19 @@ class EstadisticaVer extends Component
         $mensajesGuardados = [];
         $huboErroresDeValidacion = false;
 
+        // Determinar el modelo polimórfico
+        $modeloPartido = $this->tipoEncuentro === 'eliminatoria'
+            ? Eliminatoria::class
+            : Encuentro::class;
+
         foreach ($this->datosJugadores as $jugadorId => $datos) {
-            // Normalizar valores booleanos de checkboxes y goles
+            // Normalizar valores
             $datos['amarilla'] = filter_var($datos['amarilla'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['doble_amarilla'] = filter_var($datos['doble_amarilla'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['roja'] = filter_var($datos['roja'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['goles'] = !empty($datos['goles']) ? intval($datos['goles']) : 0;
 
-            // Validar los datos individuales de cada jugador
+            // Validar
             try {
                 Validator::make($datos, [
                     'equipo_id' => 'required|exists:equipos,id',
@@ -293,19 +259,15 @@ class EstadisticaVer extends Component
                 $jugadorError = Jugador::find($jugadorId);
                 $nombreJugadorError = $jugadorError ? ($jugadorError->apellido . ', ' . $jugadorError->nombre) : 'ID: ' . $jugadorId;
 
-                LivewireAlert::title('Error')
-                    ->text('$nombreJugadorError')
+                LivewireAlert::title('Error de validación para: ' . $nombreJugadorError,)
+                    ->text(implode("\n", $errorMessages))
+                    ->error()
                     ->show();
-                $this->dispatch('swal', [
-                    'icon' => 'error',
-                    'title' => 'Error de validación para: ' . $nombreJugadorError,
-                    'text' => implode("\n", $errorMessages),
-                    'timer' => 7000
-                ]);
-                continue; // Saltar este jugador y continuar con el siguiente
+
+
+                continue;
             }
 
-            // Determinar si el jugador tiene alguna estadística positiva en este envío
             $tieneEstadisticasPositivas = (
                 $datos['goles'] > 0 ||
                 $datos['amarilla'] ||
@@ -313,88 +275,75 @@ class EstadisticaVer extends Component
                 $datos['roja']
             );
 
-            $registroExistente = EstadisticaJugadorEncuentro::where('jugador_id', $jugadorId)
-                ->where('encuentro_id', $this->encuentroJugador)
-                ->first();
+            $claveBusqueda = [
+                'jugador_id' => $jugadorId,
+                'estadisticable_id' => $this->encuentroJugador,
+                'estadisticable_type' => $this->getPolymorphicType(), // ← tipo dinámico
+            ];
+
+            $registroExistente = EstadisticaJugadorEncuentro::where($claveBusqueda)->first();
+
+            $nuevosDatosParaGuardar = [
+                'equipo_id' => $datos['equipo_id'],
+                'campeonato_id' => intval($this->campeonatoId),
+                'goles' => $datos['goles'],
+                'tarjeta_amarilla' => $datos['amarilla'],
+                'tarjeta_doble_amarilla' => $datos['doble_amarilla'],
+                'tarjeta_roja' => $datos['roja'],
+            ];
 
             if ($tieneEstadisticasPositivas) {
-                // Si el jugador tiene estadísticas positivas, las creamos o actualizamos
-                $nuevosDatosParaGuardar = [
-                    'equipo_id' => $datos['equipo_id'],
-                    'campeonato_id' => intval($this->campeonatoId),
-                    'goles' => $datos['goles'],
-                    'tarjeta_amarilla' => $datos['amarilla'],
-                    'tarjeta_doble_amarilla' => $datos['doble_amarilla'],
-                    'tarjeta_roja' => $datos['roja'],
-                ];
-
-                // Solo actualizar si hay cambios reales para evitar writes innecesarios
                 if ($registroExistente) {
-                    $datosExistentesParaComparar = [
+                    $datosExistentes = collect([
                         'equipo_id' => $registroExistente->equipo_id,
                         'campeonato_id' => $registroExistente->campeonato_id,
                         'goles' => $registroExistente->goles,
                         'tarjeta_amarilla' => (bool)$registroExistente->tarjeta_amarilla,
                         'tarjeta_doble_amarilla' => (bool)$registroExistente->tarjeta_doble_amarilla,
                         'tarjeta_roja' => (bool)$registroExistente->tarjeta_roja,
-                    ];
-                    if (collect($nuevosDatosParaGuardar)->diffAssoc($datosExistentesParaComparar)->isEmpty()) {
-                        continue; // Sin cambios, saltar este jugador
+                    ]);
+
+                    if ($datosExistentes->diffAssoc($nuevosDatosParaGuardar)->isEmpty()) {
+                        continue;
                     }
                 }
 
-                EstadisticaJugadorEncuentro::updateOrCreate(
-                    [
-                        'jugador_id' => $jugadorId,
-                        'encuentro_id' => $this->encuentroJugador,
-                    ],
-                    $nuevosDatosParaGuardar
-                );
+                EstadisticaJugadorEncuentro::updateOrCreate($claveBusqueda, $nuevosDatosParaGuardar);
 
                 $jugador = Jugador::find($jugadorId);
                 if ($jugador) {
-                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre;
-                    $mensaje = $jugador->apellido . ' ' . $jugador->nombre;
-                    LivewireAlert::title($mensaje)
-                        ->text(implode("\n", $mensajesGuardados))
-                        ->asConfirm()
-                        ->success()
-                        ->show();
+                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre . ' ,';
                 }
             } elseif ($registroExistente) {
-                // Si el jugador NO tiene estadísticas positivas EN EL FORMULARIO
-                // Y EXISTE un registro previo en la base de datos, lo eliminamos.
                 $registroExistente->delete();
                 $jugador = Jugador::find($jugadorId);
                 if ($jugador) {
-                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre . ' - Registro de estadísticas eliminado (sin goles/tarjetas).';
+                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre . ' - Registro eliminado.';
                 }
             }
-            // Si el jugador no tiene estadísticas positivas EN EL FORMULARIO
-            // Y NO EXISTE un registro previo, no hacemos nada (continue).
         }
 
         if ($huboErroresDeValidacion) {
-            // Ya se mostraron los SweetAlerts individuales para cada error.
-            // Podrías mostrar un mensaje general adicional si lo deseas.
+            // Ya se mostraron los errores individuales
         } elseif (!empty($mensajesGuardados)) {
-            LivewireAlert::title('$mensajesGuardados')
-                ->show();
 
-            // Recargar los datos del encuentro para que el formulario refleje la BD
-            if ($this->encuentroSeleccionado) {
-                $currentEncuentro = $this->encuentroSeleccionado;
-                $this->updatedEncuentroSeleccionado(null); // Limpia
-                $this->updatedEncuentroSeleccionado($currentEncuentro); // Recarga
-            }
-        } else if (!$huboErroresDeValidacion) {
-            LivewireAlert::title('Sin Cambios')
-                ->text('No se detectaron cambios para guardar en las estadísticas de los jugadores')
+            LivewireAlert::title('Estadistica guardada')
+                ->text(implode("\n", $mensajesGuardados))
                 ->success()
                 ->show();
+
+
+            if ($this->encuentroSeleccionado) {
+                $currentEncuentro = $this->encuentroSeleccionado;
+                $this->updatedEncuentroSeleccionado(null);
+                $this->updatedEncuentroSeleccionado($currentEncuentro);
+            }
+        } else {
+            LivewireAlert::title('info')
+                ->text('sin cambios')
+                ->error()
+                ->show();
         }
-        LivewireAlert::title('ok')
-            ->show();
     }
 
     public function render()
