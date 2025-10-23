@@ -176,6 +176,38 @@
 
     {{ $slot }}
 
+    {{-- menu fijo en movil --}}
+    <nav
+        class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 sm:hidden">
+        <div class="flex justify-around items-center h-16">
+            <a href="{{ route('dashboard') }}"
+                class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                <x-icon name="home" class="w-5 h-5 mb-1" />
+                Dashboard
+            </a>
+            <a href="{{ route('jugadores.index') }}"
+                class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                <x-icon name="shirt" class="w-5 h-5 mb-1" />
+                Jugadores
+            </a>
+            <div class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                <flux:sidebar.toggle class="" icon="mas">
+                    ver mas
+                </flux:sidebar.toggle>
+            </div>
+            <a href="{{ route('fixture.index') }}"
+                class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                <x-icon name="calendar" class="w-5 h-5 mb-1" />
+                Fixture
+            </a>
+            <a href="{{ route('estadistica.index') }}"
+                class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                <x-icon name="chart-bar" class="w-5 h-5 mb-1" />
+                Stats
+            </a>
+
+        </div>
+    </nav>
     @fluxScripts
 </body>
 

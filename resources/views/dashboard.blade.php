@@ -1,90 +1,63 @@
 <x-layouts.app :title="__('Dashboard')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+    <div class="p-4 bg-slate-200 rounded-2xl shadow-2xl">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-slate-200 p-4 rounded-2xl shadow-2xl">
-            <!-- Tarjeta Jugadores -->
-            <a href="{{ route('jugadores.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Jugadores</h2>
-                </div>
-                <div>
-                    <img src="{{ asset('images/jugador.jpg') }}" alt="Logo" class="w-20 h-20 rounded-xl">
-                </div>
+        <div class="grid grid-cols-4 gap-3 mb-2">
+            <!-- Tarjeta -->
+            <a href="{{ route('jugadores.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/jugador.jpg') }}" alt="Jugadores"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <span class="text-xs font-medium text-gray-700 leading-tight">Jugadores</span>
             </a>
 
-
-            <!-- Tarjeta Fixture -->
-            <a href="{{ route('fixture.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Fixture</h2>
-
-                </div>
-                <div ">
-     <img src=" {{ asset('images/fixture.png') }}" alt="Logo" class="w-20 h-20 ">
-                </div>
+            <a href="{{ route('fixture.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/fixture.png') }}" alt="Fixture"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <span class="text-xs font-medium text-gray-700 leading-tight">Fixture</span>
             </a>
 
-            <!-- Tarjeta Estadísticas -->
-            <a href="{{ route('estadistica.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Estadísticas</h2>
-
-                </div>
-                <div ">
-     <img src=" {{ asset('images/estadistica.png') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
-                </div>
+            <a href="{{ route('estadistica.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/estadistica.png') }}" alt="Estadísticas"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <span class="text-xs font-medium text-gray-700 leading-tight">Estadísticas</span>
             </a>
-            <!-- Tarjeta Sanciones -->
-            <a href="{{ route('sanciones.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Sanciones</h2>
 
-                </div>
-                <div ">
-     <img src=" {{ asset('images/sanciones.jpg') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
-                </div>
+            <a href="{{ route('sanciones.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/sanciones.jpg') }}" alt="Sanciones"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <span class="text-xs font-medium text-gray-700 leading-tight">Sanciones</span>
             </a>
-            <!-- Listado Buena Fe -->
-            <a href="{{ route('listado-buena-fe') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Listado Buena Fe</h2>
+        </div>
+        <div class="grid grid-cols-4 gap-3">
+            <a href="{{ route('listado-buena-fe') }}" class="h-30 sm:h-48 flex flex-col items-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/listado.png') }}" alt="Listado Buena Fe"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <h2 class="text-xs font-medium text-gray-700 leading-tight">Listado Buena Fe</h2>
+            </a>
 
-                </div>
-                <div ">
-     <img src=" {{ asset('images/listado.png') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
-                </div>
+            <a href="{{ route('tabla-posiciones') }}" class="h-30 sm:h-48 flex flex-col items-center bg-white rounded-2xl shadow-md p-3
+              hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/tabla-posicion.png') }}" alt="Tabla de Posición"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <h2 class="text-xs font-medium text-gray-700 leading-tight">Tabla de Posición</h2>
             </a>
-            <!-- Tabla posicion -->
-            <a href="{{ route('tabla-posiciones') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Tabla de Posición</h2>
 
-                </div>
-                <div ">
-     <img src=" {{ asset('images/tabla-posicion.png') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
-                </div>
-            </a>
-            <!-- Altas y Bajas -->
             @adminOrCan('comision')
-            <a href="{{ route('altas-bajas.index') }}" class="bg-white rounded-2xl shadow-md p-6 flex items-center justify-between 
-                    hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-700">Altas y Bajas</h2>
-
-                </div>
-                <div ">
-     <img src=" {{ asset('images/altas-bajas.png') }}" alt="Logo" class="w-20 h-20 rounded-2xl">
-                </div>
+            <a href="{{ route('altas-bajas.index') }}" class="h-30 sm:h-48 flex flex-col items-center bg-white rounded-2xl shadow-md p-3 
+              hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out text-center">
+                <img src="{{ asset('images/altas-bajas.png') }}" alt="Altas y Bajas"
+                    class="w-10 h-10 object-cover rounded-full mb-2">
+                <h2 class="text-xs font-medium text-gray-700 leading-tight">Altas y Bajas</h2>
             </a>
             @endadminOrCan
 
-            <!-- Puedes seguir agregando más tarjetas según las opciones del menú -->
         </div>
     </div>
+    <!-- 📱 Menú inferior fijo -->
+
+
 </x-layouts.app>
