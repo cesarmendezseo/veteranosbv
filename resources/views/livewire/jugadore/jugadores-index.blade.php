@@ -221,6 +221,7 @@
                 </table>
             </div>
         </div>
+        {{-- movil --}}
         <div class="grid grid-cols-1 gap-4 sm:hidden">
             <div class="mt-2">
                 <input type="text" wire:model.defer="search" wire:keydown.enter="buscar"
@@ -228,6 +229,7 @@
                     class="border border-gray-500 rounded px-3 py-2.5 w-full mb-2" />
             </div>
             @foreach ($jugadores as $jugador)
+
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-end">
                     <div x-data="{ open: false, dropUp: false, alignRight: false }"

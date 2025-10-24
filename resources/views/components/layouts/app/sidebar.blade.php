@@ -15,7 +15,7 @@
 
         <flux:menu.separator />
         <flux:navlist.group :heading="__('')" class="grid">
-            @role('administrador|comision')
+
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                 wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             <flux:navlist.item icon="shirt" :href="route('jugadores.index')"
@@ -39,9 +39,11 @@
             <flux:navlist.item icon="identidication" :href="route('estadistica.index')"
                 :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadisticas') }}
             </flux:navlist.item>
+            @role('administrador|comision')
             <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
                 :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}
             </flux:navlist.item>
+            @endrole
             <flux:navlist.item icon="album" :href="route('categoria.index')"
                 :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}
             </flux:navlist.item>
@@ -51,7 +53,7 @@
             </flux:navlist.item>
             <flux:navlist.item icon="shield" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')"
                 wire:navigate>{{ __('Equipos') }}</flux:navlist.item>
-            @endrole
+
             @role('administrador|comision')
             <flux:navlist.item icon="cog" :href="route('config.index')" :current="request()->routeIs('config.index')"
                 wire:navigate>{{ __('Config') }}
@@ -178,7 +180,7 @@
 
     {{-- menu fijo en movil --}}
     <nav
-        class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 sm:hidden">
+        class="fixed bottom-0 left-0 right-0 mt-20 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 sm:hidden">
         <div class="flex justify-around items-center h-16">
             <a href="{{ route('dashboard') }}"
                 class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
@@ -200,10 +202,10 @@
                 <x-icon name="calendar" class="w-5 h-5 mb-1" />
                 Fixture
             </a>
-            <a href="{{ route('estadistica.index') }}"
+            <a href="{{ route('settings.profile') }}"
                 class="flex flex-col items-center text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600">
-                <x-icon name="chart-bar" class="w-5 h-5 mb-1" />
-                Stats
+                <x-icon name="cog" class="w-5 h-5 mb-1" />
+                Perfil
             </a>
 
         </div>

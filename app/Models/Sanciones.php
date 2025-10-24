@@ -23,7 +23,15 @@ class Sanciones extends Model
         'partidos_cumplidos',
         'observacion',
         'cumplida',
+        'etapa_sancion',
+        'sancionable_id',
+        'sancionable_type',
     ];
+
+    public function sancionable()
+    {
+        return $this->morphTo();
+    }
 
     public function jugador()
     {

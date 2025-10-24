@@ -62,4 +62,9 @@ class Encuentro extends Model
     {
         return $this->morphMany(EstadisticaJugadorEncuentro::class, 'estadisticable');
     }
+
+    public function sanciones()
+    {
+        return $this->morphMany(Sanciones::class, 'sancionable');
+    }
 }
