@@ -192,7 +192,7 @@ class SancionesCrear extends Component
         try {
             $this->validate([
                 'jugador_id' => 'required|exists:jugadors,id',
-                'partido_id' => 'required|integer|exists:' . class_basename($this->partido_tipo) . 's,id',
+                'partido_id' => 'required|integer|exists:' . (new $this->partido_tipo)->getTable() . ',id',
                 'partidos_sancionados' => 'required|integer|min:1',
                 'motivo' => 'required|string',
                 'observacion' => 'nullable|string',

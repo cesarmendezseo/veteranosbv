@@ -25,7 +25,7 @@ class Encuentro extends Model
         'estado',
 
     ];
-
+    protected $table = 'encuentros';
 
     public function estadisticaJugadores()
     {
