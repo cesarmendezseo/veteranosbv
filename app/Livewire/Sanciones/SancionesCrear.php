@@ -9,6 +9,7 @@ use App\Models\Jugador;
 use App\Models\Sanciones;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Illuminate\Database\QueryException;
+use Jantinnerezo\LivewireAlert\LivewireAlert as LivewireAlertLivewireAlert;
 use Livewire\Component;
 
 class SancionesCrear extends Component
@@ -266,30 +267,48 @@ class SancionesCrear extends Component
     //======================================================
     public function actualizarCumplimientosSanciones()
     {
-        $sanciones = Sanciones::where('cumplida', false)->get();
+        // Procesar sanciones en bloques para evitar sobrecarga de memoria
+        Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) {
+            foreach ($sanciones as $sancion) {
+                $jugador = $sancion->jugador;
 
+                // Validar que el jugador y su equipo existan
+                if (!$jugador || !$jugador->equipo_id) {
+                    continue;
+                }
 
-        foreach ($sanciones as $sancion) {
-            $jugador = $sancion->jugador;
-            $equipo = $jugador->equipo_id;
+                $equipoId = $jugador->equipo_id;
 
-            $encuentros = Encuentro::where('campeonato_id', $sancion->campeonato_id)
-                ->where('estado', 'Jugado')
-                ->where('fecha_encuentro', '>', $sancion->fecha_sancion)
-                ->where(function ($q) use ($equipo) {
-                    $q->where('equipo_local_id', $equipo)
-                        ->orWhere('equipo_visitante_id', $equipo);
-                })
-                ->orderBy('fecha_encuentro')
-                ->get();
+                // Contar partidos jugados posteriores a la fecha de sanción donde participó el equipo
+                $partidosCumplidos = Encuentro::where('campeonato_id', $sancion->campeonato_id)
+                    ->where('estado', 'Jugado')
+                    ->where('fecha_encuentro', '>', $sancion->fecha_sancion)
+                    ->where(function ($q) use ($equipoId) {
+                        $q->where('equipo_local_id', $equipoId)
+                            ->orWhere('equipo_visitante_id', $equipoId);
+                    })
+                    ->count();
 
-            $partidosCumplidos = $encuentros->count();
+                // Solo guardar si hay cambios
+                $cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
 
-            $sancion->partidos_cumplidos = $partidosCumplidos;
-            $sancion->cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
-            $sancion->save();
-        }
+                if (
+                    $sancion->partidos_cumplidos !== $partidosCumplidos ||
+                    $sancion->cumplida !== $cumplida
+                ) {
+                    $sancion->partidos_cumplidos = $partidosCumplidos;
+                    $sancion->cumplida = $cumplida;
+                    $sancion->save();
+                }
+            }
+        });
+
+        // Emitir evento Livewire para actualizar vista si es necesario
         $this->dispatch('actualizar-sancion');
+        LivewireAlert::title('ok')
+            ->text('Sancion actualizada')
+            ->success()
+            ->show();
     }
 
     public function updatedBuscarJugador()

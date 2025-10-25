@@ -8,6 +8,7 @@ use App\Models\Canchas;
 use App\Models\Eliminatoria;
 use App\Models\Encuentro;
 use App\Models\Grupo;
+use App\Models\Sanciones;
 use App\Services\EncuentroExportService;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Attributes\On;
@@ -142,7 +143,59 @@ class EliminatoriaVer extends Component
                 ->timer(3000)
                 ->show();
         }
+        $this->actualizarCumplimientosSanciones();
     }
+
+    public function actualizarCumplimientosSanciones()
+    {
+
+        // Procesar sanciones en bloques para evitar sobrecarga de memoria
+        Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) {
+            foreach ($sanciones as $sancion) {
+                $jugador = $sancion->jugador;
+
+                // Validar que el jugador y su equipo existan
+                if (!$jugador || !$jugador->equipo_id) {
+                    continue;
+                }
+
+                $equipoId = $jugador->equipo_id;
+
+                // Contar partidos jugados posteriores a la fecha de sanción donde participó el equipo
+                $partidosCumplidos = Encuentro::where('campeonato_id', $sancion->campeonato_id)
+                    ->where('estado', 'Jugado')
+                    ->where('fecha_encuentro', '>', $sancion->fecha_sancion)
+                    ->where(function ($q) use ($equipoId) {
+                        $q->where('equipo_local_id', $equipoId)
+                            ->orWhere('equipo_visitante_id', $equipoId);
+                    })
+                    ->count();
+
+                // Solo guardar si hay cambios
+                $cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
+
+                if (
+                    $sancion->partidos_cumplidos !== $partidosCumplidos ||
+                    $sancion->cumplida !== $cumplida
+                ) {
+                    $sancion->partidos_cumplidos = $partidosCumplidos;
+                    $sancion->cumplida = $cumplida;
+                    $sancion->save();
+                }
+            }
+        });
+
+        // Emitir evento Livewire para actualizar vista si es necesario
+        $this->dispatch('actualizar-sancion');
+        LivewireAlert::title('ok')
+            ->text('Sancion actualizada')
+            ->success()
+            ->show();
+    }
+
+
+
+
     // ==================================0EDITAR ENCUENTRO========================================
     public function editEncuentro($id)
     {
