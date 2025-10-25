@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Eliminatoria extends Model
 {
     use HasFactory;
+    protected $table = 'eliminatorias';
 
     protected $fillable = [
         'campeonato_id',
