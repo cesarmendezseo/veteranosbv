@@ -40,7 +40,7 @@
         class="grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-200 border border-gray-500 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div>
             <label class="block m-2 dark:text-white">Buscar Jugador</label>
-            <input type="text" wire:model="buscarJugador" wire:keydown.enter="buscarJugadorSancion"
+            <input type="text" wire:model.live="buscarJugador" wire:keydown.enter.prevent="buscarJugadorSancion"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white"
                 placeholder="Ingrese documento y presione Enter">
         </div>

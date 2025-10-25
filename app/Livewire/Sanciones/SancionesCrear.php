@@ -292,7 +292,10 @@ class SancionesCrear extends Component
         $this->dispatch('actualizar-sancion');
     }
 
-
+    public function updatedBuscarJugador()
+    {
+        $this->buscarJugadorSancion();
+    }
 
     //=====================================================
     public function render()
