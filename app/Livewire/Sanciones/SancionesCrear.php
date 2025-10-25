@@ -90,11 +90,24 @@ class SancionesCrear extends Component
 
         if (!empty($this->buscarJugador)) {
 
-            $this->jugadores = Jugador::where(function ($query) {
-                $query->where('documento', 'like', '%' . trim($this->buscarJugador) . '%')
-                    ->orWhere('apellido', 'like', '%' . trim($this->buscarJugador) . '%')
-                    ->orWhere('nombre', 'like', '%' . trim($this->buscarJugador) . '%');
-            })->get();
+            $buscar = trim($this->buscarJugador);
+
+            $this->jugadores = Jugador::with('equipo')
+                ->where(function ($query) use ($buscar) {
+                    $palabras = explode(' ', $buscar);
+
+                    foreach ($palabras as $palabra) {
+                        $palabra = trim($palabra);
+                        if ($palabra !== '') {
+                            $query->where(function ($subquery) use ($palabra) {
+                                $subquery->where('nombre', 'like', "%{$palabra}%")
+                                    ->orWhere('apellido', 'like', "%{$palabra}%")
+                                    ->orWhere('documento', 'like', "%{$palabra}%");
+                            });
+                        }
+                    }
+                })
+                ->get();
         } else {
 
             $this->jugadores = [];

@@ -50,11 +50,41 @@
     @if($buscarJugador && count($jugadores) > 0)
     <div class="mb-4 bg-gray-500 border border-gray-300 text-gray-100 text-sm rounded-lg p-2.5">
         @foreach($jugadores as $jug)
-        <div class="flex justify-between items-center border-b py-1">
-            <span>{{ $jug->apellido }}, {{ $jug->nombre }} - DNI ({{ $jug->documento }})</span>
+        <div class="flex justify-between items-center border-b py-2">
+
+            <div
+                class=" flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <span class="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
+                        {{ $jug->apellido }}, {{ $jug->nombre }}
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                        DNI: {{ $jug->documento }}
+                    </span>
+                </div>
+                <div>
+                    <span
+                        class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full mt-1 sm:mt-0">
+                        {{ $jug->equipo->nombre }}
+                    </span>
+                </div>
+            </div>
+
+
+
             <button wire:click="agregarJugador({{ $jug->id }})"
-                class="bg-green-500 text-white hover:bg-green-400 px-2 py-1 rounded cursor-pointer">
-                Seleccionar
+                class="bg-blue-900 text-white hover:bg-blue-700 px-2 py-1 rounded cursor-pointer">
+                <div class="flex p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-user-round-plus-icon lucide-user-round-plus">
+                        <path d="M2 21a8 8 0 0 1 13.292-6" />
+                        <circle cx="10" cy="8" r="5" />
+                        <path d="M19 16v6" />
+                        <path d="M22 19h-6" />
+                    </svg>
+                    <span class="hidden sm:flex ml-2">Agregar</span>
+                </div>
             </button>
         </div>
         @endforeach

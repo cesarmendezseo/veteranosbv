@@ -1,20 +1,17 @@
 <div class="space-y-4">
-
     {{-- Filtros --}}
-    <div class="flex flex-col sm:flex-row gap-2 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow-md">
-        {{-- Campeonato --}}
-        <select wire:model.live="campeonato_id"
-            class="border border-gray-500 rounded-lg p-2 flex-1 text-sm sm:text-base">
-            <option value="">-- Selecciona un campeonato --</option>
-            @foreach ($campeonatos as $camp)
-            <option value="{{ $camp->id }}">{{ strtoupper($camp->nombre) }}</option>
-            @endforeach
-        </select>
 
-        <input type="text" wire:model.defer="search" wire:keydown.enter="updateSearch" placeholder="Buscar jugador..."
-            class="border border-gray-500 rounded-lg p-2 flex-1 text-sm sm:text-base" />
+    <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow-md">
+        {{-- Nombre del campeonato --}}
+
+
+        {{-- Filtro --}}
+        <div class="w-full sm:w-1/2">
+            <input type="text" wire:model.live="search" placeholder="Buscar jugador por nombre o documento"
+                class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
     </div>
-
     {{-- Tabla --}}
     <div class="overflow-x-auto bg-white shadow rounded-lg">
         <table class="w-full text-sm sm:text-base text-left rtl:text-right text-gray-500 dark:text-gray-100">
@@ -43,8 +40,7 @@
                     </td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">
                         @if($jug->sancionable)
-                        {{ $jug->sancionable->equipoLocal->nombre }} vs {{ $jug->sancionable->equipoVisitante->nombre
-                        }}
+                        {{ $jug->sancionable->equipoLocal->nombre }} vs {{ $jug->sancionable->equipoVisitante->nombre }}
                         @else
                         <em>Sin partido</em>
                         @endif
@@ -62,10 +58,16 @@
                     border-b border-gray-200 dark:border-gray-600">
                     <td colspan="8" class="px-2 py-2 text-sm">
                         <div class="grid grid-cols-2 gap-1">
-                            <div><span class="font-semibold">DNI:</span> {{ $jug->jugador->documento }}</div>
-                            <div><span class="font-semibold">Jugador:</span> {{ $jug->jugador->apellido }}, {{
-                                $jug->jugador->nombre }}</div>
-                            <div><span class="font-semibold">Etapa:</span> {{ ucfirst($jug->etapa_sancion) }}</div>
+
+                            <div class="font-semibold font-Titillium Web "> {{ $jug->jugador->apellido }}, {{
+                                $jug->jugador->nombre }} @role('administrador|comision')
+                                <div class="text-xs"><span class="font-semibold">DNI:</span> {{ $jug->jugador->documento
+                                    }}</div>
+                                @endrole
+                            </div>
+                            <div><span class="font-semibold text-gray-500">Fecha Sanción:</span> {{
+                                ucfirst($jug->etapa_sancion) }}
+                            </div>
                             <div><span class="font-semibold">Motivo:</span> {{ strtoupper($jug->motivo) }}</div>
                             <div><span class="font-semibold">Fechas:</span> {{ $jug->partidos_sancionados }}</div>
                             <div><span class="font-semibold">Cumplidas:</span> {{ $jug->partidos_cumplidos }}</div>
@@ -88,7 +90,11 @@
                 @empty
                 <tr>
                     <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+                        @if ($search)
+                        No se encontraron sanciones para <strong>"{{ $search }}"</strong>.
+                        @else
                         No se encontraron sanciones.
+                        @endif
                     </td>
                 </tr>
                 @endforelse

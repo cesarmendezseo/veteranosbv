@@ -17,81 +17,106 @@
 
     </div>
 
-    <div class="flex item-center justify-between mt-2">
+    <div class="hidden grid grid-cols-3 sm:flex sm:flex-wrap gap-2 mt-2">
+        {{-- Goles --}}
+        <button type="button" wire:click="$set('vistaActual', 'goleadores')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:mr-2" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path d="M11.1 7.1a16.55 16.55 0 0 1 10.9 4" />
+                <path d="M12 12a12.6 12.6 0 0 1-8.7 5" />
+                <path d="M16.8 13.6a16.55 16.55 0 0 1-9 7.5" />
+                <path d="M20.7 17a12.8 12.8 0 0 0-8.7-5 13.3 13.3 0 0 1 0-10" />
+                <path d="M6.3 3.8a16.55 16.55 0 0 0 1.9 11.5" />
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <span class="mt-1 sm:mt-0">Goles</span>
+        </button>
 
+        {{-- Amarilla --}}
+        <button type="button" wire:click="$set('vistaActual', 'amarillas')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                    d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span class="mt-1 sm:mt-0">Amarilla</span>
+        </button>
 
-        <div class="inline-flex rounded-md shadow-xs bg-gray-900 p-0.5" role="group">
-            <button type="button" wire:click="$set('vistaActual', 'goleadores')"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="grey" fill-rule="evenodd"
-                        d="M12 2a10 10 0 1 0 10 10A10.009 10.009 0 0 0 12 2Zm6.613 4.614a8.523 8.523 0 0 1 1.93 5.32 20.093 20.093 0 0 0-5.949-.274c-.059-.149-.122-.292-.184-.441a23.879 23.879 0 0 0-.566-1.239 11.41 11.41 0 0 0 4.769-3.366ZM10 3.707a8.82 8.82 0 0 1 2-.238 8.5 8.5 0 0 1 5.664 2.152 9.608 9.608 0 0 1-4.476 3.087A45.755 45.755 0 0 0 10 3.707Zm-6.358 6.555a8.57 8.57 0 0 1 4.73-5.981 53.99 53.99 0 0 1 3.168 4.941 32.078 32.078 0 0 1-7.9 1.04h.002Zm2.01 7.46a8.51 8.51 0 0 1-2.2-5.707v-.262a31.641 31.641 0 0 0 8.777-1.219c.243.477.477.964.692 1.449-.114.032-.227.067-.336.1a13.569 13.569 0 0 0-6.942 5.636l.009.003ZM12 20.556a8.508 8.508 0 0 1-5.243-1.8 11.717 11.717 0 0 1 6.7-5.332.509.509 0 0 1 .055-.02 35.65 35.65 0 0 1 1.819 6.476 8.476 8.476 0 0 1-3.331.676Zm4.772-1.462A37.232 37.232 0 0 0 15.113 13a12.513 12.513 0 0 1 5.321.364 8.56 8.56 0 0 1-3.66 5.73h-.002Z"
-                        clip-rule="evenodd" />
-                </svg>
-
-
-                Goles
-            </button>
-            <button type="button" wire:click="$set('vistaActual', 'amarillas')"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-
-                <svg class="  w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="yellow" fill-rule="evenodd"
+        {{-- Doble Amarilla --}}
+        <button type="button" wire:click="$set('vistaActual', 'dobleAmarillas')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <div class="flex">
+                <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
                 </svg>
-                <span class="hidden sm:inline">
-                    Amarilla
-                </span>
-            </button>
-            <button type="button" wire:click="$set('vistaActual', 'dobleAmarillas')"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="yellow" fill-rule="evenodd"
-                        d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
-                        clip-rule="evenodd" />
-
-                </svg><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="yellow" fill-rule="evenodd"
-                        d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
-                        clip-rule="evenodd" />
-
-                </svg>
-                <span class="hidden sm:inline">
-                    Doble Amarilla</span>
-            </button>
-            <button type="button" wire:click="$set('vistaActual', 'rojas')"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="red" fill-rule="evenodd"
+                <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
                 </svg>
-                <span class="hidden sm:inline">
-                    Roja
-                </span>
-            </button>
-            <button type="button" wire:click="$set('vistaActual', '5amarillas')"
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                <span class="sm:hidden">5</span>
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                    <path fill="yellow" fill-rule="evenodd"
-                        d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
-                        clip-rule="evenodd" />
+            </div>
+            <span class="mt-1 sm:mt-0 text-center">Doble Amarilla</span>
+        </button>
 
+        {{-- Roja --}}
+        <button type="button" wire:click="$set('vistaActual', 'rojas')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <svg class="w-5 h-5" fill="red" viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                    d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span class="mt-1 sm:mt-0">Roja</span>
+        </button>
+
+        {{-- 5 Amarillas --}}
+        <button type="button" wire:click="$set('vistaActual', '5amarillas')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                    d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span class="mt-1 sm:mt-0 text-center">5 Amarillas</span>
+        </button>
+        {{-- Sanciones --}}
+        <button type="button" wire:click="$set('vistaActual', 'sanciones')"
+            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            <div class="flex flex-col items-center space-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-scale-icon lucide-scale">
+                    <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                    <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+                    <path d="M7 21h10" />
+                    <path d="M12 3v18" />
+                    <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
                 </svg>
-
-                <span class="hidden sm:inline">5 Amarillas</span>
-            </button>
-        </div>
-
+                <span class="text-xs sm:text-base">Sanciones</span>
+            </div>
+        </button>
     </div>
+    {{-- Select en móvil --}}
+    <div class="block sm:hidden mt-2">
+        <select wire:model.live="vistaActual"
+            class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-400 dark:bg-gray-800 dark:text-white dark:border-gray-600">
+            <option value="goleadores">Goles</option>
+            <option value="amarillas">Amarilla</option>
+            <option value="dobleAmarillas">Doble Amarilla</option>
+            <option value="rojas">Roja</option>
+            <option value="5amarillas">5 Amarillas</option>
+            <option value="sanciones">Sanciones</option>
+        </select>
+    </div>
+
+
+
+
+
     <flux:separator />
     @if ($campeonatoId)
     <div class="mt-4">
@@ -107,7 +132,21 @@
         @elseif ($vistaActual === '5amarillas')
         @livewire('estadistica.cinco-amarillas', ['campeonatoId' => $campeonatoId], key('5amarillas-' .
         $campeonatoId))
+        @elseif ($vistaActual === 'sanciones')
+        @livewire('sanciones.sanciones-ver', ['campeonatoId' => $campeonatoId])
         @endif
+    </div>
+    @else
+    <div class="mt-6 flex items-center justify-center text-center">
+        <div
+            class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg shadow-md animate-pulse flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
+            </svg>
+            <span class="font-semibold">Debe seleccionar un campeonato</span>
+        </div>
     </div>
     @endif
 
