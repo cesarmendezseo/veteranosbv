@@ -29,7 +29,7 @@
     </div>
     <div class="mt-2 ">
         <div class="bg-blue-900 text-white p-4 shadow-md  flex justify-between items-center relative z-10">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+            <h2 class="text-2xl font-bold text-gray-100 dark:text-gray-100">
                 Fase actual: <span class="bg-gray-500 dark:text-white text-gray-100 p-2 rounded-2xl">{{
                     ucfirst($fase_actual) }}</span>
             </h2>

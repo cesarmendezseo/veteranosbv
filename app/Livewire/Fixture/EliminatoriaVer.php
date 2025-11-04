@@ -2,16 +2,14 @@
 
 namespace App\Livewire\Fixture;
 
-use App\Exports\EncuentrosExport;
+
 use App\Models\Campeonato;
 use App\Models\Canchas;
 use App\Models\Eliminatoria;
-use App\Models\Encuentro;
 use App\Models\Grupo;
 use App\Models\Sanciones;
 use App\Services\EncuentroExportService;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -50,6 +48,8 @@ class EliminatoriaVer extends Component
     public $fases;
     public $mostrarFiltros = false;
     public $encuentroId;
+    public $estadoOriginal;
+
 
 
     public function mount($campeonatoId)
@@ -116,85 +116,64 @@ class EliminatoriaVer extends Component
             ->pluck('fecha');
     }
 
+
     public function guardarGoles($encuentroId)
     {
-        // Obtener el encuentro
         $encuentro = Eliminatoria::find($encuentroId);
 
         if ($encuentro) {
-            // Actualizar los goles
+            // Actualizar goles y estado
             $encuentro->goles_local = $this->goles_local[$encuentroId] ?? 0;
             $encuentro->goles_visitante = $this->goles_visitante[$encuentroId] ?? 0;
-
             $encuentro->penales_local = $this->penal_local[$encuentroId] ?? '0';
             $encuentro->penales_visitante = $this->penal_visitante[$encuentroId] ?? '0';
-            // Cambiar estado a 'Jugado'
             $encuentro->estado = 'Jugado';
-
-            // Guardar el encuentro
             $encuentro->save();
 
-            // Mensaje de éxito
+            // 🔄 Actualizar sanciones
+            $this->actualizarSancionesCumplidas($encuentro);
+
+            // Mensaje
             LivewireAlert::title('Éxito')
-                ->text('Goles guardados y estado actualizado a "Jugado".')
+                ->text('Goles guardados y sanciones actualizadas.')
                 ->success()
                 ->asConfirm('Ok', '#3085d6')
                 ->toast()
                 ->timer(3000)
                 ->show();
         }
-        $this->actualizarCumplimientosSanciones();
     }
 
-    public function actualizarCumplimientosSanciones()
+
+    public function actualizarSancionesCumplidas($encuentro)
     {
+        // Obtener jugadores sancionados en este campeonato
+        $sanciones = Sanciones::where('campeonato_id', $encuentro->campeonato_id)
+            ->where('cumplida', false)
+            ->get();
 
-        // Procesar sanciones en bloques para evitar sobrecarga de memoria
-        Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) {
-            foreach ($sanciones as $sancion) {
-                $jugador = $sancion->jugador;
+        foreach ($sanciones as $sancion) {
+            $jugador = $sancion->jugador_id;
 
-                // Validar que el jugador y su equipo existan
-                if (!$jugador || !$jugador->equipo_id) {
-                    continue;
-                }
 
-                $equipoId = $jugador->equipo_id;
 
-                // Contar partidos jugados posteriores a la fecha de sanción donde participó el equipo
-                $partidosCumplidos = Encuentro::where('campeonato_id', $sancion->campeonato_id)
-                    ->where('estado', 'Jugado')
-                    ->where('fecha_encuentro', '>', $sancion->fecha_sancion)
-                    ->where(function ($q) use ($equipoId) {
-                        $q->where('equipo_local_id', $equipoId)
-                            ->orWhere('equipo_visitante_id', $equipoId);
-                    })
-                    ->count();
 
-                // Solo guardar si hay cambios
-                $cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
+            $sancion->partidos_cumplidos += 1;
 
-                if (
-                    $sancion->partidos_cumplidos !== $partidosCumplidos ||
-                    $sancion->cumplida !== $cumplida
-                ) {
-                    $sancion->partidos_cumplidos = $partidosCumplidos;
-                    $sancion->cumplida = $cumplida;
-                    $sancion->save();
-                }
+            // Si ya cumplió todos los partidos, marcar como cumplida
+            if ($sancion->partidos_cumplidos >= $sancion->partidos_sancionados) {
+                $sancion->cumplida = true;
             }
-        });
 
-        // Emitir evento Livewire para actualizar vista si es necesario
-        $this->dispatch('actualizar-sancion');
-        LivewireAlert::title('ok')
-            ->text('Sancion actualizada')
-            ->success()
-            ->show();
+            $sancion->save();
+        }
     }
-
-
-
+    //=============================================0
+    /*    public function jugadorParticipó($jugadorId, $encuentro)
+    {
+        // Suponiendo que cada encuentro tiene jugadores relacionados
+        return $encuentro->jugadores()->where('id', $jugadorId)->exists();
+    } */
 
     // ==================================0EDITAR ENCUENTRO========================================
     public function editEncuentro($id)
@@ -209,16 +188,20 @@ class EliminatoriaVer extends Component
 
         $this->editCanchaId = $encuentro->cancha;
         $this->canchas = Canchas::all();
-
+        $this->estadoOriginal = $encuentro;
         $this->showEditModal = true;
     }
 
+    //==============================================================
     public function guardarEdicion()
     {
 
         /*  $encuentro = Eliminatoria::findOrFail($this->encuentroEditandoId); */
         $encuentro = Eliminatoria::find($this->encuentroEditandoId);
-
+        // Verificar si el estado cambió de Jugado a otro
+        if ($this->estadoOriginal === 'Jugado' && $this->editEstado !== 'Jugado') {
+            $this->revertirSancionesCumplidas($encuentro);
+        }
         if (!$encuentro) {
             LivewireAlert::title('Error')
                 ->text('No se encontro el encuentro a editar.')
@@ -248,7 +231,28 @@ class EliminatoriaVer extends Component
             ->show();
     }
 
+    //=======================================================================
+    public function revertirSancionesCumplidas($encuentro)
+    {
+        $sanciones = Sanciones::where('campeonato_id', $encuentro->campeonato_id)
+            ->where('partidos_cumplidos', '>', 0)
+            ->get();
 
+        foreach ($sanciones as $sancion) {
+            $jugador = $sancion->jugador_id;
+
+            if ($this->jugadorParticipó($jugador, $encuentro)) {
+                $sancion->partidos_cumplidos -= 1;
+
+                if ($sancion->partidos_cumplidos < $sancion->partidos_sancionados) {
+                    $sancion->cumplida = false;
+                }
+
+                $sancion->save();
+            }
+        }
+    }
+    //=====================================================================
 
     public function eliminarEncuentro($encuentroId) // The parameter name should match the key in your dispatch payload (Id)
     {

@@ -166,7 +166,7 @@ Route::middleware(['auth'])->group(function () {
 
     //==============SANCIONES========================
     Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
-    Route::get('sanciones/ver', SancionesVer::class)->name('sanciones.ver');
+    Route::get('sanciones/{campeonatoId}/ver', SancionesVer::class)->name('sanciones.ver');
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/sanciones/{campeonatoId}/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
         Route::get('/sanciones/actualizar-cumplimientos', [\App\Livewire\Sanciones\SancionesCrear::class, 'actualizarCumplimientosSanciones'])->name('sanciones.actualizar-cumplimientos');

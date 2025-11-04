@@ -6,6 +6,7 @@ use App\Models\Campeonato;
 use App\Models\Canchas;
 use App\Models\Eliminatoria as ModelsEliminatoria;
 use App\Models\Equipo;
+use App\Models\Sanciones;
 use App\Services\EncuentroExportService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -316,10 +317,31 @@ class Eliminatoria extends Component
             ->toast()
             ->timer(3000)
             ->show();
-
+        $this->actualizarSancionesCumplidas($this->campeonato_id);
         $this->cargarEncuentros();
     }
 
+    //=====================================
+    public function actualizarSancionesCumplidas($campeonato_id)
+    {
+        // Obtener jugadores sancionados en este campeonato
+        $sanciones = Sanciones::where('campeonato_id', $campeonato_id)
+            ->where('cumplida', false)
+            ->get();
+
+        foreach ($sanciones as $sancion) {
+            $jugador = $sancion->jugador_id;
+
+            $sancion->partidos_cumplidos += 1;
+
+            // Si ya cumplió todos los partidos, marcar como cumplida
+            if ($sancion->partidos_cumplidos >= $sancion->partidos_sancionados) {
+                $sancion->cumplida = true;
+            }
+
+            $sancion->save();
+        }
+    }
     // =========================================================
     public function crearFinal($ganadores, $perdedores)
     {

@@ -72,7 +72,7 @@
     {{-- Mostrar lista de grupos con sus equipos --}}
     @if ($campeonato->formato === 'grupos')
     <div class="mt-6">
-        <h2 class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">Grupos y Equipos</h2>
+        <h2 class="block mb-2 text-lg font-medium text-gray-100 dark:text-white">Grupos y Equipos</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ">
             @foreach ($campeonato->grupos as $grupo)
             <div class="p-4 border rounded-lg dark:bg-gray-600 shadow-yellow-100 ">
@@ -112,7 +112,7 @@
             'Eliminación' }})
         </h2>
         <div class="p-4 border rounded-lg bg-gray-300 dark:bg-gray-600  ">
-            <ul class="list-none space-y-1 dark:text-gray-100">
+            <ul class="list-none space-y-1 text-gray-100 dark:text-gray-100">
                 {{-- Filtramos los equipos que no tienen grupo asignado (grupo_id es null) --}}
                 @forelse ($campeonato->equipos->where('pivot.grupo_id', null) as $equipo)
                 <li class="bg-gray-900 p-2 rounded flex justify-between items-center dark:bg-gray-800">
