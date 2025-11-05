@@ -1,4 +1,4 @@
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg pb-10">
 
     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
@@ -97,7 +97,7 @@
                             class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                             :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                             <!--VER-->
-                            <a href="{{ route('sanciones.crear', $campeonato->id) }}"
+                            <a href="{{ route('sanciones.crearSanciones', $campeonato->id) }}"
                                 class="flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -106,8 +106,20 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
-                                <span class="ml-1">Sanciones</span>
+                                <span class="ml-1">Crear Sanciones</span>
                             </a>
+                            @adminOrCan('administrador')
+                            <a href="{{ route('sanciones.actualizar') }}"
+                                class="flex items-center gap-2 hover:underline dark:text-white ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+
+                                <span class="ml-1">Actualizar Sanciones</span>
+                            </a>
+                            @endadminOrCan
                             <!-- CREAR -->
                             @adminOrCan('comision')
                             <a href="{{ route('estadistica.ver', $campeonato->id) }}"
@@ -120,7 +132,7 @@
                                     <line x1="12" x2="12" y1="8" y2="16" />
                                     <line x1="8" x2="16" y1="12" y2="12" />
                                 </svg>
-                                <span>Estadistica</span>
+                                <span>Crear Estadistica</span>
                             </a>
                             @endadminOrCan
                         </div>
@@ -187,7 +199,7 @@
                         class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700 dark:border dark:border-gray-700"
                         :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                         <!--VER-->
-                        <a href="{{ route('sanciones.crear', $campeonato->id) }}"
+                        <a href="{{ route('sanciones.crearSanciones', $campeonato->id) }}"
                             class="flex items-center gap-2 hover:underline text-sm pb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
@@ -196,8 +208,20 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
-                            <span class="ml-1">Sanciones</span>
+                            <span class="ml-1">Crear Sanciones</span>
                         </a>
+                        @adminOrCan('administrador')
+                        <a href="{{ route('sanciones.actualizar') }}"
+                            class="flex items-center gap-2 hover:underline dark:text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+
+                            <span class="ml-1">Actualizar Sanciones</span>
+                        </a>
+                        @endadminOrCan
                         <!-- CREAR -->
                         @adminOrCan('comision')
                         <a href="{{ route('estadistica.ver', $campeonato->id) }}"
@@ -210,7 +234,7 @@
                                 <line x1="12" x2="12" y1="8" y2="16" />
                                 <line x1="8" x2="16" y1="12" y2="12" />
                             </svg>
-                            <span>Estadistica</span>
+                            <span>Crear Estadistica</span>
                         </a>
                         @endadminOrCan
                     </div>
@@ -231,45 +255,5 @@
         @endforeach
     </div>
 
-
-
-    @push('js')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-
-
-
-                 Livewire.on('confirmar-baja', ({
-                     id
-                 }) => {
-
-
-                     Swal.fire({
-                         title: 'CUIDADO...',
-                         text: "¿Estás seguro de borrar al el Campeonato?",
-                         icon: 'warning',
-                         showCancelButton: true,
-                         confirmButtonColor: '#3085d6',
-                         cancelButtonColor: '#d33',
-                         confirmButtonText: 'Sí, Borrar'
-                     }).then((result) => {
-                         if (result.isConfirmed) {
-                             Livewire.dispatch('eliminar-campeonato', {
-                                 id: id
-                             });
-                         }
-                     });
-                 });
-
-                 Livewire.on('Baja', () => {
-                     Swal.fire(
-                         '¡Baja exitosa!',
-                         'El campeonato se ha borrado correctamente.',
-                         'success'
-                     );
-                 });
-             });
-    </script>
-    @endpush
 
 </div>

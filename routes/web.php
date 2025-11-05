@@ -37,6 +37,7 @@ use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
 use App\Livewire\Roles\AccessControlPanel;
+use App\Livewire\Sanciones\SancionesCrear;
 use App\Livewire\Sanciones\SancionesIndex;
 use App\Livewire\Sanciones\SancionesVer;
 use App\Livewire\TablaPosicion\TablaPosiciones;
@@ -167,9 +168,10 @@ Route::middleware(['auth'])->group(function () {
     //==============SANCIONES========================
     Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
     Route::get('sanciones/{campeonatoId}/ver', SancionesVer::class)->name('sanciones.ver');
+    Route::get('sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class)->name('sanciones.actualizar');
     Route::middleware(['permission:comision|administrador'])->group(function () {
-        Route::get('/sanciones/{campeonatoId}/crear', \App\Livewire\Sanciones\SancionesCrear::class)->name('sanciones.crear');
-        Route::get('/sanciones/actualizar-cumplimientos', [\App\Livewire\Sanciones\SancionesCrear::class, 'actualizarCumplimientosSanciones'])->name('sanciones.actualizar-cumplimientos');
+        Route::get('/sanciones/{campeonatoId}/crear', SancionesCrear::class)->name('sanciones.crearSanciones');
+        Route::get('/sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class,)->name('sanciones.actualizar');
     });
     //==============FIN SANCIONES========================
     //==============ESTADISTICA========================

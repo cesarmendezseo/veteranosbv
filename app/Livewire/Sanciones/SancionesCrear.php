@@ -189,7 +189,6 @@ class SancionesCrear extends Component
     //======================================================================
     public function guardar()
     {
-
         try {
             $this->validate([
                 'jugador_id' => 'required|exists:jugadors,id',
@@ -197,33 +196,43 @@ class SancionesCrear extends Component
                 'partidos_sancionados' => 'required|integer|min:1',
                 'motivo' => 'required|string',
                 'observacion' => 'nullable|string',
-
                 'fechaBuscada' => 'required|string',
-
             ]);
 
             $campeonato = Campeonato::find($this->campeonatoId);
             $jugador = Jugador::find($this->jugador_id);
             $equipoJugador = $jugador->equipo_id;
 
-            // Obtener el partido seleccionado
             $partido = $this->partido_tipo::find($this->partido_id);
 
-            // Validar que el jugador pertenezca al partido
+            // ✅ Validar que el jugador pertenezca al partido
             if (!in_array($equipoJugador, [$partido->equipo_local_id, $partido->equipo_visitante_id])) {
                 LivewireAlert::title('Error')
                     ->text('El jugador no pertenece al partido seleccionado')
                     ->error()
                     ->show();
-
                 return;
             }
 
-            // Crear la sanción con relación polimórfica
+            // ✅ Validar si el jugador ya tiene una sanción pendiente en este campeonato
+            $sancionPendiente = Sanciones::where('jugador_id', $this->jugador_id)
+                ->where('campeonato_id', $this->campeonatoId)
+                ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                ->exists();
+
+            if ($sancionPendiente) {
+                LivewireAlert::title('Error')
+                    ->text('Este jugador ya tiene una sanción pendiente en este campeonato.')
+                    ->warning()
+                    ->show();
+                return;
+            }
+
+            // ✅ Crear la sanción si no hay pendientes
             Sanciones::create([
                 'jugador_id' => $this->jugador_id,
                 'campeonato_id' => $this->campeonatoId,
-                'etapa_sancion' => $this->fechaBuscada, // puede ser número o fase
+                'etapa_sancion' => $this->fechaBuscada,
                 'partidos_sancionados' => $this->partidos_sancionados,
                 'partidos_cumplidos' => 0,
                 'cumplida' => false,
@@ -233,8 +242,8 @@ class SancionesCrear extends Component
                 'sancionable_type' => $this->partido_tipo,
             ]);
 
-            LivewireAlert::title('ok')
-                ->text('Sancion guardada')
+            LivewireAlert::title('Éxito')
+                ->text('Sanción guardada correctamente.')
                 ->success()
                 ->show();
 
@@ -262,6 +271,7 @@ class SancionesCrear extends Component
                 ->show();
         }
     }
+
 
 
     //======================================================

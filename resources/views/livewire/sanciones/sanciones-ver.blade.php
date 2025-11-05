@@ -19,7 +19,7 @@
                 <tr>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Documento</th>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Jugador</th>
-                    <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Etapa</th>
+                    <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Fecha Sanción</th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Partido</th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Motivo</th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Fechas</th>

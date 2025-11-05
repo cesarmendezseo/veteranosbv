@@ -14,7 +14,7 @@
                 </svg>
                 Volver
             </a>
-            <a href="{{ route('sanciones.ver') }}"
+            {{-- <a href="{{ route('sanciones.ver') }}"
                 class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -24,14 +24,8 @@
                     <circle cx="12" cy="12" r="3" />
                 </svg>
                 ver
-            </a>
+            </a> --}}
 
-            <div class="hidden md:flex">
-                <button wire:click="actualizarCumplimientosSanciones"
-                    class="bg-[#FFC107] cursor-pointer hover:bg-[#d6a82b] text-gray-800 font-bold py-2 px-4 mb-2 rounded">
-                    Actualizar Sanciones
-                </button>
-            </div>
         </div>
     </div>
 

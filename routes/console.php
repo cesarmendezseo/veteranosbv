@@ -11,4 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('sanciones:actualizar')->weeklyOn(1, '00:00'); // lunes 00:00
 
-Schedule::command('sanciones:actualizar')->everyMinute(); // PARA PRUEBAS SOLO, LUEGO COMENTAR O ELIMINAR
+//Schedule::command('sanciones:actualizar')->everyMinute(); // PARA PRUEBAS SOLO, LUEGO COMENTAR O ELIMINAR
