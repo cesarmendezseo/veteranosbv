@@ -5,16 +5,18 @@ namespace App\Livewire\Equipo;
 use App\Models\Equipo;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class EquipoIndex extends Component
 {
+    use WithPagination;
+    //public $equipos = [];
+    public $search = '';
 
-    public $equipos = [];
-
-    public function mount()
+    /*   public function mount()
     {
         $this->equipos = Equipo::orderBy('nombre')->get();
-    }
+    } */
 
     public function borrar($equipoId)
     {
@@ -70,23 +72,37 @@ class EquipoIndex extends Component
             ->timer(15000)
             ->show();
 
-        $this->equipos = Equipo::orderBy('nombre')->get(); // refrescar la lista
+        //$this->equipos = Equipo::orderBy('nombre')->get(); // refrescar la lista
     }
 
 
     public function keepItem($data)
     {
         $itemId = $data['id'];
-        $this->equipos = Equipo::orderBy('nombre')->get(); // Refresh the list of equipos */
+        //$this->equipos = Equipo::orderBy('nombre')->get(); // Refresh the list of equipos */
         // Keep logic
     }
 
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
 
 
 
     public function render()
     {
-        return view('livewire.equipo.equipo-index');
+        $equipos = Equipo::query()
+            ->when($this->search, function ($query) {
+                $query->where('nombre', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy('nombre')
+            ->paginate(10); // ← paginación real
+
+        return view('livewire.equipo.equipo-index', [
+            'equipos' => $equipos,
+        ]);
     }
 }

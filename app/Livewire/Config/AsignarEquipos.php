@@ -17,6 +17,7 @@ class AsignarEquipos extends Component
     public $equiposSeleccionados = [];
     public $equiposDisponibles;
     public $grupoNombre;
+    public $search = '';
 
     public function mount($campeonatoId)
     {
@@ -33,16 +34,31 @@ class AsignarEquipos extends Component
 
     public function cargarEquiposDisponibles()
     {
-        // Se mantiene igual
+        // Obtener los IDs de los equipos que ya están asignados al campeonato
         $equiposAsignadosIds = DB::table('campeonato_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->pluck('equipo_id')
             ->toArray();
 
-        // Traer los equipos no asignados, ordenados alfabéticamente
-        $this->equiposDisponibles = Equipo::whereNotIn('id', $equiposAsignadosIds)
-            ->orderBy('nombre', 'asc')
-            ->get();
+        $query = Equipo::whereNotIn('id', $equiposAsignadosIds);
+        // APLICAR FILTRO DE BÚSQUEDA si $search tiene contenido
+        if (!empty($this->search)) {
+            // Filtra por nombre usando LIKE %valor%
+            $query->where('nombre', 'like', '%' . $this->search . '%');
+        }
+
+        // Traer los equipos no asignados y filtrados, ordenados alfabéticamente
+        $this->equiposDisponibles = $query->orderBy('nombre', 'asc')->get();
+    }
+
+    public function updatedSearch()
+    {
+        // Cuando el usuario escribe en el campo de búsqueda, Livewire actualizará $search 
+        // y llamará a este método para recargar la lista de equipos disponibles.
+        $this->cargarEquiposDisponibles();
+
+        // Opcional: Limpiar las selecciones anteriores al buscar.
+        $this->equiposSeleccionados = [];
     }
 
     public function updatedGrupoSeleccionado()

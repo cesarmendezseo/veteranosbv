@@ -18,6 +18,10 @@
             Crear</a>
         @endadminOrCan
     </div>
+    <div class="mt-2">
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del equipo "
+            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+    </div>
 
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -176,4 +180,5 @@
             </tbody>
         </table>
     </div>
+    {{ $equipos->links() }}
 </div>

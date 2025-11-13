@@ -100,6 +100,28 @@ class CampeonatoIndex extends Component
         $this->dispatch('static-modal');
     }
 
+    // Propiedad computada para obtener los campeonatos filtrados
+    public function getCampeonatosProperty()
+    {
+        $query = Campeonato::with('categoria')->orderBy('nombre', 'asc');
+
+        // Aplicar el filtro si $search tiene valor
+        if (!empty($this->search)) {
+            $searchTerm = '%' . $this->search . '%';
+
+            $query->where(function ($q) use ($searchTerm) {
+                // Buscar por nombre del campeonato
+                $q->where('nombre', 'like', $searchTerm)
+                    // Buscar por año (asumiendo que 'nombre' o alguna columna similar contiene el año, o si tienes una columna 'anio')
+                    // Si tienes una columna 'anio' (o similar):
+                    // ->orWhere('anio', 'like', $searchTerm) 
+                ;
+            });
+        }
+
+        return $query->get();
+    }
+
     public function render()
     {
         $campeonatos = Campeonato::query()

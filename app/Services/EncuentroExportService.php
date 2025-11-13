@@ -34,7 +34,7 @@ class EncuentroExportService
 
         // Preparar los datos para Excel
         $datosParaExcel = [];
-        $datosParaExcel[] = [$nombreTorneo]; // Agregar el nombre del torneo en la primera fila
+        $datosParaExcel[] = [strtoupper($nombreTorneo)]; // Agregar el nombre del torneo en la primera fila
 
         foreach ($encuentros as $cancha => $partidos) {
             $datosParaExcel[] = [$cancha]; // Solo el nombre de la cancha en la primera fila
@@ -44,10 +44,10 @@ class EncuentroExportService
                 $datosParaExcel[] = [
 
 
-                    $encuentro->equipoLocal->nombre ?? '',
+                    strtoupper($encuentro->equipoLocal->nombre ?? ''),
                     strval($encuentro->gol_local ?? 0),
                     strval($encuentro->gol_visitante ?? 0),
-                    $encuentro->equipoVisitante->nombre ?? '',
+                    strtoupper($encuentro->equipoVisitante->nombre ?? ''),
                 ];
             }
 

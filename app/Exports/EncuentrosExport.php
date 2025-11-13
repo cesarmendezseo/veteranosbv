@@ -37,7 +37,7 @@ class EncuentrosExport implements FromCollection, WithHeadings, WithStyles, With
         $data = new Collection();
 
         // Agregar el nombre del torneo
-        $data->push([$this->torneoNombre]);
+        $data->push([strtoupper($this->torneoNombre)]);
 
         // Agregar la "Fecha N°" y la fecha real del encuentro en la misma fila
         //$fechaDate = is_numeric($this->fechaEncuentro) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($this->fechaEncuentro)->format('d-m-Y') : (\is_string($this->fechaEncuentro) ? \Carbon\Carbon::parse($this->fechaEncuentro)->format('d-m-Y') : '');

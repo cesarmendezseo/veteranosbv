@@ -35,16 +35,21 @@
 
     {{-- Selección de equipos: Muestra el selector si NO es por grupos O si SÍ es por grupos y ya seleccionaste uno --}}
     @if (in_array($campeonato->formato, $formatosSinGrupos) || $grupoSeleccionado)
-    <div class="mb-4  bg-gray-200  p-4 rounded-lg dark:bg-gray-600">
+    <div class="mb-4 bg-gray-200 p-4 rounded-lg dark:bg-gray-600">
         <label class="block mb-2 text-basic font-medium bg-gray-500 text-gray-100 dark:text-white dark:bg-gray-900 p-4">
-            Seleccionar equipos
-            {{ $campeonato->formato === 'grupos' ? 'para el grupo' : 'para el campeonato' }}
-            <span> (Puedes seleccionar múltiples equipos)</span>
+            Seleccionar equipos <span> (Puedes seleccionar múltiples equipos)</span>
         </label>
+
+        {{-- AÑADIR CAMPO DE BÚSQUEDA --}}
+        <input type="text" wire:model.live="search" placeholder="Escribe el nombre del equipo para filtrar..."
+            class="mb-3 p-2 block w-full border-gray-400 bg-white rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white">
+        {{-- FIN CAMPO DE BÚSQUEDA --}}
+
         <select wire:model="equiposSeleccionados" multiple
-            class="block cursor-pointer w-full border border-gray-400  bg-gray-100  dark:text-gray-900 p-2 dark:border-gray-100 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 "
+            class="block cursor-pointer w-full border border-gray-400 bg-gray-100 dark:text-gray-900 p-2 dark:border-gray-100 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 "
             size="8">
-            @foreach ($equiposDisponibles as $equipo)
+            {{-- Usamos la propiedad computada 'equiposDisponibles' que ya está filtrando --}}
+            @foreach ($this->equiposDisponibles as $equipo)
             <option value="{{ $equipo->id }}">{{ ucwords($equipo->nombre) }}</option>
             @endforeach
         </select>

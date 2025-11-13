@@ -5,6 +5,10 @@
         {{ __('Sanciones') }}
         </h2>
     </div>
+    <div class="mt-2">
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del campeonato "
+            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+    </div>
     <!-- Para escritorio -->
     <table class="hidden md:table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-white">
@@ -210,18 +214,7 @@
                             </svg>
                             <span class="ml-1">Crear Sanciones</span>
                         </a>
-                        @adminOrCan('administrador')
-                        <a href="{{ route('sanciones.actualizar') }}"
-                            class="flex items-center gap-2 hover:underline dark:text-white ">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                            </svg>
 
-                            <span class="ml-1">Actualizar Sanciones</span>
-                        </a>
-                        @endadminOrCan
                         <!-- CREAR -->
                         @adminOrCan('comision')
                         <a href="{{ route('estadistica.ver', $campeonato->id) }}"
@@ -235,6 +228,18 @@
                                 <line x1="8" x2="16" y1="12" y2="12" />
                             </svg>
                             <span>Crear Estadistica</span>
+                        </a>
+                        @endadminOrCan
+                        @adminOrCan('administrador')
+                        <a href="{{ route('sanciones.actualizar') }}"
+                            class="flex items-center gap-2 hover:underline dark:text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+
+                            <span class="ml-1">Actualizar Sanciones</span>
                         </a>
                         @endadminOrCan
                     </div>
@@ -253,7 +258,8 @@
             </div>
         </div>
         @endforeach
+
     </div>
 
-
+    {{ $campeonatos->links() }}
 </div>

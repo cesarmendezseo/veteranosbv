@@ -2,24 +2,42 @@
 
 namespace App\Livewire\Sanciones;
 
+use App\Models\Campeonato;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class SancionesIndex extends Component
 {
+    use WithPagination; // ⬅️ DEBES USARLO
+
     public $vistaActual = 'ver';
     public $campeonatoId;
-    public $campeonatos = [];
+
+    public $search = '';
+    protected $listeners = ['refresh' => '$refresh'];
 
 
-    public function mount()
+
+
+    public function updatingSearch()
     {
-
-        $this->campeonatos = \App\Models\Campeonato::orderBy('created_at', 'desc')->get();
+        $this->resetPage();
     }
-
 
     public function render()
     {
-        return view('livewire.sanciones.sanciones-index');
+        $campeonatos = Campeonato::query()
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhereYear('created_at', $this->search);
+                });
+            })
+            ->orderBy('nombre')
+            ->paginate(10);
+
+        return view('livewire.sanciones.sanciones-index', [
+            'campeonatos' => $campeonatos, // Esta variable local es la que tiene la paginación y el filtro.
+        ]);
     }
 }

@@ -5,6 +5,10 @@
             {{ __('Listado de Buena Fé') }}
         </h2>
     </div>
+    <div class="mt-2">
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del campeonato "
+            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+    </div>
 
     {{-- VISTA DE ESCRITORIO --}}
     <div class="hidden sm:block">
@@ -139,5 +143,5 @@
         </div>
         @endforeach
     </div>
-
+    {{ $campeonatos->links() }}
 </div>

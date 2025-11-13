@@ -16,6 +16,10 @@
         </button>
         @endadminOrCan
     </div>
+    <div class="mt-2">
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del campeonato "
+            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+    </div>
     <!-- escritorio -->
     <div class="hidden">
         @adminOrCan('comision')
@@ -427,4 +431,5 @@
             </div>
         </div>
     </div>
+    {{ $campeonatos->links() }}
 </div>

@@ -4,10 +4,11 @@
         {{ __('Tabla de Posiciones') }}
         </h2>
 
-        <div class="mt-2 md:w-[600px] lg:w-[800px]">
-            <input type="text" wire:model.live="search" placeholder="Buscar por nombre del campeonato o por año"
-                class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
-        </div>
+
+    </div>
+    <div class="mt-2">
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del campeonato "
+            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
     </div>
 
     <flux:separator class="mb-2" />
@@ -189,7 +190,7 @@
         @endforeach
     </div>
 
-
+    {{ $campeonatos->links() }}
 
 
     @push('js')
