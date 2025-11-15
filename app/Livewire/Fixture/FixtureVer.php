@@ -108,7 +108,7 @@ class FixtureVer extends Component
     public function guardarGoles($encuentroId)
     {
 
-        $this->actualizarCumplimientosSanciones();
+        //$this->actualizarCumplimientosSanciones();
         // Obtener el encuentro
         $encuentro = Encuentro::find($encuentroId);
 
@@ -241,6 +241,13 @@ class FixtureVer extends Component
 
     public function render()
     {
+        if ($this->fechaFiltro) {
+            try {
+                $this->fechaFiltro = \Carbon\Carbon::parse($this->fechaFiltro)->format('Y-m-d');
+            } catch (\Exception $e) {
+                $this->fechaFiltro = null; // evitar crash
+            }
+        }
         // Si no hay campeonato seleccionado, retorna vista vacía
         if (!$this->campeonato_id) {
             return view('livewire.fixture.fixture-index', [

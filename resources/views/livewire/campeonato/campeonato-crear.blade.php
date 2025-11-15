@@ -211,7 +211,7 @@
             </div>
 
             <button type="submit"
-                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded cursor-pointer">
+                class="inline-flex items-center gap-2 mt-4 bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-save-icon lucide-save">
@@ -221,7 +221,7 @@
                     <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                 </svg> <span>Guardar</span></button>
             <a href="{{route('campeonato.index')}}"
-                class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+                class="inline-flex items-center gap-2 mt-4 bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
