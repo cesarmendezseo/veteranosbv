@@ -153,6 +153,7 @@ class CampeonatoCrear extends Component
             'puntos_perdido' => $this->puntos_perdido,
             'categoria_id' => (int) $this->categoria_id,
             'status' => $statusInicial, // Asignar el status inicial
+            'config_sancion' => 'cada_7dias', // Valor por defecto
 
         ]);
 

@@ -26,6 +26,7 @@ class Campeonato extends Model
         'cantidad_grupos',
         'total_equipos',
         'status',
+        'config_sancion',
     ];
     protected $casts = [
         'puntos_ganado' => 'integer',
