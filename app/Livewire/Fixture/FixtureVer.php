@@ -191,7 +191,7 @@ class FixtureVer extends Component
     //==================================
     public function actualizarCumplimientosSanciones()
     {
-        dd('hola');
+
         // Procesar sanciones en bloques para evitar sobrecarga de memoria
         Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) {
             foreach ($sanciones as $sancion) {
