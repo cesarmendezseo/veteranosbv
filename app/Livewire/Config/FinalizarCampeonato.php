@@ -48,6 +48,9 @@ class FinalizarCampeonato extends Component
                 'equipo_id' => $idSinEquipo
             ]);
         });
+        // 🔥 Marcar campeonato como finalizado
+        Campeonato::where('id', $this->campeonatoId)
+            ->update(['finalizado' => true]);
 
         LivewireAlert::title('Campeonato Finalizado')
             ->text('Todos los jugadores fueron dados de baja y movidos al equipo SIN EQUIPO.')

@@ -21,6 +21,7 @@
                     <th scope="col" class="px-6 py-3">
                         Categoria
                     </th>
+                    <th scope="col" class="px-6 py-3"></th>
                     <th scope="col" class="px-6 py-3 text-center">
                         Acciones
                     </th>
@@ -55,6 +56,13 @@
                     <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div class="font-normal text-gray-500 dark:text-white"> {{
                             strtoupper($campeonato->categoria->nombre) }}</div>
+                    </th>
+                    <th>
+                        @if ($campeonato->finalizado)
+                        <span class="text-red-500 font-bold">Campeonato Finalizado</span>
+                        @else
+                        <span class="text-green-500 font-bold">Campeonato Activo</span>
+                        @endif
                     </th>
 
 
@@ -137,7 +145,14 @@
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Torneo: {{ ucwords($campeonato->nombre) }}
                 </h2>
-
+                @if ($campeonato->finalizado)
+                <span class="text-red-500 font-bold">Campeonato finalizado</span>
+                @else
+                <button wire:click="finalizarCampeonato({{ $campeonato->id }})"
+                    class="px-3 py-2 bg-red-600 text-white rounded cursor pointer">
+                    Finalizar Campeonato
+                </button>
+                @endif
                 {{-- Menú acciones móvil (abre hacia arriba si no hay espacio) --}}
                 <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false"
                     @scroll.window="open=false">
