@@ -119,7 +119,7 @@ class ListadoBuenaFeCrear extends Component
                 ->implode(', ');
 
             LivewireAlert::title('Error')
-                ->text("Los siguientes jugadores están marcados como ACTIVOS y no se pueden agregar: $nombresActivos")
+                ->text("Los siguientes jugadores no se pueden agregar por que estan INACTIVOS: $nombresActivos")
                 ->error()->asConfirm()->toast()->position('top')->show();
 
             return;

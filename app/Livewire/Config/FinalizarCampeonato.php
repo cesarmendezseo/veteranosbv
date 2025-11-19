@@ -22,9 +22,12 @@ class FinalizarCampeonato extends Component
     {
         $this->campeonatoId = $id;
 
+        // Obtener id del equipo “Sin equipo”
+        $idSinEquipo = DB::table('equipos')
+            ->whereRaw('LOWER(nombre) = ?', ['sin equipo'])
+            ->value('id');
 
-
-        DB::transaction(function () {
+        DB::transaction(function () use ($idSinEquipo) {
 
             // Dar de baja todos los jugadores del campeonato
             DB::table('campeonato_jugador_equipo')
@@ -35,17 +38,19 @@ class FinalizarCampeonato extends Component
                     'updated_at' => now(),
                 ]);
 
-            // Opcional: quitar equipo actual de cada jugador (para que queden libres)
+            // Mover jugadores al equipo "Sin equipo"
             Jugador::whereIn(
                 'id',
                 DB::table('campeonato_jugador_equipo')
                     ->where('campeonato_id', $this->campeonatoId)
                     ->pluck('jugador_id')
-            )->update(['equipo_id' => null]);
+            )->update([
+                'equipo_id' => $idSinEquipo
+            ]);
         });
 
         LivewireAlert::title('Campeonato Finalizado')
-            ->text('Todos los jugadores fueron dados de baja y el campeonato quedó cerrado.')
+            ->text('Todos los jugadores fueron dados de baja y movidos al equipo SIN EQUIPO.')
             ->success()
             ->toast()
             ->position('top')
