@@ -24,6 +24,7 @@ class ListadoBuenaFeCrear extends Component
 
     public function mount($campeonatoId)
     {
+        $this->campeonatoId = $campeonatoId;
 
         $this->equipos = Equipo::orderBy('nombre')->get();
         $this->campeonatos = Campeonato::where('id', $campeonatoId)->get();
@@ -45,7 +46,6 @@ class ListadoBuenaFeCrear extends Component
 
         if (!$jugador) return;
 
-        // evitar duplicados
         if (!collect($this->jugadoresSeleccionados)->contains('id', $jugador->id)) {
             $this->jugadoresSeleccionados[] = [
                 'id' => $jugador->id,
@@ -54,10 +54,8 @@ class ListadoBuenaFeCrear extends Component
                 'documento' => $jugador->documento,
             ];
         }
-        // limpiar input Livewire si existe
-        $this->buscar = '';
 
-        // enviar evento al frontend (Livewire 3)
+        $this->buscar = '';
         $this->dispatch('focus-input');
     }
 
@@ -74,14 +72,23 @@ class ListadoBuenaFeCrear extends Component
             'jugadoresSeleccionados' => 'required|array|min:1',
         ]);
 
-        // Verificación previa
+        // Obtener ID del equipo "Sin equipo"
+        $idSinEquipo = DB::table('equipos')
+            ->whereRaw('LOWER(nombre) = ?', ['sin equipo'])
+            ->value('id');
+
         $jugadoresIds = collect($this->jugadoresSeleccionados)->pluck('id');
 
+        //------------------------------------------
+        // 1️⃣ Verificar si ya pertenecen a otro equipo ACTIVO
+        //------------------------------------------
         $jugadoresYaAsignados = DB::table('campeonato_jugador_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->whereIn('jugador_id', $jugadoresIds)
+            ->whereNull('fecha_baja')                 // activo
             ->where('equipo_id', '!=', $this->equipoSeleccionado)
-            ->pluck('jugador_id') //lista de Ids en confilctos
+            ->where('equipo_id', '!=', $idSinEquipo)
+            ->pluck('jugador_id')
             ->toArray();
 
         if (!empty($jugadoresYaAsignados)) {
@@ -92,33 +99,63 @@ class ListadoBuenaFeCrear extends Component
 
             LivewireAlert::title('Error')
                 ->text("Los siguientes jugadores ya están asignados a otro equipo en este campeonato:  $nombres")
-                ->error()
-                ->asConfirm()
-                ->toast()
-                ->position('top')
-                ->show();
+                ->error()->asConfirm()->toast()->position('top')->show();
 
             return;
         }
 
-        // Si todo está OK, guardamos
+        //------------------------------------------
+        // 2️⃣ Jugadores con is_active = 1 NO pueden cargarse
+        //------------------------------------------
+        $jugadoresActivos = Jugador::whereIn('id', $jugadoresIds)
+            ->where('is_active', 0)      // activo = prohibido cargar
+            ->pluck('id')
+            ->toArray();
+
+        if (!empty($jugadoresActivos)) {
+            $nombresActivos = Jugador::whereIn('id', $jugadoresActivos)
+                ->get(['nombre', 'apellido'])
+                ->map(fn($j) => "{$j->apellido} {$j->nombre}")
+                ->implode(', ');
+
+            LivewireAlert::title('Error')
+                ->text("Los siguientes jugadores están marcados como ACTIVOS y no se pueden agregar: $nombresActivos")
+                ->error()->asConfirm()->toast()->position('top')->show();
+
+            return;
+        }
+
+        //------------------------------------------
+        // 3️⃣ Guardar historial
+        // Cada alta crea un registro nuevo
+        //------------------------------------------
         DB::transaction(function () {
             foreach ($this->jugadoresSeleccionados as $jugador) {
-                DB::table('campeonato_jugador_equipo')->updateOrInsert(
-                    [
+
+                // Verificar si ya está ACTIVO en este equipo
+                $existe = DB::table('campeonato_jugador_equipo')
+                    ->where('campeonato_id', $this->campeonatoId)
+                    ->where('equipo_id', $this->equipoSeleccionado)
+                    ->where('jugador_id', $jugador['id'])
+                    ->whereNull('fecha_baja')
+                    ->first();
+
+                // Si no está activo → crear historial nuevo
+                if (!$existe) {
+                    DB::table('campeonato_jugador_equipo')->insert([
                         'campeonato_id' => $this->campeonatoId,
                         'equipo_id' => $this->equipoSeleccionado,
                         'jugador_id' => $jugador['id'],
                         'categoria_id' => $this->categoria_id,
-                    ],
-                    [
                         'fecha_alta' => now(),
                         'fecha_baja' => null,
+                        'created_at' => now(),
                         'updated_at' => now(),
-                    ]
-                );
+                    ]);
+                }
 
-                Jugador::where('id', $jugador['id']) // nombres para mostrar en alerta
+                // Actualiza el equipo actual del jugador
+                Jugador::where('id', $jugador['id'])
                     ->update(['equipo_id' => $this->equipoSeleccionado]);
             }
         });
@@ -127,12 +164,8 @@ class ListadoBuenaFeCrear extends Component
 
         LivewireAlert::title('Éxito')
             ->text('La planilla de buena fe se guardó correctamente.')
-            ->success()
-            ->toast()
-            ->position('top')
-            ->show();
+            ->success()->toast()->position('top')->show();
     }
-
 
     public function render()
     {

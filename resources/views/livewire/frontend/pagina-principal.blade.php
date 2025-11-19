@@ -6,7 +6,21 @@
         <!-- Partidos -->
         <section id="partidos" class="py-16 w-full mx-auto px-6 bg-cover bg-center bg-no-repeat"
             style="background-image: url('{{ asset('images/pagina-principal.jpg') }}')">
-            <livewire:frontend.proximos-partidos.proximos-partidos-index />
+            {{--
+            <livewire:frontend.proximos-partidos.proximos-partidos-index /> --}}
+            <h1 class="font-semibold text-xl text-gray-100 leading-tight">{{ $tituloPrincipal }}</h1>
+
+
+            @if ($mostrarTabla && $campeonatoSeleccionado)
+            @livewire('frontend.tabla-posicion.tabla-posicion-resultados', ['campeonatoId' => $campeonatoSeleccionado])
+            @endif
+            {{-- @if ($mostrarTabla)
+            @livewire('frontend.tabla-posicion.tabla-posicion-index')
+            @endif --}}
+
+            @if ($mostrarEncuentros)
+            @livewire('frontend.proximos-partidos.proximos-partidos-index')
+            @endif
         </section>
     </section>
 

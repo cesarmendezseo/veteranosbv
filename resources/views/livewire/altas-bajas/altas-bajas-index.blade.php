@@ -1,11 +1,12 @@
 <div class="p-4 bg-gray-100 rounded-lg mb-4 shadow-md">
     <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Altas y Bajas') }}
+        {{ __('Historial de Jugadores') }}
         </h2>
         <div>
-            <a href="{{ route('copiar-listado-buena-fe') }}" class="cursor-pointer hover:underline">Clonar Listado</a>
-        </div>
+            {{-- <a href="{{ route('copiar-listado-buena-fe') }}" class="cursor-pointer hover:underline">Clonar
+                Listado</a>
+            --}}</div>
     </div>
     <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
         class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -82,7 +83,7 @@
                                 class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                                 :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                                 <!--ALTA-->
-                                <a wire:click="mostrarFormularioAlta({{ $jugador->id }})"
+                                {{-- <a wire:click="mostrarFormularioAlta({{ $jugador->id }})"
                                     class="cursor-pointer  flex items-center gap-2 hover:underline">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -105,7 +106,7 @@
                                     </svg>
 
                                     <span>Baja</span>
-                                </a>
+                                </a> --}}
                                 <!-- HISTORIAL -->
 
                                 <a wire:click="verHistorial({{ $jugador->id }})"
@@ -190,7 +191,7 @@
                     class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border dark:border-gray-700"
                     :style="`top:${top}px; left:${left}px`" x-transition.opacity>
                     <!-- ALTA -->
-                    <a wire:click="mostrarFormularioAlta({{ $jugador->id }})"
+                    {{-- <a wire:click="mostrarFormularioAlta({{ $jugador->id }})"
                         class="cursor-pointer flex items-center gap-2 hover:underline">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -211,7 +212,7 @@
                                 d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                         <span>Baja</span>
-                    </a>
+                    </a> --}}
                     <!-- HISTORIAL -->
                     <a wire:click="verHistorial({{ $jugador->id }})"
                         class="cursor-pointer flex items-center gap-2 hover:underline">

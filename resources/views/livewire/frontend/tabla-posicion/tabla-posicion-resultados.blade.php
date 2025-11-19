@@ -2,8 +2,9 @@
 
     <div class=" mt-2 w-full ">
 
-        <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
+        {{-- <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
             <h1 class="text-lg font-bold">Tabla de posiciones</h1>
+
 
             <!--Nav para móvil (se muestra hasta md)  -->
             <nav class="flex md:hidden space-x-4">
@@ -29,7 +30,7 @@
                     Volver
                 </a>
             </nav>
-        </div>
+        </div> --}}
 
 
         <!-- Tabla de posiciones -->

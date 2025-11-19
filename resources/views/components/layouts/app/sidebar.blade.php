@@ -41,7 +41,7 @@
             </flux:navlist.item>
             @role('administrador|comision')
             <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
-                :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Altas y Bajas') }}
+                :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Historial Jugadores') }}
             </flux:navlist.item>
             @endrole
             <flux:navlist.item icon="album" :href="route('categoria.index')"

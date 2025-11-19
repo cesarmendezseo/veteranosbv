@@ -13,6 +13,7 @@ use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Config\ConfigIndex;
 use App\Livewire\Config\CopiarListadoBuenaFe;
+use App\Livewire\Config\PanelConfiguracion;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
@@ -189,6 +190,8 @@ Route::middleware(['auth'])->group(function () {
     //==============CONFIGURACION========================
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/configuracion', ConfigIndex::class)->name('config.index');
+        Route::get('/configuracion/general', PanelConfiguracion::class)->name('config.PanelConfiguracion');
+        Route::get('/configuracion/finalizar-campeonato', \App\Livewire\Config\FinalizarCampeonato::class)->name('config.finalizarCampeonato');
     });
     //==============FIN CONFIGURACION========================
 });

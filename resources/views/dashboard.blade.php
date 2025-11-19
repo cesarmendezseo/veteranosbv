@@ -51,7 +51,7 @@
               hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out text-center">
                 <img src="{{ asset('images/altas-bajas.png') }}" alt="Altas y Bajas"
                     class="w-10 h-10 sm:w-18 sm:h-18 object-cover rounded-full mb-2">
-                <h2 class="text-xs sm:text-base font-medium text-gray-700 leading-tight">Altas y Bajas</h2>
+                <h2 class="text-xs sm:text-base font-medium text-gray-700 leading-tight">Historial</h2>
             </a>
             @endadminOrCan
 

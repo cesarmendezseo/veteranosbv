@@ -116,6 +116,7 @@ class JugadoresCrear extends Component
 
         LivewireAlert::title('Buenisimo!!')
             ->text('El jugador se creo correctamente.')
+            ->toast()
             ->success()
             ->show();
         // Dispatch an event to notify other components
