@@ -14,18 +14,6 @@
                 </svg>
                 Volver
             </a>
-            {{-- <a href="{{ route('sanciones.ver') }}"
-                class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-eye-icon lucide-eye">
-                    <path
-                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                    <circle cx="12" cy="12" r="3" />
-                </svg>
-                ver
-            </a> --}}
-
         </div>
     </div>
 
@@ -36,7 +24,7 @@
             <label class="block m-2 dark:text-white">Buscar Jugador</label>
             <input type="text" wire:model.live="buscarJugador" wire:keydown.enter.prevent="buscarJugadorSancion"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white"
-                placeholder="Ingrese documento y presione Enter">
+                placeholder="Ingrese Dni o Nombre y presione Enter">
         </div>
     </div>
 
@@ -45,7 +33,6 @@
     <div class="mb-4 bg-gray-500 border border-gray-300 text-gray-100 text-sm rounded-lg p-2.5">
         @foreach($jugadores as $jug)
         <div class="flex justify-between items-center border-b py-2">
-
             <div
                 class=" flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm hover:shadow-md transition">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2">
@@ -59,13 +46,10 @@
                 <div>
                     <span
                         class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full mt-1 sm:mt-0">
-                        {{ $jug->equipo->nombre }}
+                        {{strtoupper( $jug->equipo->nombre) }}
                     </span>
                 </div>
             </div>
-
-
-
             <button wire:click="agregarJugador({{ $jug->id }})"
                 class="bg-blue-900 text-white hover:bg-blue-700 px-2 py-1 rounded cursor-pointer">
                 <div class="flex p-1">

@@ -270,6 +270,7 @@ class SancionesCrear extends Component
                 ->error()
                 ->show();
         }
+        $this->jugadorSeleccionado = null;
     }
 
 

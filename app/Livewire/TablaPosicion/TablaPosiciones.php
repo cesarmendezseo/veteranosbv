@@ -127,14 +127,19 @@ class TablaPosiciones extends Component
 
                 // 📌 Cálculo de Fair Play
                 // (Suponiendo que en Encuentro tienes las tarjetas registradas por equipo)
-                $tarjetasAmarillas = $tipo === 'local' ? $encuentro->amarillas_local : $encuentro->amarillas_visitante;
-                $tarjetasDobleAmarilla = $tipo === 'local' ? $encuentro->doble_amarilla_local : $encuentro->doble_amarilla_visitante;
-                $tarjetasRojas = $tipo === 'local' ? $encuentro->rojas_local : $encuentro->rojas_visitante;
+                $stats = EstadisticaJugadorEncuentro::where('estadisticable_id', $encuentro->id)
+                    ->where('estadisticable_type', Encuentro::class)
+                    ->where('equipo_id', $equipo_id) // Filtra por equipo
+                    ->get();
+
+                $tarjetasAmarillas     = $stats->sum('tarjeta_amarilla');
+                $tarjetasDobleAmarilla = $stats->sum('tarjeta_doble_amarilla');
+                $tarjetasRojas         = $stats->sum('tarjeta_roja');
 
                 $tabla[$equipo_id]['fair_play'] +=
-                    ($tarjetasAmarillas * $campeonato->puntos_tarjetas_amarillas) +
+                    ($tarjetasAmarillas     * $campeonato->puntos_tarjetas_amarillas) +
                     ($tarjetasDobleAmarilla * $campeonato->puntos_doble_amarilla) +
-                    ($tarjetasRojas * $campeonato->puntos_tarjeta_roja);
+                    ($tarjetasRojas         * $campeonato->puntos_tarjeta_roja);
             }
         }
 

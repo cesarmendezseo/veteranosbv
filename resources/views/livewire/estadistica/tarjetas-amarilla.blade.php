@@ -24,7 +24,7 @@
             </thead>
             <tbody>
                 @forelse($amarillas as $jug)
-                <tr class="border-b dark:border-gray-600">
+                <tr class="border-b dark:border-gray-600 dark:bg-gray-800">
                     <td class="px-4 py-2">{{ $jug->jugador->documento }}</td>
                     <td class="px-4 py-2">{{ strtoupper($jug->jugador->apellido) }}, {{
                         strtoupper($jug->jugador->nombre) }}</td>
