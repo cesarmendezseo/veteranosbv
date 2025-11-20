@@ -11,7 +11,7 @@
     </div>
 
     {{-- Vista en escritorio: tabla --}}
-    <div class="hidden sm:block bg-gray-800 shadow rounded-lg overflow-x-auto">
+    <div class="hidden sm:block bg-white shadow rounded-lg overflow-x-auto">
         <table class="w-full text-sm sm:text-base text-left text-gray-700 dark:text-gray-100">
             <thead class="text-xs sm:text-sm uppercase bg-gray-700 dark:bg-gray-700 text-yellow-400">
                 <tr>

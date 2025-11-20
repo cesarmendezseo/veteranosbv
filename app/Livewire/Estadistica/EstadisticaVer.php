@@ -136,50 +136,47 @@ class EstadisticaVer extends Component
 
         if (!$value) return;
 
-        // Obtener el modelo polimórfico según el formato del campeonato
         $modelo = $this->getPolymorphicType();
 
-
-        // Cargar el partido con jugadores
-        $partido = $modelo::with([
-            'equipoLocal.jugadores',
-            'equipoVisitante.jugadores'
-        ])->find($value);
+        // Cargar encuentro sin jugadores directos
+        $partido = $modelo::with(['equipoLocal', 'equipoVisitante'])->find($value);
 
         if (!$partido) return;
 
-        // Setear datos base
-        $this->tipoEncuentro = class_basename($modelo); // 'Encuentro' o 'Eliminatoria'
+        // Datos base del encuentro
+        $this->tipoEncuentro = class_basename($modelo);
         $this->encuentroJugador = $partido->id;
         $this->nombreLocal = $partido->equipoLocal->nombre ?? 'Sin nombre';
         $this->nombreVisitante = $partido->equipoVisitante->nombre ?? 'Sin nombre';
         $this->equipoLocal_id = $partido->equipoLocal->id;
         $this->equipoVisitante_id = $partido->equipoVisitante->id;
-        $this->jugadoresLocal = $partido->equipoLocal->jugadores ?? collect();
-        $this->jugadoresVisitante = $partido->equipoVisitante->jugadores ?? collect();
 
-        // IDs de jugadores
+        // Cargar jugadores desde la pivote del campeonato (ordenados A-Z)
+        $this->jugadoresLocal = $partido->equipoLocal
+            ->jugadoresDelCampeonato($this->campeonatoId)
+            ->orderBy('apellido')
+            ->orderBy('nombre')
+            ->get();
+
+        $this->jugadoresVisitante = $partido->equipoVisitante
+            ->jugadoresDelCampeonato($this->campeonatoId)
+            ->orderBy('apellido')
+            ->orderBy('nombre')
+            ->get();
+
+        // Obtener ids
         $playerIds = $this->jugadoresLocal->pluck('id')
             ->merge($this->jugadoresVisitante->pluck('id'))
-            ->unique()
-            ->filter();
+            ->unique();
 
-        // Buscar estadísticas polimórficas
-        $existingStats = collect();
-        if ($playerIds->isNotEmpty()) {
-            $existingStats = EstadisticaJugadorEncuentro::where('estadisticable_id', $this->encuentroJugador)
-                ->where('estadisticable_type', $modelo)
-                ->whereIn('jugador_id', $playerIds)
-                ->get()
-                ->keyBy('jugador_id');
-        }
-        /*   dd([
-            'encuentro_id' => $this->encuentroJugador,
-            'tipo' => $this->getPolymorphicType(),
-            'jugadores' => $playerIds->toArray()
-        ]);
- */
-        // Poblar datos jugadores
+        // Cargar estadísticas existentes
+        $existingStats = EstadisticaJugadorEncuentro::where('estadisticable_id', $this->encuentroJugador)
+            ->where('estadisticable_type', $modelo)
+            ->whereIn('jugador_id', $playerIds)
+            ->get()
+            ->keyBy('jugador_id');
+
+        // Poblar stats locales
         foreach ($this->jugadoresLocal as $jugador) {
             $stats = $existingStats->get($jugador->id);
             $this->datosJugadores[$jugador->id] = [
@@ -191,6 +188,7 @@ class EstadisticaVer extends Component
             ];
         }
 
+        // Poblar stats visitantes
         foreach ($this->jugadoresVisitante as $jugador) {
             $stats = $existingStats->get($jugador->id);
             $this->datosJugadores[$jugador->id] = [
@@ -202,6 +200,8 @@ class EstadisticaVer extends Component
             ];
         }
     }
+
+
 
 
 
@@ -344,6 +344,7 @@ class EstadisticaVer extends Component
                 ->error()
                 ->show();
         }
+        $this->resetEncuentroData();
     }
 
     public function render()

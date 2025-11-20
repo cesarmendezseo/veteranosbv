@@ -15,15 +15,12 @@
             Volver</a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 bg-gray-300 dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-
-
-
-        <div class="mb-4">
-            <label class="block font-medium text-base dark:text-[#FFC107]">Fecha Jornada</label>
+    <div class="mb-1 grid grid-cols-1 md:grid-cols-3 gap-4  bg-gray-300 dark:bg-gray-800 p-2 rounded-lg shadow-lg">
+        <div class="">
+            {{-- <label class="block font-medium text-base dark:text-[#FFC107]">Fecha Jornada</label> --}}
             <select wire:model.live="fechaSeleccionada"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">-- Selecciona una fecha --</option>
+                <option value="">-- Fecha Jornada --</option>
                 @foreach ($fechasDisponibles as $jornada)
                 <option value="{{ $jornada }}">Fecha N°:{{ $jornada }}</option>
                 @endforeach
@@ -32,11 +29,11 @@
 
 
         @if ($encuentros)
-        <div class="mb-4">
-            <label class="block font-medium text-base dark:text-[#FFC107]">Local VS Visitante</label>
+        <div class="">
+            {{-- <label class="block font-medium text-base dark:text-[#FFC107]">Local VS Visitante</label> --}}
             <select wire:model.live="encuentroSeleccionado"
                 class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">-- Selecciona un encuentro --</option>
+                <option value="">Local VS Visitante</option>
                 @foreach ($encuentros as $encuentro)
                 <option value="{{ $encuentro->id }}"> {{ strtoupper($encuentro->equipoLocal->nombre) }} ....vs.... {{
                     strtoupper($encuentro->equipoVisitante->nombre) }}
@@ -68,14 +65,14 @@
 
             {{-- LOCAL --}}
             <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative">
-                <h2 class="text-1xl font-extrabold text-gray-100 p-2">Local :
-                    <span class="text-accent">{{ strtoupper($this->nombreLocal) }}</span>
+                <h2 class="text-1xl font-extrabold text-gray-100 ">Local :
+                    <span class="text-white">{{ strtoupper($this->nombreLocal) }}</span>
                 </h2>
             </div>
             <div class="max-h-96 overflow-y-auto bg-gray-200 rounded-lg shadow-md">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
                     <thead
-                        class="hidden md:table-header-group text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-800 dark:text-gray-100">
+                        class="sticky top-0 z-10 hidden md:table-header-group text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-800 dark:text-gray-100">
                         <tr>
                             <th class="px-6 py-3">Apellido y Nombre</th>
                             <th class="px-6 py-3 text-center">Gol</th>
@@ -118,14 +115,14 @@
 
             {{-- VISITANTE --}}
             <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative mt-4">
-                <h2 class="text-1xl font-extrabold text-gray-100 p-2">Visitante :
-                    <span class="text-accent">{{ strtoupper($this->nombreVisitante) }}</span>
+                <h2 class="text-1xl font-extrabold text-gray-100 ">Visitante :
+                    <span class="text-white">{{ strtoupper($this->nombreVisitante) }}</span>
                 </h2>
             </div>
             <div class="max-h-96 overflow-y-auto bg-gray-200 rounded-lg shadow-md">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
                     <thead
-                        class="hidden md:table-header-group text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-800 dark:text-gray-100">
+                        class="sticky top-0 z-10 hidden md:table-header-group text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-800 dark:text-gray-100">
                         <tr>
                             <th class="px-6 py-3">Apellido y Nombre</th>
                             <th class="px-6 py-3 text-center">Gol</th>

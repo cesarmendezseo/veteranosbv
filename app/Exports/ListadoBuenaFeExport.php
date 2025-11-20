@@ -87,13 +87,13 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
         return [
             $this->rowNumber++, // Número correlativo
             '',
-            $jugador->documento,
-            $jugador->apellido,
-            $jugador->nombre,
+            strtoupper($jugador->documento),
+            strtoupper($jugador->apellido),
+            strtoupper($jugador->nombre),
             '', // Espacio para firmas
             '', // Espacio para goles
             '', // Espacio para tarjetas
-            $leyenda
+            strtoupper($leyenda)
         ];
     }
 

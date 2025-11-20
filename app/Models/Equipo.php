@@ -50,6 +50,14 @@ class Equipo extends Model
             ->withTimestamps();
     }
 
+    public function jugadoresDelCampeonato($campeonatoId)
+    {
+        return $this->belongsToMany(Jugador::class, 'campeonato_jugador_equipo')
+            ->wherePivot('campeonato_id', $campeonatoId)
+            ->whereNull('fecha_baja')  // opcional, si querés solo los activos
+            ->withPivot('fecha_alta', 'fecha_baja');
+    }
+
     public function grupo()
     {
         return $this->belongsTo(Grupo::class);

@@ -34,6 +34,10 @@ class ListadoBuenaFeVer extends Component
 
         // Cargo el campeonato con sus equipos
         $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
+        $this->campeonato->setRelation(
+            'equipos',
+            $this->campeonato->equipos->sortBy('nombre')
+        );
 
         // Si existe, cargo los equipos ordenados
         $this->equiposDelCampeonato = $this->campeonato

@@ -25,7 +25,7 @@
         <select wire:model.live="equipoSeleccionado" class="border bg-blue-900 text-white rounded p-2 w-full">
             <option value="">-- Elegir --</option>
             @foreach ($equiposDelCampeonato as $equipo)
-            <option value="{{ $equipo->id }}">{{ $equipo->nombre }}</option>
+            <option value="{{ $equipo->id }}">{{strtoupper( $equipo->nombre )}}</option>
             @endforeach
         </select>
     </div>
