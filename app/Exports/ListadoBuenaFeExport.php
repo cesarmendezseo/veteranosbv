@@ -164,7 +164,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 $sheet->setCellValue('B3', 'CANCHA: ');
 
                 $sheet->mergeCells('B4:D4');
-                $sheet->setCellValue('B4',  $this->equipoNombre);
+                $sheet->setCellValue('B4',  strtoupper($this->equipoNombre));
 
                 $sheet->mergeCells('F2:H2');
                 $sheet->setCellValue('F2', 'EL DÍA:__/__/___/ ');

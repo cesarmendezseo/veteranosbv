@@ -94,7 +94,7 @@ class ListadoBuenaFeVer extends Component
                 $this->campeonatoId,
                 $this->fecha
             ),
-            'Fecha-' . $this->fecha . ' ' . Str::slug($equipo->nombre) . '.xlsx'
+            'Fecha-' . $this->fecha . ' ' .  strtoupper(Str::slug($equipo->nombre)) . '.xlsx'
         );
     }
 
