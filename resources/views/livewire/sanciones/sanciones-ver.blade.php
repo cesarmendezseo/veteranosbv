@@ -40,7 +40,8 @@
                     </td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">
                         @if($jug->sancionable)
-                        {{ $jug->sancionable->equipoLocal->nombre }} vs {{ $jug->sancionable->equipoVisitante->nombre }}
+                        {{ strtoupper($jug->sancionable->equipoLocal->nombre) }} vs {{
+                        strtoupper($jug->sancionable->equipoVisitante->nombre) }}
                         @else
                         <em>Sin partido</em>
                         @endif
@@ -74,8 +75,8 @@
                             <div class="col-span-2">
                                 <span class="font-semibold">Partido:</span>
                                 @if($jug->sancionable)
-                                {{ $jug->sancionable->equipoLocal->nombre }} vs {{
-                                $jug->sancionable->equipoVisitante->nombre }}
+                                {{ strtoupper($jug->sancionable->equipoLocal->nombre) }} vs {{
+                                strtoupper($jug->sancionable->equipoVisitante->nombre) }}
                                 @else
                                 <em>Sin partido</em>
                                 @endif

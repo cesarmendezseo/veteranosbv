@@ -18,10 +18,10 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 class ListadoBuenaFeVer extends Component
 {
 
-    public $campeonato;            // un solo campeonato
-    public $campeonatoId;          // id recibido
-    public $equiposDelCampeonato;  // equipos del campeonato
-    public $equipoSeleccionado;    // id del equipo elegido
+    public $campeonato;             // un solo campeonato
+    public $campeonatoId;           // id recibido
+    public $equiposDelCampeonato;   // equipos del campeonato
+    public $equipoSeleccionado;     // id del equipo elegido
     public $jugadoresEquipos = []; // jugadores del equipo
     public $fecha;
     public $itemId;
@@ -34,14 +34,13 @@ class ListadoBuenaFeVer extends Component
 
         // Cargo el campeonato con sus equipos
         $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
-        $this->campeonato->setRelation(
-            'equipos',
-            $this->campeonato->equipos->sortBy('nombre')
-        );
 
-        // Si existe, cargo los equipos ordenados
+        // Carga y ordenamiento robusto: 
+        // 1. Eliminamos la línea setRelation (es redundante aquí).
+        // 2. Aplicamos la ordenación a la propiedad pública $equiposDelCampeonato,
+        //    usando una función que ignora mayúsculas/minúsculas y espacios.
         $this->equiposDelCampeonato = $this->campeonato
-            ? $this->campeonato->equipos->sortBy('nombre')
+            ? $this->campeonato->equipos->sortBy(fn($equipo) => strtoupper(trim($equipo->nombre)))
             : collect();
     }
 
@@ -75,8 +74,6 @@ class ListadoBuenaFeVer extends Component
     }
 
 
-
-
     // Exportar a Excel
     public function exportarJugadores()
     {
@@ -101,6 +98,10 @@ class ListadoBuenaFeVer extends Component
 
         foreach ($sanciones as $sancion) {
             $jugador = $sancion->jugador;
+            // Corregir: La columna equipo_id está en el modelo Jugador si la relación es correcta.
+            // Si el jugador ya no está asociado a un equipo (como al dar de baja), 
+            // esta línea podría fallar si el modelo Jugador no tiene ese campo.
+            // Asumo que el modelo Jugador tiene un campo equipo_id que apunta al equipo actual.
             $equipo = $jugador->equipo_id;
 
             $encuentros = Encuentro::where('campeonato_id', $sancion->campeonato_id)
@@ -185,7 +186,15 @@ class ListadoBuenaFeVer extends Component
                 'fecha_baja' => null,
             ]);
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // En lugar de dd(), que detiene el script, logueamos el error y mostramos una alerta.
+            \Illuminate\Support\Facades\Log::error("Error al insertar jugador de baja: " . $e->getMessage());
+            LivewireAlert::title('Error')
+                ->text('Ocurrió un error al intentar mover el jugador a "Sin equipo".')
+                ->error()
+                ->toast()
+                ->timer(5000)
+                ->show();
+            return; // Detener la ejecución si hay un error de DB
         }
 
 
@@ -195,7 +204,7 @@ class ListadoBuenaFeVer extends Component
             ->update(['equipo_id' => $equipoId]);
 
         LivewireAlert::text('Correcto!')
-            ->text('El jugador de dío de baja correctamente!')
+            ->text('El jugador se dió de baja correctamente!')
             ->success()
             ->toast()
             ->position('top')

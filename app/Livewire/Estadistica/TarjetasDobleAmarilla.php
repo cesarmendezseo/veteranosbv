@@ -17,11 +17,17 @@ class TarjetasDobleAmarilla extends Component
     public $campeonato;
     public $dobleAmarillas = [];
     public $buscarAmarillas = '';
+    public $equipoSeleccionado = null; // ✅ nuevo filtro por equipo
 
     public function mount($campeonatoId = null)
     {
         $this->campeonatoId = $campeonatoId;
         $this->cargarDobleAmarillas();
+    }
+
+    public function getEquiposProperty()
+    {
+        return \App\Models\Equipo::orderBy('nombre')->get();
     }
 
     public function updatedCampeonatoId()
@@ -31,6 +37,12 @@ class TarjetasDobleAmarilla extends Component
     }
 
     public function updatedBuscarAmarillas()
+    {
+        $this->resetPage();
+        $this->cargarDobleAmarillas();
+    }
+
+    public function updatedEquipoSeleccionado()
     {
         $this->resetPage();
         $this->cargarDobleAmarillas();
@@ -55,6 +67,11 @@ class TarjetasDobleAmarilla extends Component
             ->whereHasMorph('estadisticable', [$tipoModelo], function ($q) {
                 $q->where('campeonato_id', $this->campeonato->id);
             })
+            ->when(
+                $this->equipoSeleccionado,
+                fn($q) =>
+                $q->where('equipo_id', $this->equipoSeleccionado)
+            )
             ->when($this->buscarAmarillas, function ($query) {
                 $query->whereHas('jugador', function ($q) {
                     $q->where('documento', 'like', '%' . $this->buscarAmarillas . '%')

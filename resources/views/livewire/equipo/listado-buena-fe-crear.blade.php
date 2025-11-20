@@ -21,7 +21,7 @@
 
                 <option value="">Seleccione...</option>
                 @foreach($equipos as $e)
-                <option value="{{ $e->id }}">{{ ($e->nombre) }}</option>
+                <option value="{{ $e->id }}">{{strtoupper( ($e->nombre)) }}</option>
                 @endforeach
             </select>
         </div>

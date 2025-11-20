@@ -8,6 +8,16 @@
             <input type="text" wire:model.live="buscarAmarillas" placeholder="Buscar jugador por nombre o documento"
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
         </div>
+        {{-- Filtro por equipo --}}
+        <div class="w-full sm:w-1/2">
+            <select wire:model.live="equipoSeleccionado"
+                class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-800 dark:border-gray-600 ">
+                <option value="">Todos los equipos</option>
+                @foreach($this->equipos as $equipo)
+                <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     {{-- Vista en escritorio: tabla --}}
@@ -28,12 +38,12 @@
                     <td class="px-4 py-2">{{ $jug->jugador->documento }}</td>
                     <td class="px-4 py-2">{{ strtoupper($jug->jugador->apellido) }}, {{
                         strtoupper($jug->jugador->nombre) }}</td>
-                    <td class="px-4 py-2">{{ $jug->jugador->equipo->nombre ?? 'Sin equipo' }}</td>
+                    <td class="px-4 py-2">{{ strtoupper($jug->jugador->equipo->nombre ?? 'Sin equipo') }}</td>
                     <td class="px-4 py-2 text-center">{{ $jug->tarjeta_amarilla }}</td>
                     <td class="px-4 py-2">
                         @if($jug->estadisticable && method_exists($jug->estadisticable, 'equipoLocal'))
-                        {{ $jug->estadisticable->equipoLocal->nombre ?? 'Local' }} vs {{
-                        $jug->estadisticable->equipoVisitante->nombre ?? 'Visitante' }}
+                        {{ strtoupper($jug->estadisticable->equipoLocal->nombre ?? 'Local' )}} vs {{
+                        strtoupper( $jug->estadisticable->equipoVisitante->nombre ?? 'Visitante' )}}
                         @else
                         <em>Sin partido</em>
                         @endif
@@ -61,12 +71,13 @@
             <div><span class="font-semibold">DNI:</span> {{ $jug->jugador->documento }}</div>
             <div><span class="font-semibold">Jugador:</span> {{ strtoupper($jug->jugador->apellido) }}, {{
                 strtoupper($jug->jugador->nombre) }}</div>
-            <div><span class="font-semibold">Equipo:</span> {{ $jug->jugador->equipo->nombre ?? 'Sin equipo' }}</div>
+            <div><span class="font-semibold">Equipo:</span> {{ strtoupper($jug->jugador->equipo->nombre ?? 'Sin equipo'
+                )}}</div>
             <div><span class="font-semibold">Tarjetas:</span> {{ $jug->tarjeta_amarilla }}</div>
             <div><span class="font-semibold">Partido:</span>
                 @if($jug->estadisticable && method_exists($jug->estadisticable, 'equipoLocal'))
-                {{ $jug->estadisticable->equipoLocal->nombre ?? 'Local' }} vs {{
-                $jug->estadisticable->equipoVisitante->nombre ?? 'Visitante' }}
+                {{ strtoupper($jug->estadisticable->equipoLocal->nombre ?? 'Local') }} vs {{
+                strtoupper($jug->estadisticable->equipoVisitante->nombre ?? 'Visitante') }}
                 @else
                 <em>Sin partido</em>
                 @endif

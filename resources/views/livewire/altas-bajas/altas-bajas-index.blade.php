@@ -17,7 +17,7 @@
                 <tr class="">
                     <th class="p-2 text-xs">DNI</th>
                     <th class="p-2 text-xs">Nombre</th>
-                    <th class="p-2 text-xs">Equipo</th>
+
                     <th class="p-2 text-xs">Acciones</th>
                 </tr>
             </thead>
@@ -29,7 +29,7 @@
                     <td class="p-2 text-sm dark:text-gray-300">{{ strtoupper($jugador->nombre) }}
                         {{ strtoupper($jugador->apellido) }}
                     </td>
-                    <td class="p-2 text-sm dark:text-gray-300">{{ strtoupper($jugador->equipo?->nombre ?? '-') }}
+
                     </td>
 
                     <td class="px-6 py-4 text-right">
@@ -149,9 +149,7 @@
                 <p class="text-base font-bold text-gray-900 dark:text-white">
                     {{ strtoupper($jugador->nombre) }} {{ strtoupper($jugador->apellido) }}
                 </p>
-                <p class="text-sm text-gray-700 dark:text-gray-400">
-                    Equipo: {{ strtoupper($jugador->equipo?->nombre ?? '-') }}
-                </p>
+
             </div>
 
             <!-- Menú de acciones -->

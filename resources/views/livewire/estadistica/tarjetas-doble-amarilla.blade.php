@@ -9,6 +9,13 @@
             <input type="text" wire:model.live="buscarAmarillas" placeholder="Buscar jugador por nombre o documento"
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-yellow-400" />
         </div>
+        <select wire:model.live="equipoSeleccionado"
+            class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-800 dark:border-gray-600 ">
+            <option value="">Todos los equipos</option>
+            @foreach($this->equipos as $equipo)
+            <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
+            @endforeach
+        </select>
     </div>
 
     {{-- Vista en escritorio: tabla --}}

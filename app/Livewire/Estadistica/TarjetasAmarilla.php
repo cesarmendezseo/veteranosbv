@@ -17,11 +17,17 @@ class TarjetasAmarilla extends Component
     public $buscarAmarillas = '';
     public $campeonatoId;
     public $campeonato;
+    public $equipoSeleccionado = null;
 
     public function mount($campeonatoId = null)
     {
         $this->campeonatoId = $campeonatoId;
         $this->cargarAmarillas();
+    }
+
+    public function getEquiposProperty()
+    {
+        return \App\Models\Equipo::orderBy('nombre')->get();
     }
 
     public function updatedBuscarAmarillas()
@@ -31,6 +37,12 @@ class TarjetasAmarilla extends Component
     }
 
     public function updatedCampeonatoId()
+    {
+        $this->resetPage();
+        $this->cargarAmarillas();
+    }
+
+    public function updatedEquipoSeleccionado()
     {
         $this->resetPage();
         $this->cargarAmarillas();
@@ -46,7 +58,6 @@ class TarjetasAmarilla extends Component
         }
 
         $formato = $this->campeonato->formato;
-
         $tipoModelo = in_array($formato, ['todos_contra_todos', 'grupos'])
             ? Encuentro::class
             : Eliminatoria::class;
@@ -54,6 +65,11 @@ class TarjetasAmarilla extends Component
         $this->amarillas = EstadisticaJugadorEncuentro::with(['jugador.equipo', 'estadisticable'])
             ->where('tarjeta_amarilla', '>=', 1)
             ->where('estadisticable_type', $tipoModelo)
+            ->when(
+                $this->equipoSeleccionado,
+                fn($q) =>
+                $q->where('equipo_id', $this->equipoSeleccionado)
+            )
             ->whereHas('jugador', function ($query) {
                 if (!empty($this->buscarAmarillas)) {
                     $query->where('documento', 'like', '%' . $this->buscarAmarillas . '%')

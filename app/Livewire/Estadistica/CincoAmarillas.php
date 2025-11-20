@@ -14,6 +14,7 @@ class CincoAmarillas extends Component
 
     public $campeonatoId;
     public $search = "";
+    public $equipoSeleccionado = null; // ✅ nuevo filtro por equipo
 
     public function buscar()
     {
@@ -23,6 +24,16 @@ class CincoAmarillas extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function updatedEquipoSeleccionado()
+    {
+        $this->resetPage();
+    }
+
+    public function getEquiposProperty()
+    {
+        return \App\Models\Equipo::orderBy('nombre')->get();
     }
 
     public function render()
@@ -46,6 +57,11 @@ class CincoAmarillas extends Component
                 $q->where('estado', 'jugado')
                     ->where('campeonato_id', $campeonato->id);
             })
+            ->when(
+                $this->equipoSeleccionado,
+                fn($q) =>
+                $q->where('equipo_id', $this->equipoSeleccionado)
+            )
             ->when($this->search, function ($query) {
                 $query->whereHas('jugador', function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%')

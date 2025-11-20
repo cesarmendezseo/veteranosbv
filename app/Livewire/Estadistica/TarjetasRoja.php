@@ -17,11 +17,17 @@ class TarjetasRoja extends Component
     public $campeonato;
     public $rojas = [];
     public $buscarRoja = '';
+    public $equipoSeleccionado = null; // ✅ nuevo filtro por equipo
 
     public function mount($campeonatoId = null)
     {
         $this->campeonatoId = $campeonatoId;
         $this->cargarRojas();
+    }
+
+    public function getEquiposProperty()
+    {
+        return \App\Models\Equipo::orderBy('nombre')->get();
     }
 
     public function updatedCampeonatoId()
@@ -31,6 +37,12 @@ class TarjetasRoja extends Component
     }
 
     public function updatedBuscarRoja()
+    {
+        $this->resetPage();
+        $this->cargarRojas();
+    }
+
+    public function updatedEquipoSeleccionado()
     {
         $this->resetPage();
         $this->cargarRojas();
@@ -55,6 +67,11 @@ class TarjetasRoja extends Component
             ->whereHasMorph('estadisticable', [$tipoModelo], function ($q) {
                 $q->where('campeonato_id', $this->campeonato->id);
             })
+            ->when(
+                $this->equipoSeleccionado,
+                fn($q) =>
+                $q->where('equipo_id', $this->equipoSeleccionado)
+            )
             ->when($this->buscarRoja, function ($query) {
                 $query->whereHas('jugador', function ($q) {
                     $q->where('documento', 'like', '%' . $this->buscarRoja . '%')
