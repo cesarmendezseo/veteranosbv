@@ -29,7 +29,7 @@ class Encuentro extends Model
 
     public function estadisticaJugadores()
     {
-        return $this->hasMany(EstadisticaJugadorEncuentro::class);
+        return $this->morphMany(EstadisticaJugadorEncuentro::class, 'estadisticable');
     }
 
     public function equipoLocal()
