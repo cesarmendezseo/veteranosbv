@@ -72,24 +72,45 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
     //============================================================================================
     public function map($registro): array
     {
-        $sancionActiva = $registro->sanciones->first(); // Puede haber una sola sanción activa por jugador
+        // Primero obtenemos el jugador desde el registro
         $jugador = $registro->jugador;
+
+        // Luego buscamos la sanción activa del jugador (si tenés scope activas)
+        $sancionActiva = Sanciones::activas()
+            ->where('jugador_id', $jugador->id)
+            ->where('campeonato_id', $this->campeonato_id)
+            ->first();
+
+        // Si no tenés el scope `activas()` en el modelo, podés usar:
+        /*
+    $sancionActiva = Sanciones::where('jugador_id', $jugador->id)
+        ->where('campeonato_id', $this->campeonato_id)
+        ->where(function ($q) {
+            $q->where('cumplida', false)
+              ->orWhereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
+        })->first();
+    */
+
         $leyenda = '';
 
         if ($sancionActiva) {
-            $motivo = strtolower($sancionActiva->motivo);
-            $leyenda = match ($motivo) {
-                'doble amarilla' => 'paga $2000',
-                default => ($sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos) . ' Fechas'
-            };
+            // Normalizamos motivo: trim + lowercase
+            $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
+
+            // Uso de contains para evitar fallos por pequeñas variaciones de texto
+            if (str_contains($motivo, 'amarilla')) {
+                $leyenda = 'PAGA';
+            } else {
+                $leyenda = ($sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos) . ' Fechas';
+            }
         }
 
         return [
             $this->rowNumber++, // Número correlativo
             '',
-            strtoupper($jugador->documento),
-            strtoupper($jugador->apellido),
-            strtoupper($jugador->nombre),
+            strtoupper($jugador->documento ?? ''),
+            strtoupper($jugador->apellido ?? ''),
+            strtoupper($jugador->nombre ?? ''),
             '', // Espacio para firmas
             '', // Espacio para goles
             '', // Espacio para tarjetas
@@ -345,23 +366,25 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 $rowOffset = 5; // Encabezados están en fila 5
                 $alturaFilaSancion = 20; // Define la altura deseada para las filas con sanción (en puntos)
                 $alturaFilaNormal = 20;
-                foreach ($jugadores as $index => $jugador) {
+                foreach ($jugadores as $index => $jug) {
                     $row = $rowOffset + $index + 1;
-                    $sheet->getRowDimension($row)->setRowHeight($alturaFilaNormal); // Establece una altura normal por defecto (opcional)
 
-                    $sancion = Sanciones::where('jugador_id', $jugador->id)
+                    $sheet->getRowDimension($row)->setRowHeight($alturaFilaNormal);
+
+                    // CORREGIDO:
+                    $sancion = Sanciones::where('jugador_id', $jug->jugador->id)
                         ->where('campeonato_id', $this->campeonato_id)
-                        ->where('cumplida', false)
+                        ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
                         ->first();
 
                     if ($sancion) {
-                        $sheet->getStyle("C{$row}:I{$row}")->applyFromArray([
+                        $sheet->getStyle("A{$row}:I{$row}")->applyFromArray([
                             'font' => [
                                 'color' => ['rgb' => 'FF0000'],
                                 'bold' => true,
                             ]
                         ]);
-                        $sheet->getRowDimension($row)->setRowHeight($alturaFilaSancion); // Establece una altura mayor si hay sanción
+                        $sheet->getRowDimension($row)->setRowHeight($alturaFilaSancion);
                     }
                 }
                 // Agregar una imagen al final

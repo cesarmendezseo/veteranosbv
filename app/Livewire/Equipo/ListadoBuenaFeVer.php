@@ -32,6 +32,8 @@ class ListadoBuenaFeVer extends Component
         // Guardo el id
         $this->campeonatoId = $campeonatoId;
 
+
+
         // Cargo el campeonato con sus equipos
         $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
 
@@ -47,6 +49,11 @@ class ListadoBuenaFeVer extends Component
     // Cuando se elige un equipo en el select
     public function updatedEquipoSeleccionado($equipoId)
     {
+
+        $this->sanciones = Sanciones::activas()
+            ->where('campeonato_id', $this->campeonatoId)
+            ->get();
+
         if ($this->campeonatoId && $equipoId) {
 
             $this->sanciones = Sanciones::where('campeonato_id', $this->campeonatoId)

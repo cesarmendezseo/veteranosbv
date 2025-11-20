@@ -42,4 +42,13 @@ class Sanciones extends Model
     {
         return $this->belongsTo(Campeonato::class);
     }
+
+    //para imprimir las sanciones en el export del listado de buena fe
+    public function scopeActivas($q)
+    {
+        return $q->where(function ($q) {
+            $q->where('cumplida', false)
+                ->orWhereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
+        });
+    }
 }
