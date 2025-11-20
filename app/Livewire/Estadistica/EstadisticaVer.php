@@ -7,6 +7,7 @@ use App\Models\Eliminatoria;
 use App\Models\Encuentro;
 use App\Models\EstadisticaJugadorEncuentro;
 use App\Models\Jugador;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
@@ -345,6 +346,28 @@ class EstadisticaVer extends Component
                 ->show();
         }
         $this->resetEncuentroData();
+    }
+    public function actualizarEquiposJugadores()
+    {
+        // 1. Obtener todos los registros de la pivote del campeonato seleccionado
+        $registros = DB::table('campeonato_jugador_equipo')
+            ->where('campeonato_id', $this->campeonatoId)
+            ->get();
+
+        // 2. Recorrer cada registro del campeonato
+        foreach ($registros as $registro) {
+
+            // Buscar al jugador
+            $jugador = Jugador::find($registro->jugador_id);
+
+            if ($jugador) {
+                // Actualizar su equipo_id con el equipo de la pivote
+                $jugador->equipo_id = $registro->equipo_id;
+                $jugador->save();
+            }
+        }
+
+        $this->dispatch('alert', 'Equipos actualizados correctamente.');
     }
 
     public function render()

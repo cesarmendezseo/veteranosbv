@@ -13,7 +13,14 @@
                     d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             Volver</a>
+        @adminOrCan('administrador')
+        <button wire:click="actualizarEquiposJugadores"
+            class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Actualizar equipos de jugadores
+        </button>
+        @endadminOrCan
     </div>
+
 
     <div class="mb-1 grid grid-cols-1 md:grid-cols-3 gap-4  bg-gray-300 dark:bg-gray-800 p-2 rounded-lg shadow-lg">
         <div class="">
