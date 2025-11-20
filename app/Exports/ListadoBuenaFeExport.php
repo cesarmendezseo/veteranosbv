@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\CampeonatoJugadorEquipo;
 use App\Models\Jugador;
 use App\Models\Sanciones;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -39,14 +40,19 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
 
     public function collection()
     {
-        return Jugador::where('equipo_id', $this->equipoId)
-            ->where('is_active', true)
-            ->orderBy('apellido', 'asc')
-            ->with(['equipo', 'sanciones' => function ($q) {
+        return CampeonatoJugadorEquipo::with([
+            'jugador',
+            'sanciones' => function ($q) {
                 $q->where('campeonato_id', $this->campeonato_id)
                     ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
-            }])
-            ->get();
+            }
+        ])
+            ->where('campeonato_id', $this->campeonato_id)
+            ->where('equipo_id', $this->equipoId)
+            ->whereNull('fecha_baja')
+            ->get()
+            ->sortBy(fn($registro) => $registro->jugador->apellido)
+            ->values();
     }
     //============================================================================================
     public function headings(): array
@@ -64,10 +70,10 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
         ];
     }
     //============================================================================================
-    public function map($jugador): array
+    public function map($registro): array
     {
-        $sancionActiva = $jugador->sanciones->first(); // Puede haber una sola sanción activa por jugador
-
+        $sancionActiva = $registro->sanciones->first(); // Puede haber una sola sanción activa por jugador
+        $jugador = $registro->jugador;
         $leyenda = '';
 
         if ($sancionActiva) {
