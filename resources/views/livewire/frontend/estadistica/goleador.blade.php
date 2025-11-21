@@ -22,7 +22,7 @@
     </div> --}}
 
     {{-- Tabla en escritorio --}}
-    <div class="hidden sm:block bg-white shadow rounded-lg overflow-x-auto">
+    <div class="{{-- hidden --}} sm:block bg-white shadow rounded-lg overflow-x-auto">
         <table class="w-full text-sm sm:text-base text-left text-gray-700 dark:text-gray-100">
             <thead class="text-xs sm:text-sm uppercase bg-gray-700 dark:bg-gray-700 text-yellow-400">
                 <tr>
@@ -57,10 +57,10 @@
     </div>
 
     {{-- Vista en móvil: tarjetas --}}
-    <div class="sm:hidden space-y-4">
+    {{-- <div class="sm:hidden space-y-4">
         @forelse($goleadores as $gol)
         <div class="bg-gray-100 dark:bg-gray-800 rounded-lg shadow p-4 text-sm text-gray-800 dark:text-gray-100">
-            <div><span class="font-semibold">DNI:</span> {{ $gol->jugador->documento }}</div>
+
             <div><span class="font-semibold">Jugador:</span> {{ strtoupper($gol->jugador->apellido) }}, {{
                 strtoupper($gol->jugador->nombre) }}</div>
             <div><span class="font-semibold">Equipo:</span> {{ strtoupper($gol->jugador->equipo->nombre ?? 'Sin equipo')
@@ -76,7 +76,7 @@
             @endif
         </div>
         @endforelse
-    </div>
+    </div> --}}
 
     {{-- Paginación --}}
     <div class="mt-4">
