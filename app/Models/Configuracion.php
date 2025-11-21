@@ -9,7 +9,7 @@ class Configuracion extends Model
     protected $fillable = ['key', 'value'];
 
     public static function get($key, $default = null)
-    {
+    { // Busca la configuración y devuelve el valor. Si no existe, devuelve null o un valor por defecto.
         return static::where('key', $key)->value('value') ?? $default;
     }
 

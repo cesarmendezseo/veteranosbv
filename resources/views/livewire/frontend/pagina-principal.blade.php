@@ -27,11 +27,12 @@
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 pb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 pb-12">
+        <div class="">
 
             <!-- Left Column: Matches (Takes up 2 columns on large screens) -->
-            <div class="lg:col-span-2 space-y-8">
+            <div class="">
+
                 @if ($mostrarEncuentros)
                 <div
                     class="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-zinc-700">
@@ -53,7 +54,7 @@
             </div>
 
             <!-- Right Column: Standings (Takes up 1 column on large screens) -->
-            <div class="lg:col-span-1 space-y-8">
+            <div class="">
                 @if ($mostrarTabla && $campeonatoSeleccionado)
                 <div
                     class="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-zinc-700 sticky top-24">

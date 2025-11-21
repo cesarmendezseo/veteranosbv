@@ -40,48 +40,77 @@
                 {{ ucwords($grupoNombre) }}
             </h2>
             <div class="overflow-x-auto mb-6 shadow-md">
-                <table class="w-full text-xs sm:text-sm text-center border border-gray-300 ">
-                    <thead class="bg-gray-700 text-gray-100 dark:bg-gray-700 dark:text-[#b8ae2a] dark:font-bold">
+                <table class="w-full text-xs sm:text-sm text-center border border-gray-300">
+                    <thead class="bg-gray-700 text-gray-100">
                         <tr>
-                            <th class="border px-1 md:px-2 py-1 sticky left-0 dark:bg-gray-700 ">#</th>
-                            <th
-                                class="border px-1 md:px-2 py-1 text-left sticky left-12 dark:bg-gray-700  min-w-[100px]">
-                                EQUIPOS</th>
-                            <th class="border px-1 md:px-2 py-1 ">PJ</th>
-                            <th class="border px-1 md:px-2 py-1">PG</th>
-                            <th class="border px-1 md:px-2 py-1">PE</th>
-                            <th class="border px-1 md:px-2 py-1">PP</th>
-                            <th class="border px-1 md:px-2 py-1 hidden md:table-cell">GF</th>
-                            <th class="border px-1 md:px-2 py-1 hidden md:table-cell">GC</th>
-                            <th class="border px-1 md:px-2 py-1">DG</th>
-                            <th class="border px-1 md:px-2 py-1 hidden sm:table-cell">Fair Play</th>
-                            <th class="border px-1 md:px-2 py-1 font-bold">Pts</th>
+                            <th class="px-2 py-2">#</th>
+                            <th class="px-2 py-2 text-left">EQUIPO</th>
+                            <th class="px-2 py-2 font-bold">Pts</th>
+                            <th class="px-2 py-2">PJ</th>
+                            <th class="px-2 py-2">PG</th>
+                            <th class="px-2 py-2">PE</th>
+                            <th class="px-2 py-2">PP</th>
+                            <th class="px-2 py-2">GF</th>
+                            <th class="px-2 py-2">GC</th>
+                            <th class="px-2 py-2">DG</th>
+                            <th class="px-2 py-2">Fair Play</th>
+
                         </tr>
                     </thead>
+
                     <tbody>
                         @foreach ($tablaGrupo as $index => $equipo)
                         <tr
-                            class="{{ $index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700' }}">
-                            <td
-                                class="border px-1 md:px-2 py-1 sticky left-0 {{ $index % 2 === 0 ? 'bg-white dark:bg-gray-800 dark:text-white' : 'bg-gray-100 dark:bg-gray-700' }} ">
-                                {{ $index + 1 }}
+                            class="relative after:content-[''] after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gray-300/50">
+
+                            <!-- POSICIÓN -->
+                            <td class="px-2 py-3 ">
+                                <div
+                                    class="w-5 h-5 bg-blue-100 text-black rounded-full flex items-center justify-center mx-auto">
+                                    {{ (int)$index + 1 }}
+                                </div>
                             </td>
-                            <td
-                                class="border px-1 md:px-2 py-1 text-left  left-12 dark:text-white {{ $index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700' }}  min-w-[100px]">
+
+                            <!-- EQUIPO -->
+                            <td class="px-2 py-3 text-left font-semibold border-l border-gray-300">
                                 {{ strtoupper($equipo['equipo']) }}
                             </td>
-                            <td class="border px-1 md:px-2 py-1">{{ $equipo['jugados'] }}</td>
-                            <td class="border px-1 md:px-2 py-1">{{ $equipo['ganados'] }}</td>
-                            <td class="border px-1 md:px-2 py-1">{{ $equipo['empatados'] }}</td>
-                            <td class="border px-1 md:px-2 py-1">{{ $equipo['perdidos'] }}</td>
-                            <td class="border px-1 md:px-2 py-1 hidden md:table-cell">
+                            <!-- PUNTOS -->
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900">
+                                <div
+                                    class="w-8 h-8 bg-blue-700 text-white rounded-full flex items-center justify-center font-bold mx-auto">
+                                    {{ $equipo['puntos'] }}
+                                </div>
+                            </td>
+                            <!-- ESTADÍSTICAS -->
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
+                                {{ $equipo['jugados'] }}</td>
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
+                                {{ $equipo['ganados'] }}</td>
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
+                                {{ $equipo['empatados'] }}</td>
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
+                                {{ $equipo['perdidos'] }}</td>
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
                                 {{ $equipo['goles_favor'] }}</td>
-                            <td class="border px-1 md:px-2 py-1 hidden md:table-cell">
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
                                 {{ $equipo['goles_contra'] }}</td>
-                            <td class="border px-1 md:px-2 py-1">{{ $equipo['diferencia_goles'] }}</td>
-                            <td class="border px-1 md:px-2 py-1 hidden sm:table-cell">
+                            <td
+                                class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900 ">
+                                {{ $equipo['diferencia_goles'] }}
+                            </td>
+                            <td class="">
                                 {{ $equipo['fair_play'] }}</td>
-                            <td class="border px-1 md:px-2 py-1 font-bold">{{ $equipo['puntos'] }}</td>
+
+
+
                         </tr>
                         @endforeach
                     </tbody>

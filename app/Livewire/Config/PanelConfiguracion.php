@@ -16,19 +16,27 @@ class PanelConfiguracion extends Component
 
     public function mount()
     {
-        $this->mostrarTablaPosiciones = Configuracion::get('mostrar_tabla_posiciones', '1');
-        $this->mostrarProximosEncuentros = Configuracion::get('mostrar_proximos_encuentros', '1');
+        // 1. Castea los valores a booleano para los checkboxes
+        $this->mostrarTablaPosiciones = (bool) Configuracion::get('mostrar_tabla_posiciones', '1');
+        $this->mostrarProximosEncuentros = (bool) Configuracion::get('mostrar_proximos_encuentros', '1');
+
+        // 2. Los demás valores pueden seguir como strings
         $this->tituloPrincipal = Configuracion::get('titulo_principal', 'Bienvenidos al Torneo');
         $this->campeonatoPrincipal = Configuracion::get('campeonato_principal');
     }
 
     public function guardar()
     {
-        Configuracion::set('mostrar_tabla_posiciones', $this->mostrarTablaPosiciones);
-        Configuracion::set('mostrar_proximos_encuentros', $this->mostrarProximosEncuentros);
+        // 1. Al guardar, convierte los booleanos de los checkboxes a string ('1' o '0')
+        $tablaPosicionesDB = $this->mostrarTablaPosiciones ? '1' : '0';
+        $proximosEncuentrosDB = $this->mostrarProximosEncuentros ? '1' : '0';
+
+        Configuracion::set('mostrar_tabla_posiciones', $tablaPosicionesDB);
+        Configuracion::set('mostrar_proximos_encuentros', $proximosEncuentrosDB);
+
+        // 2. Los demás valores se guardan directamente
         Configuracion::set('titulo_principal', $this->tituloPrincipal);
         Configuracion::set('campeonato_principal', $this->campeonatoPrincipal);
-
 
         FacadesLivewireAlert::title('Configuración guardada correctamente.')
             ->text('Los cambios han sido aplicados.')
@@ -36,6 +44,8 @@ class PanelConfiguracion extends Component
             ->position('center')
             ->show();
     }
+
+
     public function render()
     {
         return view('livewire.config.panel-configuracion');
