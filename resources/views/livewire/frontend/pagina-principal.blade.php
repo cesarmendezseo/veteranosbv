@@ -34,48 +34,89 @@
             <div class="">
 
                 @if ($mostrarEncuentros)
-                <div
-                    class="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-zinc-700">
-                    <div class="p-6 border-b border-gray-100 dark:border-zinc-700 flex items-center justify-between">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Próximos Encuentros
-                        </h2>
-                    </div>
-                    <div class="p-6">
-                        @livewire('frontend.proximos-partidos.proximos-partidos-index')
-                    </div>
-                </div>
-                @endif
-            </div>
+                <a href="{{ route('frontend.fixture.index') }}" class="block bg-white shadow-md rounded-2xl p-4 
+                  border border-gray-200 
+                  active:scale-[0.98] transition duration-150
+                  hover:shadow-lg">
 
-            <!-- Right Column: Standings (Takes up 1 column on large screens) -->
-            <div class="">
-                @if ($mostrarTabla && $campeonatoSeleccionado)
-                <div
-                    class="bg-white dark:bg-zinc-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-zinc-700 sticky top-24">
-                    <div class="p-6 border-b border-gray-100 dark:border-zinc-700 bg-blue-600">
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-800">
+                                Próximos Encuentros
+                            </h2>
+                            <p class="text-sm text-gray-500">
+                                Ver el fixture completo
+                            </p>
+                        </div>
+
+                        <div class="w-10 h-10 flex items-center justify-center bg-green-100 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-6 h-6 text-green-600">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>
-                            Tabla de Posiciones
-                        </h2>
+                        </div>
+                        @endif
                     </div>
+
+                    <!-- Right Column: Standings (Takes up 1 column on large screens) -->
+
                     <div class="p-4">
-                        @livewire('frontend.tabla-posicion.tabla-posicion-resultados', ['campeonatoId' =>
-                        $campeonatoSeleccionado])
-                    </div>
-                </div>
-                @endif
-            </div>
+                        @if ($mostrarTabla && $campeonatoSeleccionado)
+                        <a href="{{ route('tabla-posicion-resultados') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
+                  border border-gray-200 
+                  active:scale-[0.98] transition duration-150
+                  hover:shadow-lg">
 
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-lg font-semibold text-white">
+                                        Tabla de Posiciones
+                                    </h2>
+                                    <p class="text-sm text-gray-200">
+                                        Ver resultados
+                                    </p>
+                                </div>
+
+                                <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-6 h-6 text-blue-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                        </a>
+                        @endif
+                        {{-- @if ($mostrarTabla && $campeonatoSeleccionado) --}}
+                        <a href="{{ route('frontend.goleadores.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2 
+                  border border-gray-200 
+                  active:scale-[0.98] transition duration-150
+                  hover:shadow-lg">
+
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-lg font-semibold text-white">
+                                        Goleadores
+                                    </h2>
+                                    <p class="text-sm text-gray-200">
+                                        Ver los goleadores del torneo actual
+                                    </p>
+                                </div>
+
+                                <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-6 h-6 text-blue-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                        </a>
+                        {{-- @endif --}}
+                    </div>
+
+            </div>
         </div>
     </div>
-</div>
