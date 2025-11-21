@@ -11,19 +11,21 @@ use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PosicionesExport;
+use App\Models\Configuracion;
 use App\Services\TablaPosicionesService;
 
 class TablaPosicionResultados extends Component
 {
     public $campeonato_id;
+    public $campeonatoId;
     public $campeonatos;
     public \Illuminate\Support\Collection $posiciones;
 
-    public function mount($campeonatoId)
+    public function mount()
     {
-        $this->campeonato_id = $campeonatoId;
+        $this->campeonatoId = Configuracion::get('campeonato_principal');
         $this->posiciones = collect();
-        $this->generarTablaPosiciones($campeonatoId);
+        $this->generarTablaPosiciones($this->campeonatoId);
     }
 
     public function updatedCampeonatoId()
@@ -156,7 +158,7 @@ class TablaPosicionResultados extends Component
         return collect($tabla);
     }
 
-    public function generarTablaPosicionesPDF(Campeonato $campeonato)
+    /*   public function generarTablaPosicionesPDF(Campeonato $campeonato)
     {
         $this->generarTablaPosiciones($campeonato->id);
         $posiciones = $this->posiciones;
@@ -169,7 +171,7 @@ class TablaPosicionResultados extends Component
 
         return PDF::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'))
             ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
-    }
+    } */
 
     public function exportarPosiciones()
     {

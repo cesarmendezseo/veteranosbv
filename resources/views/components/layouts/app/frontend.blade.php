@@ -72,11 +72,11 @@
         <div class="space-x-8 hidden md:flex items-center font-titulo text-lg">
             <a href="{{ route('pagina-principal-index') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Inicio</a>
-            <a href="{{ route('tabla-posicion-index') }}"
+            <a href="{{ route('tabla-posicion-resultados') }}"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Tabla de
                 Posición</a>
-            <a href="{{ route('frontend.eliminatoria.index') }}"
-                class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Eliminatoria</a>
+            <a href="{{ route('frontend.goleadores.index') }}"
+                class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Goleadores</a>
             <a href="#"
                 class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition duration-300 nav-link">Contacto</a>
 
