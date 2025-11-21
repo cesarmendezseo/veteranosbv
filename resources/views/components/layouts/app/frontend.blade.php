@@ -154,7 +154,7 @@
     <main class="flex-grow pt-[80px] px-6 w-full mx-auto">
         {{ $slot }}
     </main>
-    <footer class="bg-gray-800 text-white py-4">
+    <footer class="bg-gray-800 text-white py-4 mb-8">
         <div class="container mx-auto text-center">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <p>&copy; 2025 ACFVBV. Todos los derechos reservados.</p>
@@ -164,6 +164,25 @@
             <p class="mt-2 text-sm text-gray-200">Diseñado por César Méndez</p>
         </div>
     </footer>
+    <div class="fixed bottom-0 left-0 w-full bg-white shadow-lg border-t z-50">
+        <div class="flex justify-around items-center py-3 relative">
+
+            <!-- Botón Home centrado y sobresalido -->
+            <a href="{{ route('pagina-principal-index') }}"
+                class="absolute -top-5 left-1/2 transform -translate-x-1/2
+                  bg-blue-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-xl border-4 border-white">
+                <i class="fas fa-home text-2xl">
+                </i>
+            </a>
+
+            <!-- Otros ítems del menú -->
+            {{-- <a href="/tabla" class="text-gray-600 text-sm">Tabla</a>
+            <a href="/fixture" class="text-gray-600 text-sm">Fixture</a> --}}
+            <span class="w-14"></span> <!-- espacio para el botón -->
+            {{-- <a href="/goleadores" class="text-gray-600 text-sm">Goleadores</a>
+            <a href="/sanciones" class="text-gray-600 text-sm">Sanciones</a> --}}
+        </div>
+    </div>
     @livewireScripts
     @fluxScripts
     @RegisterServiceWorkerScript
