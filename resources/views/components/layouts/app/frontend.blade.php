@@ -125,10 +125,10 @@
         class="fixed top-16 left-0 w-full bg-white dark:bg-zinc-900 shadow-md px-4 py-4 space-y-4 hidden md:hidden z-40">
         <a href="{{ route('pagina-principal-index') }}"
             class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Inicio</a>
-        <a href="{{ route('tabla-posicion-index') }}"
+        <a href="{{ route('tabla-posicion-resultados') }}"
             class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Tabla de Posición</a>
-        <a href="{{ route('frontend.eliminatoria.index') }}"
-            class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Eliminatoria</a>
+        <a href="{{ route('frontend.goleadores.index') }}"
+            class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Goleador</a>
         <a href="#" class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Contacto</a>
 
         @if (Route::has('login'))
