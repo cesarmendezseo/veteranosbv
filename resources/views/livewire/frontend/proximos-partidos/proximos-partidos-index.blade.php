@@ -43,15 +43,7 @@
                 @empty
                 {{-- Si no hay partidos, mostrar la leyenda centrada --}}
                 <div class="flex items-center justify-center min-h-[40vh]">
-                    <div
-                        class="text-center bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 text-white rounded-2xl shadow-2xl p-6 mb-8 max-w-3xl mx-auto border border-gray-600">
-                        <p class="font-serif italic text-lg md:text-xl leading-relaxed tracking-wide">
-                            “Donde las viejas glorias siguen escribiendo nuevas historias.”
-                            <br>
-                            <span class="font-bold text-amber-400">Fútbol de Veteranos</span> — pasión sin fecha de
-                            vencimiento.
-                        </p>
-                    </div>
+
                 </div>
                 @endforelse
             </div>
