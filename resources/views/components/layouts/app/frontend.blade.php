@@ -67,7 +67,7 @@
             <img src="{{ asset('storage/' . \App\Models\Configuracion::get('logo')) }}" alt="Logo"
                 class="h-10 w-10 rounded-full">
             <span class="text-xl font-bold text-gray-800 dark:text-white">
-                {{ \App\Models\Configuracion::get('titulo', 'Sistema') }}
+                {{ \App\Models\Configuracion::get('titulo', '') }}
             </span>
         </a>
 

@@ -40,10 +40,10 @@ class PanelConfiguracion extends Component
     public function guardar()
     {
         // 1. Al guardar, convierte los booleanos de los checkboxes a string ('1' o '0')
-        $tablaPosicionesDB = $this->mostrarTablaPosiciones ? '1' : '0';
-        $proximosEncuentrosDB = $this->mostrarProximosEncuentros ? '1' : '0';
-        $mostrarGoleadoresDB = $this->mostrarGoleadores ? '1' : '0';
-        $mostrarSancionesDB = $this->mostrarSanciones ? '1' : '0';
+        $tablaPosicionesDB     = $this->mostrarTablaPosiciones ? '1' : '0';
+        $proximosEncuentrosDB  = $this->mostrarProximosEncuentros ? '1' : '0';
+        $mostrarGoleadoresDB   = $this->mostrarGoleadores ? '1' : '0';
+        $mostrarSancionesDB    = $this->mostrarSanciones ? '1' : '0';
 
         Configuracion::set('mostrar_tabla_posiciones', $tablaPosicionesDB);
         Configuracion::set('mostrar_proximos_encuentros', $proximosEncuentrosDB);
@@ -53,6 +53,10 @@ class PanelConfiguracion extends Component
         // 2. Los demás valores se guardan directamente
         Configuracion::set('titulo_principal', $this->tituloPrincipal);
         Configuracion::set('campeonato_principal', $this->campeonatoPrincipal);
+
+        // 🔹 Aquí faltaba guardar el título y el logo
+        Configuracion::set('titulo', $this->titulo);
+        Configuracion::set('logo', $this->logo);
 
         FacadesLivewireAlert::title('Configuración guardada correctamente.')
             ->text('Los cambios han sido aplicados.')
