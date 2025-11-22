@@ -58,38 +58,71 @@
                     </tr>
 
                     {{-- Fila adicional para móviles --}}
-                    <tr class="sm:hidden
-                    @if ($index % 2 == 0) bg-blue-50 dark:bg-gray-800
-                    @else bg-blue-100 dark:bg-gray-500 @endif
-                    border-b border-gray-200 dark:border-gray-600">
-                        <td colspan="8" class="px-2 py-2 text-sm">
-                            <div class="grid grid-cols-2 gap-1">
+                    <tr class="sm:hidden my-3">
+                        <td colspan="8" class="px-2 py-3">
+                            <div class="rounded-xl shadow-md overflow-hidden">
 
-                                <div class="font-semibold font-Titillium Web "> {{ $jug->jugador->apellido }}, {{
-                                    $jug->jugador->nombre }}
+                                <!-- Encabezado -->
+                                <div class="p-2 font-front font-bold text-sm
+                @if ($index % 2 == 0)
+                    bg-blue-100 text-blue-900
+                @else
+                    bg-blue-900 text-white
+                @endif">
+                                    {{ strtoupper($jug->jugador->apellido) }}, {{ strtoupper($jug->jugador->nombre) }}
                                 </div>
-                                <div><span class="font-semibold text-gray-500">Fecha Sanción:</span> {{
-                                    ucfirst($jug->etapa_sancion) }}
-                                </div>
-                                <div><span class="font-semibold">Motivo:</span> {{ strtoupper($jug->motivo) }}</div>
-                                <div><span class="font-semibold">Fechas:</span> {{ $jug->partidos_sancionados }}</div>
-                                <div><span class="font-semibold">Cumplidas:</span> {{ $jug->partidos_cumplidos }}</div>
-                                <div class="col-span-2">
-                                    <span class="font-semibold">Partido:</span>
-                                    @if($jug->sancionable)
-                                    {{ strtoupper($jug->sancionable->equipoLocal->nombre) }} vs {{
-                                    strtoupper($jug->sancionable->equipoVisitante->nombre) }}
-                                    @else
-                                    <em>Sin partido</em>
+
+                                <!-- Contenido -->
+                                <div class="p-3 bg-white space-y-2 text-sm text-gray-800">
+
+                                    <!-- Fila 1 -->
+                                    <div class="flex justify-between">
+                                        <span class="font-front">Fecha Sanción:</span>
+                                        <span>{{ ucfirst($jug->etapa_sancion) }}</span>
+                                    </div>
+
+                                    <!-- Fila 2 -->
+                                    <div class="flex justify-between">
+                                        <span class="font-front">Motivo:</span>
+                                        <span class="uppercase">{{ $jug->motivo }}</span>
+                                    </div>
+
+                                    <!-- Fila 3 -->
+                                    <div class="flex justify-between">
+                                        <span class="font-front">Fechas:</span>
+                                        <span>{{ $jug->partidos_sancionados }}</span>
+                                    </div>
+
+                                    <!-- Fila 4 -->
+                                    <div class="flex justify-between">
+                                        <span class="font-front">Cumplidas:</span>
+                                        <span>{{ $jug->partidos_cumplidos }}</span>
+                                    </div>
+
+                                    <!-- Partido -->
+                                    <div class="pt-2 border-t">
+                                        <span class="font-front">Partido:</span>
+                                        @if($jug->sancionable)
+                                        {{ strtoupper($jug->sancionable->equipoLocal->nombre) }} vs
+                                        {{ strtoupper($jug->sancionable->equipoVisitante->nombre) }}
+                                        @else
+                                        <em>Sin partido</em>
+                                        @endif
+                                    </div>
+
+                                    @if ($jug->observacion)
+                                    <div class="pt-2 border-t">
+                                        <span class="font-front">Detalle:</span> {{ strtoupper($jug->observacion) }}
+                                    </div>
                                     @endif
+
                                 </div>
-                                @if ($jug->observacion)
-                                <div class="col-span-2"><span class="font-semibold">Detalle:</span> {{
-                                    strtoupper($jug->observacion) }}</div>
-                                @endif
                             </div>
                         </td>
                     </tr>
+
+
+                    {{-- ////////////////////// --}}
                     @empty
                     <tr>
                         <td colspan="8" class="px-4 py-6 text-center text-gray-500">
