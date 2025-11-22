@@ -5,16 +5,21 @@ namespace App\Livewire\Config;
 use App\Models\Configuracion;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert as FacadesLivewireAlert;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\WithFileUploads;
 use Livewire\Component;
 
 class PanelConfiguracion extends Component
 {
+
+
     public $mostrarTablaPosiciones;
     public $mostrarProximosEncuentros;
     public $mostrarGoleadores;
     public $mostrarSanciones;
     public $tituloPrincipal;
     public $campeonatoPrincipal;
+    public $titulo;
+    public $logo;
 
     public function mount()
     {
@@ -27,6 +32,9 @@ class PanelConfiguracion extends Component
         // 2. Los demás valores pueden seguir como strings
         $this->tituloPrincipal = Configuracion::get('titulo_principal', 'Bienvenidos al Torneo');
         $this->campeonatoPrincipal = Configuracion::get('campeonato_principal');
+
+        $this->titulo = Configuracion::get('titulo', 'Sistema de Torneo');
+        $this->logo   = Configuracion::get('logo', null);
     }
 
     public function guardar()
@@ -52,6 +60,7 @@ class PanelConfiguracion extends Component
             ->position('center')
             ->show();
     }
+
 
 
     public function render()

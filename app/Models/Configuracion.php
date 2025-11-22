@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Configuracion extends Model
 {
+    protected $table = 'configuracions'; // 👈 IMPORTANTE
+    public $timestamps = false;          // 👈 Si tu tabla no tiene created_at/updated_at
     protected $fillable = ['key', 'value'];
 
     public static function get($key, $default = null)

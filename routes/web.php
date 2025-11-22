@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\FotoJugadorController;
 use App\Http\Controllers\LogoEquipoController;
 use App\Livewire\Campeonato\CampeonatoCrear;
@@ -14,6 +15,7 @@ use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Config\ConfigIndex;
 use App\Livewire\Config\CopiarListadoBuenaFe;
 use App\Livewire\Config\PanelConfiguracion;
+use App\Livewire\Config\UploadLogo;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
 use App\Livewire\Equipo\EquipoIndex;
@@ -199,6 +201,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/configuracion', ConfigIndex::class)->name('config.index');
         Route::get('/configuracion/general', PanelConfiguracion::class)->name('config.PanelConfiguracion');
         Route::get('/configuracion/finalizar-campeonato', \App\Livewire\Config\FinalizarCampeonato::class)->name('config.finalizarCampeonato');
+        Route::post('/configuracion/subir-logo', [LogoEquipoController::class, 'subirLogo'])
+            ->name('configuracion.subir-logo');
+        Route::get('/configuracion/subir-logo', [LogoEquipoController::class, 'index'])->name('cargar.logo');
     });
     //==============FIN CONFIGURACION========================
 });

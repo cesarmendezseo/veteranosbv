@@ -42,7 +42,7 @@
 
 
     {{-- 📱 Versión Móvil (super moderna tipo app) --}}
-    <div class="sm:hidden space-y-4">
+    <div class="sm:hidden ">
         @forelse($goleadores as $gol)
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 border border-gray-200 dark:border-gray-700
                     hover:scale-[1.02] transition-transform duration-200">

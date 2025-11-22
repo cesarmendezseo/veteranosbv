@@ -42,8 +42,13 @@
             <label>Mostrar sanciones</label>
         </div>
 
-        <button wire:click="guardar" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
+        <button wire:click="guardar" class="bg-blue-900  text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
             Guardar
         </button>
+        <a href="{{ route('cargar.logo') }}"
+            class="bg-blue-900  text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
+            Cargar Logo
+        </a>
     </div>
+
 </div>
