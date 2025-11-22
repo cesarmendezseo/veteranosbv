@@ -161,10 +161,12 @@
                 {{-- <p class="mt-2"> Tel: +54 3777 - 111111</p> --}}
             </div>
             <!-- Agregado el "Diseñado por" -->
-            <p class="mt-2 text-sm text-[#3c95B3]">Diseñado por César Méndez</p>
+            <div class="hidden md:block">
+                <p class="mt-2 text-sm text-[#3c95B3]">Diseñado por César Méndez</p>
+            </div>
         </div>
     </footer>
-    <div class="fixed bottom-3 left-0 w-full  shadow-lg  z-50">
+    <div class="block sm:hidden fixed bottom-3 left-0 w-full  shadow-lg  z-50">
         <div class="flex justify-around items-center py-3 relative">
 
             <!-- Botón Home centrado y sobresalido -->
@@ -183,8 +185,8 @@
             {{-- <a href="/tabla" class="text-gray-600 text-sm">Tabla</a>
             <a href="/fixture" class="text-gray-600 text-sm">Fixture</a> --}}
             <span class="w-25"></span> <!-- espacio para el botón -->
-            {{-- <a href="/goleadores" class="text-gray-600 text-sm">Goleadores</a>
-            <a href="/sanciones" class="text-gray-600 text-sm">Sanciones</a> --}}
+            <a href="/goleadores" class="text-gray-600 text-sm"></a>
+            <a href="#" class="text-gray-300 text-sm">Desing by CMendez</a>
         </div>
     </div>
     @livewireScripts

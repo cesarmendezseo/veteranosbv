@@ -33,7 +33,7 @@
 
         <div class="P-4">
             @if ($mostrarTabla && $campeonatoSeleccionado)
-            <a href="{{ route('frontend.fixture.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
+            <a href="{{ route('tabla-posicion-resultados') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
                   hover:shadow-lg">
@@ -128,7 +128,7 @@
         <div class="P-4">
             {{-- MOSTRAR Tabla --}}
             @if ($mostrarEncuentros && $campeonatoSeleccionado)
-            <a href="{{ route('frontend.fixture.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
+            <a href="{{ route('frontend.proximoPartidos') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
                   hover:shadow-lg">

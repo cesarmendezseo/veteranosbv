@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Frontend\ProximosPartidos;
 
+use App\Models\Configuracion;
 use App\Models\Eliminatoria;
 use App\Models\Encuentro;
 use Carbon\Carbon;
@@ -11,22 +12,29 @@ class ProximosPartidosIndex extends Component
 {
     public $proximos = [];
     public $proximosEliminatorias = [];
+    public $campeonatoId;
 
     public function mount()
     {
+
+        $campeonatoId = Configuracion::get('campeonato_principal');
+
         $hoy = Carbon::now();
 
         $this->proximos = Encuentro::with(['equipoLocal', 'equipoVisitante'])
-            ->whereDate('fecha', '>=', $hoy)   // desde hoy en adelante
+            ->where('campeonato_id', $campeonatoId)   // 👈 FILTRA POR CAMPEONATO
+            ->whereDate('fecha', '>=', $hoy)
             ->orderBy('fecha', 'asc')
-            ->take(15) // opcional: limita a los próximos 5 partidos
+            ->take(15)
             ->get();
 
+
         $this->proximosEliminatorias = Eliminatoria::with(['equipoLocal', 'equipoVisitante'])
-            ->whereDate('fecha', '>=', $hoy)   // desde hoy en adelante
+            ->where('campeonato_id', $campeonatoId)   // 👈 FILTRA POR CAMPEONATO
             ->where('estado', 'programado')
+            ->whereDate('fecha', '>=', $hoy)
             ->orderBy('fecha', 'asc')
-            ->take(15) // opcional: limita a los próximos 5 partidos
+            ->take(15)
             ->get();
         /* dd($this->proximosEliminatorias); */
     }

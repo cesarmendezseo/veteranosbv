@@ -34,6 +34,7 @@ use App\Livewire\Frontend\Fixture\FixtureVer as FixtureFixtureVer;
 use App\Livewire\Frontend\Fixture\FrontEliminatoria;
 use App\Livewire\Frontend\Fixture\FrontEliminatoriaVer;
 use App\Livewire\Frontend\PaginaPrincipal;
+use App\Livewire\Frontend\ProximosPartidos\ProximosPartidosIndex;
 use App\Livewire\Frontend\TablaPosicion\TablaPosicionIndex as TablaPosicionTablaPosicionIndex;
 use App\Livewire\Frontend\TablaPosicion\TablaPosicionResultados;
 use App\Livewire\Jugadore\JugadoresCrear;
@@ -59,8 +60,9 @@ Route::get('/', PaginaPrincipal::class)->name('pagina-principal-index');
 Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->name('tabla-posicion-index');
 Route::get('/tabla-posicion/{campeonatoId}/verHistorial', TablaPosicionResultados::class)->name('tabla-posicion-historial');
 Route::get('/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
-Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');
+/* Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');*/
 Route::get('/fixture/{campeonatoId}/ver-fixture', FixtureFixtureVer::class)->name('frontend.fixture.verFixture');
+Route::get('/frontend/proximo-partidos', ProximosPartidosIndex::class)->name('frontend.proximoPartidos');
 Route::get('/frontend/eliminatoria/{campeonatoId}', FrontEliminatoriaVer::class)->name('frontend.eliminatoria.ver');
 Route::get('/frontend/eliminatoria', FrontEliminatoria::class)->name('frontend.eliminatoria.index');
 Route::get('/frontend/goleadores', Goleador::class)->name('frontend.goleadores.index');

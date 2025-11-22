@@ -5,6 +5,7 @@ namespace App\Livewire\Frontend\Fixture;
 use App\Exports\EncuentrosExport;
 use App\Models\Campeonato;
 use App\Models\Canchas;
+use App\Models\Configuracion;
 use App\Models\Encuentro;
 use App\Models\Grupo;
 use App\Services\EncuentroExportService;
@@ -44,13 +45,13 @@ class FixtureVer extends Component
     public $encuentrosPorCancha = [];
     public $equipoFiltro;
 
-    public function mount($campeonatoId)
+    public function mount()
     {
-
+        $this->campeonatoId = Configuracion::get('campeonato_principal');
         $this->canchas = Canchas::all(); // Cargar todas las canchas
         // Obtener los años disponibles
 
-        $this->campeonato_id = $campeonatoId;
+        $this->campeonato_id = $this->campeonatoId;
         $this->campeonatos = $this->campeonatoId;
         $this->updatedCampeonatoId();
     }
