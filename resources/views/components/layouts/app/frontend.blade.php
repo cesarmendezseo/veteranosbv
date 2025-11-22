@@ -63,11 +63,12 @@
     <nav
         class="fixed top-0 left-0 w-full z-50  hidden md:flex items-center justify-between px-6 py-4 bg-white dark:bg-zinc-900 shadow">
         <!-- Logo -->
-        <a href="#" class="flex items-center  space-x-2 font-titulo text-lg">
-            <img src="{{ asset('storage/' . \App\Models\Configuracion::get('logo')) }}" alt="Logo">
-            {{-- <img src="{{ asset('images/logo.jpeg') }}" alt="Logo del Club" class="h-10 w-10 rounded-full"> --}}
-            <span class="text-xl font-bold text-gray-800 dark:text-white">{{-- A.C.F.V.B.V --}}{{
-                \App\Models\Configuracion::get('titulo', 'Sistema') }}</span>
+        <a href="#" class="flex items-center space-x-2 font-titulo text-lg">
+            <img src="{{ asset('storage/' . \App\Models\Configuracion::get('logo')) }}" alt="Logo"
+                class="h-10 w-10 rounded-full">
+            <span class="text-xl font-bold text-gray-800 dark:text-white">
+                {{ \App\Models\Configuracion::get('titulo', 'Sistema') }}
+            </span>
         </a>
 
         <!-- Enlaces de navegación -->
