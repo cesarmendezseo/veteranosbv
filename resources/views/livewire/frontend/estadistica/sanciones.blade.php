@@ -69,7 +69,7 @@
                                 </div>
 
                                 <!-- Contenido -->
-                                <div class=" p-3 bg-gray-100 space-y-2 text-sm text-gray-800">
+                                <div class=" p-3 bg-blue-600 space-y-2 text-sm text-gray-100">
 
                                     <!-- Fila 1 -->
                                     <div class="flex justify-between">

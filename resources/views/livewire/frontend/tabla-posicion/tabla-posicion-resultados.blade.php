@@ -64,22 +64,21 @@
                             class="relative after:content-[''] after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gray-300/50">
 
                             <!-- POSICIÓN -->
-                            <td class="px-2 py-3 ">
-                                <div
-                                    class="w-5 h-5 bg-blue-100 text-black rounded-full flex items-center justify-center mx-auto">
+                            <td class=" py-2 ">
+                                <div class="w-5 h-5   rounded-full flex items-center justify-center mx-auto">
                                     {{ (int)$index + 1 }}
                                 </div>
                             </td>
 
                             <!-- EQUIPO -->
-                            <td class="px-2 py-3 text-left font-semibold border-l border-gray-300">
+                            <td class="px-2 py-3 text-left font-semibold border-l border-gray-300 whitespace-nowrap">
                                 {{ strtoupper($equipo['equipo']) }}
                             </td>
                             <!-- PUNTOS -->
                             <td
                                 class="relative after:content-[''] after:absolute after:top-1/2 after:-translate-y-1/2 after:right-0 after:w-px after:h-4 after:bg-gray-900">
                                 <div
-                                    class="w-8 h-8 bg-blue-700 text-white rounded-full flex items-center justify-center font-bold mx-auto">
+                                    class="w-6 h-6 bg-blue-700 text-white rounded-full flex items-center justify-center font-bold mx-auto">
                                     {{ $equipo['puntos'] }}
                                 </div>
                             </td>
