@@ -60,20 +60,16 @@
                     {{-- Fila adicional para móviles --}}
                     <tr class="sm:hidden my-3">
                         <td colspan="8" class="px-2 py-3">
-                            <div class="rounded-xl shadow-md overflow-hidden">
+                            <div class="rounded-xl shadow-2xl overflow-hidden ">
 
                                 <!-- Encabezado -->
-                                <div class="p-2 font-front font-bold text-sm
-                @if ($index % 2 == 0)
-                    bg-blue-100 text-blue-900
-                @else
-                    bg-blue-900 text-white
-                @endif">
+                                <div class="p-2 font-front  text-sm bg-blue-900 text-white">
+
                                     {{ strtoupper($jug->jugador->apellido) }}, {{ strtoupper($jug->jugador->nombre) }}
                                 </div>
 
                                 <!-- Contenido -->
-                                <div class="p-3 bg-white space-y-2 text-sm text-gray-800">
+                                <div class=" p-3 bg-gray-100 space-y-2 text-sm text-gray-800">
 
                                     <!-- Fila 1 -->
                                     <div class="flex justify-between">
