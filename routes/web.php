@@ -28,6 +28,7 @@ use App\Livewire\Fixture\FixtureEditar;
 use App\Livewire\Fixture\FixtureIndex;
 use App\Livewire\Fixture\FixtureVer;
 use App\Livewire\Frontend\Estadistica\Goleador;
+use App\Livewire\Frontend\Estadistica\Sanciones;
 use App\Livewire\Frontend\Fixture\FixtureIndex as FixtureFixtureIndex;
 use App\Livewire\Frontend\Fixture\FixtureVer as FixtureFixtureVer;
 use App\Livewire\Frontend\Fixture\FrontEliminatoria;
@@ -63,6 +64,7 @@ Route::get('/fixture/{campeonatoId}/ver-fixture', FixtureFixtureVer::class)->nam
 Route::get('/frontend/eliminatoria/{campeonatoId}', FrontEliminatoriaVer::class)->name('frontend.eliminatoria.ver');
 Route::get('/frontend/eliminatoria', FrontEliminatoria::class)->name('frontend.eliminatoria.index');
 Route::get('/frontend/goleadores', Goleador::class)->name('frontend.goleadores.index');
+Route::get('/frontend/sanciones', Sanciones::class)->name('frontend.sanciones.index');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

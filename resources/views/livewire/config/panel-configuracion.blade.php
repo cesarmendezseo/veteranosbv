@@ -33,6 +33,14 @@
             <input type="checkbox" wire:model="mostrarProximosEncuentros">
             <label>Mostrar próximos encuentros</label>
         </div>
+        <div class="flex gap-3 items-center">
+            <input type="checkbox" wire:model="mostrarGoleadores">
+            <label>Mostrar goleadores</label>
+        </div>
+        <div class="flex gap-3 items-center">
+            <input type="checkbox" wire:model="mostrarSanciones">
+            <label>Mostrar sanciones</label>
+        </div>
 
         <button wire:click="guardar" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
             Guardar

@@ -15,6 +15,8 @@ class PaginaPrincipal extends Component
             'mostrarTabla'           => Configuracion::get('mostrar_tabla_posiciones'),
             'mostrarEncuentros'      => Configuracion::get('mostrar_proximos_encuentros'),
             'tituloPrincipal'        => Configuracion::get('titulo_principal'),
+            'mostrarGoleadores'      => Configuracion::get('mostrar_goleadores'),
+            'mostrarSanciones'       => Configuracion::get('mostrar_sanciones'),
         ];
 
         // 2. Utiliza dd() para inspeccionar el array de datos
