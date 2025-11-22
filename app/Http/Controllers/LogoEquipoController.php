@@ -11,7 +11,7 @@ class LogoEquipoController extends Controller
 {
     public function subirLogo(Request $request)
     {
-        dd('subiendo logo', $request->file('logo'));
+
         // Validación del archivo
         $request->validate([
             'logo' => 'required|image|max:2048', // 2MB
