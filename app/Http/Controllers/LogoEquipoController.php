@@ -30,11 +30,7 @@ class LogoEquipoController extends Controller
         // Guardar en configuración
         Configuracion::set('logo', $path);
 
-        FacadesLivewireAlert::title('¡Éxito!')
-            ->success('')
-            ->toast()
-            ->position('top-end')
-            ->show('Logo actualizado correctamente.');
+
 
         return redirect()->route('configuracion.index')
             ->with('success', 'Logo actualizado correctamente.');
