@@ -20,6 +20,7 @@ class PanelConfiguracion extends Component
     public $campeonatoPrincipal;
     public $titulo;
     public $logo;
+    public $textoFooter;
 
     public function mount()
     {
@@ -32,6 +33,7 @@ class PanelConfiguracion extends Component
         // 2. Los demás valores pueden seguir como strings
         $this->tituloPrincipal = Configuracion::get('titulo_principal', 'Bienvenidos al Torneo');
         $this->campeonatoPrincipal = Configuracion::get('campeonato_principal');
+        $this->textoFooter = Configuracion::get('texto_footer', 'Derechos Reservados');
 
         $this->titulo = Configuracion::get('titulo', 'Sistema de Torneo');
         $this->logo   = Configuracion::get('logo', null);
@@ -53,6 +55,7 @@ class PanelConfiguracion extends Component
         // 2. Los demás valores se guardan directamente
         Configuracion::set('titulo_principal', $this->tituloPrincipal);
         Configuracion::set('campeonato_principal', $this->campeonatoPrincipal);
+        Configuracion::set('texto_footer', $this->textoFooter);
 
         // 🔹 Aquí faltaba guardar el título y el logo
         Configuracion::set('titulo', $this->titulo);
@@ -61,6 +64,7 @@ class PanelConfiguracion extends Component
         FacadesLivewireAlert::title('Configuración guardada correctamente.')
             ->text('Los cambios han sido aplicados.')
             ->toast()
+            ->success()
             ->position('center')
             ->show();
     }

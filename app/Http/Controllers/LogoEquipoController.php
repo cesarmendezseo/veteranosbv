@@ -6,6 +6,8 @@ use App\Models\Configuracion;
 use App\Models\Equipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert as FacadesLivewireAlert;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class LogoEquipoController extends Controller
 {
@@ -17,13 +19,25 @@ class LogoEquipoController extends Controller
             'logo' => 'required|image|max:2048', // 2MB
         ]);
 
+        // Crear carpeta si no existe
+        if (!Storage::disk('public')->exists('logos')) {
+            Storage::disk('public')->makeDirectory('logos');
+        }
+
         // Guardar archivo
         $path = $request->file('logo')->store('logos', 'public');
 
         // Guardar en configuración
         Configuracion::set('logo', $path);
 
-        return redirect()->back()->with('success', 'Logo actualizado correctamente.');
+        FacadesLivewireAlert::title('¡Éxito!')
+            ->success('')
+            ->toast()
+            ->position('top-end')
+            ->show('Logo actualizado correctamente.');
+
+        return redirect()->route('configuracion.index')
+            ->with('success', 'Logo actualizado correctamente.');
     }
 
     public function index()

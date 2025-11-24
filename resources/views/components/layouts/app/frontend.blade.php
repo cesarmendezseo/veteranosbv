@@ -67,7 +67,7 @@
             <img src="{{ asset('storage/' . \App\Models\Configuracion::get('logo')) }}" alt="Logo"
                 class="h-10 w-10 rounded-full">
             <span class="text-xl font-bold text-gray-800 dark:text-white">
-                {{ \App\Models\Configuracion::get('titulo', '') }}
+                {{ \App\Models\Configuracion::get('titulo', 'Sistema') }}
             </span>
         </a>
 
@@ -157,15 +157,28 @@
     <main class="flex-grow pt-[80px] px-6 w-full mx-auto">
         {{ $slot }}
     </main>
-    <footer class="bg-[#042240] text-[#3c95B3] py-4 mb-8">
-        <div class="container mx-auto text-center">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2025 ACFVBV. Todos los derechos reservados.</p>
-                {{-- <p class="mt-2"> Tel: +54 3777 - 111111</p> --}}
-            </div>
-            <!-- Agregado el "Diseñado por" -->
-            <div class="hidden md:block">
-                <p class="mt-2 text-sm text-[#3c95B3]">Diseñado por César Méndez</p>
+    <footer class="bg-[#042240] text-[#3c95B3] py-6 mt-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-3">
+
+                <!-- Texto principal -->
+                <div class="text-center md:text-left">
+                    <p class="text-lg font-semibold tracking-wide">
+                        &copy; {{ date('Y') }} — {{ \App\Models\Configuracion::get('texto_footer', 'Derechos
+                        Reservados') }}
+                    </p>
+                </div>
+
+                <!-- Línea separadora en móvil -->
+                <div class="block md:hidden w-full h-px bg-[#3c95B3]/30 my-2"></div>
+
+                <!-- Diseñado por -->
+                <div class="text-center md:text-right">
+                    <p class="hidden sm:block text-sm text-[#3c95B3] opacity-80 hover:opacity-100 transition">
+                        Diseñado por <span class="font-semibold">César Méndez</span>
+                    </p>
+                </div>
+
             </div>
         </div>
     </footer>

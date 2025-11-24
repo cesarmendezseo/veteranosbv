@@ -10,7 +10,13 @@
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
         <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-            <x-app-logo />
+            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                <img src="{{ asset('storage/' . \App\Models\Configuracion::get('logo')) }}" alt="Logo"
+                    class="h-10 w-10 rounded-full">
+                <span class="text-xl font-bold text-gray-800 dark:text-white">
+                    {{ \App\Models\Configuracion::get('titulo', 'Sistema') }}
+                </span>
+            </div>
         </a>
 
         <flux:menu.separator />

@@ -1,5 +1,5 @@
 <div>
-    <div class="space-y-4">
+    <div class="space-y-4 bg-gray-50 dark:bg-gray-900 p-6 rounded shadow-md">
 
         @if (session('ok'))
         <div class="p-3 bg-green-100 text-green-700 rounded">
@@ -10,20 +10,55 @@
         <h2 class="text-xl font-bold">Configuración de Inicio</h2>
 
         <div>
-            <label class="font-semibold">Título principal</label>
-            <input type="text" class="border w-full p-2" wire:model="tituloPrincipal">
+            <label class="font-semibold font-titulo">TÍTULO PRINCIPAL</label>
+            <input type="text" class="bg-gray-100 dark:bg-gray-800 border w-full p-2" wire:model="tituloPrincipal">
         </div>
 
-        <div>
-            <label class="font-semibold">Campeonato principal</label>
-            <select wire:model="campeonatoPrincipal" class="border p-2 w-full">
-                <option value="">-- Seleccionar --</option>
 
+        <form class="">
+            <label for="countries" class="block mb-2.5 text-sm font-medium text-heading"><span
+                    class=" font-titulo text-lg">CAMPEONATO PRINCIPAL</span>
+                <p class="text-xs">(Seleccione el campeonato que quiere que
+                    aparezca
+                    en la pagina principal)</p>
+            </label>
+            <select id="countries" wire:model="campeonatoPrincipal"
+                class="bg-gray-100 block w-full px-3 py-2.5 bg-neutral-secondary-medium border dark:bg-gray-800 border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                <option value="">-- Seleccionar --</option>
                 @foreach(\App\Models\Campeonato::all() as $camp)
-                <option value="{{ $camp->id }}">{{ $camp->nombre }}</option>
+                <option value="{{ $camp->id }}">{{strtoupper( $camp->nombre) }}</option>
                 @endforeach
             </select>
+
+        </form>
+        <div class="mb-4">
+
+            <div>
+                <label for="first_name" class="block mb-2.5 text-sm font-titulo text-heading">TÍTULO DE LA
+                    PÁGINA</label>
+                <input type="text" wire:model="titulo" id="first_name"
+                    class="bg-gray-100 dark:bg-gray-800 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                    placeholder="John" required />
+            </div>
+
         </div>
+        <div class="mb-4">
+            <div>
+                <label for="first_name" class="block mb-2.5 text-sm font-titulo text-heading">FOOTER DE LA
+                    PÁGINA</label>
+                <input type="text" wire:model="textoFooter" id="first_name"
+                    class="bg-gray-100 dark:bg-gray-800 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                    placeholder="" required />
+            </div>
+
+        </div>
+        <div class="mb-4">
+            <a href="{{ route('cargar.logo') }}"
+                class="bg-blue-500  text-white px-4 py-3 rounded cursor-pointer hover:bg-blue-700">
+                Cargar Logo
+            </a>
+        </div>
+
         <div class="flex gap-3 items-center">
             <input type="checkbox" wire:model="mostrarTablaPosiciones">
             <label>Mostrar tabla de posiciones</label>
@@ -41,19 +76,13 @@
             <input type="checkbox" wire:model="mostrarSanciones">
             <label>Mostrar sanciones</label>
         </div>
-        <div class="mb-4">
-            <label for="titulo" class="block text-sm font-medium text-gray-700">Título de la página</label>
-            <input type="text" id="titulo" wire:model="titulo"
-                class="mt-1 p-4 bg-gray-200 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-        </div>
+
+
 
         <button wire:click="guardar" class="bg-blue-900  text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
             Guardar
         </button>
-        <a href="{{ route('cargar.logo') }}"
-            class="bg-blue-900  text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700">
-            Cargar Logo
-        </a>
+
     </div>
 
 </div>

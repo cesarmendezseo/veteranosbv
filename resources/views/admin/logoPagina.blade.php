@@ -9,17 +9,32 @@
             </svg>
             <span class="sr-only">Info</span>
             <div>
-                <h1> <span class="font-medium underline decoration-blue-500">Cargar Logo pagina cesar</h1>
+                <h1> <span class="font-medium underline decoration-blue-500">Cargar logo</h1>
             </div>
         </div>
 
         <form action="{{ route('configuracion.subir-logo') }}" method="POST" enctype="multipart/form-data" wire:ignore>
             @csrf
 
-            <label class="block text-sm font-medium text-gray-700">Subir logo</label>
-            <input type="file" name="logo" class="mt-1 block w-full">
+            <div
+                class="flex items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-neutral-secondary-light">
+                <label for="dropzone-file"
+                    class="flex flex-col items-center justify-center w-full h-64 bg-neutral-secondary-medium border border-dashed border-default-strong rounded-base cursor-pointer hover:bg-neutral-tertiary-medium">
+                    <div class="flex flex-col items-center justify-center text-body pt-5 pb-6 ">
+                        <svg class="w-8 h-8 mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h3a3 3 0 0 0 0-6h-.025a5.56 5.56 0 0 0 .025-.5A5.5 5.5 0 0 0 7.207 9.021C7.137 9.017 7.071 9 7 9a4 4 0 1 0 0 8h2.167M12 19v-9m0 0-2 2m2-2 2 2" />
+                        </svg>
+                        <p class="mb-2 text-sm"><span class="font-semibold">Click para subir</span> o arrastre hasta
+                            aqui</p>
+                        <p class="text-xs">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    </div>
+                    <input id="dropzone-file" type="file" class="hidden" name="logo" />
+                </label>
+            </div>
 
-            <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
+            <button class="cursor-pointer mt-2 px-4 py-2 bg-blue-600 text-white rounded">
                 Subir logo
             </button>
 
