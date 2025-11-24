@@ -32,7 +32,7 @@ class LogoEquipoController extends Controller
 
 
 
-        return redirect()->route('configuracion.index')
+        return redirect()->route('config.PanelConfiguracion')
             ->with('success', 'Logo actualizado correctamente.');
     }
 
