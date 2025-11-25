@@ -3,6 +3,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Knewave&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Asul:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400..700;1,400..700&display=swap');
+
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
@@ -15,7 +23,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
-  
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -23,6 +30,11 @@
     --font-titulo: 'Titillium Web', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-select: 'Racing Sans One', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-leyenda: 'Knewave', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-titan: 'Titan One', sans-serif;
+    --font-passion: 'Passion One', sans-serif;
+    --font-cookie: 'Cookie', cursive;
+    --font-asul: "Asul", serif;
+    --font-gelasio: "Gelasio", serif;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -62,6 +74,26 @@
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
+}
+@layer utilities {
+    .font-leyenda {
+        font-family: var(--font-leyenda);
+    }
+    .font-titan {
+        font-family: var(--font-titan);
+    }
+    .font-passion {
+        font-family: var(--font-passion);
+    }
+    .font-cookie {
+        font-family: var(--font-cookie);
+    }
+    .font-asul {
+        font-family: var(--font-asul);
+    }
+    .font-gelasio {
+        font-family: var(--font-gelasio);
+    }
 }
 
 [data-flux-label] {

@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Configuracion;
-use App\Models\Equipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\Facades\LivewireAlert as FacadesLivewireAlert;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class LogoEquipoController extends Controller
+class imagenPrincipal extends Controller
 {
-    public function subirLogo(Request $request)
+    public function subirImagen(Request $request)
     {
+
 
         // Validación del archivo
         $request->validate([
-            'logo' => 'required|image|max:2048', // 2MB
+            'fondo_pagina_principal' => 'required|image|max:2048', // 2MB
         ]);
 
         // Crear carpeta si no existe
@@ -25,21 +23,21 @@ class LogoEquipoController extends Controller
         }
 
         // Guardar archivo
-        $path = $request->file('logo')->store('logos', 'public');
+        $path = $request->file('fondo_pagina_principal')->store('logos', 'public');
 
         // Guardar en configuración
-        Configuracion::set('logo', $path);
+        Configuracion::set('fondo_pagina_principal', $path);
 
 
 
         return redirect()->route('config.PanelConfiguracion')
-            ->with('success', 'Logo actualizado correctamente.');
+            ->with('success', 'imagen actualizado correctamente.');
     }
 
 
 
     public function index()
     {
-        return view('admin.logoPagina');
+        return view('admin.imagenPrincipal');
     }
 }

@@ -3,7 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Sanciones;
+use App\Models\User;
+use App\Notifications\SancionesActualizadas;
 use Illuminate\Console\Command;
+
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
 
 class ActualizarSanciones extends Command
@@ -22,6 +26,10 @@ class ActualizarSanciones extends Command
         // 2️⃣ Marcar como cumplidas las sanciones que ya igualaron la cantidad
         Sanciones::whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados')
             ->update(['cumplida' => true]);
+
+        // Enviar notificación al admin (ajusta el ID o el criterio)
+        $admin = User::where('role', 'administrador')->first(); // o User::where('role', 'admin')->first();
+        Notification::send($admin, new SancionesActualizadas());
 
         $this->info('Sanciones actualizadas correctamente.');
     }

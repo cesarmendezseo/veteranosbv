@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\FotoJugadorController;
+use App\Http\Controllers\imagenPrincipal;
 use App\Http\Controllers\LogoEquipoController;
 use App\Livewire\Campeonato\CampeonatoCrear;
 use App\Livewire\Campeonato\CampeonatoEditar;
@@ -204,6 +205,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/configuracion/subir-logo', [LogoEquipoController::class, 'subirLogo'])
             ->name('configuracion.subir-logo');
         Route::get('/configuracion/subir-logo', [LogoEquipoController::class, 'index'])->name('cargar.logo');
+        Route::get('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'index'])->name('cargar.imagenPrincipal');
+        Route::post('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'subirImagen'])
+            ->name('configuracion.subir-imagen-principal');
     });
     //==============FIN CONFIGURACION========================
 });
