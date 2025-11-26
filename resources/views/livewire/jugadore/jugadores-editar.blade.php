@@ -19,7 +19,7 @@
         <div
             class="w-full p-4 text-center bg-gray-100 border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
             <flux:separator class="bt-2 mb-2" />
-            <form wire:submit.prevent="actualizarJugador" class="max-w-2xl mx-auto" enctype="multipart/form-data">
+            <form wire:submit.prevent="actualizarJugador" class="mb-10 max-w-2xl mx-auto" enctype="multipart/form-data">
                 @csrf
                 <div class="grid md:grid-cols-3 md:gap-6">
                     <!-- NOMBRE -->
