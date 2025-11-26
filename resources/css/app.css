@@ -1,3 +1,5 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* ***** 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
@@ -9,8 +11,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Asul:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400..700;1,400..700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400..700;1,400..700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Amaranth:ital,wght@0,400;0,700;1,400;1,700&family=Asap:ital,wght@0,100..900;1,100..900&family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto+Slab:wght@100..900&family=Vollkorn:ital,wght@0,400..900;1,400..900&display=swap');
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
@@ -25,7 +27,7 @@
 
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+   /*  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-front: 'Fugaz One', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-titulo: 'Titillium Web', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-select: 'Racing Sans One', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -34,7 +36,21 @@
     --font-passion: 'Passion One', sans-serif;
     --font-cookie: 'Cookie', cursive;
     --font-asul: "Asul", serif;
-    --font-gelasio: "Gelasio", serif;
+    --font-gelasio: "Gelasio", serif; */
+
+    /* ****************** */
+    --font-alegreya:"Alegreya", serif;
+    --font-asap:"Asap", sans-serif;
+    --font-lato:"Lato", sans-serif;
+    --font-merriweather:"Merriweather", serif;
+    --font-raleway:"Raleway", sans-serif;
+    --font-montserrat:"Montserrat", sans-serif;
+    --font-amaranth:"Amaranth", sans-serif;
+    --font-gentium:"Gentium Plus", serif;
+    --font-lora:"Lora", serif;
+    --font-roboto:"Roboto Slab", serif;
+    --font-vollkorn:"Vollkorn", serif;
+    /* ****************** */
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -75,24 +91,42 @@
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }
+
+
 @layer utilities {
-    .font-leyenda {
-        font-family: var(--font-leyenda);
+    .font-alegreya {
+        font-family: var(--font-alegreya);
     }
-    .font-titan {
-        font-family: var(--font-titan);
+    .font-asap {
+        font-family: var(--font-asap);
     }
-    .font-passion {
-        font-family: var(--font-passion);
+    .font-lato {
+        font-family: var(--font-lato);
     }
-    .font-cookie {
-        font-family: var(--font-cookie);
+    .font-merriweather {
+        font-family: var(--font-merriweather);
     }
-    .font-asul {
-        font-family: var(--font-asul);
+    .font-raleway {
+        font-family: var(--font-raleway);
     }
-    .font-gelasio {
-        font-family: var(--font-gelasio);
+    .font-montserrat {
+        font-family: var(--font-montserrat);
+    }
+    
+     .font-amaranth {
+        font-family: var(--font-amaranth);
+    }
+     .font-gentium {
+        font-family: var(--font-gentium);
+    }
+     .font-lora {
+        font-family: var(--font-lora);
+    }
+     .font-roboto {
+        font-family: var(--font-roboto);
+    }
+     .font-vollkorn {
+        font-family: var(--font-vollkorn);
     }
 }
 

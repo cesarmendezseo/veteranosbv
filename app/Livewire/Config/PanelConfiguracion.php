@@ -33,17 +33,20 @@ class PanelConfiguracion extends Component
     public $tituloFuente;
     public $tituloColor;
     public $fuentes_disponibles = [
-        'sans' => 'Sans',
-        'front' => 'Front',
-        'titulo' => 'Titulo',
-        'select' => 'Select ',
-        'leyenda' => 'Leyenda',
-        'titan' => 'Titan',
-        'passion' => 'Pasion',
-        'cookie' => 'Cookie',
-        'asul' => 'Asul',
-        'gelasio' => 'Gelasio',
+        'alegreya' => 'Alegreya',
+        'asap' => 'Asap',
+        'lato' => 'Lato',
+        'merriweather' => 'Merriweather',
+        'raleway' => 'Raleway',
+        'montserrat' => 'Montserrat',
+        'amaranth' => 'Amaranth',
+        'gentium' => 'Gentium Plus',
+        'lora' => 'Lora',
+        'roboto' => 'Roboto Slab',
+        'vollkorn' => 'Vollkorn',
     ];
+
+
     public $tituloSize;
     public $tituloWeight;
     public $tituloSizeMovil;

@@ -12,7 +12,7 @@
                     color: {{ \App\Models\Configuracion::get('titulo_color', '#ffffff') }};
                     font-size: clamp(
                         {{ \App\Models\Configuracion::get('titulo_size', '12px') }},
-                        5vw,
+                        8vw,
                         calc({{ \App\Models\Configuracion::get('titulo_size', '12px') }} * 3)
                     );
                 ">
@@ -39,38 +39,38 @@
                                 color: {{ \App\Models\Configuracion::get('leyenda_principal_color_1', '#ffffff') }};
                                 font-size: clamp(
                                     {{ \App\Models\Configuracion::get('leyenda_size_1', '12px') }},
-                                    5vw,
-                                    calc({{ \App\Models\Configuracion::get('leyenda_size_1', '12px') }} * 3)
+                                    4vw,
+                                    calc({{ \App\Models\Configuracion::get('leyenda_size_1', '12px') }} * 2)
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_1', '700') }};
                             ">
                             {{ \App\Models\Configuracion::get('leyenda_principal1', 'Sistema de Gestión de Torneos
                             Deportivos') }}
                         </span>
-                        <br>
+
                         {{-- Texto 2 --}}
                         <span style="
                                 font-family: var(--font-{{ \App\Models\Configuracion::get('leyenda_principal_fuente_2', 'titulo') }});
                                 color: {{ \App\Models\Configuracion::get('leyenda_principal_color_2', '#ffffff') }};
                                 font-size: clamp(
                                     {{ \App\Models\Configuracion::get('leyenda_size_2', '12px') }},
-                                    5vw,
-                                    calc({{ \App\Models\Configuracion::get('leyenda_size_2', '12px') }} * 3)
+                                    4vw,
+                                    calc({{ \App\Models\Configuracion::get('leyenda_size_2', '12px') }} * 2)
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_2', '700') }};
                             ">
                             {{ \App\Models\Configuracion::get('leyenda_principal2', 'Organiza y administra tus torneos
                             fácilmente') }}
                         </span>
-                        <br>
+
                         {{-- Texto 3 --}}
                         <span style="
                                 font-family: var(--font-{{ \App\Models\Configuracion::get('leyenda_principal_fuente_3', 'titulo') }});
                                 color: {{ \App\Models\Configuracion::get('leyenda_principal_color_3', '#ffffff') }};
                                 font-size: clamp(
                                     {{ \App\Models\Configuracion::get('leyenda_size_3', '12px') }},
-                                    5vw,
-                                    calc({{ \App\Models\Configuracion::get('leyenda_size_3', '12px') }} * 3)
+                                    4vw,
+                                    calc({{ \App\Models\Configuracion::get('leyenda_size_3', '12px') }} * 2)
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_3', '700') }};
                             ">
