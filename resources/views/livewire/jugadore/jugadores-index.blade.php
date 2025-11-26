@@ -109,18 +109,22 @@
 
                             {{-- /////////////////*****************///////////////////// --}}
                             <td class="px-6 py-4 text-right">
-                                <div x-data="{ open: false, coords: { top: 0, left: 0 } }" class="inline-block">
+                                <div x-data="{ open: false, dropUp: false }" class="inline-block relative">
                                     <!-- Botón -->
+
                                     <button @click="
-                                            open = !open;
-                                            if(open){
-                                                $nextTick(() => {
-                                                    const rect = $refs.trigger.getBoundingClientRect();
-                                                    coords.top = rect.bottom + window.scrollY;
-                                                    coords.left = rect.right + window.scrollX - 192; // 192px = w-48
-                                                })
-                                            }
-                                        " x-ref="trigger" class="px-4 py-2">
+            open = !open;
+            if (open) {
+                $nextTick(() => {
+                    const dropdownHeight = $refs.dropdown.offsetHeight; // Obtenemos la altura del menú
+                    const triggerRect = $refs.trigger.getBoundingClientRect();
+                    const spaceBelow = window.innerHeight - triggerRect.bottom;
+
+                    // Lógica para abrir hacia arriba si no hay espacio
+                    dropUp = (spaceBelow < dropdownHeight) && (triggerRect.top > dropdownHeight); 
+                })
+            }
+            " x-ref="trigger" class="px-4 py-2">
                                         <!-- Icono menú -->
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="w-10 h-10 cursor-pointer text-gray-800 dark:text-white" fill="none"
@@ -131,9 +135,9 @@
                                     </button>
 
                                     <!-- Dropdown -->
-                                    <div x-show="open" x-cloak
-                                        class="fixed w-48 bg-white dark:bg-gray-700 rounded shadow-lg z-[9999]"
-                                        :style="`top:${coords.top}px; left:${coords.left}px`"
+                                    <div x-show="open" x-cloak x-ref="dropdown"
+                                        class="absolute w-48 bg-white dark:bg-gray-700 rounded shadow-lg z-10"
+                                        :class="dropUp ? 'bottom-full right-0 mb-2' : 'top-full right-0 mt-2'"
                                         @click.outside="open = false">
 
                                         <ul class="flex flex-col">
