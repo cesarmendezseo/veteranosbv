@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-gray-50 dark:bg-zinc-900">
     <!-- Hero Section -->
-    <div class="relative w-full h-[500px] overflow-hidden">
+    <div class="relative w-full min-h-screen">
         <div class="absolute inset-0 bg-cover bg-center"
             style="background-image: url('{{ asset('storage/' . \App\Models\Configuracion::get('fondo_pagina_principal', 'images/pagina-principal.jpg')) }}')">
         </div>
@@ -86,7 +86,8 @@
         <!-- Main Content -->
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 pb-12">
             <div class="p-4">
-                @if ($mostrarTabla && $campeonatoSeleccionado)
+
+                @if ($mostrarTabla)
                 <a href="{{ route('tabla-posicion-resultados') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
@@ -116,10 +117,10 @@
                 @endif
             </div>
 
-
             <div class="p-4">
                 {{-- MOSTRAR GOLEADOR --}}
-                @if ($mostrarGoleadores && $campeonatoSeleccionado)
+
+                @if ($mostrarGoleadores)
                 <a href="{{ route('frontend.goleadores.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2 
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
@@ -150,7 +151,7 @@
             {{-- ////////////////////////////////// --}}
             <div class="p-4">
                 {{-- MOSTRAR SANCIONES --}}
-                @if ($mostrarSanciones && $campeonatoSeleccionado)
+                @if ($mostrarSanciones)
                 <a href="{{ route('frontend.sanciones.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2 
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
@@ -181,7 +182,7 @@
 
             <div class="p-4">
                 {{-- MOSTRAR Tabla --}}
-                @if ($mostrarEncuentros && $campeonatoSeleccionado)
+                @if ($mostrarEncuentros)
                 <a href="{{ route('frontend.proximoPartidos') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
                   border border-gray-200 
                   active:scale-[0.98] transition duration-150
