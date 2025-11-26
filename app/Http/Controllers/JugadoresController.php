@@ -38,7 +38,7 @@ class JugadoresController extends Controller
                 ->with('success', '¡La lista de personas ha sido importada exitosamente!');
         } catch (\Exception $e) {
             // 4. Manejo de errores (por ejemplo, si falla la base de datos o el mapeo)
-            \log::error('Error de importación de personas: ' . $e->getMessage());
+
             return back()
                 ->withErrors(['import_error' => 'Ocurrió un error durante la importación. Asegúrate de que el formato del archivo es correcto.']);
         }
