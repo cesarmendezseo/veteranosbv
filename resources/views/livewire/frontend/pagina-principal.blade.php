@@ -84,133 +84,83 @@
         </div>
 
         <!-- Main Content -->
-        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-20 pb-12">
-            <div class="p-4">
+        <div class="w-full max-w-4xl mx-auto px-4 py-6 space-y-4">
 
-                @if ($mostrarTabla)
-                <a href="{{ route('tabla-posicion-resultados') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
-                  border border-gray-200 
-                  active:scale-[0.98] transition duration-150
-                  hover:shadow-lg">
+            {{-- TABLA DE POSICIONES --}}
+            @if ($mostrarTabla)
+            <a href="{{ route('tabla-posicion-resultados') }}"
+                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
 
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-semibold text-white">
-                                Tabla de Posiciones
-                            </h2>
-                            <p class="text-sm text-gray-200">
-                                Ver resultados
-                            </p>
-                        </div>
+                <div>
+                    <h2 class="text-xl font-semibold">Tabla de Posiciones</h2>
+                    <p class="text-sm opacity-90">Ver resultados</p>
+                </div>
 
-                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="#2563eb">
-                                <path
-                                    d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-507h560v-133H200v133Zm0 214h560v-134H200v134Zm0 213h560v-133H200v133Zm40-454v-80h80v80h-80Zm0 214v-80h80v80h-80Zm0 214v-80h80v80h-80Z" />
-                            </svg>
+                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560..." />
+                    </svg>
+                </div>
+            </a>
+            @endif
 
-                        </div>
-                    </div>
 
-                </a>
-                @endif
-            </div>
+            {{-- GOLEADORES --}}
+            @if ($mostrarGoleadores)
+            <a href="{{ route('frontend.goleadores.index') }}"
+                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
 
-            <div class="p-4">
-                {{-- MOSTRAR GOLEADOR --}}
+                <div>
+                    <h2 class="text-xl font-semibold">Goleadores</h2>
+                    <p class="text-sm opacity-90">Ver los goleadores del torneo actual</p>
+                </div>
 
-                @if ($mostrarGoleadores)
-                <a href="{{ route('frontend.goleadores.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2 
-                  border border-gray-200 
-                  active:scale-[0.98] transition duration-150
-                  hover:shadow-lg">
+                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
+                        <path d="M480-80q-83 0-156-31.5T197-197..." />
+                    </svg>
+                </div>
+            </a>
+            @endif
 
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-semibold text-white">
-                                Goleadores
-                            </h2>
-                            <p class="text-sm text-gray-200">
-                                Ver los goleadores del torneo actual
-                            </p>
-                        </div>
 
-                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="#2563eb">
-                                <path
-                                    d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm200-500 54-18 16-54q-32-48-77-82.5T574-786l-54 38v56l160 112Zm-400 0 160-112v-56l-54-38q-54 17-99 51.5T210-652l16 54 54 18Zm-42 308 46-4 30-54-58-174-56-20-40 30q0 65 18 118.5T238-272Zm242 112q26 0 51-4t49-12l28-60-26-44H378l-26 44 28 60q24 8 49 12t51 4Zm-90-200h180l56-160-146-102-144 102 54 160Zm332 88q42-50 60-103.5T800-494l-40-28-56 18-58 174 30 54 46 4Z" />
-                            </svg>
-                        </div>
-                    </div>
+            {{-- SANCIONES --}}
+            @if ($mostrarSanciones)
+            <a href="{{ route('frontend.sanciones.index') }}"
+                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
 
-                </a>
-                @endif
-            </div>
-            {{-- ////////////////////////////////// --}}
-            <div class="p-4">
-                {{-- MOSTRAR SANCIONES --}}
-                @if ($mostrarSanciones)
-                <a href="{{ route('frontend.sanciones.index') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2 
-                  border border-gray-200 
-                  active:scale-[0.98] transition duration-150
-                  hover:shadow-lg">
+                <div>
+                    <h2 class="text-xl font-semibold">Sanciones</h2>
+                    <p class="text-sm opacity-90">Ver las sanciones de los jugadores</p>
+                </div>
 
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-semibold text-white">
-                                Sanciones
-                            </h2>
-                            <p class="text-sm text-gray-200">
-                                Ver las sancioes de los jugadores
-                            </p>
-                        </div>
+                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
+                        <path d="M640-400q-50 0-85-35t-35-85q0-50..." />
+                    </svg>
+                </div>
+            </a>
+            @endif
 
-                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="#2563eb">
-                                <path
-                                    d="M640-400q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM400-160v-76q0-21 10-40t28-30q45-27 95.5-40.5T640-360q56 0 106.5 13.5T842-306q18 11 28 30t10 40v76H400Zm86-80h308q-35-20-74-30t-80-10q-41 0-80 10t-74 30Zm154-240q17 0 28.5-11.5T680-520q0-17-11.5-28.5T640-560q-17 0-28.5 11.5T600-520q0 17 11.5 28.5T640-480Zm0-40Zm0 280ZM120-400v-80h320v80H120Zm0-320v-80h480v80H120Zm324 160H120v-80h360q-14 17-22.5 37T444-560Z" />
-                            </svg>
-                        </div>
-                    </div>
 
-                </a>
-                @endif
-            </div>
+            {{-- PRÓXIMOS ENCUENTROS --}}
+            @if ($mostrarEncuentros)
+            <a href="{{ route('frontend.proximoPartidos') }}"
+                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
 
-            <div class="p-4">
-                {{-- MOSTRAR Tabla --}}
-                @if ($mostrarEncuentros)
-                <a href="{{ route('frontend.proximoPartidos') }}" class="block bg-blue-600 shadow-md rounded-2xl p-4 mb-2
-                  border border-gray-200 
-                  active:scale-[0.98] transition duration-150
-                  hover:shadow-lg">
+                <div>
+                    <h2 class="text-xl font-semibold">Próximos Encuentros</h2>
+                    <p class="text-sm opacity-90">Fixtures y horarios</p>
+                </div>
 
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-lg font-semibold text-white">
-                                Proximos Encuentros
-                            </h2>
-                            <p class="text-sm text-gray-200">
-                                Fixtures y horarios
-                            </p>
-                        </div>
+                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
+                        <path d="M300-120 140-280l56-56..." />
+                    </svg>
+                </div>
+            </a>
+            @endif
 
-                        <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                                fill="#2563eb">
-                                <path
-                                    d="M300-120 140-280l56-56 64 63v-247H120q-33 0-56.5-23.5T40-600v-240h80v240h140q33 0 56.5 23.5T340-520v247l63-63 57 56-160 160Zm360 0L500-280l56-56 64 63v-247q0-33 23.5-56.5T700-600h140v-240h80v240q0 33-23.5 56.5T840-520H700v248l63-64 57 56-160 160Z" />
-                            </svg>
-
-                        </div>
-                    </div>
-
-                </a>
-                @endif
-            </div>
         </div>
     </div>
 </div>

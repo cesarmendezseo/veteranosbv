@@ -3,7 +3,9 @@
 use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\FotoJugadorController;
 use App\Http\Controllers\imagenPrincipal;
+use App\Http\Controllers\JugadoresController;
 use App\Http\Controllers\LogoEquipoController;
+use App\Imports\JugadoresImport;
 use App\Livewire\Campeonato\CampeonatoCrear;
 use App\Livewire\Campeonato\CampeonatoEditar;
 use App\Livewire\Campeonato\CampeonatoIndex;
@@ -208,6 +210,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'index'])->name('cargar.imagenPrincipal');
         Route::post('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'subirImagen'])
             ->name('configuracion.subir-imagen-principal');
+        // Muestra el formulario de importación
+        Route::get('jugadores/import', [JugadoresController::class, 'showImportForm'])->name('jugadores.form');
+
+        // Procesa la subida del archivo y la importación
+        Route::post('jugadores/import', [JugadoresController::class, 'import'])->name('jugadores.import');
     });
     //==============FIN CONFIGURACION========================
 });
