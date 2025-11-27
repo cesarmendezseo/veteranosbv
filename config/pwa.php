@@ -29,7 +29,7 @@ return [
             [
                 'src' => 'logo.png',
                 'sizes' => '512x512',
-                'type' => 'images/png',
+                'type' => '',
             ],
         ],
     ],
