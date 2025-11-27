@@ -84,7 +84,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="w-full max-w-4xl mx-auto px-4 py-6 space-y-4">
+        <div class="w-full max-w-4xl mx-auto px-4 py-6 space-y-4 relative z-20">
 
             {{-- TABLA DE POSICIONES --}}
             @if ($mostrarTabla)
@@ -96,13 +96,17 @@
                     <p class="text-sm opacity-90">Ver resultados</p>
                 </div>
 
-                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
-                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560..." />
+                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                    {{-- AÑADIDO: text-blue-600 fill-current --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#1f1f1f">
+                        <path
+                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
                     </svg>
                 </div>
             </a>
             @endif
+
 
 
             {{-- GOLEADORES --}}
@@ -115,13 +119,17 @@
                     <p class="text-sm opacity-90">Ver los goleadores del torneo actual</p>
                 </div>
 
-                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
-                        <path d="M480-80q-83 0-156-31.5T197-197..." />
+                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                    {{-- AÑADIDO: text-blue-600 fill-current --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#1f1f1f">
+                        <path
+                            d="M185-80q-17 0-29.5-12.5T143-122v-105q0-90 56-159t144-88q-40 28-62 70.5T259-312v190q0 11 3 22t10 20h-87Zm147 0q-17 0-29.5-12.5T290-122v-190q0-70 49.5-119T459-480h189q70 0 119 49t49 119v64q0 70-49 119T648-80H332Zm148-484q-66 0-112-46t-46-112q0-66 46-112t112-46q66 0 112 46t46 112q0 66-46 112t-112 46Z" />
                     </svg>
                 </div>
             </a>
             @endif
+
 
 
             {{-- SANCIONES --}}
@@ -134,16 +142,20 @@
                     <p class="text-sm opacity-90">Ver las sanciones de los jugadores</p>
                 </div>
 
-                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
-                        <path d="M640-400q-50 0-85-35t-35-85q0-50..." />
+                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                    {{-- AÑADIDO: text-blue-600 fill-current --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#1f1f1f">
+                        <path
+                            d="m819-28-59-59q-10 3-19.5 5T720-80H240q-50 0-85-35t-35-85v-120h120v-287L27-820l57-57L876-85l-57 57ZM240-160h447l-80-80H200v40q0 17 11.5 28.5T240-160Zm600-73-80-80v-447H313l-73-73v-47l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v647Zm-520-87h207L320-527v207Zm155-280-80-80h205v80H475Zm120 120-80-80h85v80h-5Zm85 0q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480Zm0-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600ZM200-160v-80 80Z" />
                     </svg>
                 </div>
             </a>
             @endif
 
 
-            {{-- PRÓXIMOS ENCUENTROS --}}
+
+            {{-- PRÓXIMOS ENCUENTROS (Este ya estaba correcto) --}}
             @if ($mostrarEncuentros)
             <a href="{{ route('frontend.proximoPartidos') }}"
                 class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
@@ -153,11 +165,14 @@
                     <p class="text-sm opacity-90">Fixtures y horarios</p>
                 </div>
 
-                <div class="w-11 h-11 flex items-center justify-center bg-white/20 rounded-full backdrop-blur">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#fff">
-                        <path d="M300-120 140-280l56-56..." />
+                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#1f1f1f">
+                        <path
+                            d="M600-120v-120H440v-400h-80v120H80v-320h280v120h240v-120h280v320H600v-120h-80v320h80v-120h280v320H600ZM160-760v160-160Zm520 400v160-160Zm0-400v160-160Zm0 160h120v-160H680v160Zm0 400h120v-160H680v160ZM160-600h120v-160H160v160Z" />
                     </svg>
                 </div>
+
             </a>
             @endif
 
