@@ -194,7 +194,7 @@
                                                     </svg>
                                                     <span>Borrar</span>
                                                 </a>
-                                                @endadminOrCan
+
                                             </li>
 
                                             {{-- FOTO --}}
@@ -213,6 +213,7 @@
                                                     <span>Foto</span>
                                                 </a>
                                             </li>
+                                            @endadminOrCan
                                         </ul>
                                     </div>
                                 </div>

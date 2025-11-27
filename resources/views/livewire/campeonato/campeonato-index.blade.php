@@ -4,7 +4,7 @@
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
             {{ __('Campeonatos') }}
             </h2>
-            @adminOrCan('comision')
+            @adminOrCan('administrador|comision')
             <div class="flex items-center gap-4">
                 <button wire:click="crear" class="  text-white rounded flex items-center gap-1 cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -36,7 +36,7 @@
         </div>
         <!-- escritorio -->
         <div class="hidden">
-            @adminOrCan('comision')
+            @adminOrCan('administrador|comision')
             <button wire:click="crear" class="px-3 py-2  text-white rounded flex items-center gap-1 cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -162,7 +162,7 @@
                             <div x-ref="menu" x-cloak x-show="open" @click.away="open=false"
                                 class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
                                 :style="`top:${top}px; left:${left}px`" x-transition.opacity>
-                                @adminOrCan('comision')
+                                @adminOrCan('administrador|comision')
                                 {{-- Editar --}}
                                 <a href="{{ route('campeonato.editar', $campeonato->id) }}"
                                     class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
@@ -198,6 +198,7 @@
                                     </svg><span class="ml-1">Ver</span>
                                 </button>
                                 {{-- ASIGNAR EQUIPO --}}
+                                @adminOrCan('administrador|comision')
                                 <a href="{{ route('asignar-equipos', $campeonato->id) }}"
                                     class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
                                     title="Equipos">
@@ -210,7 +211,8 @@
 
                                 </a>
                                 {{-- CLONAR EQUIPO --}}
-
+                                @endadminOrCan
+                                @adminOrCan('administrador')
                                 <a href="{{ route('copiar-listado-buena-fe') }}"
                                     class="cursor-pointer flex items-center gap-2 hover:underline dark:text-white "
                                     title="Equipos">
@@ -224,6 +226,7 @@
                                     </svg><span class="ml-1">Clonar Listado</span>
 
                                 </a>
+                                @endadminOrCan
                             </div>
                         </div>
 

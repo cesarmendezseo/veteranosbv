@@ -13,7 +13,7 @@
                         d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
             </a>
-            @adminOrCan()
+            @adminOrCan('administrador|comision')
             <button wire:click="exportar"
                 class="md:hidden cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
@@ -35,7 +35,7 @@
                     </svg>
                     Volver
                 </a>
-                @adminOrCan()
+                @adminOrCan('administrador|comision')
                 <button wire:click="exportar"
                     class="cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
@@ -198,7 +198,7 @@
                                         </svg>
                                     </button>
                                     {{-- EDITAR --}}
-                                    @adminOrCan('comision')
+                                    @adminOrCan('administrador|comision')
                                     <button wire:click="editEncuentro({{ $encuentro->id }})"
                                         class="cursor-pointer text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                         title="Editar">

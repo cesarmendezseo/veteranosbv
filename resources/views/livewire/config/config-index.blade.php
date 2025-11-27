@@ -9,6 +9,7 @@
     </div>
 
     <div class="mt-4 ">
+        @adminOrCan('administrador')
         <a href="{{ route('copiar-listado-buena-fe') }}"
             class="mb-4 block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-500 ">
             <div class="flex justify-between items-center">
@@ -52,6 +53,7 @@
                 </button>
             </div>
         </a>
+        @endadminOrCan
         <a href="{{ route('config.PanelConfiguracion') }}"
             class="mb-4 block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-500">
             <div class="flex justify-between items-center">

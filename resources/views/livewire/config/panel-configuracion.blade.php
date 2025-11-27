@@ -11,7 +11,7 @@
         </div>
         {{-- *********************TITULO DE LA PAGINA****************** --}}
         <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
-
+            @adminOrCan('administrador')
             <!-- Campo: Título -->
             <div>
                 <label for="first_name" class="text-lg">Título de la página</label>
@@ -31,40 +31,30 @@
                     Cargar Logo
                 </a>
             </div>
+            <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
+                <div>
+                    <label for="first_name" class="block mb-2.5  font-titulo text-heading">Footer de la página</label>
+                    <input type="text" wire:model="textoFooter" id="first_name"
+                        class="bg-gray-50 dark:bg-gray-800 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                        placeholder="" required />
+                </div>
 
-        </div>
-
-
-        {{-- ******************************************************* --}}
-
-        <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
-            <div>
-                <label class=" mb-3 text-lg">Título Principal</label>
-                <input type="text" class="bg-gray-50 dark:bg-gray-800 shadow-2xs border w-full p-2"
-                    wire:model="tituloPrincipal">
             </div>
+            <hr class="mb-4 border-gray-400">
+            <div class="flex gap-4 p-2">
+
+                <div class="mb-4">
+                    <a href="{{ route('cargar.imagenPrincipal') }}"
+                        class="bg-blue-500  text-white px-4 py-3 rounded cursor-pointer hover:bg-blue-700">
+                        Cargar Imagen Principal
+                    </a>
+                </div>
+            </div>
+
         </div>
 
-        {{-- *********************campeoanto principal********************* --}}
-        <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
-            <form class="">
-                <label for="countries" class="text-lg "><span class="">Campeonato
-                        Principal</span>
-                    <p class="text-xs text-gray-600 mb-2 dark:text-gray-200 ">Seleccione el campeonato que quiere que
-                        aparezca
-                        en la pagina principal</p>
-                </label>
-                <select id="countries" wire:model="campeonatoPrincipal"
-                    class="bg-gray-50 block w-full px-3 py-2.5 bg-neutral-secondary-medium border dark:bg-gray-800 border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-2xs placeholder:text-body">
-                    <option value="">-- Seleccionar --</option>
-                    @foreach(\App\Models\Campeonato::all() as $camp)
-                    <option value="{{ $camp->id }}">{{strtoupper( $camp->nombre) }}</option>
-                    @endforeach
-                </select>
 
-            </form>
-        </div>
-        {{-- ******************************************************* --}}
+
 
 
         {{-- -------------------LEYENDAS--------------------------- --}}
@@ -89,27 +79,39 @@
                 class="border bg-gray-50 border-default-medium text-heading dark:text-white dark:bg-gray-800 text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body"
                 placeholder="Escribe aqui lo que quieras que aparezca en la pagina princial..."></textarea>
         </div>
+
+        @endadminOrCan
+        {{-- *********************campeoanto principal********************* --}}
+        <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
+            <form class="">
+                <label for="countries" class="text-lg "><span class="">Campeonato
+                        Principal</span>
+                    <p class="text-xs text-gray-600 mb-2 dark:text-gray-200 ">Seleccione el campeonato que quiere que
+                        aparezca
+                        en la pagina principal</p>
+                </label>
+                <select id="countries" wire:model="campeonatoPrincipal"
+                    class="bg-gray-50 block w-full px-3 py-2.5 bg-neutral-secondary-medium border dark:bg-gray-800 border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-2xs placeholder:text-body">
+                    <option value="">-- Seleccionar --</option>
+                    @foreach(\App\Models\Campeonato::all() as $camp)
+                    <option value="{{ $camp->id }}">{{strtoupper( $camp->nombre) }}</option>
+                    @endforeach
+                </select>
+
+            </form>
+        </div>
         {{-- --------------------------------------------------------------------------- --}}
+
 
         <div class="mb-4 p-4 bg-gray-300 dark:text-white dark:bg-gray-700 rounded-lg space-y-4">
             <div>
-                <label for="first_name" class="block mb-2.5  font-titulo text-heading">Footer de la página</label>
-                <input type="text" wire:model="textoFooter" id="first_name"
-                    class="bg-gray-50 dark:bg-gray-800 border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
-                    placeholder="" required />
-            </div>
-
-        </div>
-        <hr class="mb-4 border-gray-400">
-        <div class="flex gap-4 p-2">
-
-            <div class="mb-4">
-                <a href="{{ route('cargar.imagenPrincipal') }}"
-                    class="bg-blue-500  text-white px-4 py-3 rounded cursor-pointer hover:bg-blue-700">
-                    Cargar Imagen Principal
-                </a>
+                <label class=" mb-3 text-lg">Título Principal</label>
+                <input type="text" class="bg-gray-50 dark:bg-gray-800 shadow-2xs border w-full p-2"
+                    wire:model="tituloPrincipal">
             </div>
         </div>
+        {{-- ******************************************************* --}}
+
         <hr class="mb-4 border-gray-400">
         <div class="flex gap-3 items-center">
             <input type="checkbox" wire:model="mostrarTablaPosiciones">

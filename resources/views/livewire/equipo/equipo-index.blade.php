@@ -4,7 +4,7 @@
         {{ __('Equipos') }}
         </h2>
 
-        @adminOrCan('comision')
+        @adminOrCan('administrador|comision')
         <a href="{{ route('equipo.crear') }}"
             class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -128,6 +128,7 @@
                                 :style="`top:${coords.top}px; left:${coords.left}px`" @click.outside="open = false">
                                 <ul class="flex flex-col dark:text-white">
                                     <!-- Editar -->
+                                    @adminOrCan('administrador|comision')
                                     <li>
                                         <a href="{{ route('equipo.editar', $equipo->id) }}"
                                             class="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -167,6 +168,7 @@
                                             Logo
                                         </a>
                                     </li>
+                                    @endadminOrCan
                                 </ul>
                             </div>
                         </div>

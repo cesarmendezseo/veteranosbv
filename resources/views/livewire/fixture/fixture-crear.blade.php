@@ -5,9 +5,9 @@
     </div>
     @enderror
 
-    <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10"">
+    <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Crear Fixture') }}
+            {{ __('Crear Fixture') }}
         </h2>
         <a href="{{ route('fixture.index') }}"
             class="flex items-center gap-1 hover:underline text-gray-100 dark:text-gray-100">
@@ -36,7 +36,7 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option value=""></option>
                 @foreach ($grupos as $grupo)
-                <option value="{{ $grupo->id }}">{{ $grupo->nombre }}</option>
+                <option value="{{ $grupo->id }}">{{ strtoupper($grupo->nombre) }}</option>
                 @endforeach
             </select>
         </div>
@@ -148,7 +148,7 @@
         <hr>
         {{-- Botón --}}
         <button type="submit"
-            class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-save-icon lucide-save">
@@ -159,7 +159,31 @@
             </svg> <span>Guardar</span></button>
 
     </form>
-    @if($campeonatos)
+    {{-- ================= ENCUENTROS ================= --}}
+    <div class="mt-6">
 
-    @endif
+        <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
+            <h3 class="text-lg font-semibold mb-2">Encuentros registrados</h3>
+        </div>
+
+        @foreach ($this->encuentros as $encuentro)
+        <div class="hidden lg:flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
+            <span class="flex-1 pl-2">{{ ucwords($encuentro->fase) }}</span>
+
+            <span class="flex-1 text-right pr-2">{{ $encuentro->equipoLocal->nombre }}</span>
+
+            <span class="font-bold rounded-4xl bg-white text-gray-900 p-2">vs</span>
+
+            <span class="flex-1 pl-2">{{ $encuentro->equipoVisitante->nombre }}</span>
+
+            <span class="flex-1 text-sm">
+                {{ \Carbon\Carbon::parse($encuentro->fecha . ' ' . $encuentro->hora)->format('d/m/Y H:i') }}hs
+            </span>
+
+            <span class="flex-1 text-sm">
+                {{ $encuentro->cancha->nombre ?? "Sin cancha asignada" }}
+            </span>
+        </div>
+        @endforeach
+    </div>
 </div>

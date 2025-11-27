@@ -246,7 +246,7 @@
                                         </svg>
                                     </button>
                                     @endadminOrCan
-                                    @adminOrCan('comision')
+                                    @adminOrCan('administrador|comision')
                                     <button wire:click="editEncuentro({{ $encuentro->id }})"
                                         class="cursor-pointer text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                         title="Editar">
@@ -274,6 +274,7 @@
                                             <line x1="14" x2="14" y1="11" y2="17" />
                                         </svg>
                                     </button>
+
 
                                 </div>
                             </td>
@@ -329,7 +330,7 @@
                         </div>
 
                         <!-- Botones de acción -->
-                        @adminOrCan('comision|cargar gol')
+                        @adminOrCan('administrador|comision|cargar gol')
                         <div class="flex justify-between space-x-2">
                             <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
                                 class="flex-1 flex items-center justify-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
@@ -344,7 +345,7 @@
                                 <span class="hidden xs:inline">Guardar</span>
                             </button>
                             @endadminOrCan
-                            @adminOrCan('comision')
+                            @adminOrCan('administrador|comision')
                             <button wire:click="editEncuentro({{ $encuentro->id }})"
                                 class="flex-1 flex items-center justify-center text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-2 py-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                 title="Editar">
@@ -425,7 +426,7 @@
                 </div>
                 <div class="flex justify-end gap-4">
                     <button @click="open = false"
-                        class="px-4 py-2 bg-red-500 text-white rounded-md flex items-center gap-2"><svg
+                        class="cursor-pointer px-4 py-2 bg-red-500 text-white rounded-md flex items-center gap-2"><svg
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="lucide lucide-circle-x-icon lucide-circle-x">
@@ -434,7 +435,7 @@
                             <path d="m9 9 6 6" />
                         </svg>Cancelar</button>
                     <button wire:click="guardarEdicion"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-md flex items-center gap-2">
+                        class="cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-md flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="lucide lucide-save">

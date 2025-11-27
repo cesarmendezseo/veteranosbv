@@ -10,8 +10,9 @@ use App\Models\Grupo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Livewire\Component;
-
 use App\Services\EncuentroExportService as ServicesEncuentroExportService;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+
 
 class FixtureCrear extends Component
 {
@@ -118,6 +119,17 @@ class FixtureCrear extends Component
         });
     }
 
+    public function getEncuentrosProperty()
+    {
+        return Encuentro::with(['equipoLocal', 'equipoVisitante', 'cancha'])
+            ->where('campeonato_id', $this->campeonato_id)
+            ->when($this->jornada, function ($q) {
+                $q->where('fecha_encuentro', $this->jornada);
+            })
+            ->orderBy('hora')
+            ->get();
+    }
+
     //============== guardar el fixture
 
     public function guardarEncuentro()
@@ -152,10 +164,13 @@ class FixtureCrear extends Component
             ]);
 
             $horaEncuentro = Carbon::parse($this->fecha . ' ' . $this->hora);
-
+            if (!$this->equipo_local_id || !$this->equipo_visitante_id) {
+                return; // o no hagas la verificación aún
+            }
 
             // Verifica si un equipo ya juega ese día
-            $conflictoEquipo = Encuentro::where('fecha_encuentro', $this->fecha)
+            $conflictoEquipo = Encuentro::where('campeonato_id', $this->campeonato_id)
+                ->where('fecha_encuentro', $this->jornada)
                 ->where(function ($q) {
                     $q->where('equipo_local_id', $this->equipo_local_id)
                         ->orWhere('equipo_visitante_id', $this->equipo_local_id)
@@ -166,6 +181,11 @@ class FixtureCrear extends Component
 
             if ($conflictoEquipo) {
                 $this->addError('fecha', 'Uno de los equipos ya tiene un partido en esa fecha.');
+                LivewireAlert::title('Error')
+                    ->text('Uno de los equipos ya tiene un partido en esa fecha')
+                    ->error()
+                    ->toast()
+                    ->show();
                 return;
             }
 
@@ -187,6 +207,11 @@ class FixtureCrear extends Component
 
             if ($conflictoCancha) {
                 $this->addError('hora', 'El horario seleccionado se superpone con otro partido en esta cancha.');
+                LivewireAlert::title('error')
+                    ->text('El horario seleccionado se superpone con otro partido en esta cancha')
+                    ->error()
+                    ->toast()
+                    ->show();
                 return;
             }
 
@@ -204,6 +229,13 @@ class FixtureCrear extends Component
 
             // 3. Mensaje flash y reset
             session()->flash('success', 'Encuentro guardado correctamente.');
+            livewirealert::title('Ok!')
+                ->text('Encuentro guardado correctamente.')
+                ->success()
+                ->toast()
+                ->show();
+            $this->dispatch('$refresh');
+
             $this->reset([
                 'fecha',
                 'hora',
@@ -218,6 +250,11 @@ class FixtureCrear extends Component
         } catch (\Exception $e) {
             logger()->error('Error al guardar: ' . $e->getMessage());
             $this->addError('general', 'Error al guardar el encuentro: ' . $e->getMessage());
+            livewirealert::title('Error')
+                ->text('Error al guardar el encuentro: ' . $e->getMessage())
+                ->error()
+                ->toast()
+                ->show();
         }
     }
 
