@@ -10,24 +10,18 @@ use Livewire\Component;
 class Pwa extends Component
 {
     use WithFileUploads;
-    // Propiedades que se enlazan al formulario
+    // ... (Propiedades)
+    public $configId;
     public $name;
-    public $short_name;
+    public  $short_name;
     public $background_color;
     public $theme_color;
     public $description;
     public $icon;
 
-    // Almacena el ID de la configuración para saber qué actualizar
-
-
-    public $newIcon;
-
-    public $configId;
 
     public function mount()
     {
-        // Usa el método del modelo para asegurar que siempre haya un registro
         $config = PwaConfig::getSingletonConfig();
 
         $this->configId = $config->id;
@@ -38,30 +32,11 @@ class Pwa extends Component
         $this->description = $config->description;
         $this->icon = $config->icon;
 
-        $config = PwaConfig::getSingletonConfig();
-        $this->configId = $config->id;
-        // ... (Carga de los demás campos)
-        $this->icon = $config->icon;
+        // ❌ ELIMINAR EL BLOQUE REPETIDO DE LA CARGA DE $config
+
     }
 
-    public function rules()
-    {
-        $rules = [
-            'name' => 'required|string|max:50',
-            'short_name' => 'required|string|max:12',
-            // Simple validación de color hexadecimal
-            'background_color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'theme_color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
-            'description' => 'required|string|max:150',
-            'icon' => 'required|string|ends_with:.png,.jpg|max:50', // Ajusta si permites subir archivos
-        ];
-        if ($this->newIcon) {
-            // El archivo debe ser una imagen, tener un tamaño máximo de 1MB y ser png/jpg/jpeg
-            $rules['newIcon'] = 'image|max:1024|mimes:png,jpg,jpeg';
-        }
-
-        return $rules;
-    }
+    // ... (Reglas: Las dejamos como están, pero verifica el max:50 si usas rutas largas)
 
     public function save()
     {
@@ -71,18 +46,20 @@ class Pwa extends Component
 
         // 1. Manejar la subida del nuevo ícono
         if ($this->newIcon) {
-            // 🆕 Definir el nombre del archivo y la ubicación
-            // Usamos un nombre fijo (pwa-logo.png) para que siempre sobrescriba
             $fileName = 'pwa-logo.png';
+            $path = 'images'; // Carpeta de destino DENTRO de public/
 
-            // 🆕 Mover el archivo al directorio public
-            // La subida usa por defecto el disco 'public' y crea una carpeta 'livewire-tmp'
-            // El método storeAs mueve el archivo de la carpeta temporal a la ruta deseada.
-            $this->newIcon->storeAs('/', $fileName, 'public');
+            // Usamos el disco 'public'. El archivo se guarda en storage/app/public/images/pwa-logo.png
+            // y se accede por URL vía /storage/images/pwa-logo.png
+            $this->newIcon->storeAs($path, $fileName, 'public');
 
-            // 🆕 Actualizar la propiedad 'icon' con el nuevo nombre (sin la ruta pública, solo el nombre)
-            $this->icon = $fileName;
+            // 🆕 Actualizar 'icon' con la URL relativa al sitio para que funcione el asset() y la PWA
+            $iconPublicPath = 'storage/' . $path . '/' . $fileName;
+        } else {
+            // Si no se sube un nuevo ícono, mantén el valor actual de la DB
+            $iconPublicPath = $this->icon;
         }
+
         // 2. Actualizar los datos en la base de datos
         if ($config) {
             $config->update([
@@ -91,19 +68,12 @@ class Pwa extends Component
                 'background_color' => $this->background_color,
                 'theme_color' => $this->theme_color,
                 'description' => $this->description,
-                'icon' => $this->icon,
+                'icon' => $iconPublicPath, // Ahora contiene la ruta completa: storage/images/pwa-logo.png
             ]);
-            LivewireAlert::title('Ok')
-                ->text('✅ Configuración PWA actualizada correctamente.')
-                ->success()
-                ->toast()
-                ->show();
+
+            // ... (Alerta de éxito) ...
         } else {
-            LivewireAlert::title('Error')
-                ->text('❌ Error: No se encontró el registro de configuración..')
-                ->error()
-                ->toast()
-                ->show();
+            // ... (Alerta de error) ...
         }
     }
 

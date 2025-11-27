@@ -51,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 // 🆕 Actualiza el ícono: Sobrescribe la propiedad 'src' del primer ícono [0]
                 Config::set('pwa.manifest.icons.0.src', $config->icon);
 
+
                 // Opcional: Si quieres que el campo 'description' también sea dinámico, añádelo:
                 Config::set('pwa.manifest.description', $config->description);
             }

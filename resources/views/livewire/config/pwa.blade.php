@@ -50,7 +50,7 @@
         </div>
 
         {{-- Icono --}}
-        <div class="mb-6">
+        {{-- <div class="mb-6">
             <label for="icon" class="block text-gray-700 font-semibold mb-2 dark:text-gray-50">Nombre del Archivo del
                 Ícono </label>
             <input type="text" id="icon" wire:model="icon"
@@ -58,7 +58,7 @@
             <p class="text-xs text-gray-500 mt-1">Debe ser el nombre del archivo del ícono, el que carga para la página
                 principal (ej. `logo.png`).</p>
 
-        </div>
+        </div> --}}
         {{-- 🆕 Sección de Subida de Icono --}}
         <div class="mb-6 border p-4 rounded-md">
             <h3 class="text-lg font-semibold mb-3">🖼️ Ícono de la Aplicación</h3>
@@ -66,7 +66,7 @@
             <div class="flex items-center space-x-4 mb-3 border border-gray-400 rounded p-2">
                 <p class="font-medium text-gray-700 dark:text-gray-100">Ícono Actual:</p>
                 @if ($icon)
-                {{-- Mostrar el ícono actual. Nota: Asset() es necesario para la ruta pública --}}
+                {{-- asset() es crucial para convertir la ruta de la DB en una URL accesible --}}
                 <img src="{{ asset($icon) }}" alt="Ícono actual" class="w-10 h-10 rounded-lg shadow-md">
                 <span class="text-sm text-gray-600 dark:text-gray-100">{{ $icon }}</span>
                 @else
