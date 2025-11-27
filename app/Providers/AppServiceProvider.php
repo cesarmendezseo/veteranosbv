@@ -48,8 +48,11 @@ class AppServiceProvider extends ServiceProvider
                 Config::set('pwa.manifest.short_name', $config->short_name);
                 Config::set('pwa.manifest.theme_color', $config->theme_color);
                 Config::set('pwa.manifest.background_color', $config->background_color);
-                // También debes actualizar la sección de iconos si usas una configuración dinámica
-                // Config::set('pwa.manifest.icons.0.src', $config->icon);
+                // 🆕 Actualiza el ícono: Sobrescribe la propiedad 'src' del primer ícono [0]
+                Config::set('pwa.manifest.icons.0.src', $config->icon);
+
+                // Opcional: Si quieres que el campo 'description' también sea dinámico, añádelo:
+                Config::set('pwa.manifest.description', $config->description);
             }
         }
     }

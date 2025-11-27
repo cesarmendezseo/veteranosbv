@@ -59,6 +59,34 @@
                 principal (ej. `logo.png`).</p>
 
         </div>
+        {{-- 🆕 Sección de Subida de Icono --}}
+        <div class="mb-6 border p-4 rounded-md">
+            <h3 class="text-lg font-semibold mb-3">🖼️ Ícono de la Aplicación</h3>
+
+            <div class="flex items-center space-x-4 mb-3">
+                <p class="font-medium text-gray-700">Ícono Actual:</p>
+                @if ($icon)
+                {{-- Mostrar el ícono actual. Nota: Asset() es necesario para la ruta pública --}}
+                <img src="{{ asset($icon) }}" alt="Ícono actual" class="w-10 h-10 rounded-lg shadow-md">
+                <span class="text-sm text-gray-600">{{ $icon }}</span>
+                @else
+                <span class="text-sm text-red-500">No hay ícono configurado.</span>
+                @endif
+            </div>
+
+            <label for="newIcon" class="block text-gray-700 font-semibold mb-2">Cambiar Ícono (.png, .jpg)</label>
+            {{-- ⚠️ wire:model="newIcon" es CRUCIAL para Livewire File Uploads --}}
+            <input type="file" id="newIcon" wire:model="newIcon" class="w-full border-gray-300 rounded-md shadow-sm">
+
+            @error('newIcon')
+            <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+            @enderror
+
+            {{-- Opcional: Mostrar una barra de progreso mientras sube --}}
+            <div wire:loading wire:target="newIcon" class="mt-2 text-blue-500 text-sm">
+                Subiendo imagen...
+            </div>
+        </div>
 
         <button type="submit"
             class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 ease-in-out">
