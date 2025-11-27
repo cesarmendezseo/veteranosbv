@@ -18,6 +18,7 @@ use App\Livewire\Config\AsignarEquipos;
 use App\Livewire\Config\ConfigIndex;
 use App\Livewire\Config\CopiarListadoBuenaFe;
 use App\Livewire\Config\PanelConfiguracion;
+use App\Livewire\Config\Pwa;
 use App\Livewire\Config\UploadLogo;
 use App\Livewire\Equipo\EquipoCrear;
 use App\Livewire\Equipo\EquipoEditar;
@@ -215,6 +216,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Procesa la subida del archivo y la importación
         Route::post('jugadores/import', [JugadoresController::class, 'import'])->name('jugadores.import');
+        Route::get('configuracion/pwa', Pwa::class)->name('config.pwa');
     });
     //==============FIN CONFIGURACION========================
 });

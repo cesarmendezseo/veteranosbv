@@ -19,8 +19,8 @@ return [
     */
 
     'manifest' => [
-        'name' => 'APP Veteranosbv',
-        'short_name' => 'ACFVBV',
+        'name' => 'APP',
+        'short_name' => 'Futbol',
         'background_color' => '#6777ef',
         'display' => 'standalone',
         'description' => 'App webFull.',

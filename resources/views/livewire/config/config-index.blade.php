@@ -53,6 +53,21 @@
                 </button>
             </div>
         </a>
+        <a href="{{ route('config.pwa') }}"
+            class="mb-4 block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-500">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Config PWA
+                    </h5>
+                    <p class="font-normal text-gray-700 dark:text-gray-50">Configurar la App para movil
+                    </p>
+                </div>
+                <button
+                    class="px-5 py-2.5 gap-4 text-sm font-medium text-white inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 cursor-pointer rounded-lg text-center shadow">
+                    Configurar
+                </button>
+            </div>
+        </a>
         @endadminOrCan
         <a href="{{ route('config.PanelConfiguracion') }}"
             class="mb-4 block p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-500">
