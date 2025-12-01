@@ -11,7 +11,7 @@
                     font-family: var(--font-{{ \App\Models\Configuracion::get('titulo_fuente', 'titulo') }});
                     color: {{ \App\Models\Configuracion::get('titulo_color', '#ffffff') }};
                     font-size: clamp(
-                        {{ \App\Models\Configuracion::get('titulo_size', '12px') }},
+                        {{ \App\Models\Configuracion::get('titulo_size', '8px') }},
                         8vw,
                         calc({{ \App\Models\Configuracion::get('titulo_size', '12px') }} * 3)
                     );
