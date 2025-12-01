@@ -38,7 +38,7 @@ class PosicionesExport implements FromCollection, WithEvents, WithTitle
 
             return [
                 'pos'  => $i + 1,
-                'eq'   => $p[strtoupper('equipo')],
+                'eq'   => strtoupper($p['equipo']),
                 'pj'   => (int)$p['jugados'],
                 'g'    => (int)$p['ganados'],
                 'e'    => (int)$p['empatados'],
