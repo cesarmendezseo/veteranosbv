@@ -93,16 +93,16 @@ class PanelConfiguracion extends Component
         $this->logo   = Configuracion::get('logo', null);
         $this->fondoPaginaPrincipal   = Configuracion::get('fondo_pagina_principal', null);
 
-        $this->tituloSize = Configuracion::get('titulo_size', '40px');
+        $this->tituloSize = Configuracion::get('titulo_size', '8px');
         $this->tituloWeight = Configuracion::get('titulo_weight', '700');
 
-        $this->leyendaSize1 = Configuracion::get('leyenda_size_1', '20px');
+        $this->leyendaSize1 = Configuracion::get('leyenda_size_1', '8px');
         $this->leyendaWeight1 = Configuracion::get('leyenda_weight_1', '400');
 
-        $this->leyendaSize2 = Configuracion::get('leyenda_size_2', '20px');
+        $this->leyendaSize2 = Configuracion::get('leyenda_size_2', '8px');
         $this->leyendaWeight2 = Configuracion::get('leyenda_weight_2', '400');
 
-        $this->leyendaSize3 = Configuracion::get('leyenda_size_3', '20px');
+        $this->leyendaSize3 = Configuracion::get('leyenda_size_3', '8px');
         $this->leyendaWeight3 = Configuracion::get('leyenda_weight_3', '400');
     }
 

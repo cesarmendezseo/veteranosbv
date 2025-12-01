@@ -154,6 +154,8 @@
                         placeholder="" required /> --}}
                     <select wire:model="tituloSize"
                         class="border border-gray-500  rounded px-3 py-1 bg-gray-50 w-full dark:bg-gray-800">
+                        <option value="8px">12</option>
+                        <option value="10px">12</option>
                         <option value="12px">12</option>
                         <option value="14px">14</option>
                         <option value="18px">18</option>

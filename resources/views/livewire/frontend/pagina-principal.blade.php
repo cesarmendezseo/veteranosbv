@@ -13,7 +13,7 @@
                     font-size: clamp(
                         {{ \App\Models\Configuracion::get('titulo_size', '8px') }},
                         8vw,
-                        calc({{ \App\Models\Configuracion::get('titulo_size', '12px') }} * 3)
+                        calc({{ \App\Models\Configuracion::get('titulo_size', '8px') }} * 3)
                     );
                 ">
                 {{ $tituloPrincipal }}
