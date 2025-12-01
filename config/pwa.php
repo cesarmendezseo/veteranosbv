@@ -27,7 +27,7 @@ return [
         'theme_color' => '#6777ef',
         'icons' => [
             [
-                'src' => 'logo.png',
+                'src' => 'pwa-logo.png',
                 'sizes' => '512x512',
                 'type' => 'image/png',
             ],

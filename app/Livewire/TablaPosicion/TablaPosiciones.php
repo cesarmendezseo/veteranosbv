@@ -11,6 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PosicionesExport;
 
+
 class TablaPosiciones extends Component
 {
     public $campeonato_id;
@@ -161,13 +162,14 @@ class TablaPosiciones extends Component
         $title = "Tabla de Posiciones - " . $campeonato->nombre;
 
         if ($campeonato->formato === 'grupos') {
-            return PDF::loadView('admin.pdf.posiciones_por_grupo', compact('campeonato', 'posiciones', 'title'))
+            return Pdf::loadView('admin.pdf.posiciones_por_grupo', compact('campeonato', 'posiciones', 'title'))
                 ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
         }
 
-        return PDF::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'))
+        return Pdf::loadView('admin.pdf.posiciones', compact('campeonato', 'posiciones', 'title'))
             ->stream('tabla_posiciones_' . str_replace(' ', '_', $campeonato->nombre) . '.pdf');
     }
+
 
     public function exportarPosiciones()
     {
