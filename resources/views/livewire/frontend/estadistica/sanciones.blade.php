@@ -108,9 +108,9 @@
                                     </div>
 
                                     @if ($jug->observacion)
-                                    <div class="pt-2 border-t">
+                                    {{-- <div class="pt-2 border-t">
                                         <span class="font-front">Detalle:</span> {{ strtoupper($jug->observacion) }}
-                                    </div>
+                                    </div> --}}
                                     @endif
 
                                 </div>
