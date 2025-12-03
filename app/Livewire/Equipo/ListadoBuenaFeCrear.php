@@ -12,23 +12,39 @@ use Livewire\Component;
 class ListadoBuenaFeCrear extends Component
 {
     public $buscar = '';
-    public $jugadores = [];
+    public $jugadores;
     public $jugadoresSeleccionados = [];
     public $equipoSeleccionado;
     public $campeonatoSeleccionado;
+    public $jugadorSeleccionado;
+    public $jugador_id;
+    public $nombreJugador;
+    public $buscarJugador;
 
     public $equipos;
     public $campeonatos;
     public $campeonatoId;
     public $categoria_id;
+    public $campeonato;
 
     public function mount($campeonatoId)
     {
         $this->campeonatoId = $campeonatoId;
 
-        $this->equipos = Equipo::orderBy('nombre')->get();
-        $this->campeonatos = Campeonato::where('id', $campeonatoId)->get();
-        $this->categoria_id = $this->campeonatos->first()->categoria_id;
+        // 1. OBTENER EL MODELO SINGULAR: Usa findOrFail o find.
+        // Esto te da el objeto Campeonato, no una Colección.
+        $campeonato = Campeonato::findOrFail($campeonatoId);
+
+        // Almacenamos el modelo singular en la propiedad
+        $this->campeonato = $campeonato;
+
+        // 2. ACCEDER A LA RELACIÓN: Esto solo funciona en el modelo singular.
+        // Acceder a la relación 'equipos' del campeonato.
+        $this->equipos = $campeonato->equipos;
+
+        // 3. Obtener el resto de datos
+
+        $this->categoria_id = $campeonato->categoria_id;
     }
 
     public function updatedBuscar()
@@ -42,22 +58,39 @@ class ListadoBuenaFeCrear extends Component
 
     public function agregarJugador($jugadorId)
     {
-        $jugador = Jugador::find($jugadorId);
-
-        if (!$jugador) return;
-
-        if (!collect($this->jugadoresSeleccionados)->contains('id', $jugador->id)) {
-            $this->jugadoresSeleccionados[] = [
-                'id' => $jugador->id,
-                'nombre' => $jugador->nombre,
-                'apellido' => $jugador->apellido,
-                'documento' => $jugador->documento,
-            ];
+        // Verificar que $jugadores sea colección y no esté vacía
+        if ($this->jugadores->isEmpty()) {
+            return;
         }
 
+        // Buscar el jugador en la colección filtrada
+        $jugador = $this->jugadores->firstWhere('id', $jugadorId);
+
+        if (!$jugador) {
+            return;
+        }
+
+        // Evitar agregar jugador ya seleccionado (duplicado)
+        if (collect($this->jugadoresSeleccionados)->pluck('id')->contains($jugadorId)) {
+            return;
+        }
+
+        // Agregar el jugador seleccionado a la lista de seleccionados (como array)
+        $this->jugadoresSeleccionados[] = $jugador->toArray();
+
+        // Obtener el nombre del equipo o "Sin Equipo"
+        $nombreEquipo = $jugador->equipo?->nombre ?? 'Sin Equipo';
+
+        // Construir nombre completo para mostrar (opcional)
+        $this->nombreJugador = $jugador->nombreCompleto . ' - ' . $nombreEquipo;
+
+        // Limpiar el campo de búsqueda y la lista filtrada para ocultar resultados
+        $this->buscar = '';
+        $this->jugadores = collect();
         $this->buscar = '';
         $this->dispatch('focus-input');
     }
+
 
     public function quitarJugador($index)
     {
@@ -72,20 +105,17 @@ class ListadoBuenaFeCrear extends Component
             'jugadoresSeleccionados' => 'required|array|min:1',
         ]);
 
-        // Obtener ID del equipo "Sin equipo"
         $idSinEquipo = DB::table('equipos')
             ->whereRaw('LOWER(nombre) = ?', ['sin equipo'])
             ->value('id');
 
         $jugadoresIds = collect($this->jugadoresSeleccionados)->pluck('id');
 
-        //------------------------------------------
         // 1️⃣ Verificar si ya pertenecen a otro equipo ACTIVO
-        //------------------------------------------
         $jugadoresYaAsignados = DB::table('campeonato_jugador_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->whereIn('jugador_id', $jugadoresIds)
-            ->whereNull('fecha_baja')                 // activo
+            ->whereNull('fecha_baja')
             ->where('equipo_id', '!=', $this->equipoSeleccionado)
             ->where('equipo_id', '!=', $idSinEquipo)
             ->pluck('jugador_id')
@@ -104,11 +134,9 @@ class ListadoBuenaFeCrear extends Component
             return;
         }
 
-        //------------------------------------------
-        // 2️⃣ Jugadores con is_active = 1 NO pueden cargarse
-        //------------------------------------------
+        // 2️⃣ Verificar jugadores inactivos
         $jugadoresActivos = Jugador::whereIn('id', $jugadoresIds)
-            ->where('is_active', 0)      // activo = prohibido cargar
+            ->where('is_active', 0)
             ->pluck('id')
             ->toArray();
 
@@ -125,14 +153,9 @@ class ListadoBuenaFeCrear extends Component
             return;
         }
 
-        //------------------------------------------
         // 3️⃣ Guardar historial
-        // Cada alta crea un registro nuevo
-        //------------------------------------------
         DB::transaction(function () {
             foreach ($this->jugadoresSeleccionados as $jugador) {
-
-                // Verificar si ya está ACTIVO en este equipo
                 $existe = DB::table('campeonato_jugador_equipo')
                     ->where('campeonato_id', $this->campeonatoId)
                     ->where('equipo_id', $this->equipoSeleccionado)
@@ -140,7 +163,6 @@ class ListadoBuenaFeCrear extends Component
                     ->whereNull('fecha_baja')
                     ->first();
 
-                // Si no está activo → crear historial nuevo
                 if (!$existe) {
                     DB::table('campeonato_jugador_equipo')->insert([
                         'campeonato_id' => $this->campeonatoId,
@@ -154,7 +176,6 @@ class ListadoBuenaFeCrear extends Component
                     ]);
                 }
 
-                // Actualiza el equipo actual del jugador
                 Jugador::where('id', $jugador['id'])
                     ->update(['equipo_id' => $this->equipoSeleccionado]);
             }

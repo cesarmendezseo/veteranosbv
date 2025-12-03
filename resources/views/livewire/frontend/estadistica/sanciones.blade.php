@@ -26,7 +26,7 @@
                         <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Motivo</th>
                         <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Fechas</th>
                         <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Cumplidas</th>
-                        <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Detalle</th>
+                        {{-- <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Detalle</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -53,8 +53,9 @@
                         </td>
                         <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ $jug->partidos_cumplidos }}
                         </td>
-                        <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{ ucfirst($jug->observacion) }}
-                        </td>
+                        {{-- <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">{{
+                            ucfirst($jug->observacion) }}
+                        </td> --}}
                     </tr>
 
                     {{-- Fila adicional para móviles --}}

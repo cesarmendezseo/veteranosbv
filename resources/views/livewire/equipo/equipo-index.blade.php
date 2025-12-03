@@ -1,57 +1,41 @@
 <div>
-    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
-        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Equipos') }}
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10 m-b10">
+        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
+            {{ __('Equipos') }}
         </h2>
 
         @adminOrCan('administrador|comision')
         <a href="{{ route('equipo.crear') }}"
-            class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-badge-plus-icon lucide-badge-plus">
                 <path
                     d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
                 <line x1="12" x2="12" y1="8" y2="16" />
                 <line x1="8" x2="16" y1="12" y2="12" />
             </svg>
-            Crear</a>
+            Crear
+        </a>
         @endadminOrCan
     </div>
+
     <div class="mt-2">
-        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del equipo "
-            class="hidden md:table border rounded px-3 py-2.5 w-full mb-2" />
+        <input type="text" wire:model.live="search" placeholder="Buscar por nombre del equipo"
+            class="hidden md:table border rounded px-3 py-2 w-full mb-2" />
     </div>
 
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Logo
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nombre
-                    </th>
-                    <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                        Ciudad
-                    </th>
-                    <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                        Provincia
-                    </th>
-                    <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                        Cod. Pos.
-                    </th>
-
-                    <th scope="col" class="px-6 py-3 hidden sm:table-cell">
-                        Descripción
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        Acción
-                    </th>
+                    <th class="px-6 py-3">Logo</th>
+                    <th class="px-6 py-3">Nombre</th>
+                    <th class="px-6 py-3 hidden sm:table-cell">Ciudad</th>
+                    <th class="px-6 py-3 hidden sm:table-cell">Provincia</th>
+                    <th class="px-6 py-3 hidden sm:table-cell">Cod. Pos.</th>
+                    <th class="px-6 py-3 hidden sm:table-cell">Descripción</th>
+                    <th class="px-6 py-3">Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,7 +54,7 @@
                         <div
                             class="w-14 h-14 rounded-full border-4 border-gray-300 shadow-lg overflow-hidden flex items-center justify-center">
                             <div
-                                class="flex animate-pulse  items-center justify-center w-full h-48 bg-gray-300 rounded-sm sm:w-96 dark:bg-gray-700">
+                                class="flex animate-pulse items-center justify-center w-full h-48 bg-gray-300 rounded-sm sm:w-96 dark:bg-gray-700">
                                 <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                     <path
@@ -81,40 +65,35 @@
                         @endif
                     </th>
 
-                    <th scope=" row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ strtoupper($equipo->nombre) }}
-                    </th>
-                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white ">
-                        {{ strToupper($equipo->ciudad) }}
-                    </td>
-                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white ">
-                        {{ strToupper($equipo->provincia) }}
-                    </td>
-                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white ">
-                        {{ strToupper($equipo->cod_pos) }}
-                    </td>
-                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white ">
-                        {{ strToupper($equipo->descripcion) }}
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{
+                        strtoupper($equipo->nombre) }}</td>
+                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white">{{ strtoupper($equipo->ciudad) }}</td>
+                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white">{{ strtoupper($equipo->provincia) }}</td>
+                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white">{{ strtoupper($equipo->cod_pos) }}</td>
+                    <td class="px-6 py-4 hidden sm:table-cell dark:text-white">{{ strtoupper($equipo->descripcion) }}
                     </td>
 
-                    <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
+                    <!-- Dropdown móvil -->
                     <td class="px-6 py-4 text-right">
-
-                        <!-- Para móviles: Menú desplegable -->
-
-                        <!------------------------------------------->
-                        <div x-data="{ open: false, coords: { top: 0, left: 0 } }" class="inline-block">
+                        <div x-data="{ open: false, isDroppedUp: false }" class="inline-block relative">
                             <button @click="
-                                        open = !open;
-                                        if(open){
-                                            $nextTick(() => {
-                                                const rect = $refs.trigger.getBoundingClientRect();
-                                                coords.top = rect.bottom + window.scrollY;
-                                                coords.left = rect.right + window.scrollX - 192; // 192px = w-48
-                                            })
-                                        }
-                                    " x-ref="trigger" class="px-4 py-2">
-                                <!-- Icono menú -->
+            open = !open;
+            if(open){
+                $nextTick(() => {
+                    const rect = $refs.trigger.getBoundingClientRect();
+                    const dropdownHeight = 180; // Altura estimada del menú
+                    const spaceBelow = window.innerHeight - rect.bottom;
+                    const spaceAbove = rect.top;
+
+                    // Si no cabe abajo O hay más espacio arriba, abre hacia arriba
+                    if(spaceBelow < dropdownHeight || spaceAbove > spaceBelow){
+                        isDroppedUp = true;
+                    } else {
+                        isDroppedUp = false;
+                    }
+                })
+            }
+        " x-ref="trigger" class="px-4 py-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 cursor-pointer dark:text-white"
                                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -122,12 +101,11 @@
                                 </svg>
                             </button>
 
-                            <!-- Dropdown -->
                             <div x-show="open" x-cloak
-                                class="fixed w-48 bg-white dark:bg-gray-700 rounded shadow-lg z-[9999]"
-                                :style="`top:${coords.top}px; left:${coords.left}px`" @click.outside="open = false">
+                                class="absolute right-0 w-48 bg-white dark:bg-gray-700 rounded shadow-lg z-50"
+                                :class="{ 'bottom-full mb-2': isDroppedUp, 'top-full mt-2': !isDroppedUp }"
+                                @click.outside="open = false">
                                 <ul class="flex flex-col dark:text-white">
-                                    <!-- Editar -->
                                     @adminOrCan('administrador|comision')
                                     <li>
                                         <a href="{{ route('equipo.editar', $equipo->id) }}"
@@ -140,8 +118,6 @@
                                             Editar
                                         </a>
                                     </li>
-
-                                    <!-- Borrar -->
                                     <li>
                                         <button wire:click="borrar({{ $equipo->id }})"
                                             class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -153,8 +129,6 @@
                                             Borrar
                                         </button>
                                     </li>
-
-                                    <!-- Subir logo -->
                                     <li>
                                         <a href="{{ route('equipo.logo.upload', $equipo->id) }}"
                                             class="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -172,15 +146,12 @@
                                 </ul>
                             </div>
                         </div>
-                        {{-- -------- --}}
-
-
                     </td>
-
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+
     {{ $equipos->links() }}
 </div>
