@@ -125,6 +125,7 @@ class CampeonatoIndex extends Component
     public function render()
     {
         $campeonatos = Campeonato::query()
+            ->where('finalizado', 0)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%')

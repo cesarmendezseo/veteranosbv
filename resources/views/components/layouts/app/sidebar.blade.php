@@ -42,6 +42,9 @@
             <flux:navlist.item icon="pencil-line" :href="route('sanciones.index')"
                 :current="request()->routeIs('sanciones.index')" wire:navigate>{{ __('Sanciones') }}
             </flux:navlist.item>
+            <flux:navlist.item icon="device-tablet" :href="route('estadistica.cargar')"
+                :current="request()->routeIs('estadistica.cargar')" wire:navigate>{{ __('Tarjetas y Gol') }}
+            </flux:navlist.item>
             <flux:navlist.item icon="identidication" :href="route('estadistica.index')"
                 :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadisticas') }}
             </flux:navlist.item>

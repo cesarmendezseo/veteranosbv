@@ -16,7 +16,7 @@ class EstadisticaIndex extends Component
     public function mount()
     {
 
-        $this->campeonatos = Campeonato::all();
+        $this->campeonatos = Campeonato::all()->where('finalizado', 0);
     }
 
     public function updatedCampeonatoId($value)

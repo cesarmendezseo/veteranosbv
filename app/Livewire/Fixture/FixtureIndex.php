@@ -15,7 +15,9 @@ class FixtureIndex extends Component
 
     public function mount()
     {
-        $this->campeonatos = Campeonato::with('grupos', 'categoria')->get();
+        $this->campeonatos = Campeonato::with('grupos', 'categoria')
+            ->where('finalizado', 0)
+            ->get();
     }
 
     public function crear($campeonatoId)

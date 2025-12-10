@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Livewire\Sanciones;
+namespace App\Livewire\Estadistica;
 
 use App\Models\Campeonato;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class SancionesIndex extends Component
+class EstadisticaCargar extends Component
 {
+
     use WithPagination; // ⬅️ DEBES USARLO
 
     public $vistaActual = 'ver';
@@ -24,10 +25,11 @@ class SancionesIndex extends Component
         $this->resetPage();
     }
 
+
     public function render()
     {
         $campeonatos = Campeonato::query()
-            ->where('finalizado', 0)
+            ->where('finalizado', 0)      // 👈 Filtra los NO finalizados
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%')
@@ -37,7 +39,7 @@ class SancionesIndex extends Component
             ->orderBy('nombre')
             ->paginate(10);
 
-        return view('livewire.sanciones.sanciones-index', [
+        return view('livewire.estadistica.estadistica-cargar', [
             'campeonatos' => $campeonatos, // Esta variable local es la que tiene la paginación y el filtro.
         ]);
     }

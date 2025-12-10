@@ -123,6 +123,7 @@ class FixtureCrear extends Component
     {
         return Encuentro::with(['equipoLocal', 'equipoVisitante', 'cancha'])
             ->where('campeonato_id', $this->campeonato_id)
+            ->where('estado', 'programado')
             ->when($this->jornada, function ($q) {
                 $q->where('fecha_encuentro', $this->jornada);
             })

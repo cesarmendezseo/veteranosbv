@@ -192,6 +192,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/estadistica/{campeonatoId}/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
+        Route::get('/estadistica/cargar', \App\Livewire\Estadistica\EstadisticaCargar::class)->name('estadistica.cargar');
     });
     //==============FIN ESTADISTICA========================
 
