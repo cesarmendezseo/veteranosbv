@@ -72,10 +72,18 @@ class EliminatoriaExport implements FromCollection, WithHeadings, WithStyles, Wi
 
         $canchasReversed = array_reverse($canchas);
 
-        foreach ($canchasReversed as $canchaNombre) { // Usamos $canchaNombre aquí
+        foreach ($canchasReversed as $canchaNombre) {
             $data->push([strtoupper($canchaNombre)]);
             $data->push(['PENALES']);
-            $data = $data->concat($encuentrosPorCancha[$canchaNombre]); // Usamos $canchaNombre aquí
+
+            // Convertir nombres de equipos y cualquier texto a mayúsculas
+            $mayusEncuentros = array_map(function ($fila) {
+                return array_map(function ($valor) {
+                    return is_string($valor) ? strtoupper($valor) : $valor;
+                }, $fila);
+            }, $encuentrosPorCancha[$canchaNombre]);
+
+            $data = $data->concat($mayusEncuentros);
         }
 
         return $data;
