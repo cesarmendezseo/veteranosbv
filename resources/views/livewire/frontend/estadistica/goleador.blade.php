@@ -1,88 +1,136 @@
-<div class="space-y-4">
+<div class="w-full mt-6 font-titulo">
 
-    {{-- 📌 Versión Escritorio (moderna) --}}
+    <!-- Contenedor vidrioso principal -->
     <div
-        class="hidden sm:block bg-white dark:bg-gray-900 shadow-xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-        <table class="w-full text-sm sm:text-base text-gray-700 dark:text-gray-100">
-            <thead
-                class="bg-gradient-to-r from-blue-700 to-blue-900 text-white text-xs sm:text-sm uppercase font-semibold">
-                <tr>
-                    <th class="px-4 py-3 text-left">Jugador</th>
-                    <th class="px-4 py-3 text-left">Equipo</th>
-                    <th class="px-4 py-3 text-center">Goles</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($goleadores as $gol)
-                <tr
-                    class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
-                    <td class="px-4 py-3 font-semibold">
-                        {{ strtoupper($gol->jugador->apellido) }}, {{ strtoupper($gol->jugador->nombre) }}
-                    </td>
-                    <td class="px-4 py-3 text-gray-600 dark:text-gray-300">
-                        {{ strtoupper($gol->jugador->equipo->nombre ?? 'SIN EQUIPO') }}
-                    </td>
-                    <td class="px-4 py-3 text-center">
-                        <span class="text-white bg-blue-600 px-3 py-1 rounded-full font-bold shadow">
-                            {{ $gol->total_goles }}
-                        </span>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="3" class="px-4 py-6 text-center text-gray-500 dark:text-gray-300">
-                        No hay goles registrados.
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+        class="p-4 sm:p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_25px_rgba(0,0,0,0.4)]">
 
+        <!-- Título -->
+        <div class="p-4 sm:p-6 rounded-3xl text-center mb-6">
+            <h1
+                class="text-4xl md:text-6xl font-extrabold text-black dark:text-white px-6 py-3 rounded-2xl inline-block">
+                ⚽ GOLEADORES
+            </h1>
+        </div>
 
+        {{-- 📌 Versión Escritorio --}}
+        <div class="hidden sm:block overflow-x-auto rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+            <table class="w-full text-sm text-center text-white/90 bg-white/5 backdrop-blur-xl">
 
-    {{-- 📱 Versión Móvil (super moderna tipo app) --}}
-    <div class="sm:hidden ">
-        @forelse($goleadores as $gol)
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 border border-gray-200 dark:border-gray-700
-                    hover:scale-[1.02] transition-transform duration-200">
+                <!-- CABECERA -->
+                <thead
+                    class="bg-gradient-to-r from-blue-700/60 to-blue-500/50 text-black dark:text-white uppercase text-xs border-b border-white/20">
+                    <tr>
+                        <th class="px-2 py-3">#</th>
+                        <th class="px-4 py-3 text-left">Jugador</th>
+                        <th class="px-4 py-3 text-left">Equipo</th>
+                        <th class="px-4 py-3 text-center">Goles</th>
+                    </tr>
+                </thead>
 
-            <!-- Top -->
-            <div class="flex justify-between items-center mb-2">
+                <!-- BODY -->
+                <tbody class="backdrop-blur-xl">
+                    @forelse($goleadores as $index => $gol)
+                    <tr class="text-black dark:text-white border-b border-white/10 hover:bg-white/10 transition">
 
-                <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
-                    {{ strtoupper($gol->jugador->apellido) }},
-                    <span class="font-normal">{{ strtoupper($gol->jugador->nombre) }}</span>
-                </h2>
+                        <!-- POSICIÓN -->
+                        <td class="py-3">
+                            <span
+                                class="w-8 h-8 text-sm flex items-center justify-center mx-auto rounded-full bg-blue-600 text-white font-bold shadow-[0_0_10px_rgba(0,150,255,0.7)]">
+                                {{ $goleadores->firstItem() + $index }}
+                            </span>
+                        </td>
 
-                <span class="bg-blue-600 text-white px-4 py-1 rounded-full font-bold shadow text-base">
-                    {{ $gol->total_goles }}
-                </span>
+                        <!-- JUGADOR -->
+                        <td class="px-4 py-3 text-left font-semibold tracking-wide">
+                            {{ strtoupper($gol->jugador->apellido) }}, {{ strtoupper($gol->jugador->nombre) }}
+                        </td>
+
+                        <!-- EQUIPO -->
+                        <td class="px-4 py-3 text-left text-black/80 dark:text-white/80">
+                            {{ $gol->jugador->equiposPorCampeonato->first()?->nombre ?? '-' }}
+                        </td>
+
+                        <!-- GOLES -->
+                        <td class="py-3">
+                            <span
+                                class="w-12 h-12 flex items-center justify-center mx-auto rounded-full bg-emerald-600 text-white font-bold text-lg shadow-[0_0_10px_rgba(0,255,180,0.6)]">
+                                {{ $gol->total_goles }}
+                            </span>
+                        </td>
+
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="4" class="px-4 py-8 text-center text-black/70 dark:text-white/70 font-semibold">
+                            No hay goles registrados en este campeonato.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+
+            </table>
+        </div>
+
+        {{-- 📱 Versión Móvil --}}
+        <div class="sm:hidden space-y-4">
+            @forelse($goleadores as $index => $gol)
+            <div
+                class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 shadow-[0_0_20px_rgba(0,0,0,0.3)] hover:bg-white/15 hover:shadow-[0_0_30px_rgba(0,150,255,0.4)] transition-all duration-300">
+
+                <!-- Top: Posición y Goles -->
+                <div class="flex justify-between items-center mb-4">
+
+                    <!-- Posición -->
+                    <div
+                        class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold shadow-[0_0_10px_rgba(0,150,255,0.7)]">
+                        {{ $goleadores->firstItem() + $index }}
+                    </div>
+
+                    <!-- Goles -->
+                    <div
+                        class="w-14 h-14 flex items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-2xl shadow-[0_0_10px_rgba(0,255,180,0.6)]">
+                        {{ $gol->total_goles }}
+                    </div>
+
+                </div>
+
+                <!-- Nombre del Jugador -->
+                <div class="mb-3">
+                    <h2 class="text-xl font-extrabold text-black dark:text-white leading-tight">
+                        {{ strtoupper($gol->jugador->apellido) }},
+                        <span class="font-semibold">{{ strtoupper($gol->jugador->nombre) }}</span>
+                    </h2>
+                </div>
+
+                <!-- Separador -->
+                <div class="border-t border-white/20 my-3"></div>
+
+                <!-- Equipo -->
+                <div
+                    class="flex items-center justify-between bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                    <span class="text-sm font-semibold text-black/70 dark:text-white/70">
+                        Equipo:
+                    </span>
+
+                    {{ $gol->jugador->equiposPorCampeonato->first()?->nombre ?? '-' }}
+                </div>
 
             </div>
-
-            <hr class="my-3 border-gray-300 dark:border-gray-600">
-
-            <!-- Equipo -->
-            <div class="flex justify-between text-sm">
-                <span class="font-semibold text-gray-600 dark:text-gray-300">Equipo:</span>
-                <span class="font-bold text-gray-900 dark:text-gray-100">
-                    {{ strtoupper($gol->jugador->equipo->nombre ?? 'SIN EQUIPO') }}
-                </span>
+            @empty
+            <div
+                class="text-center py-8 text-black/70 dark:text-white/70 font-semibold bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 p-6">
+                No hay goles registrados en este campeonato.
             </div>
-
+            @endforelse
         </div>
-        @empty
-        <div class="text-center text-gray-500 dark:text-gray-300">
-            No hay goles registrados en este campeonato.
+
+        {{-- 📄 Paginación --}}
+        @if($goleadores->hasPages())
+        <div class="mt-8">
+            {{ $goleadores->links() }}
         </div>
-        @endforelse
-    </div>
+        @endif
 
-
-    {{-- 📄 Paginación --}}
-    <div class="mt-4">
-        {{ $goleadores->links() }}
     </div>
 
 </div>

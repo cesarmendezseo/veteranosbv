@@ -2,8 +2,12 @@
 
 namespace App\Livewire\Frontend\Estadistica;
 
+use App\Models\Campeonato;
 use App\Models\Configuracion;
+use App\Models\Eliminatoria;
+use App\Models\Encuentro;
 use App\Models\Sanciones as ModelsSanciones;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,15 +19,78 @@ class Sanciones extends Component
     public $campeonato_id;
     public $search = '';
     public $campeonatoId;
+    public $partidoJugadorInfo = null;
+    public $partido_id;
 
-    public function mount()
+    public function mount($id)
     {
-        $this->campeonatoId = Configuracion::get('campeonato_principal');
+
+        $this->campeonatoId = $id;
+
+
+        // Debug temporal
+        $encuentro = \App\Models\Encuentro::find(487);
+        /* dd($encuentro); // Esto te dirá si existe o no */
     }
 
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function buscarPartidoDelJugador()
+    {
+        $campeonato = Campeonato::find($this->campeonatoId);
+
+        if (!$campeonato) {
+            $this->partidoJugadorInfo = 'Campeonato inválido.';
+            return;
+        }
+
+        // 🔥 EQUIPO DEL JUGADOR EN ESTE CAMPEONATO
+        $equipoId = DB::table('campeonato_jugador_equipo')
+            ->where('campeonato_id', $this->campeonatoId)
+            ->where('jugador_id', $this->jugador_id)
+            ->value('equipo_id');
+
+
+        if (!$equipoId) {
+            $this->partidoJugadorInfo = 'El jugador no pertenece a este campeonato.';
+            return;
+        }
+
+        $fecha = (int) $this->fechaBuscada;
+
+        if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
+
+            $partido = Encuentro::with(['equipoLocal', 'equipoVisitante'])
+                ->where('campeonato_id', $this->campeonatoId)
+                ->where('fecha_encuentro', $fecha)
+                ->where(function ($q) use ($equipoId) {
+                    $q->where('equipo_local_id', $equipoId)
+                        ->orWhere('equipo_visitante_id', $equipoId);
+                })
+                ->orderBy('hora')
+                ->first();
+        } else {
+
+            $partido = Eliminatoria::with(['equipoLocal', 'equipoVisitante'])
+                ->where('campeonato_id', $this->campeonatoId)
+                ->where('fase', $fecha)
+                ->where(function ($q) use ($equipoId) {
+                    $q->where('equipo_local_id', $equipoId)
+                        ->orWhere('equipo_visitante_id', $equipoId);
+                })
+                ->first();
+        }
+
+        if ($partido) {
+            $this->partidoJugadorInfo =
+                $partido->equipoLocal->nombre . ' vs ' . $partido->equipoVisitante->nombre;
+            $this->partido_id = $partido->id;
+        } else {
+            $this->partidoJugadorInfo = 'No se encontró partido del jugador en esa fecha.';
+        }
     }
 
     public function render()
@@ -39,11 +106,12 @@ class Sanciones extends Component
                 $query->whereHas('jugador', function ($subQuery) {
                     $subQuery->where(function ($q) {
                         $q->where('apellido', 'like', '%' . $this->search . '%')
-                            ->orWhere('nombre', 'like', '%' . $this->search . '%');
-                    })->orWhere('documento', 'like', '%' . $this->search . '%');
+                            ->orWhere('nombre', 'like', '%' . $this->search . '%')
+                            ->orWhere('documento', 'like', '%' . $this->search . '%');
+                    });
                 });
             })
-            ->orderBy('etapa_sancion', 'desc')
+            ->orderBy('etapa_sancion', 'asc')  // Cambia a 'asc' si quieres de menor a mayor
             ->paginate(20);
 
         return view('livewire.frontend.estadistica.sanciones', [

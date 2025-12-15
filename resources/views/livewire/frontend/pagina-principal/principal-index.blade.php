@@ -24,7 +24,7 @@
                     calc({{ \App\Models\Configuracion::get('titulo_size', '8px') }} * 3)
                 );
             ">
-            {{ $campeonato->nombre }}
+            {{ ucwords($campeonato->nombre) }}
         </h1>
 
         <!-- ITEMS DE MENÚ (repetibles) -->
@@ -69,7 +69,44 @@
             </div>
         </a>
         @endif
+        <a href="{{ Route('frontend.goleadores.index', $campeonato->id) }}" class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5
+                  shadow-md hover:shadow-xl transition-all duration-200">
 
+            <div>
+                <h2 class="text-xl font-semibold">Goleadores</h2>
+                <p class="text-sm opacity-90">Ver resultados</p>
+            </div>
+
+            <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#1f1f1f">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 
+                             23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 
+                             33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 
+                             0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 
+                             0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                </svg>
+            </div>
+        </a>
+        <a href="{{ Route('frontend.sanciones.index', $campeonato->id) }}" class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5
+                  shadow-md hover:shadow-xl transition-all duration-200">
+
+            <div>
+                <h2 class="text-xl font-semibold">Sanciones</h2>
+                <p class="text-sm opacity-90">Ver los estados</p>
+            </div>
+
+            <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#1f1f1f">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 
+                             23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 
+                             33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 
+                             0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 
+                             0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
+                </svg>
+            </div>
+        </a>
 
     </div>
 

@@ -73,7 +73,7 @@ Route::get('/frontend/proximo-partidos', ProximosPartidosIndex::class)->name('fr
 Route::get('/frontend/eliminatoria/{campeonatoId}', FrontEliminatoriaVer::class)->name('frontend.eliminatoria.ver');
 Route::get('/frontend/eliminatoria', FrontEliminatoria::class)->name('frontend.eliminatoria.index');
 Route::get('/frontend/goleadores', Goleador::class)->name('frontend.goleadores.index');
-Route::get('/frontend/sanciones', Sanciones::class)->name('frontend.sanciones.index');
+Route::get('/frontend/{id}/sanciones', Sanciones::class)->name('frontend.sanciones.index');
 Route::get('/frontend/principal/{id}index', PrincipalIndex::class)->name('frontend.principal-index');
 Route::get('/frontend/{id}/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados1');
 

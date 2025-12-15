@@ -141,7 +141,7 @@
                         <!-- Contenido -->
                         <div class="mt-6 text-white space-y-2">
                             <h2 class="text-2xl font-bold tracking-wide group-hover:text-cyan-300 transition">
-                                {{ $camp->nombre }}
+                                {{ ucwords($camp->nombre) }}
                             </h2>
 
                             <p class="text-sm text-gray-300">

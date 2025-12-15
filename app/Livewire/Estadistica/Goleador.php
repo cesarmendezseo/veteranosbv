@@ -56,6 +56,7 @@ class Goleador extends Component
             ->orderByDesc('total_goles')
             ->paginate(20);
 
+        dd($goleadores);
         return view('livewire.estadistica.goleador', [
             'goleadores' => $goleadores,
         ]);
