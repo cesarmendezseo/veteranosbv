@@ -173,11 +173,11 @@ class SancionesCrear extends Component
             ->where('jugador_id', $this->jugador_id)
             ->value('equipo_id');
 
-        /*   dd($equipoId);
+
         if (!$equipoId) {
             $this->partidoJugadorInfo = 'El jugador no pertenece a este campeonato.';
             return;
-        } */
+        }
 
         $fecha = (int) $this->fechaBuscada;
 
@@ -227,7 +227,12 @@ class SancionesCrear extends Component
 
             $campeonato = Campeonato::find($this->campeonatoId);
             $jugador = Jugador::find($this->jugador_id);
-            $equipoJugador = $jugador->equipo_id;
+            /* $equipoJugador = $jugador->equipo_id; */
+
+            $equipoJugador = DB::table('campeonato_jugador_equipo')
+                ->where('campeonato_id', $this->campeonatoId)
+                ->where('jugador_id', $this->jugador_id)
+                ->value('equipo_id');
 
             $partido = $this->partido_tipo::find($this->partido_id);
 
