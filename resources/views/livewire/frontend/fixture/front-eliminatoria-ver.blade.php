@@ -1,65 +1,101 @@
-<div class="space-y-6 mt-20 font-titulo">
-  <h2 class="text-2xl font-bold text-center mb-6">
-    Eliminatoria - {{ucwords( $campeonato->nombre) }}
-  </h2>
+<div class="w-full mt-6 font-titulo">
 
-  <hr class="border-t border-gray-300 dark:border-gray-400 my-4">
-  <div class="mt-2">
-    <label for="equipo_visitante_id" class="text-base text-blue-900 font-semibold dark:text-gray-100">Selecione una Fase
-    </label>
-    <select id="equipo_visitante_id" wire:model.live="faseElegida"
-      class="bg-gray-50 border font-select text-lg border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-      <option value=""> </option>
-      @foreach ($fases as $fase)
-      <option value="{{ $fase }}">{{ strtoupper($fase) }}</option>
-      @endforeach
-    </select>
+  <!-- Contenedor vidrioso principal -->
+  <div
+    class="p-4 sm:p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_0_25px_rgba(0,0,0,0.4)]">
 
-  </div>
+    <!-- Título del campeonato -->
+    <div class="p-4 sm:p-6 rounded-3xl text-center">
+      <h1
+        class="text-4xl md:text-6xl font-extrabold text-center text-black dark:text-white px-6 py-3 rounded-2xl inline-block">
+        Eliminatoria - {{ ucwords($campeonato->nombre) }}
+      </h1>
+    </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    @foreach ($encuentros as $fencuentro)
+    <hr class="border-t border-white/20 my-6">
 
-    <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-4 flex flex-col gap-2">
-      <div class="text-sm text-gray-500 dark:text-gray-300">{{ \Carbon\Carbon::parse($fencuentro->fecha)->format('d M')
-        }}</div>
-      <div>
-        <span class="font-semibold font-titulo text-xl text-[#bb4108] dark:text-white">{{ strtoupper($fencuentro->fase
-          )}}</span>
-      </div>
-
-      <div class="flex items-center justify-between">
-        {{-- Equipo Local --}}
-        <div class="flex items-center gap-2">
-          <img src="{{ $fencuentro->equipoLocal->logo
-    ? asset('storage/' . $fencuentro->equipoLocal->logo)
-    : asset('images/default.jpg') }}" alt="Logo Local"
-            class="w-8 h-8 object-contain rounded-full bg-gray-300 shadow-2md">
-          <span class="font-semibold font-front text-xl text-blue-900 dark:text-white">{{
-            strtoupper($fencuentro->equipoLocal->nombre)
-            }}</span>
-        </div>
-        <span class=" font-bold font-front text-xl text-gray-800 dark:text-white">{{ $fencuentro->goles_local
-          }}</span>
-      </div>
-
-      <div class="flex items-center justify-between">
-        {{-- Equipo Visitante --}}
-        <div class="flex items-center gap-2">
-          <img src="{{ $fencuentro->equipoVisitante->logo
-                ? asset('storage/' . $fencuentro->equipoVisitante->logo)
-                 : asset('images/default.jpg') }}" alt="Logo Visitante"
-            class="w-8 h-8 object-contain rounded-full bg-gray-300 shadow-2md">
-          <span class="font-semibold font-front text-xl text-blue-900 dark:text-white">{{
-            strtoupper($fencuentro->equipoVisitante->nombre)
-            }}</span>
-        </div>
-        <span class=" font-bold font-front text-xl text-gray-800 dark:text-white">{{ $fencuentro->goles_visitante
-          }}</span>
+    <!-- Selector de Fase -->
+    <div class="mb-8 flex justify-center">
+      <div
+        class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-[0_0_15px_rgba(0,0,0,0.3)]">
+        <label for="fase_select" class="block text-base font-semibold mb-2 text-black dark:text-white">
+          Seleccione una Fase
+        </label>
+        <select id="fase_select" wire:model.live="faseElegida"
+          class="bg-white/20 backdrop-blur-md border border-white/30 text-black dark:text-white font-select text-lg rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-52 p-3 shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+          <option value="">-- Todas las fases --</option>
+          @foreach ($fases as $fase)
+          <option value="{{ $fase }}">{{ strtoupper($fase) }}</option>
+          @endforeach
+        </select>
       </div>
     </div>
-    @endforeach
-  </div>
 
+    <!-- Grid de encuentros -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      @foreach ($encuentros as $encuentro)
+
+      <div
+        class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] hover:bg-white/15 hover:shadow-[0_0_30px_rgba(0,150,255,0.4)] transition-all duration-300">
+
+        <!-- Fecha del encuentro -->
+        <div class="text-sm font-semibold text-black/70 dark:text-white/70 mb-2">
+          {{ \Carbon\Carbon::parse($encuentro->fecha)->format('d M Y') }}
+        </div>
+
+        <!-- Fase del encuentro -->
+        <div class="mb-4">
+          <span
+            class="inline-block bg-gradient-to-r from-blue-700/60 to-blue-500/50 text-black dark:text-white font-bold text-lg px-4 py-2 rounded-xl shadow-[0_0_10px_rgba(0,150,255,0.5)] border border-white/20">
+            {{ strtoupper($encuentro->fase) }}
+          </span>
+        </div>
+
+        <!-- Equipo Local -->
+        <div
+          class="flex items-center justify-between mb-4 bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm p-1 shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+              <img src="{{ $encuentro->equipoLocal->logo
+                                ? asset('storage/' . $encuentro->equipoLocal->logo)
+                                : asset('images/default.jpg') }}" alt="Logo Local"
+                class="w-full h-full object-contain rounded-full">
+            </div>
+            <span class="font-semibold text-xl text-black dark:text-white">
+              {{ strtoupper($encuentro->equipoLocal->nombre) }}
+            </span>
+          </div>
+          <span
+            class="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-xl shadow-[0_0_10px_rgba(0,255,180,0.6)]">
+            {{ $encuentro->goles_local }}
+          </span>
+        </div>
+
+        <!-- Equipo Visitante -->
+        <div
+          class="flex items-center justify-between bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm p-1 shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+              <img src="{{ $encuentro->equipoVisitante->logo
+                                ? asset('storage/' . $encuentro->equipoVisitante->logo)
+                                : asset('images/default.jpg') }}" alt="Logo Visitante"
+                class="w-full h-full object-contain rounded-full">
+            </div>
+            <span class="font-semibold text-xl text-black dark:text-white">
+              {{ strtoupper($encuentro->equipoVisitante->nombre) }}
+            </span>
+          </div>
+          <span
+            class="w-10 h-10 flex items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-xl shadow-[0_0_10px_rgba(0,255,180,0.6)]">
+            {{ $encuentro->goles_visitante }}
+          </span>
+        </div>
+
+      </div>
+
+      @endforeach
+    </div>
+
+  </div>
 
 </div>
