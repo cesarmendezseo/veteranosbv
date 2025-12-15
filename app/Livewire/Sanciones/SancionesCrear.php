@@ -173,11 +173,11 @@ class SancionesCrear extends Component
             ->where('jugador_id', $this->jugador_id)
             ->value('equipo_id');
 
-        dd($equipoId);
+        /*   dd($equipoId);
         if (!$equipoId) {
             $this->partidoJugadorInfo = 'El jugador no pertenece a este campeonato.';
             return;
-        }
+        } */
 
         $fecha = (int) $this->fechaBuscada;
 

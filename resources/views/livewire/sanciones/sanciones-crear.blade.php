@@ -37,7 +37,7 @@
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm hover:shadow-md transition">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2">
                     <span class="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
-                        {{ $jug->apellido }}, {{ $jug->nombre }}
+                        {{ strtoupper($jug->apellido) }}, {{ strtoupper($jug->nombre) }}
                     </span>
                     <span class="text-xs text-gray-500 dark:text-gray-400">
                         DNI: {{ $jug->documento }}
