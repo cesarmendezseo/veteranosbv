@@ -44,7 +44,7 @@
                     class="bg-gray-50 border mt-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="">Selec Equipo</option>
                     @foreach ($equiposDisponibles as $equipo)
-                    <option value="{{ $equipo->id }}">{{ $equipo->nombre }}</option>
+                    <option value="{{ $equipo->id }}">{{strtoupper( $equipo->nombre) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -67,7 +67,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value=""></option>
                         @foreach($equiposDisponibles as $equipo)
-                        <option value="{{ $equipo->id }}">{{ $equipo->nombre }}</option>
+                        <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -78,7 +78,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value=""></option>
                         @foreach($equiposDisponibles as $equipo)
-                        <option value="{{ $equipo->id }}">{{ $equipo->nombre }}</option>
+                        <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -101,7 +101,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value=""></option>
                         @foreach($canchas as $cancha)
-                        <option value="{{ $cancha->id }}">{{ $cancha->nombre }}</option>
+                        <option value="{{ $cancha->id }}">{{ strtoupper($cancha->nombre) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -132,18 +132,18 @@
             <div class=" hidden lg:flex items-center justify-between border-b py-2 text-gray-900 dark:text-gray-100">
                 <span class="flex-1 pl-2"> {{ ucwords($encuentro->fase) }}</span>
 
-                <span class="flex-1 text-right pr-2">{{ $encuentro->equipoLocal->nombre }} </span>
+                <span class="flex-1 text-right pr-2">{{ strtoupper($encuentro->equipoLocal->nombre) }} </span>
 
                 <span class="font-bold rounded-4xl bg-white text-gray-900 p-2 dark:text-gray-900">vs </span>
 
 
-                <span class="flex-1 pl-2"> {{ $encuentro->equipoVisitante->nombre }}</span>
+                <span class="flex-1 pl-2"> {{ strtoupper($encuentro->equipoVisitante->nombre) }}</span>
 
                 <span class="flex-1  text-sm text-gray-900 dark:text-gray-100">
                     {{ \Carbon\Carbon::parse($encuentro->fecha . ' ' . $encuentro->hora)->format('d/m/Y H:i') }}hs
                 </span>
                 <span class=" flex-1 text-sm text-gray-900 dark:text-gray-100">
-                    {{ $encuentro->canchas->nombre ?? "Sin cancha asignada" }}
+                    {{ strtoupper($encuentro->canchas->nombre) ?? "Sin cancha asignada" }}
                 </span>
 
             </div>
@@ -157,10 +157,10 @@
                 <hr class="border-gray-300 dark:border-gray-600 mb-2">
                 <div class="flex flex-col space-y-1">
                     <div class="flex justify-between items-center">
-                        <span class="font-medium">{{ $encuentro->equipoLocal->nombre }}</span>
+                        <span class="font-medium">{{ strtoupper($encuentro->equipoLocal->nombre) }}</span>
                         <span
                             class="text-xs font-bold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-2 py-1 rounded-full">vs</span>
-                        <span class="font-medium">{{ $encuentro->equipoVisitante->nombre }}</span>
+                        <span class="font-medium">{{ strtoupper($encuentro->equipoVisitante->nombre) }}</span>
                     </div>
                     <hr class="border-gray-300 dark:border-gray-600 mb-2">
                     <div class="text-sm text-gray-600 dark:text-gray-300">
@@ -168,7 +168,7 @@
                     </div>
 
                     <div class="text-sm text-gray-600 dark:text-gray-300">
-                        {{ $encuentro->canchas->nombre ?? "Sin cancha asignada" }}
+                        {{ strtoupper($encuentro->canchas->nombre) ?? "Sin cancha asignada" }}
                     </div>
                 </div>
             </div>
