@@ -2,11 +2,22 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Models\Campeonato;
 use App\Models\Configuracion;
 use Livewire\Component;
 
 class PaginaPrincipal extends Component
 {
+    public $campeonato;
+
+    public function mount()
+    {
+        $this->campeonato = Campeonato::where('finalizado', false)->get();
+
+        // Aquí puedes inicializar cualquier lógica necesaria al montar el componente
+    }
+
+
     public function render()
     {
         // 1. Define las variables que se pasarán a la vista

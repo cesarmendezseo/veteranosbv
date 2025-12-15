@@ -7,6 +7,7 @@ use App\Models\Canchas;
 use App\Models\Encuentro;
 use App\Models\Equipo;
 use App\Models\Grupo;
+use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Livewire\Component;
 
 class FixtureAutomatico extends Component
@@ -27,6 +28,7 @@ class FixtureAutomatico extends Component
     public function mount()
     {
         $this->aniosDisponibles = Campeonato::selectRaw('YEAR(created_at) as anio')
+
             ->distinct()
             ->orderBy('anio', 'desc')
             ->pluck('anio');
@@ -36,7 +38,9 @@ class FixtureAutomatico extends Component
 
     public function updatedAnioSeleccionado()
     {
-        $this->campeonatos = Campeonato::whereYear('created_at', $this->anioSeleccionado)->get();
+        $this->campeonatos = Campeonato::whereYear('created_at', $this->anioSeleccionado)
+            ->where('finalizado', 0)
+            ->get();
         $this->campeonatoSeleccionado = null;
         $this->campeonato = null;
         $this->botonFixture = false;
@@ -61,23 +65,35 @@ class FixtureAutomatico extends Component
     public function fixtureNormal()
     {
         $this->generarFixture($this->campeonato, 'normal', $this->porGrupos);
+        LivewireAlert::title('Fixture generado con éxito')
+            ->success()
+            ->toast()
+            ->show();
     }
 
     public function fixtureAlternancia()
     {
         $this->generarFixture($this->campeonato, 'alternancia', $this->porGrupos);
+        LivewireAlert::title('Fixture con alternancia generado con éxito')
+            ->success()
+            ->toast()
+            ->show();
     }
 
     public function fixtureIdaVuelta()
     {
         $this->generarFixture($this->campeonato, 'ida_vuelta', $this->porGrupos);
+        LivewireAlert::title('Fixture de ida y vuelta generado con éxito')
+            ->success()
+            ->toast()
+            ->show();
     }
 
 
     private function generarFixture($campeonato, $modo = 'normal', $porGrupos = false)
     {
 
-        $canchas = Canchas::pluck('id')->toArray();
+        $canchas = [Canchas::first()->id];
         $horarios = ['14:00', '15:00', '16:00', '17:00'];
         $fechaInicio = now();
 
@@ -140,7 +156,7 @@ class FixtureAutomatico extends Component
                         'grupo_id' => $grupoId,
                         'fecha' => $fechaInicio->copy()->addDays(($jornada - 1) * 7)->format('Y-m-d'),
                         'hora' => $horarios[$indiceCanchaHora % count($horarios)],
-                        'cancha_id' => $canchas[intdiv($indiceCanchaHora, count($horarios)) % count($canchas)],
+                        'cancha_id' => $canchas[0],
                         'estado' => 'programado',
                         'equipo_local_id' => $local,
                         'equipo_visitante_id' => $visitante,

@@ -110,4 +110,46 @@ class EncuentroExportService
 
         return Excel::download(new EliminatoriaExport($datosParaExcel, $nombreTorneo, $fechaPrimerEncuentro, $fase), 'Fixture Fecha_' . $fase . '.xlsx');
     }
+
+    /* **************************************** */
+    public function exportarTodoElCampeonato($campeonatoId)
+    {
+        $encuentros = Encuentro::with(['equipoLocal', 'equipoVisitante'])
+            ->where('campeonato_id', $campeonatoId)
+            ->orderBy('fecha_encuentro')
+            ->orderBy('hora')
+            ->get()
+            ->groupBy('fecha_encuentro'); // 🔹 Agrupamos SOLO por jornada
+
+        // Datos del torneo
+        $campeonato = \App\Models\Campeonato::find($campeonatoId);
+        $nombreTorneo = $campeonato ? $campeonato->nombre : 'Torneo Desconocido';
+
+        $datosParaExcel = [];
+        $datosParaExcel[] = [strtoupper($nombreTorneo)];
+
+        foreach ($encuentros as $jornada => $partidos) {
+
+            // 🔹 Encabezado de la jornada
+            $datosParaExcel[] = [''];
+            $datosParaExcel[] = ["JORNADA $jornada"];
+            $datosParaExcel[] = [''];
+
+            foreach ($partidos as $encuentro) {
+                $datosParaExcel[] = [
+                    strtoupper($encuentro->equipoLocal->nombre ?? ''),
+                    strval($encuentro->gol_local ?? 0),
+                    strval($encuentro->gol_visitante ?? 0),
+                    strtoupper($encuentro->equipoVisitante->nombre ?? ''),
+                ];
+            }
+
+            $datosParaExcel[] = [''];
+        }
+
+        return Excel::download(
+            new EncuentrosExport($datosParaExcel, $nombreTorneo, null, 'COMPLETO'),
+            'Fixture_Completo_' . $nombreTorneo . '.xlsx'
+        );
+    }
 }

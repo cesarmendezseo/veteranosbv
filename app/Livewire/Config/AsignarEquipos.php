@@ -73,7 +73,7 @@ class AsignarEquipos extends Component
             $this->dispatch('selecionarEquipos');
             return;
         }
-
+        $this->search = "";
         // 1. Definir los formatos que NO usan grupos
         $formatosSinGrupos = ['todos_contra_todos', 'eliminacion_simple', 'eliminacion_doble'];
 

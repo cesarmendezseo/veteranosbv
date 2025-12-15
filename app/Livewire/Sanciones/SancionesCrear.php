@@ -9,6 +9,7 @@ use App\Models\Jugador;
 use App\Models\Sanciones;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert as LivewireAlertLivewireAlert;
 use Livewire\Component;
 
@@ -88,12 +89,12 @@ class SancionesCrear extends Component
     //=========================================================
     public function buscarJugadorSancion()
     {
-
         if (!empty($this->buscarJugador)) {
-
             $buscar = trim($this->buscarJugador);
 
-            $this->jugadores = Jugador::with('equipo')
+            $this->jugadores = Jugador::with(['equiposPorCampeonato' => function ($query) {
+                $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
+            }])
                 ->where(function ($query) use ($buscar) {
                     $palabras = explode(' ', $buscar);
 
@@ -110,7 +111,6 @@ class SancionesCrear extends Component
                 })
                 ->get();
         } else {
-
             $this->jugadores = [];
         }
     }
@@ -120,7 +120,13 @@ class SancionesCrear extends Component
     {
         $this->jugadorSeleccionado = $this->jugadores->firstWhere('id', $jugadorId);
         $this->jugador_id = $jugadorId;
-        $this->nombreJugador = $this->jugadorSeleccionado->nombreCompleto . ' - ' . $this->jugadorSeleccionado->equipo->nombre;
+
+        // Obtener el equipo del campeonato actual usando la nueva relación
+        $equipoDelCampeonato = $this->jugadorSeleccionado->equiposPorCampeonato->first();
+
+        $nombreEquipo = $equipoDelCampeonato ? $equipoDelCampeonato->nombre : 'Sin equipo en este campeonato';
+
+        $this->nombreJugador = $this->jugadorSeleccionado->nombreCompleto . ' - ' . $nombreEquipo;
         $this->buscarJugador = ""; // oculta el listado
     }
 
@@ -154,24 +160,43 @@ class SancionesCrear extends Component
     //==================================================================
     public function buscarPartidoDelJugador()
     {
-        $jugador = Jugador::find($this->jugador_id);
-        $equipoId = $jugador->equipo_id;
-
         $campeonato = Campeonato::find($this->campeonatoId);
 
+        if (!$campeonato) {
+            $this->partidoJugadorInfo = 'Campeonato inválido.';
+            return;
+        }
+
+        // 🔥 EQUIPO DEL JUGADOR EN ESTE CAMPEONATO
+        $equipoId = DB::table('campeonato_jugador_equipo')
+            ->where('campeonato_id', $this->campeonatoId)
+            ->where('jugador_id', $this->jugador_id)
+            ->value('equipo_id');
+
+
+        if (!$equipoId) {
+            $this->partidoJugadorInfo = 'El jugador no pertenece a este campeonato.';
+            return;
+        }
+
+        $fecha = (int) $this->fechaBuscada;
+
         if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
+
             $partido = Encuentro::with(['equipoLocal', 'equipoVisitante'])
                 ->where('campeonato_id', $this->campeonatoId)
-                ->where('fecha_encuentro', $this->fechaBuscada)
+                ->where('fecha_encuentro', $fecha)
                 ->where(function ($q) use ($equipoId) {
                     $q->where('equipo_local_id', $equipoId)
                         ->orWhere('equipo_visitante_id', $equipoId);
                 })
+                ->orderBy('hora')
                 ->first();
         } else {
+
             $partido = Eliminatoria::with(['equipoLocal', 'equipoVisitante'])
                 ->where('campeonato_id', $this->campeonatoId)
-                ->where('fase', $this->fechaBuscada)
+                ->where('fase', $fecha)
                 ->where(function ($q) use ($equipoId) {
                     $q->where('equipo_local_id', $equipoId)
                         ->orWhere('equipo_visitante_id', $equipoId);
@@ -180,10 +205,11 @@ class SancionesCrear extends Component
         }
 
         if ($partido) {
-            $this->partidoJugadorInfo = $partido->equipoLocal->nombre . ' vs ' . $partido->equipoVisitante->nombre;
+            $this->partidoJugadorInfo =
+                $partido->equipoLocal->nombre . ' vs ' . $partido->equipoVisitante->nombre;
             $this->partido_id = $partido->id;
         } else {
-            $this->partidoJugadorInfo = 'No se encontró partido del jugador en esa fecha/fase.';
+            $this->partidoJugadorInfo = 'No se encontró partido del jugador en esa fecha.';
         }
     }
     //======================================================================

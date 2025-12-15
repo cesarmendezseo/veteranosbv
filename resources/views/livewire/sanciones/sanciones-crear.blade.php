@@ -34,7 +34,7 @@
         @foreach($jugadores as $jug)
         <div class="flex justify-between items-center border-b py-2">
             <div
-                class=" flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm hover:shadow-md transition">
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 shadow-sm hover:shadow-md transition">
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2">
                     <span class="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">
                         {{ $jug->apellido }}, {{ $jug->nombre }}
@@ -46,7 +46,8 @@
                 <div>
                     <span
                         class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full mt-1 sm:mt-0">
-                        {{strtoupper( $jug->equipo->nombre) }}
+                        {{ $jug->equiposPorCampeonato->first() ? strtoupper($jug->equiposPorCampeonato->first()->nombre)
+                        : 'SIN EQUIPO' }}
                     </span>
                 </div>
             </div>
@@ -73,7 +74,9 @@
     @if($jugadorSeleccionado)
     <div class="bg-blue-100 border border-blue-300 text-blue-900 rounded-lg p-4 mb-4">
         <strong>{{ $jugadorSeleccionado['apellido'] }}, {{ $jugadorSeleccionado['nombre'] }}</strong><br>
-        DNI: {{ $jugadorSeleccionado['documento'] }}
+        DNI: {{ $jugadorSeleccionado['documento'] }}, Equipo:
+        {{ $jugadorSeleccionado->equiposPorCampeonato->first() ?
+        strtoupper($jugadorSeleccionado->equiposPorCampeonato->first()->nombre) : 'SIN EQUIPO' }}
     </div>
     @endif
 

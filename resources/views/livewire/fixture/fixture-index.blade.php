@@ -2,8 +2,11 @@
 
     <div class="bg-blue-900 text-white p-4 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Fixture') }}
+        {{ __('Fixture Index') }}
         </h2>
+        @adminOrCan('administrador')
+        <a href="{{ route('fixture.automatico') }}" class="cursor-pointer">Automatico</a>
+        @endadminOrCan
     </div>
     <div class="hidden sm:block">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

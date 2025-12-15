@@ -50,7 +50,7 @@
             size="8">
             {{-- Usamos la propiedad computada 'equiposDisponibles' que ya está filtrando --}}
             @foreach ($this->equiposDisponibles as $equipo)
-            <option value="{{ $equipo->id }}">{{ ucwords($equipo->nombre) }}</option>
+            <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
             @endforeach
         </select>
     </div>
@@ -86,7 +86,7 @@
                 <ul class="list-none space-y-1">
                     @forelse ($grupo->equipos as $equipo)
                     <li>
-                        {{ $loop->iteration }}. {{ ucwords($equipo->nombre) }}
+                        {{ $loop->iteration }}. {{ strtoupper($equipo->nombre) }}
                         <button type="button" wire:click="removerEquipoDeGrupo({{ $equipo->id }}, {{ $grupo->id }})"
                             class="text-red-600 hover:underline text-sm ml-2 cursor-pointer dark:bg-white rounded-4xl dark:p-1 dark:shadow-2xl bg-gray-200  p-1 shadow-lg">
                             {{-- Icono de eliminar --}}
@@ -121,7 +121,7 @@
                 {{-- Filtramos los equipos que no tienen grupo asignado (grupo_id es null) --}}
                 @forelse ($campeonato->equipos->where('pivot.grupo_id', null) as $equipo)
                 <li class="bg-gray-900 p-2 rounded flex justify-between items-center dark:bg-gray-800">
-                    {{ $loop->iteration }}. - {{ ucwords($equipo->nombre) }}
+                    {{ $loop->iteration }}. - {{ strtoupper($equipo->nombre) }}
 
                     @adminOrCan('comision')
                     {{-- Pasamos 'null' como segundo argumento para indicar que no tiene grupo --}}

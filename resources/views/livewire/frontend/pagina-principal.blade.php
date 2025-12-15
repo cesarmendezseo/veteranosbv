@@ -1,25 +1,36 @@
 <div class="min-h-screen bg-gray-50 dark:bg-zinc-900">
     <!-- Hero Section -->
-    <div class="relative w-full min-h-screen">
-        <div class="absolute inset-0 bg-cover bg-center"
-            style="background-image: url('{{ asset('storage/' . \App\Models\Configuracion::get('fondo_pagina_principal', 'images/pagina-principal.jpg')) }}')">
+
+
+    <div class="relative min-h-screen overflow-hidden bg-black pb-5">
+
+        <!-- Imagen de fondo -->
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110 blur-[3px] opacity-60" style="
+                background-image: url('{{ asset('storage/' . \App\Models\Configuracion::get('fondo_pagina_principal', 'images/pagina-principal.jpg')) }}');
+            ">
+            </div>
         </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-gray-50 dark:to-zinc-900"></div>
-        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
 
-            <h1 class="font-extrabold tracking-tight drop-shadow-lg mb-4" style="
-                    font-family: var(--font-{{ \App\Models\Configuracion::get('titulo_fuente', 'titulo') }});
-                    color: {{ \App\Models\Configuracion::get('titulo_color', '#ffffff') }};
-                    font-size: clamp(
-                        {{ \App\Models\Configuracion::get('titulo_size', '8px') }},
-                        8vw,
-                        calc({{ \App\Models\Configuracion::get('titulo_size', '8px') }} * 3)
-                    );
-                ">
-                {{ $tituloPrincipal }}
+        <!-- Capa de oscurecimiento elegante -->
+        <div class="absolute inset-0 bg-gradient-to-b 
+                from-black/60 
+                via-black/40 
+                to-black/65">
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="relative z-10 py-20 px-6 flex flex-col items-center">
+
+            <!-- Título -->
+            <h1 class="text-4xl md:text-6xl font-extrabold text-center mb-16 text-white tracking-wide
+                   drop-shadow-[0_0_15px_rgba(0,200,255,0.8)]" style="
+                font-family: var(--font-{{ \App\Models\Configuracion::get('titulo_fuente', 'titulo') }});
+                color: {{ \App\Models\Configuracion::get('titulo_color', '#ffffff') }};
+                font-size: clamp({{ \App\Models\Configuracion::get('titulo_size', '8px') }}, 8vw, calc({{ \App\Models\Configuracion::get('titulo_size', '8px') }} * 3));
+        ">
+                ⚡ {{ $tituloPrincipal }}
             </h1>
-
-            {{-- Leyendas principales --}}
             @php
             $ley1 = \App\Models\Configuracion::get('leyenda_principal1');
             $ley2 = \App\Models\Configuracion::get('leyenda_principal2');
@@ -44,7 +55,8 @@
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_1', '700') }};
                             ">
-                            {{ \App\Models\Configuracion::get('leyenda_principal1', 'Sistema de Gestión de Torneos
+                            {{ \App\Models\Configuracion::get('leyenda_principal1', 'Sistema de Gestión de
+                            Torneos
                             Deportivos') }}
                         </span>
 
@@ -59,7 +71,8 @@
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_2', '700') }};
                             ">
-                            {{ \App\Models\Configuracion::get('leyenda_principal2', 'Organiza y administra tus torneos
+                            {{ \App\Models\Configuracion::get('leyenda_principal2', 'Organiza y administra tus
+                            torneos
                             fácilmente') }}
                         </span>
 
@@ -74,7 +87,8 @@
                                 );
                                 font-weight: {{ \App\Models\Configuracion::get('leyenda_weight_3', '700') }};
                             ">
-                            {{ \App\Models\Configuracion::get('leyenda_principal3', '¡Únete a la comunidad deportiva hoy
+                            {{ \App\Models\Configuracion::get('leyenda_principal3', '¡Únete a la comunidad
+                            deportiva hoy
                             mismo!') }}
                         </span>
                     </p>
@@ -82,100 +96,80 @@
             </div>
             @endif
         </div>
+        <!-- GRID -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
-        <!-- Main Content -->
-        <div class="w-full max-w-4xl mx-auto px-4 py-6 space-y-4 relative z-20">
 
-            {{-- TABLA DE POSICIONES --}}
-            @if ($mostrarTabla)
-            <a href="{{ route('tabla-posicion-resultados') }}"
-                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
 
-                <div>
-                    <h2 class="text-xl font-semibold">Tabla de Posiciones</h2>
-                    <p class="text-sm opacity-90">Ver resultados</p>
-                </div>
+            @foreach ($campeonato as $camp )
+            <!-- CARD 1 -->
+            <a href="{{ Route('frontend.principal-index', $camp->id) }}">
+                <div class="relative group p-[2px] rounded-3xl bg-gradient-to-br 
+                    from-cyan-400/60 via-blue-500/40 to-purple-500/60
+                    hover:from-cyan-300 hover:to-blue-400
+                    transition-all shadow-[0_0_25px_rgba(0,200,255,0.3)]
+                    hover:shadow-[0_0_45px_rgba(0,200,255,0.6)] cursor-pointer">
 
-                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
-                    {{-- AÑADIDO: text-blue-600 fill-current --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#1f1f1f">
-                        <path
-                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z" />
-                    </svg>
+                    <div class="rounded-3xl bg-zinc-900/70 backdrop-blur-xl p-6 h-full
+                        flex flex-col justify-between border border-white/10">
+
+                        <!-- Estado -->
+                        <div class="absolute top-5 right-5">
+                            <span
+                                class="px-4 py-1 text-xs rounded-full bg-emerald-600/80 text-white font-bold shadow-lg animate-pulse">
+                                EN JUEGO
+                            </span>
+                        </div>
+
+                        <!-- Banner -->
+                        <div class="w-full h-40 rounded-2xl overflow-hidden relative
+                            bg-gradient-to-br from-zinc-800 to-zinc-900
+                            group-hover:scale-105 transition-transform duration-500">
+
+                            <div
+                                class="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(0,200,255,0.4),transparent)]">
+                            </div>
+                            <div
+                                class="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(255,0,200,0.25),transparent)]">
+                            </div>
+
+                            <div class="absolute inset-0 opacity-40 
+                                bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                            </div>
+                        </div>
+
+                        <!-- Contenido -->
+                        <div class="mt-6 text-white space-y-2">
+                            <h2 class="text-2xl font-bold tracking-wide group-hover:text-cyan-300 transition">
+                                {{ $camp->nombre }}
+                            </h2>
+
+                            <p class="text-sm text-gray-300">
+                                Temporada: <span class="font-semibold text-cyan-300">{{ date('Y') }}</span>
+                            </p>
+
+
+                            @if($camp->total_equipos === 0)
+                            <p class="text-sm text-gray-400">Grupos: {{ $camp->cantidad_grupos }} </p>
+                            <p class="text-sm text-gray-400">Equipos: {{ $camp->cantidad_equipos_grupo}}
+                            </p>
+                            @else
+                            <p class="text-sm text-gray-400">Equipos: {{ $camp->total_equipos }} </p>
+                            @endif
+                            <p class="pt-3 text-cyan-300 font-medium text-sm">
+                                Ver detalles →
+                            </p>
+                        </div>
+
+                    </div>
                 </div>
             </a>
-            @endif
 
-
-
-            {{-- GOLEADORES --}}
-            @if ($mostrarGoleadores)
-            <a href="{{ route('frontend.goleadores.index') }}"
-                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
-
-                <div>
-                    <h2 class="text-xl font-semibold">Goleadores</h2>
-                    <p class="text-sm opacity-90">Ver los goleadores del torneo actual</p>
-                </div>
-
-                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
-                    {{-- AÑADIDO: text-blue-600 fill-current --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#1f1f1f">
-                        <path
-                            d="M185-80q-17 0-29.5-12.5T143-122v-105q0-90 56-159t144-88q-40 28-62 70.5T259-312v190q0 11 3 22t10 20h-87Zm147 0q-17 0-29.5-12.5T290-122v-190q0-70 49.5-119T459-480h189q70 0 119 49t49 119v64q0 70-49 119T648-80H332Zm148-484q-66 0-112-46t-46-112q0-66 46-112t112-46q66 0 112 46t46 112q0 66-46 112t-112 46Z" />
-                    </svg>
-                </div>
-            </a>
-            @endif
-
-
-
-            {{-- SANCIONES --}}
-            @if ($mostrarSanciones)
-            <a href="{{ route('frontend.sanciones.index') }}"
-                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
-
-                <div>
-                    <h2 class="text-xl font-semibold">Sanciones</h2>
-                    <p class="text-sm opacity-90">Ver las sanciones de los jugadores</p>
-                </div>
-
-                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
-                    {{-- AÑADIDO: text-blue-600 fill-current --}}
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#1f1f1f">
-                        <path
-                            d="m819-28-59-59q-10 3-19.5 5T720-80H240q-50 0-85-35t-35-85v-120h120v-287L27-820l57-57L876-85l-57 57ZM240-160h447l-80-80H200v40q0 17 11.5 28.5T240-160Zm600-73-80-80v-447H313l-73-73v-47l60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60 60 60 60-60v647Zm-520-87h207L320-527v207Zm155-280-80-80h205v80H475Zm120 120-80-80h85v80h-5Zm85 0q-17 0-28.5-11.5T640-520q0-17 11.5-28.5T680-560q17 0 28.5 11.5T720-520q0 17-11.5 28.5T680-480Zm0-120q-17 0-28.5-11.5T640-640q0-17 11.5-28.5T680-680q17 0 28.5 11.5T720-640q0 17-11.5 28.5T680-600ZM200-160v-80 80Z" />
-                    </svg>
-                </div>
-            </a>
-            @endif
-
-
-
-            {{-- PRÓXIMOS ENCUENTROS (Este ya estaba correcto) --}}
-            @if ($mostrarEncuentros)
-            <a href="{{ route('frontend.proximoPartidos') }}"
-                class="flex items-center justify-between bg-blue-600 text-white rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-200">
-
-                <div>
-                    <h2 class="text-xl font-semibold">Próximos Encuentros</h2>
-                    <p class="text-sm opacity-90">Fixtures y horarios</p>
-                </div>
-
-                <div class="w-11 h-11 flex items-center justify-center bg-white rounded-full backdrop-blur">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#1f1f1f">
-                        <path
-                            d="M600-120v-120H440v-400h-80v120H80v-320h280v120h240v-120h280v320H600v-120h-80v320h80v-120h280v320H600ZM160-760v160-160Zm520 400v160-160Zm0-400v160-160Zm0 160h120v-160H680v160Zm0 400h120v-160H680v160ZM160-600h120v-160H160v160Z" />
-                    </svg>
-                </div>
-
-            </a>
-            @endif
-
+            @endforeach
         </div>
     </div>
+
+
+</div>
+</div>
 </div>

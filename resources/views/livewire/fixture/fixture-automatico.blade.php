@@ -50,18 +50,24 @@
     <div>
         @if($botonFixture)
         @if(!$porGrupos)
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureNormal({{ $campeonato->id }}, false)">General - Normal</button>
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureAlternancia({{ $campeonato->id }}, false)">General - Alternancia</button>
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureIdaVuelta({{ $campeonato->id }}, false)">General - Ida/Vuelta</button>
         @else
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureNormal({{ $campeonato->id }}, true)">Por Grupos - Normal</button>
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureAlternancia({{ $campeonato->id }}, true)">Por Grupos - Alternancia</button>
-        <button class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
+        <button
+            class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded "
             wire:click="fixtureIdaVuelta({{ $campeonato->id }}, true)">Por Grupos - Ida/Vuelta</button>
         @endif
         @endif
@@ -69,6 +75,6 @@
     </div>
 
     <button wire:click="borrarTodo"
-        class="inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">BORRAR</button>
+        class="cursor-pointer inline-flex items-center gap-2 mt-4  bg-blue-950 hover:bg-blue-800 text-white px-4 py-2 rounded ">BORRAR</button>
 
 </div>

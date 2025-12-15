@@ -3,7 +3,7 @@
     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
         <!-- Título -->
         <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Fixture') }}
+            {{ __('Fixture Ver') }}
         </h2>
 
         <!-- Botones -->
@@ -19,7 +19,7 @@
                     </svg>
                 </a>
 
-                @adminOrCan()
+                @adminOrCan('administrador|comision')
                 <a href="{{ route('fixture.automatico') }}"
                     class="px-3 py-2 text-white rounded flex items-center gap-1">
                     <!-- icono crear automático -->
@@ -46,6 +46,7 @@
                     </svg>
                 </button>
                 @endadminOrCan
+
             </div>
 
             <!-- escritorio -->
@@ -86,6 +87,19 @@
                         <path d="m7 10 5 5 5-5" />
                     </svg>
                     Exportar
+                </button>
+                @endadminOrCan
+                @adminOrCan('administrador')
+                <button wire:click="exportarTodo"
+                    class="cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
+                    <!-- icono exportar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                        <path d="M12 15V3" />
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <path d="m7 10 5 5 5-5" />
+                    </svg>
+                    Exportar Todo
                 </button>
                 @endadminOrCan
             </div>
@@ -169,7 +183,7 @@
                     <path d="M64,14 A4,4 0 0,0 64,26" stroke="white" stroke-width="1" fill="none" />
                 </svg>
 
-                <p class="m-0">
+                <p class="m-0 text-white">
                     "{{ strtoupper($nombreCancha) }}"
                     @if ($grupos && $grupos->isNotEmpty())
                     <span class="bg-[#eee16b] rounded-3xl px-2 py-1">

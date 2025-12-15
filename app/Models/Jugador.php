@@ -62,4 +62,10 @@ class Jugador extends Model
             ->withPivot('fecha_alta', 'fecha_baja')
             ->withTimestamps();
     }
+    // ✅ NUEVA relación para equipos por campeonato
+    public function equiposPorCampeonato()
+    {
+        return $this->belongsToMany(Equipo::class, 'campeonato_jugador_equipo', 'jugador_id', 'equipo_id')
+            ->withPivot('campeonato_id');
+    }
 }

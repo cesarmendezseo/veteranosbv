@@ -19,11 +19,13 @@ class TablaPosicionResultados extends Component
     public $campeonato_id;
     public $campeonatoId;
     public $campeonatos;
+    public $campeonatoNombre;
     public \Illuminate\Support\Collection $posiciones;
 
-    public function mount()
+    public function mount($id)
     {
-        $this->campeonatoId = Configuracion::get('campeonato_principal');
+        $this->campeonatoId = $id;
+
         $this->posiciones = collect();
         $this->generarTablaPosiciones($this->campeonatoId);
     }
@@ -37,7 +39,7 @@ class TablaPosicionResultados extends Component
     {
         $campeonatoId = $campeonatoId ?? $this->campeonato_id;
         $campeonato = Campeonato::find($campeonatoId);
-
+        $this->campeonatoNombre = $campeonato?->nombre ?? 'Campeonato No Encontrado';
         if (!$campeonato) {
             $this->posiciones = collect();
             return;

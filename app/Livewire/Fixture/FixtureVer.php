@@ -188,6 +188,21 @@ class FixtureVer extends Component
         return $servicio->exportarPorCampeonatoYFecha($this->campeonato_id, $this->jornadaFiltro);
     }
 
+    public function exportarTodo(EncuentroExportService $servicio)
+
+    {
+        if (!$this->campeonato_id) {
+            session()->flash('error', 'Debes seleccionar un campeonato para exportar.');
+            LivewireAlert::title('Error')
+                ->text('Debes seleccionar un campeonato para exportar.')
+                ->error()
+                ->show();
+            return;
+        }
+
+        return $servicio->exportarTodoElCampeonato($this->campeonato_id);
+    }
+
     //==================================
     public function actualizarCumplimientosSanciones()
     {
