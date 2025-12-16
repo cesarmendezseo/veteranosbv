@@ -76,6 +76,7 @@ Route::get('/frontend/goleadores', Goleador::class)->name('frontend.goleadores.i
 Route::get('/frontend/{id}/sanciones', Sanciones::class)->name('frontend.sanciones.index');
 Route::get('/frontend/principal/{id}index', PrincipalIndex::class)->name('frontend.principal-index');
 Route::get('/frontend/{id}/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados1');
+Route::get('/frontend/tarjetas/{id}', \App\Livewire\Frontend\Estadistica\Amarillas::class)->name('frontend.estadistica.tarjetas');
 
 
 Route::view('dashboard', 'dashboard')

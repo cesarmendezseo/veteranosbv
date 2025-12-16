@@ -7,9 +7,10 @@
         <!-- Título -->
         <div class="p-4 sm:p-6 rounded-3xl text-center mb-6">
             <h1
-                class="text-4xl md:text-6xl font-extrabold text-black dark:text-white px-6 py-3 rounded-2xl inline-block">
+                class="text-3xl md:text-4xl font-extrabold text-black dark:text-white px-6 py-3 rounded-2xl inline-block">
                 ⚽ GOLEADORES
             </h1>
+
         </div>
 
         {{-- 📌 Versión Escritorio --}}

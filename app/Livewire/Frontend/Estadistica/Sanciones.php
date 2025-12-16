@@ -26,11 +26,6 @@ class Sanciones extends Component
     {
 
         $this->campeonatoId = $id;
-
-
-        // Debug temporal
-        $encuentro = \App\Models\Encuentro::find(487);
-        /* dd($encuentro); // Esto te dirá si existe o no */
     }
 
     public function updatingSearch()
