@@ -10,29 +10,20 @@ use App\Models\Sanciones;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
-use Jantinnerezo\LivewireAlert\LivewireAlert as LivewireAlertLivewireAlert;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class SancionesCrear extends Component
 {
-    public $jugador_id;
-    public $campeonato_id;
+    // Propiedades de búsqueda y selección
     public $campeonatoId;
-    public $fecha_sancion;
-    public $partidos_sancionados = 1;
+    public $jugador_id;
     public $nombreJugador;
-
-    public $observacion;
-    public $motivo;
-
-    public $jugadores;
-    public $campeonatos;
-    public $jugadorBuscadoSancion;
-
     public $buscarJugador;
-
+    public $jugadores = [];
     public $jugadorSeleccionado = null;
 
+    // Propiedades del Partido/Contexto
     public $partido_id;
     public $partido_tipo;
     public $partidosDisponibles = [];
@@ -40,32 +31,33 @@ class SancionesCrear extends Component
     public $opcionesFechaFase = [];
     public $partidoJugadorInfo = null;
 
+    // Propiedades de la Sanción
+    public $tipo_medida = 'partidos'; // 'partidos' o 'tiempo'
+    public $partidos_sancionados = 1;
+    public $fecha_fin; // Para sanciones de 1 año, 2 años, etc.
+    public $motivo;
+    public $observacion;
 
     public function mount($campeonatoId)
     {
+        $this->campeonatoId = $campeonatoId;
         $campeonato = Campeonato::find($campeonatoId);
 
-        $this->partidosDisponibles = in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])
-            ? Encuentro::where('campeonato_id', $this->campeonatoId)->get()
-            : Eliminatoria::with(['equipoLocal', 'equipoVisitante'])->where('campeonato_id', $this->campeonatoId)->get();
+        if (!$campeonato) return redirect()->route('campeonatos.index');
 
-        //dd($this->partidosDisponibles);
         $this->partido_tipo = in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])
-            ? 'App\Models\Encuentro'
-            : 'App\Models\Eliminatoria';
+            ? Encuentro::class
+            : Eliminatoria::class;
 
-        $this->jugadores = [];
         $this->cargarOpcionesFechaFase();
     }
 
-    //===================================================
     public function cargarOpcionesFechaFase()
     {
         $ordenFases = ['treintaydosavo', 'diesoseisavo', 'octavos', 'cuartos', 'semifinal', '3er y 4to', 'final'];
         $campeonato = Campeonato::find($this->campeonatoId);
 
         if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
-            // Cargar fechas únicas de encuentros
             $this->opcionesFechaFase = Encuentro::where('campeonato_id', $this->campeonatoId)
                 ->pluck('fecha_encuentro')
                 ->unique()
@@ -73,292 +65,223 @@ class SancionesCrear extends Component
                 ->values()
                 ->toArray();
         } else {
-            // Cargar fases únicas de eliminatorias
             $this->opcionesFechaFase = Eliminatoria::where('campeonato_id', $this->campeonatoId)
                 ->pluck('fase')
                 ->unique()
                 ->filter()
-                ->sortBy(function ($fase) use ($ordenFases) {
-                    return array_search(strtolower($fase), $ordenFases);
-                })
+                ->sortBy(fn($fase) => array_search(strtolower($fase), $ordenFases))
                 ->values()
                 ->toArray();
         }
     }
 
-    //=========================================================
     public function buscarJugadorSancion()
     {
         if (!empty($this->buscarJugador)) {
             $buscar = trim($this->buscarJugador);
 
             $this->jugadores = Jugador::with(['equiposPorCampeonato' => function ($query) {
+                // AQUÍ ESTÁ EL CAMBIO: Especificamos la tabla pivote
                 $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
             }])
                 ->where(function ($query) use ($buscar) {
-                    $palabras = explode(' ', $buscar);
-
-                    foreach ($palabras as $palabra) {
-                        $palabra = trim($palabra);
-                        if ($palabra !== '') {
-                            $query->where(function ($subquery) use ($palabra) {
-                                $subquery->where('nombre', 'like', "%{$palabra}%")
-                                    ->orWhere('apellido', 'like', "%{$palabra}%")
-                                    ->orWhere('documento', 'like', "%{$palabra}%");
-                            });
-                        }
-                    }
+                    // ... (tu lógica de búsqueda por nombre/apellido)
+                    $query->where('nombre', 'like', "%{$buscar}%")
+                        ->orWhere('apellido', 'like', "%{$buscar}%")
+                        ->orWhere('documento', 'like', "%{$buscar}%");
                 })
                 ->get();
         } else {
             $this->jugadores = [];
         }
     }
-    //======================================================================
 
     public function agregarJugador($jugadorId)
     {
-        $this->jugadorSeleccionado = $this->jugadores->firstWhere('id', $jugadorId);
+        $this->jugadorSeleccionado = Jugador::with(['equiposPorCampeonato' => function ($q) {
+            // AQUÍ TAMBIÉN: Especificamos la tabla pivote
+            $q->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
+        }])->find($jugadorId);
+
         $this->jugador_id = $jugadorId;
 
-        // Obtener el equipo del campeonato actual usando la nueva relación
         $equipoDelCampeonato = $this->jugadorSeleccionado->equiposPorCampeonato->first();
-
-        $nombreEquipo = $equipoDelCampeonato ? $equipoDelCampeonato->nombre : 'Sin equipo en este campeonato';
+        $nombreEquipo = $equipoDelCampeonato ? $equipoDelCampeonato->nombre : 'Sin equipo';
 
         $this->nombreJugador = $this->jugadorSeleccionado->nombreCompleto . ' - ' . $nombreEquipo;
-        $this->buscarJugador = ""; // oculta el listado
+        $this->buscarJugador = "";
+        $this->jugadores = [];
     }
 
-    //====================================================================
-    public function cargarPartidosPorFecha()
+    public function updatedFechaBuscada()
     {
-        $campeonato = Campeonato::find($this->campeonatoId);
-
-        if (!$this->fechaBuscada) {
-            $this->partidosDisponibles = [];
-            return;
-        }
-
-        if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
-            $this->partido_tipo = Encuentro::class;
-
-            $this->partidosDisponibles = Encuentro::with(['equipoLocal', 'equipoVisitante'])
-                ->where('campeonato_id', $this->campeonatoId)
-                ->where('fecha_encuentro', $this->fechaBuscada)
-                ->get();
-        } else {
-            $this->partido_tipo = Eliminatoria::class;
-
-            $this->partidosDisponibles = Eliminatoria::with(['equipoLocal', 'equipoVisitante'])
-                ->where('campeonato_id', $this->campeonatoId)
-                ->where('fase', $this->fechaBuscada)
-                ->get();
-        }
         $this->buscarPartidoDelJugador();
     }
-    //==================================================================
+
     public function buscarPartidoDelJugador()
     {
-        $campeonato = Campeonato::find($this->campeonatoId);
+        if (!$this->jugador_id || !$this->fechaBuscada) return;
 
-        if (!$campeonato) {
-            $this->partidoJugadorInfo = 'Campeonato inválido.';
-            return;
-        }
-
-        // 🔥 EQUIPO DEL JUGADOR EN ESTE CAMPEONATO
         $equipoId = DB::table('campeonato_jugador_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->where('jugador_id', $this->jugador_id)
             ->value('equipo_id');
 
-
         if (!$equipoId) {
-            $this->partidoJugadorInfo = 'El jugador no pertenece a este campeonato.';
+            $this->partidoJugadorInfo = 'El jugador no tiene equipo asignado.';
             return;
         }
 
-        $fecha = (int) $this->fechaBuscada;
+        $query = $this->partido_tipo::with(['equipoLocal', 'equipoVisitante'])
+            ->where('campeonato_id', $this->campeonatoId)
+            ->where(function ($q) use ($equipoId) {
+                $q->where('equipo_local_id', $equipoId)->orWhere('equipo_visitante_id', $equipoId);
+            });
 
-        if (in_array($campeonato->formato, ['todos_contra_todos', 'grupos'])) {
-
-            $partido = Encuentro::with(['equipoLocal', 'equipoVisitante'])
-                ->where('campeonato_id', $this->campeonatoId)
-                ->where('fecha_encuentro', $fecha)
-                ->where(function ($q) use ($equipoId) {
-                    $q->where('equipo_local_id', $equipoId)
-                        ->orWhere('equipo_visitante_id', $equipoId);
-                })
-                ->orderBy('hora')
-                ->first();
+        if ($this->partido_tipo === Encuentro::class) {
+            $query->where('fecha_encuentro', $this->fechaBuscada);
         } else {
-
-            $partido = Eliminatoria::with(['equipoLocal', 'equipoVisitante'])
-                ->where('campeonato_id', $this->campeonatoId)
-                ->where('fase', $fecha)
-                ->where(function ($q) use ($equipoId) {
-                    $q->where('equipo_local_id', $equipoId)
-                        ->orWhere('equipo_visitante_id', $equipoId);
-                })
-                ->first();
+            $query->where('fase', $this->fechaBuscada);
         }
+
+        $partido = $query->first();
 
         if ($partido) {
-            $this->partidoJugadorInfo =
-                $partido->equipoLocal->nombre . ' vs ' . $partido->equipoVisitante->nombre;
+            $this->partidoJugadorInfo = "{$partido->equipoLocal->nombre} vs {$partido->equipoVisitante->nombre}";
             $this->partido_id = $partido->id;
         } else {
-            $this->partidoJugadorInfo = 'No se encontró partido del jugador en esa fecha.';
+            $this->partidoJugadorInfo = 'No se encontró partido en esta fecha/fase.';
+            $this->partido_id = null;
         }
     }
-    //======================================================================
+
+    // Atajos para el tribunal
+    public function setTiempo($cantidad, $unidad)
+    {
+        $this->tipo_medida = 'tiempo';
+        $this->fecha_fin = now()->add($cantidad, $unidad)->format('Y-m-d');
+    }
+
     public function guardar()
     {
+
+        $rules = [
+            'jugador_id' => 'required|exists:jugadors,id',
+            'partido_id' => 'required', // <--- Esto es lo que está fallando según tu dd()
+            'motivo' => 'required|string',
+            'tipo_medida' => 'required|in:partidos,tiempo',
+        ];
+
+        if ($this->tipo_medida === 'partidos') {
+            $rules['partidos_sancionados'] = 'required|integer|min:1';
+        } else {
+            $rules['fecha_fin'] = 'required|date|after:today';
+        }
+
+        // Mensajes personalizados para que el usuario entienda el error
+        $messages = [
+            'partido_id.required' => 'No se puede cargar la sanción: el jugador no tiene un partido asignado en la fecha seleccionada.',
+            'jugador_id.required' => 'Debes seleccionar un jugador.',
+            'fecha_fin.required' => 'Debes ingresar la fecha de finalización.',
+        ];
+
         try {
-            $this->validate([
-                'jugador_id' => 'required|exists:jugadors,id',
-                'partido_id' => 'required|integer|exists:' . (new $this->partido_tipo)->getTable() . ',id',
-                'partidos_sancionados' => 'required|integer|min:1',
-                'motivo' => 'required|string',
-                'observacion' => 'nullable|string',
-                'fechaBuscada' => 'required|string',
-            ]);
-
-            $campeonato = Campeonato::find($this->campeonatoId);
-            $jugador = Jugador::find($this->jugador_id);
-            /* $equipoJugador = $jugador->equipo_id; */
-
-            $equipoJugador = DB::table('campeonato_jugador_equipo')
+            $this->validate($rules, $messages);
+            // Verificar duplicados activos
+            $pendiente = Sanciones::where('jugador_id', $this->jugador_id)
                 ->where('campeonato_id', $this->campeonatoId)
-                ->where('jugador_id', $this->jugador_id)
-                ->value('equipo_id');
-
-            $partido = $this->partido_tipo::find($this->partido_id);
-
-            // ✅ Validar que el jugador pertenezca al partido
-            if (!in_array($equipoJugador, [$partido->equipo_local_id, $partido->equipo_visitante_id])) {
-                LivewireAlert::title('Error')
-                    ->text('El jugador no pertenece al partido seleccionado')
-                    ->error()
-                    ->show();
-                return;
-            }
-
-            // ✅ Validar si el jugador ya tiene una sanción pendiente en este campeonato
-            $sancionPendiente = Sanciones::where('jugador_id', $this->jugador_id)
-                ->where('campeonato_id', $this->campeonatoId)
-                ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                ->where('cumplida', false)
                 ->exists();
 
-            if ($sancionPendiente) {
-                LivewireAlert::title('Error')
-                    ->text('Este jugador ya tiene una sanción pendiente en este campeonato.')
+            if ($pendiente) {
+
+                LivewireAlert::title('Atención')
+                    ->text('El jugador ya posee una sanción activa.')
                     ->warning()
                     ->show();
                 return;
             }
 
-            // ✅ Crear la sanción si no hay pendientes
             Sanciones::create([
                 'jugador_id' => $this->jugador_id,
                 'campeonato_id' => $this->campeonatoId,
-                'etapa_sancion' => $this->fechaBuscada,
-                'partidos_sancionados' => $this->partidos_sancionados,
-                'partidos_cumplidos' => 0,
-                'cumplida' => false,
+                'fecha_sancion' => $this->fechaBuscada, // O now() según prefieras
                 'motivo' => $this->motivo,
                 'observacion' => $this->observacion,
+                'partidos_sancionados' => $this->tipo_medida === 'partidos' ? $this->partidos_sancionados : 0,
+                'fin_sancion_at' => $this->tipo_medida === 'tiempo' ? $this->fecha_fin : null,
+                'medida' => $this->tipo_medida,
                 'sancionable_id' => $this->partido_id,
                 'sancionable_type' => $this->partido_tipo,
+                'partidos_cumplidos' => 0,
+                'cumplida' => false,
             ]);
+
 
             LivewireAlert::title('Éxito')
-                ->text('Sanción guardada correctamente.')
+                ->text('Sanción registrada correctamente.')
                 ->success()
                 ->show();
+            $this->reset(['jugador_id', 'nombreJugador', 'partido_id', 'motivo', 'observacion', 'partidoJugadorInfo']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Obtenemos el primer mensaje de error de la validación
+            $primerError = collect($e->errors())->flatten()->first();
 
-            $this->reset([
-                'jugador_id',
-                'partido_id',
-                'partido_tipo',
-                'fechaBuscada',
-                'partidos_sancionados',
-                'motivo',
-                'observacion',
-                'partidoJugadorInfo',
-            ]);
+            LivewireAlert::title('Error de Validación')
+                ->text($primerError)
+                ->error()
+                ->toast()
+                ->withConfirmButton('ok')
+                ->show();
 
-            $this->jugadores = [];
-        } catch (QueryException $e) {
-            LivewireAlert::title('Error SQL')
-                ->text('Ocurrió un error al guardar la sanción: ' . $e->getMessage())
-                ->error()
-                ->show();
-        } catch (\Exception $e) {
-            LivewireAlert::title('Error inesperado')
-                ->text('Algo salió mal: ' . $e->getMessage())
-                ->error()
-                ->show();
+
+            throw $e; // Importante para que Livewire pinte los errores en el Blade si usas @error
         }
-        $this->jugadorSeleccionado = null;
     }
 
-
-
-    //======================================================
     public function actualizarCumplimientosSanciones()
     {
-        // Procesar sanciones en bloques para evitar sobrecarga de memoria
-        Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) {
-            foreach ($sanciones as $sancion) {
-                $jugador = $sancion->jugador;
+        $hoy = Carbon::today();
 
-                // Validar que el jugador y su equipo existan
-                if (!$jugador || !$jugador->equipo_id) {
+        Sanciones::where('cumplida', false)->chunk(50, function ($sanciones) use ($hoy) {
+            foreach ($sanciones as $sancion) {
+                // Caso TIEMPO
+                if ($sancion->medida === 'tiempo' || $sancion->fin_sancion_at) {
+                    if ($hoy->greaterThan($sancion->fin_sancion_at)) {
+                        $sancion->update(['cumplida' => true]);
+                    }
                     continue;
                 }
 
-                $equipoId = $jugador->equipo_id;
+                // Caso PARTIDOS (Tu lógica original)
+                $equipoId = DB::table('campeonato_jugador_equipo')
+                    ->where('campeonato_id', $sancion->campeonato_id)
+                    ->where('jugador_id', $sancion->jugador_id)
+                    ->value('equipo_id');
 
-                // Contar partidos jugados posteriores a la fecha de sanción donde participó el equipo
-                $partidosCumplidos = Encuentro::where('campeonato_id', $sancion->campeonato_id)
+                if (!$equipoId) continue;
+
+                $count = Encuentro::where('campeonato_id', $sancion->campeonato_id)
                     ->where('estado', 'Jugado')
                     ->where('fecha_encuentro', '>', $sancion->fecha_sancion)
                     ->where(function ($q) use ($equipoId) {
-                        $q->where('equipo_local_id', $equipoId)
-                            ->orWhere('equipo_visitante_id', $equipoId);
-                    })
-                    ->count();
+                        $q->where('equipo_local_id', $equipoId)->orWhere('equipo_visitante_id', $equipoId);
+                    })->count();
 
-                // Solo guardar si hay cambios
-                $cumplida = $partidosCumplidos >= $sancion->partidos_sancionados;
-
-                if (
-                    $sancion->partidos_cumplidos !== $partidosCumplidos ||
-                    $sancion->cumplida !== $cumplida
-                ) {
-                    $sancion->partidos_cumplidos = $partidosCumplidos;
-                    $sancion->cumplida = $cumplida;
-                    $sancion->save();
-                }
+                $sancion->update([
+                    'partidos_cumplidos' => $count,
+                    'cumplida' => $count >= $sancion->partidos_sancionados
+                ]);
             }
         });
 
-        // Emitir evento Livewire para actualizar vista si es necesario
-        $this->dispatch('actualizar-sancion');
-        LivewireAlert::title('ok')
-            ->text('Sancion actualizada')
+        $this->alert('success', 'Sanciones actualizadas');
+        LivewireAlert::title('Éxito')
+            ->text('Sanciones actualizadas correctamente.')
             ->success()
             ->show();
     }
 
-    public function updatedBuscarJugador()
-    {
-        $this->buscarJugadorSancion();
-    }
-
-    //=====================================================
     public function render()
     {
         return view('livewire.sanciones.sanciones-crear');
