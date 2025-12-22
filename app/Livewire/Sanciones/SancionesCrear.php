@@ -205,7 +205,7 @@ class SancionesCrear extends Component
             Sanciones::create([
                 'jugador_id' => $this->jugador_id,
                 'campeonato_id' => $this->campeonatoId,
-                'fecha_sancion' => $this->fechaBuscada, // O now() según prefieras
+                'etapa_sancion' => $this->fechaBuscada, // O now() según prefieras
                 'motivo' => $this->motivo,
                 'observacion' => $this->observacion,
                 'partidos_sancionados' => $this->tipo_medida === 'partidos' ? $this->partidos_sancionados : 0,
