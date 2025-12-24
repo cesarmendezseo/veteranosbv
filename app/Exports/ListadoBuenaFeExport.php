@@ -23,11 +23,10 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
 {
     protected $equipoId;
     protected $equipoNombre;
-    private int $rowNumber = 1; // Comienza en 1
+    private int $rowNumber = 1;
     private $campeonato_id;
     private $torneoNombre;
     private $fecha;
-
 
     public function __construct($equipoId, $torneoNombre, $campeonatoId, $fecha)
     {
@@ -40,13 +39,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
 
     public function collection()
     {
-        return CampeonatoJugadorEquipo::with([
-            'jugador',
-            'sanciones' => function ($q) {
-                $q->where('campeonato_id', $this->campeonato_id)
-                    ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
-            }
-        ])
+        return CampeonatoJugadorEquipo::with(['jugador'])
             ->where('campeonato_id', $this->campeonato_id)
             ->where('equipo_id', $this->equipoId)
             ->whereNull('fecha_baja')
@@ -54,7 +47,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
             ->sortBy(fn($registro) => $registro->jugador->apellido)
             ->values();
     }
-    //============================================================================================
+
     public function headings(): array
     {
         return [
@@ -69,91 +62,109 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
             'Sanción'
         ];
     }
-    //============================================================================================
+
     public function map($registro): array
     {
-        // Primero obtenemos el jugador desde el registro
         $jugador = $registro->jugador;
 
-        // Luego buscamos la sanción activa del jugador (si tenés scope activas)
-        $sancionActiva = Sanciones::activas()
-            ->where('jugador_id', $jugador->id)
-            ->where('campeonato_id', $this->campeonato_id)
+        // Buscar TODAS las sanciones activas del jugador (sin filtrar por campeonato)
+        $sancionActiva = Sanciones::where('jugador_id', $jugador->id)
+            ->where('cumplida', false)
             ->first();
-
-        // Si no tenés el scope `activas()` en el modelo, podés usar:
-        /*
-    $sancionActiva = Sanciones::where('jugador_id', $jugador->id)
-        ->where('campeonato_id', $this->campeonato_id)
-        ->where(function ($q) {
-            $q->where('cumplida', false)
-              ->orWhereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
-        })->first();
-    */
 
         $leyenda = '';
 
         if ($sancionActiva) {
-            // Normalizamos motivo: trim + lowercase
-            $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
-
-            // Uso de contains para evitar fallos por pequeñas variaciones de texto
-            if (str_contains($motivo, 'amarilla')) {
-                $leyenda = 'PAGA';
+            // Verificar si tiene fecha_inicio y fecha_fin
+            if ($sancionActiva->fecha_inicio && $sancionActiva->fecha_fin) {
+                // Calcular período de tiempo
+                $leyenda = $this->calcularPeriodoSancion(
+                    $sancionActiva->fecha_inicio,
+                    $sancionActiva->fecha_fin
+                );
             } else {
-                $leyenda = ($sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos) . ' Fechas';
+                // Es sanción por partidos
+                $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
+
+                if (str_contains($motivo, 'amarilla')) {
+                    $leyenda = 'PAGA';
+                } else {
+                    $partidosPendientes = $sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos;
+                    $leyenda = $partidosPendientes . ' Fechas';
+                }
             }
         }
 
         return [
-            $this->rowNumber++, // Número correlativo
+            $this->rowNumber++,
             '',
             strtoupper($jugador->documento ?? ''),
             strtoupper($jugador->apellido ?? ''),
             strtoupper($jugador->nombre ?? ''),
-            '', // Espacio para firmas
-            '', // Espacio para goles
-            '', // Espacio para tarjetas
+            '',
+            '',
+            '',
             strtoupper($leyenda)
         ];
     }
 
+    /**
+     * Calcular el período de sanción basado en fechas
+     */
+    private function calcularPeriodoSancion($fechaInicio, $fechaFin)
+    {
+        if (!$fechaInicio || !$fechaFin || $fechaInicio === '' || $fechaFin === '') {
+            return '';
+        }
 
-    //============================================================================================
+        try {
+            $inicio = \Carbon\Carbon::parse($fechaInicio);
+            $fin = \Carbon\Carbon::parse($fechaFin);
+
+            $diffAnios = $inicio->diffInYears($fin);
+            $diffMeses = $inicio->copy()->addYears($diffAnios)->diffInMonths($fin);
+
+            $resultado = [];
+
+            if ($diffAnios > 0) {
+                $resultado[] = $diffAnios . ($diffAnios == 1 ? ' año' : ' años');
+            }
+
+            if ($diffMeses > 0) {
+                $resultado[] = $diffMeses . ($diffMeses == 1 ? ' mes' : ' meses');
+            }
+
+            return !empty($resultado) ? implode(' y ', $resultado) : 'Menos de 1 mes';
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
-                // Establecer tamaño oficio (legal)
+
                 $sheet->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_LEGAL);
-                // Obtener el objeto PageMargins
+
                 $margins = $sheet->getPageMargins();
-                // Establecer el margen inferior (en pulgadas - puedes ajustar el valor)
-                $margins->setBottom(0.5); // 1.2 pulgadas de margen inferior (ejemplo)
-                // Establecer márgenes laterales (en pulgadas - puedes ajustar el valor)
-                $margins->setLeft(0.5);   // 1 pulgada de margen izquierdo
-                $margins->setRight(0.5);  // 1 pulgada de margen derecho
+                $margins->setBottom(0.5);
+                $margins->setLeft(0.5);
+                $margins->setRight(0.5);
+                $margins->setTop(1);
 
-
-                $sheet->getPageMargins()->setTop(1); //margen para encabezado Por defecto es 0.75, aumentá según lo necesites
                 $sheet->getHeaderFooter()
                     ->setOddHeader('&L&G&R&"Arial,Bold"&12ASOCIACIÓN CIVIL' . "\n" . 'DE FÚTBOL DE VETERANOS' . "\n" . 'BELLA VISTA - CORRIENTES');
 
-
-
-                // Cargar la imagen para el encabezado izquierdo
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing();
                 $drawing->setName('Logo');
-                $drawing->setPath(public_path('images/logo.jpeg')); // Ruta de tu logo
-                $drawing->setHeight(36); // Altura del logo
-
+                $drawing->setPath(public_path('images/logo.jpeg'));
+                $drawing->setHeight(36);
                 $sheet->getHeaderFooter()->addImage($drawing, HeaderFooter::IMAGE_HEADER_LEFT);
 
-                // 1. Insertar filas arriba de los encabezados
                 $sheet->insertNewRowBefore(1, 4);
 
-                // 2. Agregar títulos
                 $sheet->mergeCells('A1:I1');
                 $sheet->setCellValue('A1', strtoupper($this->torneoNombre));
 
@@ -173,10 +184,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 $sheet->mergeCells('F3:H3');
                 $sheet->setCellValue('F3',  'GOLES:_____');
 
-
-
-
-                // 3. Aplicar estilos a los títulos del torneo
                 $sheet->getStyle('A1:H1')->applyFromArray([
                     'font' => [
                         'bold' => true,
@@ -192,7 +199,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ]
                 ]);
 
-                //estilos a la fecha
                 $sheet->getStyle('B2:C2')->applyFromArray([
                     'font' => [
                         'bold' => true,
@@ -209,7 +215,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 ]);
 
                 $sheet->mergeCells('B4:D4');
-                $sheet->getStyle('B4')->applyFromArray([ // Aplica el estilo a la celda combinada (generalmente la primera)
+                $sheet->getStyle('B4')->applyFromArray([
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     ],
@@ -239,13 +245,8 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ]
                 ]);
 
-
-
-
-                // 4. Mover los encabezados a la fila 5
                 $sheet->fromArray([$this->headings()], null, 'A5');
 
-                // 5. Aplicar estilos a los encabezados (ahora en fila 5)
                 $sheet->getStyle('A5:I5')->applyFromArray([
                     'font' => [
                         'bold' => true,
@@ -263,7 +264,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ]
                 ]);
 
-                // 6. Estilo para las filas de datos (inicialmente hasta la fila 30 con bordes)
                 $endRow = 35;
                 $sheet->getStyle('A5:I' . $endRow)->applyFromArray([
                     'borders' => [
@@ -274,10 +274,8 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ]
                 ]);
 
-                //=================2do bloque==================================
                 $startRowBloque2 = 36;
 
-                // Título del segundo bloque
                 $sheet->mergeCells("A{$startRowBloque2}:I{$startRowBloque2}");
                 $sheet->setCellValue("A{$startRowBloque2}", 'CUERPO TÉCNICO Y AUTORIDADES');
                 $sheet->getStyle("A{$startRowBloque2}")->applyFromArray([
@@ -295,7 +293,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ]
                 ]);
 
-                // Subtítulos del segundo bloque
                 $subtitulosRow = $startRowBloque2 + 1;
                 $sheet->setCellValue("A{$subtitulosRow}", 'Cargo');
                 $sheet->mergeCells("A{$subtitulosRow}:C{$subtitulosRow}");
@@ -309,7 +306,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 $sheet->mergeCells("G{$subtitulosRow}:H{$subtitulosRow}");
                 $sheet->setCellValue("I{$subtitulosRow}", 'Observación');
 
-                //estilos a los subtitulos
                 $sheet->getStyle("A{$subtitulosRow}:I{$subtitulosRow}")->applyFromArray([
                     'font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => 'FFFFFF']],
                     'alignment' => [
@@ -329,8 +325,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     ],
                 ]);
 
-
-                // Datos del cuerpo técnico
                 $datosCuerpoTecnico = [
                     'Capitán' => '',
                     'Técnico' => '',
@@ -345,7 +339,6 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     $sheet->mergeCells("E{$rowCuerpoTecnico}:F{$rowCuerpoTecnico}");
                     $sheet->mergeCells("G{$rowCuerpoTecnico}:H{$rowCuerpoTecnico}");
 
-                    // Opcional: dejar columnas C, F vacías o con placeholder si necesitás
                     $sheet->getStyle("A{$rowCuerpoTecnico}:I{$rowCuerpoTecnico}")->applyFromArray([
                         'borders' => [
                             'allBorders' => [
@@ -357,24 +350,21 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     $rowCuerpoTecnico++;
                 }
 
-
-                // 8. Centrar texto en algunas celdas
                 $sheet->getStyle('C5:C' . $sheet->getHighestRow())->getAlignment()->setHorizontal('center');
 
-                // 9. pinta jugadores de rojo sancionados
+                // Pintar jugadores sancionados de rojo
                 $jugadores = $this->collection();
-                $rowOffset = 5; // Encabezados están en fila 5
-                $alturaFilaSancion = 20; // Define la altura deseada para las filas con sanción (en puntos)
+                $rowOffset = 5;
+                $alturaFilaSancion = 20;
                 $alturaFilaNormal = 20;
+
                 foreach ($jugadores as $index => $jug) {
                     $row = $rowOffset + $index + 1;
-
                     $sheet->getRowDimension($row)->setRowHeight($alturaFilaNormal);
 
-                    // CORREGIDO:
+                    // Buscar sanción activa (sin filtrar por campeonato)
                     $sancion = Sanciones::where('jugador_id', $jug->jugador->id)
-                        ->where('campeonato_id', $this->campeonato_id)
-                        ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                        ->where('cumplida', false)
                         ->first();
 
                     if ($sancion) {
@@ -387,37 +377,29 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                         $sheet->getRowDimension($row)->setRowHeight($alturaFilaSancion);
                     }
                 }
-                // Agregar una imagen al final
+
                 $drawing = new Drawing();
                 $drawing->setName('Logo');
                 $drawing->setDescription('Descripción del logo');
-                $drawing->setPath(public_path('images/cambios.png')); // Ruta a tu imagen (debe ser una ruta válida)
-                $drawing->setHeight(185); // Altura en píxeles (ajusta según necesites)
-                $drawing->setCoordinates('F43'); // Celda donde se insertará la esquina superior izquierda de la imagen
-                $drawing->setOffsetX(10);       // Opcional: ajustar posición horizontal (en píxeles)
-                $drawing->setOffsetY(5);        // Opcional: ajustar posición vertical (en píxeles)
+                $drawing->setPath(public_path('images/cambios.png'));
+                $drawing->setHeight(185);
+                $drawing->setCoordinates('F43');
+                $drawing->setOffsetX(10);
+                $drawing->setOffsetY(5);
                 $drawing->setWorksheet($sheet);
 
-
-                // Ajuste de columnas
                 $sheet->getColumnDimension('A')->setWidth(4);
-                $sheet->getColumnDimension('B')->setWidth(5);  // aunque esté combinada, es buena práctica
-                //$sheet->getColumnDimension('C')->setWidth(10);
+                $sheet->getColumnDimension('B')->setWidth(5);
                 $sheet->getColumnDimension('D')->setWidth(20);
                 $sheet->getColumnDimension('E')->setWidth(20);
-                //$sheet->getColumnDimension('F')->setWidth(25);
                 $sheet->getColumnDimension('G')->setWidth(5);
                 $sheet->getColumnDimension('H')->setWidth(5);
                 $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(20);
-
                 $sheet->getColumnDimension('C')->setAutoSize(false)->setWidth(10);
                 $sheet->getColumnDimension('F')->setAutoSize(false)->setWidth(15);
 
-                // Forzar la actualización de dimensiones
                 $sheet->calculateColumnWidths();
             },
-
-
         ];
     }
 }

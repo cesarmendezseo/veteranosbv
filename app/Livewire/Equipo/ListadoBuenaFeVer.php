@@ -46,32 +46,63 @@ class ListadoBuenaFeVer extends Component
             : collect();
     }
 
+
+    public function calcularPeriodoSancion($fechaInicio, $fechaFin)
+    {
+        // Validar que ambas fechas existan Y no estén vacías
+        if (!$fechaInicio || !$fechaFin || $fechaInicio === '' || $fechaFin === '') {
+            return null;
+        }
+
+        try {
+            $inicio = \Carbon\Carbon::parse($fechaInicio);
+            $fin = \Carbon\Carbon::parse($fechaFin);
+
+            $diffAnios = $inicio->diffInYears($fin);
+            $diffMeses = $inicio->copy()->addYears($diffAnios)->diffInMonths($fin);
+
+            $resultado = [];
+
+            if ($diffAnios > 0) {
+                $resultado[] = $diffAnios . ($diffAnios == 1 ? ' año' : ' años');
+            }
+
+            if ($diffMeses > 0) {
+                $resultado[] = $diffMeses . ($diffMeses == 1 ? ' mes' : ' meses');
+            }
+
+            return !empty($resultado) ? implode(' y ', $resultado) : 'Menos de 1 mes';
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     // Cuando se elige un equipo en el select
     public function updatedEquipoSeleccionado($equipoId)
     {
 
-        $this->sanciones = Sanciones::activas()
-            ->where('campeonato_id', $this->campeonatoId)
-            ->get();
-
         if ($this->campeonatoId && $equipoId) {
-
-            $this->sanciones = Sanciones::where('campeonato_id', $this->campeonatoId)
-                ->where('cumplida', false)
-                ->get();
-
-
-            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with(['jugador', 'sanciones' => function ($q) {
-                $q->where('campeonato_id', $this->campeonatoId);
+            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with(['jugador', 'jugador.sanciones' => function ($q) {
+                // Traer TODAS las sanciones activas, sin filtrar por campeonato
+                $q->where('cumplida', false);
             }])
                 ->where('campeonato_id', $this->campeonatoId)
                 ->where('equipo_id', $equipoId)
                 ->whereNull('fecha_baja')
                 ->get()
                 ->map(function ($registro) {
+                    // Las sanciones ahora vienen desde jugador.sanciones
+                    $sancionesConPeriodo = $registro->jugador->sanciones->map(function ($sancion) {
+                        $sancion->periodo_texto = $this->calcularPeriodoSancion(
+                            $sancion->fecha_inicio,
+                            $sancion->fecha_fin
+                        );
+                        return $sancion;
+                    });
+
                     return [
                         'jugador' => $registro->jugador,
-                        'sanciones' => $registro->sanciones,
+                        'sanciones' => $sancionesConPeriodo,
                     ];
                 })
                 ->unique(fn($item) => $item['jugador']->id)
@@ -79,6 +110,8 @@ class ListadoBuenaFeVer extends Component
                 ->values();
         }
     }
+
+
 
 
     // Exportar a Excel
@@ -218,6 +251,8 @@ class ListadoBuenaFeVer extends Component
             ->show();
         $this->updatedEquipoSeleccionado($this->equipoSeleccionado);
     }
+
+
 
     public function render()
     {

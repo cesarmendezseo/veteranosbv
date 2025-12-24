@@ -1,24 +1,24 @@
 <div>
-    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
-        <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Listado de Buena Fé') }}
+    <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
+        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
+            {{ __('Listado de Buena Fé') }}
         </h2>
         <a href="{{ route('listado-buena-fe') }}"
-            class=" text-white px-4 py-2 rounded flex items-center gap-2 hover:underline"> <svg
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            class="text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
-            Volver</a>
+            Volver
+        </a>
         @if($equipoSeleccionado)
         @adminOrCan('comision|administrador')
-        <button wire:click="exportarJugadores" class="cursor-pointer p-2 hover:underline">Exportar
-
-        </button>
+        <button wire:click="exportarJugadores" class="cursor-pointer p-2 hover:underline">Exportar</button>
         @endadminOrCan
         @endif
     </div>
+
     <!-- Select de equipos -->
     <div class="mb-4 bg-gray-500 p-4 rounded shadow-md">
         <label class="block mb-2 font-semibold text-white">Seleccione un equipo</label>
@@ -48,7 +48,8 @@
                 <tbody>
                     @foreach ($jugadoresEquipos as $jugador)
                     @php
-                    $sancionesJugador = $sanciones->where('jugador_id', $jugador['jugador']->id);
+                    // Usar las sanciones que vienen con el jugador (ya tienen periodo_texto calculado)
+                    $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
                     @endphp
                     <tr class="text-sm text-gray-900 dark:text-white">
                         <td class="border px-2 py-2 text-center">{{ strtoupper($loop->iteration) }}</td>
@@ -71,8 +72,20 @@
                                     Sancionado
                                 </div>
                                 <span class="text-red-900 dark:text-white">
+
+                                    @if($sancion->periodo_texto)
+                                    {{-- Si tiene periodo_texto calculado (sanción por tiempo) --}}
+                                    <strong>{{ $sancion->periodo_texto }}</strong>
+                                    <br>
+                                    <small class="text-xs">
+                                        ({{ \Carbon\Carbon::parse($sancion->fecha_inicio)->format('d/m/Y') }} -
+                                        {{ \Carbon\Carbon::parse($sancion->fecha_fin)->format('d/m/Y') }})
+                                    </small>
+                                    @else
+                                    {{-- Sanción por partidos --}}
                                     {{ $sancion->partidos_sancionados }} fechas, cumple: {{ $sancion->partidos_cumplidos
                                     }}
+                                    @endif
                                 </span>
                             </div>
                             @endforeach
@@ -91,9 +104,8 @@
                         </td>
                         <td class="px-2 py-2 text-right border">
                             @adminOrCan('comision|administrador')
-                            <button type="button" wire:click=" darDeBaja( {{ $jugador['jugador']->id }})" class="text-red-600 hover:underline text-sm ml-2 cursor-pointer dark:bg-white rounded-4xl
-                            dark:p-1 dark:shadow-2xl bg-gray-200 p-1 shadow-lg">
-                                {{-- Icono de eliminar --}}
+                            <button type="button" wire:click="darDeBaja( {{ $jugador['jugador']->id }})" class="text-red-600 hover:underline text-sm ml-2 cursor-pointer dark:bg-white rounded-4xl
+                                dark:p-1 dark:shadow-2xl bg-gray-200 p-1 shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="h-5 w-5 shasow-lg">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -108,19 +120,18 @@
             </table>
         </div>
     </div>
+
     {{-- ========================MOVIL================================================== --}}
     <div class="lg:hidden space-y-4 pt-4">
         @foreach ($jugadoresEquipos as $jugador)
         @php
-        // Se mantiene la lógica para buscar las sanciones si no las cargaste con eager loading
-        $sancionesJugador = $sanciones->where('jugador_id', $jugador['jugador']->id);
-        $jugadorModel = $jugador['jugador']; // Alias para simplificar
+        // Usar las sanciones que vienen con el jugador (ya tienen periodo_texto calculado)
+        $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
+        $jugadorModel = $jugador['jugador'];
         @endphp
 
-        {{-- Tarjeta Individual del Jugador --}}
         <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border border-gray-200 dark:border-gray-700">
 
-            {{-- Sección Superior: Nombre y Documento --}}
             <div class="flex items-center justify-between border-b pb-2 mb-3 dark:border-gray-700">
                 <div class="text-lg font-bold text-gray-900 dark:text-white">
                     {{ strtoupper($jugadorModel->apellido) }}, {{ strtoupper($jugadorModel->nombre) }}
@@ -132,10 +143,7 @@
                 </div>
             </div>
 
-            {{-- Sección de Detalles / Sanciones --}}
             <div class="space-y-2">
-
-                {{-- Sanciones / Habilitación --}}
                 <div class="flex items-start justify-between">
                     <div class="font-semibold text-gray-700 dark:text-gray-300">Estado:</div>
                     <div class="text-right flex-shrink-0 max-w-[60%]">
@@ -143,7 +151,6 @@
                         @foreach ($sancionesJugador as $sancion)
                         <div class="flex items-center gap-1 mb-1 text-xs justify-end">
                             <div class="flex items-center bg-red-500 text-white rounded px-2 py-1" title="Sancionado">
-                                {{-- Icono de Sancionado --}}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                     stroke-linejoin="round" class="lucide lucide-shield-ban mr-1">
@@ -154,13 +161,22 @@
                                 Sancionado
                             </div>
                         </div>
-                        <span class="text-red-900 dark:text-red-400 text-xs block text-right">
+                        <div class="text-red-900 dark:text-red-400 text-xs text-right">
+                            @if($sancion->periodo_texto)
+                            {{-- Si tiene periodo_texto calculado (sanción por tiempo) --}}
+                            <strong class="block">{{ $sancion->periodo_texto }}</strong>
+                            <small class="block mt-1">
+                                {{ \Carbon\Carbon::parse($sancion->fecha_inicio)->format('d/m/Y') }} -
+                                {{ \Carbon\Carbon::parse($sancion->fecha_fin)->format('d/m/Y') }}
+                            </small>
+                            @else
+                            {{-- Sanción por partidos --}}
                             {{ $sancion->partidos_sancionados }} fechas, cumple: {{ $sancion->partidos_cumplidos }}
-                        </span>
+                            @endif
+                        </div>
                         @endforeach
                         @else
                         <div class="inline-flex items-center bg-green-600 text-white rounded px-2 py-1 text-xs">
-                            {{-- Icono de Habilitado --}}
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="lucide lucide-shield-check mr-1">
@@ -173,21 +189,12 @@
                         @endif
                     </div>
                 </div>
-
-                {{-- Posición en la Lista --}}
-                {{-- <div class="flex justify-between items-center text-sm pt-2 border-t dark:border-gray-700">
-                    <div class="text-gray-700 dark:text-gray-300"># Posición:</div>
-                    <div class="font-semibold text-gray-900 dark:text-white">{{ strtoupper($loop->iteration) }}</div>
-                </div> --}}
-
             </div>
 
-            {{-- Sección de Acción (Botón Dar de Baja) --}}
             @adminOrCan('comision|administrador')
             <div class="text-right pt-3 mt-3 border-t dark:border-gray-700">
                 <button type="button" wire:click="darDeBaja({{ $jugadorModel->id }})"
                     class="inline-flex items-center text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm font-semibold p-2 rounded-full transition duration-150 ease-in-out bg-gray-100 dark:bg-gray-700 shadow-md">
-                    {{-- Icono de eliminar --}}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="h-5 w-5 mr-1">
                         <path stroke-linecap="round" stroke-linejoin="round"
