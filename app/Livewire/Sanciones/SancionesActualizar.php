@@ -78,23 +78,28 @@ class SancionesActualizar extends Component
             ->first();
 
         if (!$sancion) {
-            LivewireAlert::title('Sanción no encontrada')
+            LivewireAlert::title('Sanción no encontrada o ya cumplida')
                 ->warning()
                 ->toast()
                 ->show();
             return;
         }
 
-        // Solo suma si no supera los partidos sancionados
-        if ($sancion->partidos_cumplidos < $sancion->partidos_sancionados) {
-            $sancion->increment('partidos_cumplidos');
-            LivewireAlert::title('Se sumó un partido cumplido')
+        // Incrementar partidos cumplidos
+        $sancion->increment('partidos_cumplidos');
+
+        // Verificar si ya cumplió todos los partidos y marcar como cumplida
+        if ($sancion->partidos_cumplidos >= $sancion->partidos_sancionados) {
+            $sancion->cumplida = true;
+            $sancion->save();
+
+            LivewireAlert::title('¡Sanción cumplida completamente!')
                 ->success()
                 ->toast()
                 ->show();
         } else {
-            LivewireAlert::title('Ya cumplió todos los partidos sancionados')
-                ->info()
+            LivewireAlert::title('Se sumó un partido cumplido')
+                ->success()
                 ->toast()
                 ->show();
         }
@@ -102,9 +107,16 @@ class SancionesActualizar extends Component
 
     public function restarFechaJugador($jugadorId)
     {
-        // Buscar la sanción activa del jugador (sin filtrar por campeonato)
+        // Buscar sanciones del jugador (incluyendo las cumplidas por si se necesita restar)
         $sancion = Sanciones::where('jugador_id', $jugadorId)
-            ->where('cumplida', false)
+            ->where(function ($q) {
+                $q->where('cumplida', false)
+                    ->orWhere(function ($q2) {
+                        $q2->where('cumplida', true)
+                            ->whereColumn('partidos_cumplidos', '<=', 'partidos_sancionados');
+                    });
+            })
+            ->orderBy('created_at', 'desc')
             ->first();
 
         if (!$sancion) {
@@ -118,6 +130,13 @@ class SancionesActualizar extends Component
         // Solo resta si tiene al menos 1 partido cumplido
         if ($sancion->partidos_cumplidos > 0) {
             $sancion->decrement('partidos_cumplidos');
+
+            // Si estaba cumplida y ahora tiene menos partidos, marcarla como no cumplida
+            if ($sancion->cumplida && $sancion->partidos_cumplidos < $sancion->partidos_sancionados) {
+                $sancion->cumplida = false;
+                $sancion->save();
+            }
+
             LivewireAlert::title('Se restó un partido cumplido')
                 ->success()
                 ->toast()

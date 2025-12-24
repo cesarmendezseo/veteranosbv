@@ -82,9 +82,11 @@
                                         {{ \Carbon\Carbon::parse($sancion->fecha_fin)->format('d/m/Y') }})
                                     </small>
                                     @else
+
                                     {{-- Sanción por partidos --}}
                                     {{ $sancion->partidos_sancionados }} fechas, cumple: {{ $sancion->partidos_cumplidos
                                     }}
+
                                     @endif
                                 </span>
                             </div>
