@@ -147,7 +147,7 @@ class SancionesActualizar extends Component
     {
 
         $sanciones = Sanciones::query()
-            ->where('campeonato_id', $this->campeonato_id)
+            /* ->where('campeonato_id', $this->campeonato_id) */
             ->when($this->filtroCumplidas === 'cumplidas', fn($q) =>
             $q->whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados'))
             ->when($this->filtroCumplidas === 'pendientes', fn($q) =>
