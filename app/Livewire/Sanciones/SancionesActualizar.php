@@ -145,13 +145,22 @@ class SancionesActualizar extends Component
 
     public function render()
     {
-
         $sanciones = Sanciones::query()
-            /* ->where('campeonato_id', $this->campeonato_id) */
+            ->with('jugador') // Cargar la relación jugador
+            ->when($this->search, function ($q) {
+                $q->whereHas('jugador', function ($query) {
+                    $query->where('nombre', 'like', '%' . $this->search . '%')
+                        ->orWhere('apellido', 'like', '%' . $this->search . '%')
+                        ->orWhere('documento', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->campeonato_id, fn($q) =>
+            $q->where('campeonato_id', $this->campeonato_id))
             ->when($this->filtroCumplidas === 'cumplidas', fn($q) =>
             $q->whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados'))
             ->when($this->filtroCumplidas === 'pendientes', fn($q) =>
             $q->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados'))
+            ->orderBy('created_at', 'desc')
             ->paginate(20);
 
         return view('livewire.sanciones.sanciones-actualizar', [
