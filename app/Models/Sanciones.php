@@ -26,6 +26,9 @@ class Sanciones extends Model
         'etapa_sancion',
         'sancionable_id',
         'sancionable_type',
+        'fecha_inicio',
+        'fecha_fin',
+        'medida',
     ];
 
     public function sancionable()

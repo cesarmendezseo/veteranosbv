@@ -33,7 +33,7 @@ class SancionesVer extends Component
                 'sancionable.equipoLocal',
                 'sancionable.equipoVisitante'
             ])
-            ->where('campeonato_id', $this->campeonato_id)
+            /* ->where('campeonato_id', $this->campeonato_id) */
             ->when($this->search, function ($query) {
                 $query->whereHas('jugador', function ($subQuery) {
                     $subQuery->where(function ($q) {

@@ -187,6 +187,7 @@ Route::middleware(['auth'])->group(function () {
     //==============SANCIONES========================
     Route::get('/sanciones', SancionesIndex::class)->name('sanciones.index');
     Route::get('sanciones/{campeonatoId}/ver', SancionesVer::class)->name('sanciones.ver');
+    Route::get('sanciones/mostrar', \App\Livewire\Sanciones\SancionesMostrar::class)->name('sanciones.mostrar');
     Route::get('sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class)->name('sanciones.actualizar');
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/sanciones/{campeonatoId}/crear', SancionesCrear::class)->name('sanciones.crearSanciones');
