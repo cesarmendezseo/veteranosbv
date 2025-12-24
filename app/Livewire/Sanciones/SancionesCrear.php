@@ -223,7 +223,23 @@ class SancionesCrear extends Component
                 ->text('Sanción registrada correctamente.')
                 ->success()
                 ->show();
-            $this->reset(['jugador_id', 'nombreJugador', 'partido_id', 'motivo', 'observacion', 'partidoJugadorInfo']);
+            $this->reset([
+                'jugador_id',
+                'nombreJugador',
+                'buscarJugador',      // <--- Importante
+                'jugadores',         // <--- Importante (limpia la lista de búsqueda)
+                'jugadorSeleccionado',
+                'partido_id',
+                'fechaBuscada',      // <--- Importante (resetea el select de fecha/fase)
+                'motivo',
+                'observacion',
+                'partidoJugadorInfo',
+                'partidos_sancionados', // <--- Volver a 1 por defecto
+                'fecha_fin'
+            ]);
+
+            // Opcional: Si quieres que el tipo de medida vuelva a 'partidos'
+            $this->tipo_medida = 'partidos';
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Obtenemos el primer mensaje de error de la validación
             $primerError = collect($e->errors())->flatten()->first();
