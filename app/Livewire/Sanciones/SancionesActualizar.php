@@ -71,11 +71,10 @@ class SancionesActualizar extends Component
     }
     public function sumarFechaJugador($jugadorId)
     {
-
-
-        // Buscar la sanción del jugador dentro del campeonato actual
-        $sancion = Sanciones::where('campeonato_id', $this->campeonato_id)
-            ->where('jugador_id', $jugadorId)
+        // Buscar la sanción activa del jugador (sin filtrar por campeonato)
+        $sancion = Sanciones::where('jugador_id', $jugadorId)
+            ->where('cumplida', false)
+            ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
             ->first();
 
         if (!$sancion) {
@@ -103,9 +102,9 @@ class SancionesActualizar extends Component
 
     public function restarFechaJugador($jugadorId)
     {
-        // Buscar la sanción del jugador dentro del campeonato actual
-        $sancion = Sanciones::where('campeonato_id', $this->campeonato_id)
-            ->where('jugador_id', $jugadorId)
+        // Buscar la sanción activa del jugador (sin filtrar por campeonato)
+        $sancion = Sanciones::where('jugador_id', $jugadorId)
+            ->where('cumplida', false)
             ->first();
 
         if (!$sancion) {
