@@ -132,7 +132,7 @@ class CampeonatoIndex extends Component
                         ->orWhereYear('created_at', $this->search); // búsqueda por año
                 });
             })
-            ->orderBy('nombre')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('livewire.campeonato.campeonato-index', [

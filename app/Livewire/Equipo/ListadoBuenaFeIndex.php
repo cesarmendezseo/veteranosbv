@@ -23,14 +23,15 @@ class ListadoBuenaFeIndex extends Component
     public function render()
     {
         $campeonatos = Campeonato::query()
+            ->where('finalizado', 0) // 🔒 filtro fijo
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('nombre', 'like', '%' . $this->search . '%')
                         ->orWhereYear('created_at', $this->search);
                 });
             })
-            ->orderBy('nombre')
-            ->paginate(10); // ⬅️ 3. APLICAR PAGINACIÓN
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('livewire.equipo.listado-buena-fe-index', [
             'campeonatos' => $campeonatos,

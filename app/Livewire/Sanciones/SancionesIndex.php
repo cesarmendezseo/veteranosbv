@@ -34,7 +34,7 @@ class SancionesIndex extends Component
                         ->orWhereYear('created_at', $this->search);
                 });
             })
-            ->orderBy('nombre')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('livewire.sanciones.sanciones-index', [
