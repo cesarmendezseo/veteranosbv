@@ -19,7 +19,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 
-class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithEvents
+class ListadoBuenaFeExport implements
+    FromCollection,
+    WithHeadings,
+    WithMapping,
+    WithEvents,
+    ShouldAutoSize
 {
     protected $equipoId;
     protected $equipoNombre;
@@ -67,30 +72,32 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
     {
         $jugador = $registro->jugador;
 
-        // Buscar TODAS las sanciones activas del jugador (sin filtrar por campeonato)
         $sancionActiva = Sanciones::where('jugador_id', $jugador->id)
             ->where('cumplida', false)
             ->first();
 
         $leyenda = '';
+        $firma = '';
 
         if ($sancionActiva) {
-            // Verificar si tiene fecha_inicio y fecha_fin
+            // Marcar como SUSPENDIDO en la columna de firmas
+            $firma = 'SUSPENDIDO';
+
+            // 🟥 SANCIÓN POR FECHAS
             if ($sancionActiva->fecha_inicio && $sancionActiva->fecha_fin) {
-                // Calcular período de tiempo
                 $leyenda = $this->calcularPeriodoSancion(
                     $sancionActiva->fecha_inicio,
                     $sancionActiva->fecha_fin
                 );
             } else {
-                // Es sanción por partidos
+                // 🟨 SANCIÓN POR PARTIDOS
                 $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
 
                 if (str_contains($motivo, 'amarilla')) {
                     $leyenda = 'PAGA';
                 } else {
-                    $partidosPendientes = $sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos;
-                    $leyenda = $partidosPendientes . ' Fechas';
+                    $pendientes = $sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos;
+                    $leyenda = $pendientes . ' FECHAS';
                 }
             }
         }
@@ -101,10 +108,10 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
             strtoupper($jugador->documento ?? ''),
             strtoupper($jugador->apellido ?? ''),
             strtoupper($jugador->nombre ?? ''),
+            strtoupper($firma),      // 👈 FIRMA (SUSPENDIDO si tiene sanción)
             '',
             '',
-            '',
-            strtoupper($leyenda)
+            strtoupper($leyenda),    // 👈 SANCIÓN
         ];
     }
 
@@ -352,7 +359,7 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
 
                 $sheet->getStyle('C5:C' . $sheet->getHighestRow())->getAlignment()->setHorizontal('center');
 
-                // Pintar jugadores sancionados de rojo
+                // Pintar jugadores sancionados y la palabra SUSPENDIDO en rojo
                 $jugadores = $this->collection();
                 $rowOffset = 5;
                 $alturaFilaSancion = 20;
@@ -362,18 +369,35 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                     $row = $rowOffset + $index + 1;
                     $sheet->getRowDimension($row)->setRowHeight($alturaFilaNormal);
 
-                    // Buscar sanción activa (sin filtrar por campeonato)
+                    // Buscar sanción activa
                     $sancion = Sanciones::where('jugador_id', $jug->jugador->id)
                         ->where('cumplida', false)
                         ->first();
 
                     if ($sancion) {
+                        // Pintar toda la fila en rojo
                         $sheet->getStyle("A{$row}:I{$row}")->applyFromArray([
                             'font' => [
                                 'color' => ['rgb' => 'FF0000'],
                                 'bold' => true,
                             ]
                         ]);
+
+                        // Pintar específicamente la celda de FIRMA (columna F) en rojo con fondo
+                        $sheet->getStyle("F{$row}")->applyFromArray([
+                            'font' => [
+                                'color' => ['rgb' => 'FFFFFF'],
+                                'bold' => true,
+                            ],
+                            'fill' => [
+                                'fillType' => 'solid',
+                                'startColor' => ['rgb' => 'FF0000']
+                            ],
+                            'alignment' => [
+                                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                            ]
+                        ]);
+
                         $sheet->getRowDimension($row)->setRowHeight($alturaFilaSancion);
                     }
                 }
@@ -388,15 +412,18 @@ class ListadoBuenaFeExport implements FromCollection, WithHeadings, WithMapping,
                 $drawing->setOffsetY(5);
                 $drawing->setWorksheet($sheet);
 
+                // Configurar anchos de columnas
                 $sheet->getColumnDimension('A')->setWidth(4);
                 $sheet->getColumnDimension('B')->setWidth(5);
+                $sheet->getColumnDimension('C')->setAutoSize(false)->setWidth(10);
                 $sheet->getColumnDimension('D')->setWidth(20);
                 $sheet->getColumnDimension('E')->setWidth(20);
-                $sheet->getColumnDimension('G')->setWidth(5);
-                $sheet->getColumnDimension('H')->setWidth(5);
-                $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(20);
-                $sheet->getColumnDimension('C')->setAutoSize(false)->setWidth(10);
                 $sheet->getColumnDimension('F')->setAutoSize(false)->setWidth(15);
+
+                // 🔥 Columnas G, H e I con autosize
+                $sheet->getColumnDimension('G')->setAutoSize(true);
+                $sheet->getColumnDimension('H')->setAutoSize(true);
+                $sheet->getColumnDimension('I')->setAutoSize(true);
 
                 $sheet->calculateColumnWidths();
             },
