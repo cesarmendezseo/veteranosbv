@@ -3,6 +3,7 @@
 namespace App\Livewire\AltasBajas;
 
 use App\Exports\AltasBajasExport;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -10,39 +11,49 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Historial extends Component
 {
-
     use WithPagination;
 
     protected $paginationTheme = 'tailwind';
 
     // 🔎 FILTROS
-    public $tipo = 'altas'; // altas | bajas
+    public $tipo = 'altas';
     public $campeonatoFiltro = null;
     public $fechaDesde = null;
     public $fechaHasta = null;
+
+    public $aplicarFiltros = false;
 
     // Para selects
     public $campeonatos = [];
 
     public function mount()
     {
-        // Cargar campeonatos para el filtro
         $this->campeonatos = DB::table('campeonatos')
             ->orderBy('nombre')
             ->get();
     }
 
-    // Resetear paginación al cambiar filtros
-    public function updated($property)
+    // 🟢 BOTÓN FILTRAR
+    public function filtrar()
     {
-        if (in_array($property, [
+
+        $this->aplicarFiltros = true;
+        $this->resetPage();
+    }
+
+    // 🔴 BOTÓN LIMPIAR
+    public function limpiarFiltros()
+    {
+        $this->reset([
             'tipo',
             'campeonatoFiltro',
             'fechaDesde',
-            'fechaHasta'
-        ])) {
-            $this->resetPage();
-        }
+            'fechaHasta',
+            'aplicarFiltros',
+        ]);
+
+        $this->tipo = 'altas';
+        $this->resetPage();
     }
 
     public function exportarExcel()
@@ -57,7 +68,6 @@ class Historial extends Component
             'Altas_Bajas.xlsx'
         );
     }
-
 
     public function render()
     {
@@ -75,45 +85,36 @@ class Historial extends Component
                 'cje.fecha_baja',
             ])
 
-            // 🔥 ALTAS o BAJAS
-            ->when(
-                $this->tipo === 'altas',
-                fn($q) => $q->whereNotNull('cje.fecha_alta')
-                    ->whereNull('cje.fecha_baja')
-            )
-            ->when(
-                $this->tipo === 'bajas',
-                fn($q) => $q->whereNotNull('cje.fecha_baja')
-            )
+            ->when($this->aplicarFiltros, function ($q) {
 
-            // 🎯 FILTROS
-            ->when(
-                $this->campeonatoFiltro,
-                fn($q) =>
-                $q->where('cje.campeonato_id', $this->campeonatoFiltro)
-            )
-            ->when(
-                $this->fechaDesde,
-                fn($q) =>
-                $q->whereDate(
-                    $this->tipo === 'altas'
+                // 🔥 ALTAS / BAJAS
+                if ($this->tipo === 'altas') {
+                    $q->whereNotNull('cje.fecha_alta');
+                } else {
+                    $q->whereNotNull('cje.fecha_baja');
+                }
+
+                // 🎯 CAMPEONATO
+                if ($this->campeonatoFiltro) {
+                    $q->where('cje.campeonato_id', $this->campeonatoFiltro);
+                }
+
+                // 📅 FECHAS
+                if ($this->fechaDesde && $this->fechaHasta) {
+
+                    $columnaFecha = $this->tipo === 'altas'
                         ? 'cje.fecha_alta'
-                        : 'cje.fecha_baja',
-                    '>=',
-                    $this->fechaDesde
-                )
-            )
-            ->when(
-                $this->fechaHasta,
-                fn($q) =>
-                $q->whereDate(
-                    $this->tipo === 'altas'
-                        ? 'cje.fecha_alta'
-                        : 'cje.fecha_baja',
-                    '<=',
-                    $this->fechaHasta
-                )
-            )
+                        : 'cje.fecha_baja';
+
+                    $q->whereBetween(
+                        DB::raw("DATE($columnaFecha)"),
+                        [
+                            Carbon::parse($this->fechaDesde)->toDateString(),
+                            Carbon::parse($this->fechaHasta)->toDateString(),
+                        ]
+                    );
+                }
+            })
 
             ->orderByDesc(
                 $this->tipo === 'altas'
