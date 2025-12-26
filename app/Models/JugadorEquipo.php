@@ -28,4 +28,17 @@ class JugadorEquipo extends Model
             ->withPivot('fecha_alta', 'fecha_baja')
             ->withTimestamps();
     }
+    protected function nombre(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => strtoupper($value),
+        );
+    }
+
+    protected function apellido(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => strtoupper($value),
+        );
+    }
 }

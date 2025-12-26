@@ -1,7 +1,7 @@
 <div>
     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10"">
         <h2 class=" font-semibold text-xl text-gray-100 leading-tight">
-        {{ __('Estadistica de Jugadores') }}
+        {{ __('Ver Estadistica de Jugadores ') }}
         </h2>
 
         <div class="relative z-0 w-55  group">
@@ -20,7 +20,10 @@
     <div class="hidden grid grid-cols-3 sm:flex sm:flex-wrap gap-2 mt-2">
         {{-- Goles --}}
         <button type="button" wire:click="$set('vistaActual', 'goleadores')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm 
+        {{ $vistaActual === 'goleadores' 
+            ? 'bg-blue-600 text-white border-blue-700 hover:bg-blue-700' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:mr-2" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path d="M11.1 7.1a16.55 16.55 0 0 1 10.9 4" />
@@ -35,8 +38,11 @@
 
         {{-- Amarilla --}}
         <button type="button" wire:click="$set('vistaActual', 'amarillas')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-            <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm
+        {{ $vistaActual === 'amarillas' 
+            ? 'bg-yellow-500 text-white border-yellow-600 hover:bg-yellow-600' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
+            <svg class="w-5 h-5" fill="{{ $vistaActual === 'amarillas' ? 'white' : 'yellow' }}" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                     d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                     clip-rule="evenodd" />
@@ -46,14 +52,19 @@
 
         {{-- Doble Amarilla --}}
         <button type="button" wire:click="$set('vistaActual', 'dobleAmarillas')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm
+        {{ $vistaActual === 'dobleAmarillas' 
+            ? 'bg-yellow-500 text-white border-yellow-600 hover:bg-yellow-600' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
             <div class="flex">
-                <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="{{ $vistaActual === 'dobleAmarillas' ? 'white' : 'yellow' }}"
+                    viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
                 </svg>
-                <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="{{ $vistaActual === 'dobleAmarillas' ? 'white' : 'yellow' }}"
+                    viewBox="0 0 24 24">
                     <path fill-rule="evenodd"
                         d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                         clip-rule="evenodd" />
@@ -64,8 +75,11 @@
 
         {{-- Roja --}}
         <button type="button" wire:click="$set('vistaActual', 'rojas')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-            <svg class="w-5 h-5" fill="red" viewBox="0 0 24 24">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm
+        {{ $vistaActual === 'rojas' 
+            ? 'bg-red-600 text-white border-red-700 hover:bg-red-700' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
+            <svg class="w-5 h-5" fill="{{ $vistaActual === 'rojas' ? 'white' : 'red' }}" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                     d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                     clip-rule="evenodd" />
@@ -75,17 +89,24 @@
 
         {{-- 5 Amarillas --}}
         <button type="button" wire:click="$set('vistaActual', '5amarillas')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
-            <svg class="w-5 h-5" fill="yellow" viewBox="0 0 24 24">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm
+        {{ $vistaActual === '5amarillas' 
+            ? 'bg-yellow-500 text-white border-yellow-600 hover:bg-yellow-600' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
+            <svg class="w-5 h-5" fill="{{ $vistaActual === '5amarillas' ? 'white' : 'yellow' }}" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                     d="M4 4c0-.975.718-2 1.875-2h12.25C19.282 2 20 3.025 20 4v16c0 .975-.718 2-1.875 2H5.875C4.718 22 4 20.975 4 20V4Zm7 13a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2h-2Z"
                     clip-rule="evenodd" />
             </svg>
             <span class="mt-1 sm:mt-0 text-center">5 Amarillas</span>
         </button>
+
         {{-- Sanciones --}}
         <button type="button" wire:click="$set('vistaActual', 'sanciones')"
-            class="inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium bg-white border border-gray-200 rounded-md shadow-sm hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700">
+            class="cursor-pointer inline-flex flex-col items-center justify-center w-16 sm:w-auto px-2 py-2 text-xs sm:text-sm font-medium border rounded-md shadow-sm
+        {{ $vistaActual === 'sanciones' 
+            ? 'bg-purple-600 text-white border-purple-700 hover:bg-purple-700' 
+            : 'bg-white border-gray-200 hover:bg-gray-200 hover:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700' }}">
             <div class="flex flex-col items-center space-y-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

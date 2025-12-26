@@ -68,4 +68,18 @@ class Jugador extends Model
         return $this->belongsToMany(Equipo::class, 'campeonato_jugador_equipo', 'jugador_id', 'equipo_id')
             ->withPivot('campeonato_id');
     }
+
+    protected function nombre(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => strtoupper($value),
+        );
+    }
+
+    protected function apellido(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => strtoupper($value),
+        );
+    }
 }

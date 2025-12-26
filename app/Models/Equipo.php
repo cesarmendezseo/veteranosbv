@@ -82,4 +82,11 @@ class Equipo extends Model
     {
         return $this->hasMany(Encuentro::class, 'equipo_visitante_id');
     }
+
+    protected function nombre(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn($value) => strtoupper($value),
+        );
+    }
 }

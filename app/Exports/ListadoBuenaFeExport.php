@@ -167,7 +167,7 @@ class ListadoBuenaFeExport implements
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing();
                 $drawing->setName('Logo');
                 $drawing->setPath(public_path('images/logo.jpeg'));
-                $drawing->setHeight(50);
+                $drawing->setHeight(60);
                 $sheet->getHeaderFooter()->addImage($drawing, HeaderFooter::IMAGE_HEADER_LEFT);
 
                 $sheet->insertNewRowBefore(1, 4);
