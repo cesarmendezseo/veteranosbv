@@ -205,6 +205,7 @@ Route::middleware(['auth'])->group(function () {
     //==============ALTAS Y BAJAS========================
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');
+        Route::get('/altas-bajas/historial', \App\Livewire\AltasBajas\Historial::class)->name('altas-bajas.historial');
     });
     //==============FIN ALTAS Y BAJAS========================
     //==============CONFIGURACION========================

@@ -4,9 +4,9 @@
         {{ __('Historial de Jugadores') }}
         </h2>
         <div>
-            {{-- <a href="{{ route('copiar-listado-buena-fe') }}" class="cursor-pointer hover:underline">Clonar
-                Listado</a>
-            --}}</div>
+            <a href="{{ route('altas-bajas.historial') }}" class="cursor-pointer hover:underline">Historial por
+                Fechas</a>
+        </div>
     </div>
     <input wire:model.lazy="dni" wire:keydown.enter="buscar" type="text" placeholder="Buscar por DNI"
         class="mt-2 flex-grow bg-gray-50 mb-2 border border-gray-500 text-gray-900  text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-500 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
