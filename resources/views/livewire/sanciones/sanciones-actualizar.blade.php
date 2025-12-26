@@ -71,7 +71,7 @@
                     @adminOrCan('administrador')
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">
                         <div class="flex space-x-2">
-                            <button wire:click="sumarFechaJugador({{ $jug->jugador_id }})"
+                            <button wire:click="sumarFechaJugador({{ $jug->id }})"
                                 class="cursor-pointer p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -84,7 +84,7 @@
 
                             </button>
 
-                            <button wire:click="restarFechaJugador({{ $jug->jugador_id }})"
+                            <button wire:click="restarFechaJugador({{ $jug->id }})"
                                 class="cursor-pointer p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-md transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -127,7 +127,7 @@
                     @adminOrCan('administrador')
                     <td>
                         <div class="flex space-x-2">
-                            <button wire:click="sumarFechaJugador({{ $jug->jugador_id }})"
+                            <button wire:click="sumarFechaJugador({{ $jug->id }})"
                                 class="cursor-pointer p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -140,7 +140,7 @@
 
                             </button>
 
-                            <button wire:click="restarFechaJugador({{ $jug->jugador_id }})"
+                            <button wire:click="restarFechaJugador({{ $jug->id }})"
                                 class="cursor-pointer p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-md transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
