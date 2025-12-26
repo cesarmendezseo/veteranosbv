@@ -2,9 +2,11 @@
 
 namespace App\Livewire\AltasBajas;
 
+use App\Exports\AltasBajasExport;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Historial extends Component
 {
@@ -41,6 +43,19 @@ class Historial extends Component
         ])) {
             $this->resetPage();
         }
+    }
+
+    public function exportarExcel()
+    {
+        return Excel::download(
+            new AltasBajasExport(
+                $this->tipo,
+                $this->campeonatoFiltro,
+                $this->fechaDesde,
+                $this->fechaHasta
+            ),
+            'Altas_Bajas.xlsx'
+        );
     }
 
 
