@@ -167,7 +167,7 @@ class ListadoBuenaFeExport implements
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing();
                 $drawing->setName('Logo');
                 $drawing->setPath(public_path('images/logo.jpeg'));
-                $drawing->setHeight(36);
+                $drawing->setHeight(50);
                 $sheet->getHeaderFooter()->addImage($drawing, HeaderFooter::IMAGE_HEADER_LEFT);
 
                 $sheet->insertNewRowBefore(1, 4);
@@ -257,7 +257,7 @@ class ListadoBuenaFeExport implements
                 $sheet->getStyle('A5:I5')->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'color' => ['rgb' => 'FFFFFF']
+                        'color' => ['rgb' => '000000']
                     ],
                     'fill' => [
                         'fillType' => 'solid',
@@ -314,7 +314,7 @@ class ListadoBuenaFeExport implements
                 $sheet->setCellValue("I{$subtitulosRow}", 'Observación');
 
                 $sheet->getStyle("A{$subtitulosRow}:I{$subtitulosRow}")->applyFromArray([
-                    'font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => 'FFFFFF']],
+                    'font' => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
                     'alignment' => [
                         'horizontal' => Alignment::HORIZONTAL_CENTER,
                         'vertical' => Alignment::VERTICAL_CENTER,
