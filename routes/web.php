@@ -7,6 +7,7 @@ use App\Http\Controllers\JugadoresController;
 use App\Http\Controllers\LogoEquipoController;
 use App\Imports\JugadoresImport;
 use App\Livewire\Campeonato\CampeonatoCrear;
+use App\Livewire\Campeonato\CampeonatoCrear2;
 use App\Livewire\Campeonato\CampeonatoEditar;
 use App\Livewire\Campeonato\CampeonatoIndex;
 use App\Livewire\Canchas\CanchasCrear;
@@ -15,6 +16,7 @@ use App\Livewire\Canchas\CanchasIndex;
 use App\Livewire\Categoria\CategoriaCrear;
 use App\Livewire\Categoria\CategoriaEdit;
 use App\Livewire\Config\AsignarEquipos;
+use App\Livewire\Config\ConfigCampeonato;
 use App\Livewire\Config\ConfigIndex;
 use App\Livewire\Config\CopiarListadoBuenaFe;
 use App\Livewire\Config\PanelConfiguracion;
@@ -139,6 +141,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/campeonato', CampeonatoIndex::class)->name('campeonato.index');
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/campeonato/crear', CampeonatoCrear::class)->name('campeonato.crear');
+        Route::get('/campeonato/crea2', CampeonatoCrear2::class)->name('campeonato.crear2');
         Route::get('/campeonato/{campeonatoId}/editar', CampeonatoEditar::class)->name('campeonato.editar');
     });
     //==============FIN CAMPEONATO========================
@@ -219,6 +222,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'index'])->name('cargar.imagenPrincipal');
         Route::post('/configuracion/subir-imagen-principal', [imagenPrincipal::class, 'subirImagen'])
             ->name('configuracion.subir-imagen-principal');
+        Route::get('/configuracion/config-campeonato/{id}', ConfigCampeonato::class)->name('config.campeonato');
         // Muestra el formulario de importación
         Route::get('jugadores/import', [JugadoresController::class, 'showImportForm'])->name('jugadores.form');
 

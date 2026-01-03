@@ -29,19 +29,15 @@ class SancionesActualizar extends Component
      * ========================================================= */
     public function sumarFecha()
     {
-        if (!$this->campeonato_id) {
-            LivewireAlert::title('Selecciona un campeonato activo')
-                ->warning()->toast()->show();
-            return;
-        }
 
-        // 1️⃣ Sumar partidos cumplidos (sin pasarse)
-        Sanciones::where('campeonato_id', $this->campeonato_id)
+
+        // 1️⃣ Incrementamos 1 partido cumplido a TODAS las sanciones que aún no terminaron
+        Sanciones::where('cumplida', false)
             ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
             ->increment('partidos_cumplidos');
 
-        // 2️⃣ Marcar como cumplidas las que llegaron al tope
-        Sanciones::where('campeonato_id', $this->campeonato_id)
+        // 2️⃣ Marcamos como 'cumplida' cualquier sanción que, tras el incremento, alcanzó o superó el tope
+        Sanciones::where('cumplida', false)
             ->whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados')
             ->update(['cumplida' => true]);
 
@@ -54,22 +50,18 @@ class SancionesActualizar extends Component
      * ========================================================= */
     public function restarFecha()
     {
-        if (!$this->campeonato_id) {
-            LivewireAlert::title('Selecciona un campeonato activo')
-                ->warning()->toast()->show();
-            return;
-        }
 
-        // 1️⃣ Restar partidos cumplidos (sin bajar de 0)
+
+        // 1️⃣ Restar 1 partido cumplido a TODAS las sanciones que tengan al menos 1 cumplido
         DB::statement("
-            UPDATE sanciones
-            SET partidos_cumplidos = partidos_cumplidos - 1
-            WHERE campeonato_id = ?
-              AND partidos_cumplidos > 0
-        ", [$this->campeonato_id]);
+    UPDATE sanciones 
+    SET partidos_cumplidos = partidos_cumplidos - 1 
+    WHERE partidos_cumplidos > 0 
+      AND cumplida = 1
+");
 
-        // 2️⃣ Marcar como NO cumplidas las que ya no alcanzan el tope
-        Sanciones::where('campeonato_id', $this->campeonato_id)
+        // 2️⃣ Marcar como NO cumplidas las que, al restar, ya no alcanzan el tope (Global)
+        Sanciones::where('cumplida', true)
             ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
             ->update(['cumplida' => false]);
 

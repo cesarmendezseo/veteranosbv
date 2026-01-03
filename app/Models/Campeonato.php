@@ -5,6 +5,7 @@ namespace App\Models;
 use App\NormalizesAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Campeonato extends Model
 {
@@ -27,6 +28,7 @@ class Campeonato extends Model
         'total_equipos',
         'status',
         'config_sancion',
+        'fase_actual_id',
     ];
     protected $casts = [
         'puntos_ganado' => 'integer',
@@ -61,5 +63,14 @@ class Campeonato extends Model
     public function eliminatoria()
     {
         return $this->hasMany(Eliminatoria::class);
+    }
+    public function fases(): HasMany
+    {
+        return $this->hasMany(FaseCampeonato::class)->orderBy('orden');
+    }
+
+    public function faseActual()
+    {
+        return $this->belongsTo(FaseCampeonato::class, 'fase_actual_id');
     }
 }

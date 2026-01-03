@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Encuentro extends Model
 {
@@ -23,6 +24,7 @@ class Encuentro extends Model
         'goles_local',
         'goles_visitante',
         'estado',
+        'fase_id',
 
     ];
     protected $table = 'encuentros';
@@ -66,5 +68,9 @@ class Encuentro extends Model
     public function sanciones()
     {
         return $this->morphMany(Sanciones::class, 'sancionable');
+    }
+    public function fase(): BelongsTo
+    {
+        return $this->belongsTo(FaseCampeonato::class, 'fase_id');
     }
 }

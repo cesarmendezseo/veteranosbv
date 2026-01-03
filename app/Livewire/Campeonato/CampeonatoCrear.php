@@ -181,23 +181,7 @@ class CampeonatoCrear extends Component
                     'cantidad_equipos' => $this->cantidad_equipos_grupo,
                 ]);
             }
-        } /* elseif ($isTodosContraTodos) {
-            // Lógica existente para "Todos contra todos" (un solo grupo)
-            Campeonato::create([
-                'campeonato_id' => $campeonato->id,
-                'nombre' => 'Todos contra todos',
-                'cantidad_equipos' => $this->total_equipos ?? 0,
-            ]);
-            // ¡NUEVO! Crear un grupo/llave para la eliminación
-        } elseif ($isEliminacion) {
-
-            Grupo::create([
-                'campeonato_id' => $campeonato->id,
-                'nombre' => 'Llave de Eliminación',
-                'cantidad_equipos' => $this->total_equipos ?? 0,
-                // Puedes añadir un campo 'es_llave_eliminacion' en el modelo Grupo si lo necesitas
-            ]);
-        } */
+        }
 
         // ... Alerta de éxito y redirección
         LivewireAlert::title('Perfecto!!')
