@@ -11,7 +11,6 @@ class Encuentro extends Model
     use HasFactory;
 
 
-
     protected $fillable = [
         'fecha',
         'hora',
@@ -21,11 +20,11 @@ class Encuentro extends Model
         'fecha_encuentro',
         'equipo_local_id',
         'equipo_visitante_id',
-        'goles_local',
-        'goles_visitante',
+        'gol_local',
+        'gol_visitante',
         'estado',
         'fase_id',
-
+        'fase',
     ];
     protected $table = 'encuentros';
 
@@ -69,6 +68,7 @@ class Encuentro extends Model
     {
         return $this->morphMany(Sanciones::class, 'sancionable');
     }
+
     public function fase(): BelongsTo
     {
         return $this->belongsTo(FaseCampeonato::class, 'fase_id');

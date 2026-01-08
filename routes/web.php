@@ -167,6 +167,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/fixture/{estadioId}/editar', FixtureEditar::class)->name('fixture.editar');
         Route::get('/fixture/{campeonatoId}/eliminatorias', Eliminatoria::class)->name('fixture.eliminatoria');
         Route::get('/fixture/{campeonatoId}/eliminatorias/editar', EliminatoriaVer::class)->name('fixture.eliminatoria.ver');
+        Route::get(
+            '/campeonatos/{campeonato}/fases/equipos',
+            \App\Livewire\Fixture\EquiposClasificadosPorFase::class
+        )->name('fixture.equipos.clasificados.por.fase');
     });
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/fixture/automatico', \App\Livewire\Fixture\FixtureAutomatico::class)->name('fixture.automatico');

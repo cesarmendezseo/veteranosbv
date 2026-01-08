@@ -123,12 +123,22 @@ class FixtureVer extends Component
             // Guardar el encuentro
             $encuentro->save();
 
+            //
+            // Verificar si se debe avanzar de fase
+            //$campeonato = Campeonato::find($encuentro->campeonato_id);
+            // 🔥 AVANCE AUTOMÁTICO DE FASE
+            $campeonato = Campeonato::find($encuentro->campeonato_id);
+
+            if ($campeonato) {
+                $campeonato->avanzarFase();
+            }
 
 
-            LivewireAlert::title('ok')
+
+            /*  LivewireAlert::title('ok')
                 ->text('Goles guardados y estado actualizado a "Jugado"')
                 ->success()
-                ->show();
+                ->show(); */
         }
     }
     // ==================================0EDITAR ENCUENTRO========================================
@@ -145,6 +155,8 @@ class FixtureVer extends Component
 
         $this->showEditModal = true;
     }
+
+    //==================================0GUARDAR EDICION ENCUENTRO========================================
 
     public function guardarEdicion()
     {
@@ -250,6 +262,29 @@ class FixtureVer extends Component
             ->success()
             ->show();
     }
+
+    public function avanzarFaseSiCorresponde()
+    {
+
+        $campeonato = Campeonato::find($this->campeonatoId);
+
+
+        if (!$campeonato) {
+            LivewireAlert::title('Error')
+                ->text('Campeonato no encontrado')
+                ->error()
+                ->show();
+            return;
+        }
+
+        $campeonato->avanzarFase();
+
+        LivewireAlert::title('OK')
+            ->text('Se verificó y avanzó de fase si correspondía')
+            ->success()
+            ->show();
+    }
+    /* ******************************************** */
 
 
     //============================

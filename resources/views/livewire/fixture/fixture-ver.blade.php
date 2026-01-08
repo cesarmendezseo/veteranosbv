@@ -1,10 +1,12 @@
 <div>
 
+
     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
         <!-- Título -->
         <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Fixture Ver') }}
+            {{ __('Fixture Ver ') }}
         </h2>
+
 
         <!-- Botones -->
         <div class="flex gap-2">
@@ -45,6 +47,7 @@
                         <path d="m7 10 5 5 5-5" />
                     </svg>
                 </button>
+
                 @endadminOrCan
 
             </div>
@@ -100,6 +103,12 @@
                         <path d="m7 10 5 5 5-5" />
                     </svg>
                     Exportar Todo
+                </button>
+                <button wire:click="avanzarFaseSiCorresponde"
+                    class="cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
+                    <!-- icono exportar -->
+                    Avanzar Fase
+
                 </button>
                 @endadminOrCan
             </div>
@@ -464,6 +473,7 @@
                 </div>
             </div>
         </div>
+
     </div>
     @push('js')
     <script>

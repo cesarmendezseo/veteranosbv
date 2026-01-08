@@ -89,4 +89,19 @@ class Equipo extends Model
             get: fn($value) => strtoupper($value),
         );
     }
+
+    public function fases()
+    {
+        return $this->belongsToMany(
+            FaseCampeonato::class,
+            'equipos_fase',
+            'equipo_id',
+            'fase_id'
+        )
+            ->withPivot([
+                'fase_origen_id',
+                'posicion_origen'
+            ])
+            ->withTimestamps();
+    }
 }
