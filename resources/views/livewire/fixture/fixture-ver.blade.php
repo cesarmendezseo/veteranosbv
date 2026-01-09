@@ -104,12 +104,7 @@
                     </svg>
                     Exportar Todo
                 </button>
-                <button wire:click="avanzarFaseSiCorresponde"
-                    class="cursor-pointer px-3 py-2 text-white rounded disabled:opacity-50 flex items-center gap-1">
-                    <!-- icono exportar -->
-                    Avanzar Fase
 
-                </button>
                 @endadminOrCan
             </div>
         </div>
@@ -125,6 +120,18 @@
             <input wire:model.live="fechaFiltro" type="date"
                 class="hidden md:block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Fecha encuentro" />
+
+
+            <select wire:model.live="faseFiltro"
+                class="cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                <option value="">-- Todas las Fases --</option>
+                @foreach ($fases as $fase)
+                <option value="{{ $fase->id }}">{{ $fase->nombre }}</option>
+
+                @endforeach
+
+            </select>
 
             <!-- Fecha Encuentro -->
             <select wire:model.live="jornadaFiltro" id="fecha_jornada"
@@ -210,8 +217,8 @@
                         <tr>
                             <th class="px-2 sm:px-4 py-2 text-center">Fecha</th>
 
-                            <th class="px-2 sm:px-4 py-2 text-center">Fecha Jornada</th>
-
+                            <th class="px-2 sm:px-4 py-2 text-center"> Fase</th>
+                            <th class="px-2 sm:px-4 py-2 text-center"> Jornada</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Local</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Gol</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Gol</th>
@@ -227,9 +234,11 @@
                             <td class="px-2 sm:px-4 py-2 text-center">
                                 {{ \Carbon\Carbon::parse($encuentro->fecha)->format('d/m/Y') }}
                             </td>
-                            {{-- <td class="px-2 sm:px-4 py-2 text-center">
-                                {{ \Carbon\Carbon::parse($encuentro->hora)->format('H:i') }}
-                            </td> --}}
+                            <td class="px-2 sm:px-4 py-2 text-center">
+                                <span class="px-2 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                                    {{ $encuentro->fase_campeonato->nombre ?? $encuentro->fase }}
+                                </span>
+
                             <td
                                 class="px-2 sm:px-4 py-2 text-center text-sm text-gray-800 font-semibold  dark:text-gray-200">
                                 {{ $encuentro->fecha_encuentro }}

@@ -92,107 +92,167 @@ class FixtureAutomatico extends Component
 
     private function generarFixture($campeonato, $modo = 'normal', $porGrupos = false)
     {
+        if (!$campeonato->faseActual) {
+            throw new \Exception('El campeonato no tiene fase actual asignada');
+        }
 
-        $canchas = [Canchas::first()->id];
-        $horarios = ['14:00', '15:00', '16:00', '17:00'];
+        $faseActual = $campeonato->faseActual;
+
         $fechaInicio = now();
-
-        $indiceCanchaHora = 0; // 🔹 índice global para evitar pisar horarios
+        $canchas = Canchas::pluck('id')->toArray();
+        $horarios = ['18:00', '19:00', '20:00', '21:00'];
 
         if ($porGrupos) {
-            $grupos = Grupo::where('campeonato_id', $campeonato->id)->get();
-            foreach ($grupos as $grupo) {
+
+            foreach ($campeonato->grupos as $grupo) {
+
                 $equipos = $grupo->equipos->pluck('id')->toArray();
-                $indiceCanchaHora = $this->generarFixtureBase(
+
+                if (count($equipos) < 2) {
+                    continue;
+                }
+
+                $this->generarFixtureBase(
                     $equipos,
                     $modo,
                     $campeonato,
+                    $faseActual,
                     $fechaInicio,
                     $canchas,
                     $horarios,
-                    $grupo->id,
-                    $indiceCanchaHora
+                    $grupo->id
                 );
             }
         } else {
-            $equipos = Equipo::whereHas('campeonatos', function ($q) use ($campeonato) {
-                $q->where('campeonato_id', $campeonato->id);
-            })->pluck('id')->toArray();
+
+            $equipos = $campeonato->equipos->pluck('id')->toArray();
+
+            if (count($equipos) < 2) {
+                return;
+            }
 
             $this->generarFixtureBase(
                 $equipos,
                 $modo,
                 $campeonato,
+                $faseActual,
                 $fechaInicio,
                 $canchas,
-                $horarios,
-                null,
-                $indiceCanchaHora
+                $horarios
             );
         }
     }
 
-    private function generarFixtureBase($equipos, $modo, $campeonato, $fechaInicio, $canchas, $horarios, $grupoId = null, $indiceCanchaHora = 0)
-    {
-        if (count($equipos) % 2 !== 0) {
-            $equipos[] = null;
+    /*==================================
+     Genera el fixture base para una fase
+    =============================== */
+    private function generarFixtureBase(
+        array $equipos,
+        string $modo,
+        $campeonato,
+        $fase,
+        $fechaInicio,
+        array $canchas,
+        array $horarios,
+        $grupoId = null
+    ) {
+        $canchaId = Canchas::query()->value('id');
+
+        if (!$canchaId) {
+            throw new \Exception('No hay canchas cargadas en el sistema');
+        }
+        $cantidadEquipos = count($equipos);
+
+        if ($cantidadEquipos % 2 !== 0) {
+            $equipos[] = null; // equipo libre
+            $cantidadEquipos++;
         }
 
-        $totalEquipos = count($equipos);
-        $totalJornadas = $totalEquipos - 1;
+        $jornadas = $cantidadEquipos - 1;
+        $mitad = $cantidadEquipos / 2;
 
-        for ($jornada = 1; $jornada <= $totalJornadas; $jornada++) {
-            for ($i = 0; $i < $totalEquipos / 2; $i++) {
-                $local = $equipos[$i];
-                $visitante = $equipos[$totalEquipos - 1 - $i];
+        $rotacion = $equipos;
+        $indiceCanchaHora = 0;
 
-                if (($modo === 'alternancia' || $modo === 'ida_vuelta') && $jornada % 2 === 0) {
-                    [$local, $visitante] = [$visitante, $local];
+        for ($jornada = 1; $jornada <= $jornadas; $jornada++) {
+
+            for ($i = 0; $i < $mitad; $i++) {
+
+                $local = $rotacion[$i];
+                $visitante = $rotacion[$cantidadEquipos - 1 - $i];
+
+                if (!$local || !$visitante) {
+                    continue;
                 }
 
-                if ($local !== null && $visitante !== null) {
+                Encuentro::create([
+                    'campeonato_id' => $campeonato->id,
+                    'grupo_id' => $grupoId,
+
+                    'fase_id' => $fase->id,
+                    'fase'    => $fase->nombre,
+
+                    'fecha' => $fechaInicio->copy()->addDays(($jornada - 1) * 7)->format('Y-m-d'),
+                    'hora' => $horarios[$indiceCanchaHora % count($horarios)],
+                    'cancha_id' => $canchaId,
+                    'estado' => 'programado',
+
+                    'equipo_local_id' => $local,
+                    'equipo_visitante_id' => $visitante,
+                    'fecha_encuentro' => $jornada,
+                ]);
+
+                $indiceCanchaHora++;
+            }
+
+            // rotación round-robin
+            $fijo = array_shift($rotacion);
+            $ultimo = array_pop($rotacion);
+            array_unshift($rotacion, $fijo);
+            array_splice($rotacion, 1, 0, [$ultimo]);
+        }
+
+        // 🔁 IDA Y VUELTA
+        if ($modo === 'ida_vuelta') {
+            $canchaId = Canchas::query()->value('id');
+
+            if (!$canchaId) {
+                throw new \Exception('No hay canchas cargadas en el sistema');
+            }
+            for ($jornada = 1; $jornada <= $jornadas; $jornada++) {
+
+                for ($i = 0; $i < $mitad; $i++) {
+
+                    $local = $rotacion[$cantidadEquipos - 1 - $i];
+                    $visitante = $rotacion[$i];
+
+                    if (!$local || !$visitante) {
+                        continue;
+                    }
+
                     Encuentro::create([
                         'campeonato_id' => $campeonato->id,
                         'grupo_id' => $grupoId,
-                        'fecha' => $fechaInicio->copy()->addDays(($jornada - 1) * 7)->format('Y-m-d'),
+
+                        'fase_id' => $fase->id,
+                        'fase'    => $fase->nombre,
+
+                        'fecha' => $fechaInicio->copy()->addDays(($jornada + $jornadas - 1) * 7)->format('Y-m-d'),
                         'hora' => $horarios[$indiceCanchaHora % count($horarios)],
-                        'cancha_id' => $canchas[0],
+                        'cancha_id' => $canchaId,
                         'estado' => 'programado',
+
                         'equipo_local_id' => $local,
                         'equipo_visitante_id' => $visitante,
-                        'fecha_encuentro' => $jornada,
+                        'fecha_encuentro' => $jornada + $jornadas,
                     ]);
+
                     $indiceCanchaHora++;
                 }
             }
-            $equipos = array_merge([$equipos[0]], array_slice($equipos, -1), array_slice($equipos, 1, -1));
         }
-
-        if ($modo === 'ida_vuelta') {
-            for ($jornada = 1; $jornada <= $totalJornadas; $jornada++) {
-                $partidos = Encuentro::where('campeonato_id', $campeonato->id)
-                    ->where('grupo_id', $grupoId)
-                    ->where('fecha_encuentro', $jornada)
-                    ->get();
-
-                foreach ($partidos as $partido) {
-                    Encuentro::create([
-                        'campeonato_id' => $campeonato->id,
-                        'grupo_id' => $grupoId,
-                        'fecha' => $fechaInicio->copy()->addDays(($totalJornadas + $jornada - 1) * 7)->format('Y-m-d'),
-                        'hora' => $partido->hora,
-                        'cancha_id' => $partido->cancha_id,
-                        'estado' => 'programado',
-                        'equipo_local_id' => $partido->equipo_visitante_id,
-                        'equipo_visitante_id' => $partido->equipo_local_id,
-                        'fecha_encuentro' => $totalJornadas + $jornada,
-                    ]);
-                }
-            }
-        }
-
-        return $indiceCanchaHora; // 🔹 devolvemos el índice para el siguiente grupo
     }
+
 
     public function render()
     {

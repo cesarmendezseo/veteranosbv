@@ -31,6 +31,8 @@ class Campeonato extends Model
         'config_sancion',
         'fase_actual_id',
         'config_liguilla', // Asegúrate de tener esto como cast 'array'
+        'equipos_fase_arriba',
+        'equipos_fase_abajo',
     ];
 
     protected $casts = [
@@ -80,40 +82,6 @@ class Campeonato extends Model
         return $this->belongsTo(FaseCampeonato::class, 'fase_actual_id');
     }
 
-    /* =====================================================
-     | LÓGICA DE AVANCE DE FASE (Liguilla Superior/Inferior)
-     ===================================================== */
-    public function avanzarFase(): bool
-    {
-        $faseActual = $this->faseActual;
-
-        // 1. Finalizar fase actual
-        $faseActual->update(['estado' => 'finalizada']);
-
-        // 2. BUSQUEDA FLEXIBLE: Buscar las fases que siguen (cualquiera con orden superior)
-        // En lugar de orden + 1, buscamos el siguiente número de orden que exista
-        $siguientesFases = $this->fases()
-            ->where('orden', '>', $faseActual->orden)
-            ->get();
-
-        if ($siguientesFases->isEmpty()) {
-            // Si no hay más fases, el campeonato terminó
-            return false;
-        }
-
-        // 3. Generar cruces para cada fase encontrada (Oro y Plata)
-        foreach ($siguientesFases as $faseDestino) {
-            $this->generarCrucesLiguilla($faseActual, $faseDestino);
-            $faseDestino->update(['estado' => 'activa']);
-        }
-
-        // 4. Actualizar el campeonato a la primera de las nuevas fases
-        $this->update(['fase_actual_id' => $siguientesFases->first()->id]);
-
-        return true;
-    }
-
-
 
     private function crearPartidosEliminatorios(array $ids, $faseModel, $subTipo)
     {
@@ -135,6 +103,58 @@ class Campeonato extends Model
     }
 
     /* =====================================================
+     | LÓGICA DE AVANCE DE FASE (Liguilla Superior/Inferior)
+     ===================================================== */
+    public function avanzarFase(): bool
+    {
+        if (!$this->fase_actual_id) {
+            return false;
+        }
+
+        $faseActual = $this->faseActual;
+
+        if (!$faseActual) {
+            return false;
+        }
+
+        // ✅ PRIMERO buscar fases siguientes
+        $siguientesFases = $this->fases()
+            ->where('orden', '>', $faseActual->orden)
+            ->orderBy('orden')
+            ->get();
+
+        // ✅ Validar ANTES de finalizar
+        if ($siguientesFases->isEmpty()) {
+            return false; // No hace cambios si no hay fases siguientes
+        }
+
+        // ✅ AHORA SÍ finalizar (solo si hay fases siguientes)
+        $faseActual->update(['estado' => 'finalizada']);
+
+        // 3️⃣ Procesar cada fase
+        foreach ($siguientesFases as $faseDestino) {
+            $cantidad = $this->generarCrucesLiguilla($faseActual, $faseDestino);
+
+            if ($cantidad === 0) {
+                return false;
+            }
+
+            $faseDestino->update(['estado' => 'activa']);
+        }
+
+        // 4️⃣ Avanzar fase actual
+        $this->update([
+            'fase_actual_id' => $siguientesFases->first()->id
+        ]);
+
+        return true;
+    }
+
+
+
+
+
+    /* =====================================================
      | CÁLCULO DE TABLA DE POSICIONES
      ===================================================== */
 
@@ -142,19 +162,13 @@ class Campeonato extends Model
     {
         $tabla = [];
 
-        // Buscamos los encuentros basándonos en el campeonato y el nombre de la fase
-        // Usamos trim y case-insensitive para asegurar el match
         $partidos = Encuentro::where('campeonato_id', $this->id)
-            ->where('fase', 'like', trim($fase->nombre))
+            ->where('fase_id', $fase->id) // ✅ CLAVE
             ->whereIn('estado', ['Jugado', 'jugado', 'JUGADO'])
             ->get();
 
-        // Si no encuentra por nombre, intentamos buscar por los que NO tienen fase de liguilla (Fase Regular)
-        if ($partidos->isEmpty() && $fase->orden == 1) {
-            $partidos = Encuentro::where('campeonato_id', $this->id)
-                ->whereNotIn('fase', ['oro', 'plata', 'superior', 'inferior'])
-                ->whereIn('estado', ['Jugado', 'jugado'])
-                ->get();
+        if ($partidos->isEmpty()) {
+            return [];
         }
 
         foreach ($partidos as $p) {
@@ -171,7 +185,7 @@ class Campeonato extends Model
                     'pts' => 0,
                     'gf' => 0,
                     'gc' => 0,
-                    'dg' => 0
+                    'dg' => 0,
                 ];
 
                 $tabla[$equipoId]['pj']++;
@@ -179,9 +193,13 @@ class Campeonato extends Model
                 $tabla[$equipoId]['gc'] += $gc;
                 $tabla[$equipoId]['dg'] = $tabla[$equipoId]['gf'] - $tabla[$equipoId]['gc'];
 
-                if ($gf > $gc) $tabla[$equipoId]['pts'] += $this->puntos_ganado;
-                elseif ($gf === $gc) $tabla[$equipoId]['pts'] += $this->puntos_empatado;
-                else $tabla[$equipoId]['pts'] += $this->puntos_perdido;
+                if ($gf > $gc) {
+                    $tabla[$equipoId]['pts'] += $this->puntos_ganado;
+                } elseif ($gf === $gc) {
+                    $tabla[$equipoId]['pts'] += $this->puntos_empatado;
+                } else {
+                    $tabla[$equipoId]['pts'] += $this->puntos_perdido;
+                }
             }
         }
 
@@ -192,33 +210,48 @@ class Campeonato extends Model
             ->toArray();
     }
 
-    private function generarCrucesLiguilla($faseOrigen, $faseDestino)
+    /*======================================================== 
+| GENERAR CRUCES DE LIGUILLA    
+=======================================================*/
+
+    private function generarCrucesLiguilla($faseOrigen, $faseDestino): int
     {
         $tabla = $this->calcularTablaFase($faseOrigen);
         $equiposRankeados = collect($tabla);
 
         if ($equiposRankeados->isEmpty()) {
-            throw new \Exception("No hay datos de partidos jugados para procesar la tabla de " . $faseOrigen->nombre);
+            return 0;
         }
 
         $rango = $faseDestino->reglas_clasificacion['rango'] ?? 'superior';
-        $cantidad = (int)($faseDestino->reglas_clasificacion['cantidad'] ?? 4);
+        $cantidad = (int) ($faseDestino->reglas_clasificacion['cantidad'] ?? 0);
+
+        if ($cantidad <= 0) {
+            return 0;
+        }
 
         if ($rango === 'superior') {
-            // Los mejores N
             $clasificados = $equiposRankeados->take($cantidad);
         } else {
-            // Los siguientes N (Saltamos los que fueron a Oro)
-            $faseOro = $this->fases()->where('reglas_clasificacion->rango', 'superior')->first();
-            $salto = $faseOro ? (int)($faseOro->reglas_clasificacion['cantidad'] ?? 4) : 4;
+            $faseOro = $this->fases()
+                ->where('reglas_clasificacion->rango', 'superior')
+                ->first();
+
+            $salto = $faseOro
+                ? (int) ($faseOro->reglas_clasificacion['cantidad'] ?? 0)
+                : 0;
+
             $clasificados = $equiposRankeados->slice($salto, $cantidad);
         }
 
-        // GRABACIÓN DIRECTA EN BD
-        DB::table('equipos_fase')->where('fase_id', $faseDestino->id)->delete();
+        // 🔥 ELIMINAR ESTA LÍNEA - NO BORRAR
+        // DB::table('equipos_fase')
+        //     ->where('fase_id', $faseDestino->id)
+        //     ->delete();
 
+        // ✅ SOLO INSERTAR SI NO EXISTE
         foreach ($clasificados as $item) {
-            DB::table('equipos_fase')->insert([
+            DB::table('equipos_fase')->insertOrIgnore([
                 'fase_id' => $faseDestino->id,
                 'equipo_id' => $item['equipo_id'],
                 'fase_origen_id' => $faseOrigen->id,
@@ -227,5 +260,25 @@ class Campeonato extends Model
                 'updated_at' => now(),
             ]);
         }
+
+        return $clasificados->count();
+    }
+
+    /* ==============================================
+        | CREAR FINAL VACÍA
+    ====================================================== */
+    public function crearFinalVacia($faseActualId, $faseNombre)
+    {
+        return Encuentro::create([
+            'campeonato_id' => $this->id,
+            'fase_id' => $faseActualId,
+            'fase' => $faseNombre,
+            'equipo_local_id' => null, // Se llenará por sorteo o ganador
+            'equipo_visitante_id' => null, // Se llenará por ganador
+            'estado' => 'pendiente',
+            'fecha' => now()->addDays(7), // Fecha tentativa
+            'hora' => '20:00',
+
+        ]);
     }
 }

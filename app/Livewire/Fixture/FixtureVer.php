@@ -11,6 +11,7 @@ use App\Models\Sanciones;
 use App\Services\EncuentroExportService;
 
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Jantinnerezo\LivewireAlert\LivewireAlert as JantinnerezoLivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -44,6 +45,8 @@ class FixtureVer extends Component
     public $formato;
     public $encuentro;
     public $encuentrosPorCancha = [];
+    public $fases = []; // Para almacenar las fases disponibles
+    public $faseFiltro; // Para el ID de la fase seleccionada
 
     public function mount($campeonatoId)
     {
@@ -56,7 +59,9 @@ class FixtureVer extends Component
         $this->updatedCampeonatoId();
     }
 
-    //==================================0ORDENAMIENTO========================================
+    /*==================================
+                ORDENAMIENTO
+    ======================================== */
 
     public function sortBy($field)
     {
@@ -81,8 +86,6 @@ class FixtureVer extends Component
 
     public function updatedCampeonatoId()
     {
-
-        // Resetear filtros al cambiar el campeonato
         $this->resetPage();
         $this->grupoFiltro = null;
         $this->fechaFiltro = null;
@@ -90,58 +93,83 @@ class FixtureVer extends Component
         $this->equipoLocalFiltro = null;
         $this->equipoVisitanteFiltro = null;
         $this->jornadaFiltro = null;
+        $this->faseFiltro = null; // <--- Asegúrate de que se resetee aquí
 
-        // Obtener grupos relacionados al campeonato
         $this->grupos = $this->campeonato_id
             ? Grupo::where('campeonato_id', $this->campeonato_id)->get()
+            : [];
+
+        $this->fases = $this->campeonato_id
+            ? \App\Models\FaseCampeonato::where('campeonato_id', $this->campeonato_id)->orderBy('orden')->get()
             : [];
 
         $this->formato = $this->campeonato_id
             ? Campeonato::find($this->campeonato_id)->formato
             : null;
+
         $this->jornadas = Encuentro::where('campeonato_id', $this->campeonato_id)
             ->distinct()
             ->orderBy('fecha_encuentro')
             ->pluck('fecha_encuentro');
     }
 
+    /*=============================================== 
+    Guardar goles y actualizar estado a 'Jugado'
+    ===============================================*/
+
     public function guardarGoles($encuentroId)
     {
-
-        //$this->actualizarCumplimientosSanciones();
-        // Obtener el encuentro
         $encuentro = Encuentro::find($encuentroId);
 
         if ($encuentro) {
-            // Actualizar los goles
-            $encuentro->gol_local = $this->goles_local[$encuentroId] ?? 0;
-            $encuentro->gol_visitante = $this->goles_visitante[$encuentroId] ?? 0;
+            // 1. Obtener los goles de las propiedades de Livewire
+            $gLocal = $this->goles_local[$encuentroId] ?? 0;
+            $gVisitante = $this->goles_visitante[$encuentroId] ?? 0;
 
-            // Cambiar estado a 'Jugado'
+            $encuentro->gol_local = $gLocal;
+            $encuentro->gol_visitante = $gVisitante;
+
+            // 2. LÓGICA DE GANADOR/PERDEDOR (Para ocultar al eliminado)
+            if ($gLocal > $gVisitante) {
+                $encuentro->ganador_id = $encuentro->equipo_local_id;
+                $encuentro->perdedor_id = $encuentro->equipo_visitante_id;
+            } elseif ($gVisitante > $gLocal) {
+                $encuentro->ganador_id = $encuentro->equipo_visitante_id;
+                $encuentro->perdedor_id = $encuentro->equipo_local_id;
+            } else {
+                // Caso de Empate: Aquí deberías capturar penales si es eliminación
+                // Por ahora, si empatan, podrías no asignar ganador hasta que definas penales
+                $pLocal = $this->penales_local[$encuentroId] ?? 0;
+                $pVisitante = $this->penales_visitante[$encuentroId] ?? 0;
+
+                if ($pLocal > $pVisitante) {
+                    $encuentro->ganador_id = $encuentro->equipo_local_id;
+                    $encuentro->perdedor_id = $encuentro->equipo_visitante_id;
+                } else {
+                    $encuentro->ganador_id = $encuentro->equipo_visitante_id;
+                    $encuentro->perdedor_id = $encuentro->equipo_local_id;
+                }
+            }
+
+            // 3. Finalizar encuentro
             $encuentro->estado = 'Jugado';
-
-            // Guardar el encuentro
             $encuentro->save();
 
-            //
-            // Verificar si se debe avanzar de fase
-            //$campeonato = Campeonato::find($encuentro->campeonato_id);
-            // 🔥 AVANCE AUTOMÁTICO DE FASE
+            // 4. AVANCE DE FASE (Tu lógica existente)
+            // Nota: Solo avanza si el formato no es manual o si ya terminaron todos los de la fase
             $campeonato = Campeonato::find($encuentro->campeonato_id);
-
             if ($campeonato) {
                 $campeonato->avanzarFase();
             }
-
-
-
-            /*  LivewireAlert::title('ok')
-                ->text('Goles guardados y estado actualizado a "Jugado"')
+            LivewireAlert::title('Éxito')
+                ->text('Resultado guardado correctamente')
                 ->success()
-                ->show(); */
+                ->show();
         }
     }
-    // ==================================0EDITAR ENCUENTRO========================================
+    /*======================================================================
+                                Editar encuentro
+     ====================================================================*/
     public function editEncuentro($id)
     {
         $encuentro = Encuentro::findOrFail($id);
@@ -156,7 +184,9 @@ class FixtureVer extends Component
         $this->showEditModal = true;
     }
 
-    //==================================0GUARDAR EDICION ENCUENTRO========================================
+    /*======================================================================
+                                Guardar edición de encuentro
+     ====================================================================*/
 
     public function guardarEdicion()
     {
@@ -186,7 +216,9 @@ class FixtureVer extends Component
         };
     }
 
-    //=============exportar a exel ===============
+    /*======================================================================
+                                Exportar a Excel por jornada
+     ====================================================================*/
 
     public function exportar(EncuentroExportService $servicio)
 
@@ -199,6 +231,10 @@ class FixtureVer extends Component
 
         return $servicio->exportarPorCampeonatoYFecha($this->campeonato_id, $this->jornadaFiltro);
     }
+
+    /*======================================================================
+                                Exportar todo el campeonato 
+     ====================================================================*/
 
     public function exportarTodo(EncuentroExportService $servicio)
 
@@ -263,6 +299,9 @@ class FixtureVer extends Component
             ->show();
     }
 
+    /* =====================================
+    Avanzar fase si corresponde
+    =====================================*/
     public function avanzarFaseSiCorresponde()
     {
 
@@ -285,7 +324,16 @@ class FixtureVer extends Component
             ->show();
     }
     /* ******************************************** */
+    public function updatedFaseFiltro($value)
+    {
+        logger('faseFiltro actualizado:', [
+            'valor' => $value,
+            'tipo' => gettype($value),
+        ]);
 
+        // Solo para pruebas visuales (opcional)
+        //dd($value, gettype($value));
+    }
 
     //============================
 
@@ -298,6 +346,7 @@ class FixtureVer extends Component
                 $this->fechaFiltro = null; // evitar crash
             }
         }
+
         // Si no hay campeonato seleccionado, retorna vista vacía
         if (!$this->campeonato_id) {
             return view('livewire.fixture.fixture-index', [
@@ -305,50 +354,36 @@ class FixtureVer extends Component
             ]);
         }
 
-
         // Obtener los encuentros filtrados
         $encuentros = Encuentro::query()
-            ->with(['equipoLocal', 'equipoVisitante', 'cancha', 'grupo', 'campeonato']) // Agregado campeonato
+            ->with(['equipoLocal', 'equipoVisitante', 'cancha', 'grupo', 'campeonato', 'fase'])
             ->when($this->campeonato_id, fn($q) => $q->where('campeonato_id', $this->campeonato_id))
-            ->when($this->fechaFiltro, fn($q) => $q->whereDate('fecha', $this->fechaFiltro))
-            ->when($this->equipoLocalFiltro, fn($q) => $q->whereHas('equipoLocal', fn($query) =>
-            $query->where('nombre', 'like', '%' . $this->equipoLocalFiltro . '%')))
-            ->when($this->jornadaFiltro, fn($q) => $q->where('fecha_encuentro', $this->jornadaFiltro))
-            ->when($this->equipoVisitanteFiltro, fn($q) => $q->whereHas('equipoVisitante', fn($query) =>
-            $query->where('nombre', 'like', '%' . $this->equipoVisitanteFiltro . '%')))
+
+            // FILTRO POR FASE (Usando fase_id que es el nombre de tu columna)
+            ->when($this->faseFiltro !== null, function ($q) {
+                $q->where('fase_id', $this->faseFiltro);
+            })
+
+            // Otros filtros que mencionas tener (ejemplos basados en tus variables)
             ->when($this->grupoFiltro, fn($q) => $q->where('grupo_id', $this->grupoFiltro))
+            ->when($this->fechaFiltro, fn($q) => $q->whereDate('fecha', $this->fechaFiltro))
             ->when($this->estadoFiltro, fn($q) => $q->where('estado', $this->estadoFiltro))
+
             ->orderBy('fecha')
-            ->orderBy('cancha_id')
             ->orderBy('hora')
             ->get();
 
-
-
-
-
-
-        // Agrupar los encuentros por cancha y obtener el nombre del grupo
+        // Agrupar los encuentros por cancha
         $encuentrosAgrupados = $encuentros->groupBy(function ($encuentro) {
             $nombreCancha = $encuentro->cancha->nombre ?? 'Sin cancha';
-            $nombreGrupo = $encuentro->grupo?->nombre ?? '';
-
-            // Puedes retornar un string combinado si quieres agrupar por ambos, por ejemplo:
-            //return $nombreCancha . ' _ ' . $nombreGrupo;
-
-            // O simplemente devolver un array para luego usar ambos nombres
             return $nombreCancha;
         });
-
-
 
         // Pasar los goles almacenados en la base de datos al componente
         foreach ($encuentros as $encuentro) {
             $this->goles_local[$encuentro->id] = $encuentro->gol_local;
             $this->goles_visitante[$encuentro->id] = $encuentro->gol_visitante;
         }
-
-
 
         return view('livewire.fixture.fixture-ver', compact('encuentrosAgrupados'));
     }

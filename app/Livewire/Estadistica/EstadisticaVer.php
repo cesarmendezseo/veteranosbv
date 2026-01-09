@@ -34,6 +34,8 @@ class EstadisticaVer extends Component
     public $encuentroJugador; // ID del encuentro para el cual se guardan estadísticas, igual a encuentroSeleccionado
     public $formatoCampeonato;
     public $tipoEncuentro;
+    public $fasesDisponibles = [];
+    public $faseSeleccionada;
 
 
     public function mount($campeonatoId)
@@ -44,6 +46,7 @@ class EstadisticaVer extends Component
         $this->jugadoresVisitante = collect(); // Inicializar como colección vacía
         $this->updatedCampeonatoId($campeonatoId);
     }
+
 
     //helper  para obtener el tipo polimórfico correcto según el formato del campeonato
     private function getPolymorphicType(): string
@@ -59,77 +62,84 @@ class EstadisticaVer extends Component
 
 
 
+    /* ============================================================
 
+========================================================*/
     public function updatedCampeonatoId($campeonatoId)
     {
+        $this->campeonatoId = $campeonatoId;
 
+        // Cargamos todas las fases que pertenecen a este campeonato
+        // Usamos el modelo FaseCampeonato directamente
+        $this->fasesDisponibles = \App\Models\FaseCampeonato::where('campeonato_id', $campeonatoId)
+            ->orderBy('orden', 'asc') // O el campo que uses para el orden
+            ->get();
 
-        $campeonato = Campeonato::where('id', $this->campeonatoId)->first();
-        $this->formatoCampeonato = $campeonato->formato;
-
-
-
-        if ($this->formatoCampeonato === 'todos_contra_todos' || $this->formatoCampeonato === 'grupos') {
-            $this->fechasDisponibles = Encuentro::where('campeonato_id', $campeonatoId)
-                ->select('fecha_encuentro')
-                ->distinct()
-                ->orderBy('fecha_encuentro')
-                ->pluck('fecha_encuentro');
-        } else {
-            $this->fechasDisponibles = Eliminatoria::where('campeonato_id', $campeonatoId)
-                ->select('fase')
-                ->distinct()
-                ->orderBy('fase')
-                ->pluck('fase');
-        }
-
-
-        // Resetear dependencias
-        $this->fechaSeleccionada = null;
-        $this->encuentros = collect();
-        $this->encuentroSeleccionado = null;
-        $this->jugadoresLocal = collect();
-        $this->jugadoresVisitante = collect();
-        $this->datosJugadores = [];
-        $this->nombreLocal = null;
-        $this->nombreVisitante = null;
-        $this->equipoLocal_id = null;
-        $this->equipoVisitante_id = null;
-        $this->encuentroJugador = null;
+        // Resetear los selects hijos
+        $this->reset(['faseSeleccionada', 'fechaSeleccionada', 'fechasDisponibles', 'encuentros', 'encuentroSeleccionado']);
     }
 
-    public function updatedFechaSeleccionada($value)
+    /* =================================================
+                    FASE SELECCIONADA
+=================================================== */
+
+    // 2. Al seleccionar una FASE, cargamos las FECHAS de esa fase
+    public function updatedFaseSeleccionada($value)
     {
 
+        if ($value) {
+            // Ahora buscamos las fechas (Jornadas) de los encuentros 
+            // filtrando por el fase_id seleccionado
+            $this->fechasDisponibles = Encuentro::where('campeonato_id', $this->campeonatoId)
+                ->where('fase_id', $value)
+                ->select('fecha_encuentro')
+                ->distinct()
+                ->orderBy('fecha_encuentro', 'asc')
+                ->pluck('fecha_encuentro');
+        } else {
+            $this->fechasDisponibles = [];
+        }
+        //dd($this->fechasDisponibles);
 
-        if ($value && $this->campeonatoId) {
-            if ($this->formatoCampeonato === 'todos_contra_todos' || $this->formatoCampeonato === 'grupos') {
-                $this->encuentros = Encuentro::where('campeonato_id', $this->campeonatoId)
-                    ->where('fecha_encuentro', $value)
-                    ->with(['equipoLocal.jugadores', 'equipoVisitante.jugadores'])
-                    ->orderBy('fecha') // 'fecha' podría ser un timestamp para ordenar por hora si hay varios en un día
-                    ->get();
-            } else {
-                $this->encuentros = Eliminatoria::where('campeonato_id', $this->campeonatoId)
-                    ->where('fase', $value)
-                    ->with(['equipoLocal.jugadores', 'equipoVisitante.jugadores'])
-                    ->orderBy('fecha') // 'fecha' podría ser un timestamp para ordenar por hora si hay varios en un día
-                    ->get();
-            }
+        $this->reset(['fechaSeleccionada', 'encuentros', 'encuentroSeleccionado']);
+    }
+    /*======================================================================== 
+                        FECHA SELECCIONADA
+==================================================================*/
+
+    // 3. Al seleccionar la FECHA, filtramos por CAMPEONATO, FASE y FECHA
+    public function updatedFechaSeleccionada($value)
+    {
+        // Debug preventivo: si quieres ver qué llega, descomenta la siguiente línea
+        // dd($this->faseSeleccionada, $value);
+
+        if ($value && $this->faseSeleccionada) {
+            // Buscamos los encuentros que coincidan con AMBOS criterios
+            $this->encuentros = \App\Models\Encuentro::where('campeonato_id', $this->campeonatoId)
+                ->where('fase_id', $this->faseSeleccionada)
+                ->where('fecha_encuentro', $value)
+                ->with(['equipoLocal', 'equipoVisitante'])
+                ->get();
+        } else {
+            $this->encuentros = [];
         }
 
-
-        // Limpiar datos anteriores dependientes de la fecha
-        $this->encuentroSeleccionado = null;
-        $this->jugadoresLocal = collect();
-        $this->jugadoresVisitante = collect();
-        $this->datosJugadores = [];
-        $this->nombreLocal = null;
-        $this->nombreVisitante = null;
-        $this->equipoLocal_id = null;
-        $this->equipoVisitante_id = null;
-        $this->encuentroJugador = null;
+        // Resetear el encuentro seleccionado para que el usuario elija uno nuevo
+        $this->reset(['encuentroSeleccionado']);
     }
+
+    // Simplificamos el helper ya que solo usas Encuentro
+    /*  private function getPolymorphicType(): string
+    {
+        return \App\Models\Encuentro::class;
+    } */
+
+
+    /*======================================================================== 
+                        ENCUENTROS SELECCIONADOS
+==================================================================*/
+
+
 
     public function updatedEncuentroSeleccionado($value)
     {
@@ -137,74 +147,65 @@ class EstadisticaVer extends Component
 
         if (!$value) return;
 
-        $modelo = $this->getPolymorphicType();
-
-        // Cargar encuentro sin jugadores directos
-        $partido = $modelo::with(['equipoLocal', 'equipoVisitante'])->find($value);
+        // Ya no necesitamos buscar el tipo polimórfico dinámicamente
+        // Usamos directamente el modelo Encuentro
+        $partido = \App\Models\Encuentro::with(['equipoLocal', 'equipoVisitante'])->find($value);
 
         if (!$partido) return;
 
         // Datos base del encuentro
-        $this->tipoEncuentro = class_basename($modelo);
+        $this->tipoEncuentro = 'Encuentro'; // Valor fijo ahora
         $this->encuentroJugador = $partido->id;
         $this->nombreLocal = $partido->equipoLocal->nombre ?? 'Sin nombre';
         $this->nombreVisitante = $partido->equipoVisitante->nombre ?? 'Sin nombre';
         $this->equipoLocal_id = $partido->equipoLocal->id;
         $this->equipoVisitante_id = $partido->equipoVisitante->id;
 
-        // Cargar jugadores desde la pivote del campeonato (ordenados A-Z)
+        // Cargar jugadores (usando tu método existente jugadoresDelCampeonato)
         $this->jugadoresLocal = $partido->equipoLocal
             ->jugadoresDelCampeonato($this->campeonatoId)
-            ->orderBy('apellido')
-            ->orderBy('nombre')
-            ->get();
+            ->orderBy('apellido')->orderBy('nombre')->get();
 
         $this->jugadoresVisitante = $partido->equipoVisitante
             ->jugadoresDelCampeonato($this->campeonatoId)
-            ->orderBy('apellido')
-            ->orderBy('nombre')
-            ->get();
+            ->orderBy('apellido')->orderBy('nombre')->get();
 
-        // Obtener ids
+        // Obtener todos los IDs de los jugadores para la consulta de estadísticas
         $playerIds = $this->jugadoresLocal->pluck('id')
             ->merge($this->jugadoresVisitante->pluck('id'))
             ->unique();
 
-        // Cargar estadísticas existentes
+        // Cargar estadísticas existentes (Asegúrate de que 'estadisticable_type' guarde la clase de Encuentro)
+        $modeloClase = \App\Models\Encuentro::class;
+
         $existingStats = EstadisticaJugadorEncuentro::where('estadisticable_id', $this->encuentroJugador)
-            ->where('estadisticable_type', $modelo)
+            ->where('estadisticable_type', $modeloClase)
             ->whereIn('jugador_id', $playerIds)
             ->get()
             ->keyBy('jugador_id');
 
-        // Poblar stats locales
-        foreach ($this->jugadoresLocal as $jugador) {
-            $stats = $existingStats->get($jugador->id);
-            $this->datosJugadores[$jugador->id] = [
-                'equipo_id' => $this->equipoLocal_id,
-                'goles' => $stats?->goles ?? 0,
-                'amarilla' => (bool)($stats?->tarjeta_amarilla ?? false),
-                'doble_amarilla' => (bool)($stats?->tarjeta_doble_amarilla ?? false),
-                'roja' => (bool)($stats?->tarjeta_roja ?? false),
-            ];
-        }
+        // Poblamos los datos para ambos equipos en un solo ciclo si prefieres, 
+        // pero mantenemos tu estructura separada para mayor claridad
+        $this->mapearEstadisticas($this->jugadoresLocal, $this->equipoLocal_id, $existingStats);
+        $this->mapearEstadisticas($this->jugadoresVisitante, $this->equipoVisitante_id, $existingStats);
+    }
 
-        // Poblar stats visitantes
-        foreach ($this->jugadoresVisitante as $jugador) {
+    /**
+     * Función auxiliar para evitar repetir código al mapear stats
+     */
+    private function mapearEstadisticas($jugadores, $equipoId, $existingStats)
+    {
+        foreach ($jugadores as $jugador) {
             $stats = $existingStats->get($jugador->id);
             $this->datosJugadores[$jugador->id] = [
-                'equipo_id' => $this->equipoVisitante_id,
-                'goles' => $stats?->goles ?? 0,
-                'amarilla' => (bool)($stats?->tarjeta_amarilla ?? false),
+                'equipo_id'      => $equipoId,
+                'goles'          => $stats?->goles ?? 0,
+                'amarilla'       => (bool)($stats?->tarjeta_amarilla ?? false),
                 'doble_amarilla' => (bool)($stats?->tarjeta_doble_amarilla ?? false),
-                'roja' => (bool)($stats?->tarjeta_roja ?? false),
+                'roja'           => (bool)($stats?->tarjeta_roja ?? false),
             ];
         }
     }
-
-
-
-
 
 
 
@@ -224,28 +225,26 @@ class EstadisticaVer extends Component
 
     public function guardarDatos()
     {
-        if (!$this->encuentroJugador || !$this->campeonatoId || !$this->tipoEncuentro) {
+        // Verificamos que tengamos un encuentro y campeonato seleccionado
+        if (!$this->encuentroJugador || !$this->campeonatoId) {
             $this->dispatch('seleccionar-campeonato');
-
             return;
         }
 
         $mensajesGuardados = [];
         $huboErroresDeValidacion = false;
 
-        // Determinar el modelo polimórfico
-        $modeloPartido = $this->tipoEncuentro === 'eliminatoria'
-            ? Eliminatoria::class
-            : Encuentro::class;
+        // Modelo fijo ahora
+        $modeloClase = \App\Models\Encuentro::class;
 
         foreach ($this->datosJugadores as $jugadorId => $datos) {
-            // Normalizar valores
+            // Normalizar valores para asegurar que lleguen como booleanos o enteros
             $datos['amarilla'] = filter_var($datos['amarilla'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['doble_amarilla'] = filter_var($datos['doble_amarilla'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['roja'] = filter_var($datos['roja'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $datos['goles'] = !empty($datos['goles']) ? intval($datos['goles']) : 0;
 
-            // Validar
+            // Validar datos del jugador
             try {
                 Validator::make($datos, [
                     'equipo_id' => 'required|exists:equipos,id',
@@ -256,35 +255,25 @@ class EstadisticaVer extends Component
                 ])->validate();
             } catch (ValidationException $e) {
                 $huboErroresDeValidacion = true;
-                $errorMessages = $e->validator->errors()->all();
                 $jugadorError = Jugador::find($jugadorId);
-                $nombreJugadorError = $jugadorError ? ($jugadorError->apellido . ', ' . $jugadorError->nombre) : 'ID: ' . $jugadorId;
+                $nombreError = $jugadorError ? ($jugadorError->apellido . ' ' . $jugadorError->nombre) : $jugadorId;
 
-                LivewireAlert::title('Error de validación para: ' . $nombreJugadorError,)
-                    ->text(implode("\n", $errorMessages))
-                    ->error()
-                    ->show();
-
-
+                LivewireAlert::title('Error en: ' . $nombreError)
+                    ->text(implode(", ", $e->validator->errors()->all()))
+                    ->error()->show();
                 continue;
             }
 
-            $tieneEstadisticasPositivas = (
-                $datos['goles'] > 0 ||
-                $datos['amarilla'] ||
-                $datos['doble_amarilla'] ||
-                $datos['roja']
-            );
+            // ¿El jugador tiene alguna acción registrada?
+            $tieneAcciones = ($datos['goles'] > 0 || $datos['amarilla'] || $datos['doble_amarilla'] || $datos['roja']);
 
             $claveBusqueda = [
                 'jugador_id' => $jugadorId,
                 'estadisticable_id' => $this->encuentroJugador,
-                'estadisticable_type' => $this->getPolymorphicType(), // ← tipo dinámico
+                'estadisticable_type' => $modeloClase, // Siempre Encuentro
             ];
 
-            $registroExistente = EstadisticaJugadorEncuentro::where($claveBusqueda)->first();
-
-            $nuevosDatosParaGuardar = [
+            $nuevosDatos = [
                 'equipo_id' => $datos['equipo_id'],
                 'campeonato_id' => intval($this->campeonatoId),
                 'goles' => $datos['goles'],
@@ -293,60 +282,48 @@ class EstadisticaVer extends Component
                 'tarjeta_roja' => $datos['roja'],
             ];
 
-            if ($tieneEstadisticasPositivas) {
-                if ($registroExistente) {
-                    $datosExistentes = collect([
-                        'equipo_id' => $registroExistente->equipo_id,
-                        'campeonato_id' => $registroExistente->campeonato_id,
-                        'goles' => $registroExistente->goles,
-                        'tarjeta_amarilla' => (bool)$registroExistente->tarjeta_amarilla,
-                        'tarjeta_doble_amarilla' => (bool)$registroExistente->tarjeta_doble_amarilla,
-                        'tarjeta_roja' => (bool)$registroExistente->tarjeta_roja,
-                    ]);
+            $registroExistente = EstadisticaJugadorEncuentro::where($claveBusqueda)->first();
 
-                    if ($datosExistentes->diffAssoc($nuevosDatosParaGuardar)->isEmpty()) {
-                        continue;
-                    }
-                }
+            if ($tieneAcciones) {
+                // Si hay cambios respecto a lo que ya existe, guardamos/actualizamos
+                if (!$registroExistente || collect($registroExistente->only(array_keys($nuevosDatos)))->diffAssoc($nuevosDatos)->isNotEmpty()) {
+                    EstadisticaJugadorEncuentro::updateOrCreate($claveBusqueda, $nuevosDatos);
 
-                EstadisticaJugadorEncuentro::updateOrCreate($claveBusqueda, $nuevosDatosParaGuardar);
-
-                $jugador = Jugador::find($jugadorId);
-                if ($jugador) {
-                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre . ' ,';
+                    $jugador = Jugador::find($jugadorId);
+                    $mensajesGuardados[] = $jugador->apellido . " " . $jugador->nombre;
                 }
             } elseif ($registroExistente) {
+                // Si no tiene acciones pero existe un registro, lo borramos (limpieza)
                 $registroExistente->delete();
                 $jugador = Jugador::find($jugadorId);
-                if ($jugador) {
-                    $mensajesGuardados[] = $jugador->apellido . ' ' . $jugador->nombre . ' - Registro eliminado.';
-                }
+                $mensajesGuardados[] = ($jugador ? $jugador->apellido : $jugadorId) . " (Borrado)";
             }
         }
 
-        if ($huboErroresDeValidacion) {
-            // Ya se mostraron los errores individuales
-        } elseif (!empty($mensajesGuardados)) {
-
-            LivewireAlert::title('Estadistica guardada')
-                ->text(implode("\n", $mensajesGuardados))
-                ->success()
-                ->show();
-
-
-            if ($this->encuentroSeleccionado) {
-                $currentEncuentro = $this->encuentroSeleccionado;
-                $this->updatedEncuentroSeleccionado(null);
-                $this->updatedEncuentroSeleccionado($currentEncuentro);
-            }
-        } else {
-            LivewireAlert::title('info')
-                ->text('sin cambios')
-                ->error()
-                ->show();
-        }
+        $this->mostrarNotificacionFinal($huboErroresDeValidacion, $mensajesGuardados);
         $this->resetEncuentroData();
     }
+
+    /**
+     * Muestra el resultado final de la operación
+     */
+    private function mostrarNotificacionFinal($huboErrores, $mensajes)
+    {
+        if (!$huboErrores && !empty($mensajes)) {
+            LivewireAlert::title('¡Éxito!')
+                ->text('Datos actualizados de: ' . implode(", ", $mensajes))
+                ->success()->show();
+
+            // Recargar datos para refrescar la UI
+            $current = $this->encuentroSeleccionado;
+            $this->updatedEncuentroSeleccionado($current);
+        } elseif (empty($mensajes) && !$huboErrores) {
+            LivewireAlert::title('Información')
+                ->text('No se detectaron cambios nuevos.')
+                ->info()->show();
+        }
+    }
+
     public function actualizarEquiposJugadores()
     {
         // 1. Obtener todos los registros de la pivote del campeonato seleccionado

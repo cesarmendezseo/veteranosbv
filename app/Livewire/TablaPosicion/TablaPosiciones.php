@@ -25,10 +25,18 @@ class TablaPosiciones extends Component
         $this->generarTablaPosiciones($campeonatoId);
     }
 
+    /*====================================================================== 
+    =            Actualizar tabla de posiciones al cambiar campeonato            =
+    ======================================================================*/
     public function updatedCampeonatoId()
     {
         $this->generarTablaPosiciones();
     }
+
+
+    /*====================================================================== 
+    =           Generar tabla de posiciones           =
+    ======================================================================*/
 
     public function generarTablaPosiciones(int $campeonatoId = null): void
     {
@@ -56,10 +64,23 @@ class TablaPosiciones extends Component
         }
     }
 
+    /*====================================================================== 
+    =            Calcular posiciones por grupo           =
+    ======================================================================*/
     private function calcularPosicionesPorGrupo($campeonato, $grupoId = null)
     {
+        // 1. Solo traemos partidos JUGADOS
         $encuentrosQuery = Encuentro::where('campeonato_id', $campeonato->id)
             ->where('estado', 'Jugado');
+        /** * FILTRO CLAVE: 
+         * Solo sumar encuentros que pertenezcan a una fase de tipo 'regular' o 'grupos'.
+         * Esto excluye automáticamente fases de 'Oro', 'Plata' o 'Eliminación'.
+         */
+        $encuentrosQuery->whereHas('fase', function ($query) {
+            // Ajusta este string según cómo identifiques tus fases regulares en la BD
+            $query->where('nombre', 'LIKE', '%Regular%')
+                ->orWhere('tipo', 'regular');
+        });
 
         if ($grupoId) {
             $encuentrosQuery->where('grupo_id', $grupoId);
@@ -121,6 +142,17 @@ class TablaPosiciones extends Component
             $statsEquipo = EstadisticaJugadorEncuentro::where('campeonato_id', $campeonato->id)
                 ->where('equipo_id', $equipo_id)
                 ->where('estadisticable_type', Encuentro::class)
+                // Filtramos los IDs de encuentros que pertenecen a la fase regular
+                ->whereIn('estadisticable_id', function ($query) use ($campeonato) {
+                    $query->select('encuentros.id')
+                        ->from('encuentros')
+                        ->join('fases_campeonato', 'encuentros.fase_id', '=', 'fases_campeonato.id')
+                        ->where('encuentros.campeonato_id', $campeonato->id)
+                        ->where(function ($q) {
+                            $q->where('fases_campeonato.nombre', 'LIKE', '%Regular%')
+                                ->orWhere('fases_campeonato.tipo', 'regular');
+                        });
+                })
                 ->get();
 
             $tarjetasAmarillas     = $statsEquipo->sum('tarjeta_amarilla');
@@ -155,6 +187,10 @@ class TablaPosiciones extends Component
         return collect($tabla);
     }
 
+
+    /*====================================================================== 
+    =            Generar PDF de tabla de posiciones            =
+    ======================================================================*/
     public function generarTablaPosicionesPDF(Campeonato $campeonato)
     {
         $this->generarTablaPosiciones($campeonato->id);
@@ -171,6 +207,9 @@ class TablaPosiciones extends Component
     }
 
 
+    /*====================================================================== 
+    =           Exportar posiciones a Excel           =
+    ======================================================================*/
     public function exportarPosiciones()
     {
         $campeonato = Campeonato::find($this->campeonato_id);
@@ -203,6 +242,9 @@ class TablaPosiciones extends Component
         );
     }
 
+    /*====================================================================== 
+    =            Renderizar la vista del componente            =
+    ======================================================================*/
     public function render()
     {
         return view('livewire.tabla-posicion.tabla-posiciones');

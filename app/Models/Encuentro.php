@@ -24,7 +24,7 @@ class Encuentro extends Model
         'gol_visitante',
         'estado',
         'fase_id',
-        'fase',
+
     ];
     protected $table = 'encuentros';
 
@@ -71,6 +71,12 @@ class Encuentro extends Model
 
     public function fase(): BelongsTo
     {
+        return $this->belongsTo(FaseCampeonato::class, 'fase_id');
+    }
+
+    public function fase_campeonato()
+    {
+        // Relacionamos el campo fase_campeonato_id con el modelo FaseCampeonato
         return $this->belongsTo(FaseCampeonato::class, 'fase_id');
     }
 }

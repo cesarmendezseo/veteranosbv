@@ -33,7 +33,12 @@ class FaseCampeonato extends Model
         return $this->belongsTo(Campeonato::class);
     }
 
-    public function encuentros(): HasMany
+    /*  public function encuentros(): HasMany
+    {
+        return $this->hasMany(Encuentro::class, 'fase_id');
+    } */
+
+    public function encuentros()
     {
         return $this->hasMany(Encuentro::class, 'fase_id');
     }

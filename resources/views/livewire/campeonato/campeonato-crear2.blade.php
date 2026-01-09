@@ -15,14 +15,14 @@
             </svg>
             <span>Volver</span>
         </a>
-        @if($campeonato->fase_regular_terminada && !$campeonato->liguilla_generada)
+        {{-- @if($campeonato->fase_regular_terminada && !$campeonato->liguilla_generada)
         <div class="p-4 bg-yellow-100 border-l-4 border-yellow-500">
             <p class="text-yellow-700 font-bold">La fase regular ha finalizado.</p>
             <button wire:click="generarFaseEliminatoria" class="bg-blue-600 text-white px-4 py-2 rounded">
                 Generar Liguilla Superior e Inferior
             </button>
         </div>
-        @endif
+        @endif --}}
     </div>
 
     <div

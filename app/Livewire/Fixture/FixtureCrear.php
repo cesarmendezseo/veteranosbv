@@ -56,17 +56,24 @@ class FixtureCrear extends Component
     {
         $this->fase_seleccionada = $value;
 
-        // Intentamos cargar equipos DESIGNADOS para esa fase
+        // 1. Obtener IDs de equipos que ya perdieron en esta fase
+        $eliminadosIds = Encuentro::where('fase_id', $this->fase_seleccionada)
+            ->whereNotNull('perdedor_id')
+            ->pluck('perdedor_id')
+            ->toArray();
+
+        // 2. Intentamos cargar equipos DESIGNADOS para esa fase que NO estén eliminados
         $equiposEnFase = Equipo::whereHas('fases', function ($q) {
             $q->where('fase_id', $this->fase_seleccionada);
-        })->get();
+        })
+            ->whereNotIn('id', $eliminadosIds) // <--- ESTE ES EL FILTRO CLAVE
+            ->get();
 
         if ($equiposEnFase->count() > 0) {
-            // Si hay clasificados (Oro/Plata), mostramos solo esos
             $this->equipos = $equiposEnFase;
             $this->grupos = [];
         } else {
-            // Si no hay designados (Fase Regular), mostramos todos los del campeonato
+            // Si es fase regular, usualmente no hay perdedores eliminados aún
             $this->equipos = Equipo::whereHas('campeonatos', function ($q) {
                 $q->where('campeonato_id', $this->campeonato_id);
             })->get();
@@ -104,10 +111,12 @@ class FixtureCrear extends Component
 
     public function confirmarCierreFase()
     {
+
         // 1. Buscamos el campeonato
         $campeonato = Campeonato::find($this->campeonato_id);
 
         if ($campeonato) {
+
             $exito = $campeonato->avanzarFase();
 
             if ($exito) {
@@ -256,7 +265,7 @@ class FixtureCrear extends Component
         Encuentro::create([
             'campeonato_id' => $this->campeonato_id,
             'grupo_id' => $this->grupo_id,
-            'fase_campeonato_id' => $faseActualDB->id,
+            'fase_id' => $faseActualDB->id,
             'fase' => $faseActualDB->nombre, // Guardamos el nombre de la fase elegida
             'fecha' => $this->fecha,
             'hora' => $this->hora,
@@ -275,13 +284,18 @@ class FixtureCrear extends Component
         $this->reset(['fecha', 'hora', 'equipo_local_id', 'equipo_visitante_id']);
     }
 
+    /*====================================================
+ | RENDERIZADO 
+==================================================== */
+
     public function render()
     {
         $encuentros = Encuentro::with(['equipoLocal', 'equipoVisitante', 'cancha'])
             ->where('campeonato_id', $this->campeonato_id)
-            // Filtramos por el nombre de la fase actual en lugar del ID
-            ->where('fase', $this->campeonato->faseActual->nombre ?? 'regular')
-            ->orderBy('fecha_encuentro', 'desc')
+            ->where('fase_id', $this->fase_seleccionada)
+            // OPCIONAL: Si quieres que al cargar el gol el partido desaparezca de esta lista:
+            // ->where('estado', '!=', 'jugado') 
+            ->orderBy('fecha_encuentro', 'asc')
             ->orderBy('hora')
             ->get();
 

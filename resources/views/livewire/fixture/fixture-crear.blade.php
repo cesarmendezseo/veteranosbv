@@ -162,7 +162,7 @@
 
         <div class="flex justify-start pt-4">
             <button type="submit"
-                class="inline-flex items-center gap-2 bg-blue-950 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-lg shadow transition-colors">
+                class=" cursor-pointer inline-flex items-center gap-2 bg-blue-950 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-lg shadow transition-colors">
                 <i class="fas fa-save"></i>
                 GUARDAR ENCUENTRO
             </button>

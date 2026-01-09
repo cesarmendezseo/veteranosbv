@@ -30,6 +30,8 @@ class CampeonatoCrear2 extends Component
     public $puntos_doble_amarilla = -3;
     public $puntos_tarjeta_roja = -1;
     public $intergrupos_para_libres = false;
+    public $campeonato;
+
 
     // Criterios de desempate
     public $criterios = [
@@ -42,7 +44,7 @@ class CampeonatoCrear2 extends Component
     // Liguilla
     public $tiene_liguilla = false;
     public $config_liguilla = [
-        'equipos_superiores' => 16,
+        'equipos_superiores' => 0,
         'equipos_inferiores' => 0,
         'formato_superior' => 'eliminacion_simple',
         'formato_inferior' => 'eliminacion_simple',
@@ -107,6 +109,13 @@ class CampeonatoCrear2 extends Component
                 'cantidad_grupos' => $this->formato === 'grupos' ? $this->cantidad_grupos : 1,
                 'cantidad_equipos_grupo' => $this->formato === 'grupos' ? $this->equipos_por_grupo : $this->total_equipos,
                 'total_equipos' => $this->total_equipos ?? ($this->cantidad_grupos * $this->equipos_por_grupo),
+                'equipos_fase_arriba' => $this->tiene_liguilla
+                    ? $this->config_liguilla['equipos_superiores']
+                    : null,
+
+                'equipos_fase_abajo' => $this->tiene_liguilla
+                    ? $this->config_liguilla['equipos_inferiores']
+                    : null,
                 'status' => $this->formato,
                 'formato' => $this->formato,
 
@@ -166,10 +175,16 @@ class CampeonatoCrear2 extends Component
         if ($this->tiene_liguilla) {
             $orden++;
 
+            // 🟡 COPA DE ORO
             $campeonato->fases()->create([
                 'nombre' => 'Copa de Oro / Fase Superior',
                 'tipo_fase' => $this->config_liguilla['formato_superior'],
                 'orden' => $orden,
+
+                // ✅ CAMPOS REALES
+                'equipos_fase_arriba' => $this->config_liguilla['equipos_superiores'],
+
+                // ✅ JSON (reglas)
                 'reglas_clasificacion' => [
                     'rango' => 'superior',
                     'cantidad' => $this->config_liguilla['equipos_superiores'],
@@ -178,19 +193,27 @@ class CampeonatoCrear2 extends Component
                     'cantidad_por_grupo' => $this->config_liguilla['cantidad_por_grupo'],
                     'cantidad_terceros' => $this->config_liguilla['cantidad_terceros'],
                 ],
+
                 'estado' => 'pendiente',
             ]);
 
-            // FASE O COPA DE PLATA (Inferior - Si aplica)
+            // 🟡 COPA DE PLATA
             if ($this->config_liguilla['equipos_inferiores'] > 0) {
                 $campeonato->fases()->create([
                     'nombre' => 'Copa de Plata / Fase Inferior',
                     'tipo_fase' => $this->config_liguilla['formato_inferior'],
-                    'orden' => $orden, // Misma jerarquía temporal que la de oro
+                    'orden' => $orden,
+
+                    // ✅ CAMPO REAL
+                    'equipos_fase_abajo' => $this->config_liguilla['equipos_inferiores'],
+
+                    // ✅ JSON
                     'reglas_clasificacion' => [
                         'rango' => 'inferior',
                         'cantidad' => $this->config_liguilla['equipos_inferiores'],
+                        'fase_padre_id' => $fasePrincipal->id,
                     ],
+
                     'estado' => 'pendiente',
                 ]);
             }

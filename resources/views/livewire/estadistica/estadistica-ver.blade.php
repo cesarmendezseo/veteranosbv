@@ -23,6 +23,18 @@
 
 
     <div class="mb-1 grid grid-cols-1 md:grid-cols-3 gap-4  bg-gray-300 dark:bg-gray-800 p-2 rounded-lg shadow-lg">
+        {{-- SELECT DE FASE --}}
+        <div>
+            <select wire:model.live="faseSeleccionada"
+                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="">-- Seleccionar Fase --</option>
+                @foreach ($fasesDisponibles as $fase)
+                {{-- Aquí $fase es un objeto del modelo FaseCampeonato --}}
+                <option value="{{ $fase->id }}">{{ strtoupper($fase->nombre) }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="">
             {{-- <label class="block font-medium text-base dark:text-[#FFC107]">Fecha Jornada</label> --}}
             <select wire:model.live="fechaSeleccionada"
@@ -38,14 +50,21 @@
         @if ($encuentros)
         <div class="">
             {{-- <label class="block font-medium text-base dark:text-[#FFC107]">Local VS Visitante</label> --}}
-            <select wire:model.live="encuentroSeleccionado"
-                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="">Local VS Visitante</option>
+            <select wire:model.live="encuentroSeleccionado" @if(!$fechaSeleccionada) disabled @endif
+                class="bg-gray-50 border border-gray-500 text-gray-900 text-sm rounded-lg focus:ring-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:text-white">
+
+                <option value="">-- Seleccionar Partido --</option>
+
+                @if($encuentros && count($encuentros) > 0)
                 @foreach ($encuentros as $encuentro)
-                <option value="{{ $encuentro->id }}"> {{ strtoupper($encuentro->equipoLocal->nombre) }} ....vs.... {{
+                <option value="{{ $encuentro->id }}">
+                    {{ strtoupper($encuentro->equipoLocal->nombre) }} vs {{
                     strtoupper($encuentro->equipoVisitante->nombre) }}
                 </option>
                 @endforeach
+                @else
+                <option value="" disabled>No hay partidos para esta fecha</option>
+                @endif
             </select>
         </div>
         @endif
