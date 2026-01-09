@@ -343,28 +343,41 @@ class FixtureVer extends Component
             try {
                 $this->fechaFiltro = \Carbon\Carbon::parse($this->fechaFiltro)->format('Y-m-d');
             } catch (\Exception $e) {
-                $this->fechaFiltro = null; // evitar crash
+                $this->fechaFiltro = null;
             }
         }
 
-        // Si no hay campeonato seleccionado, retorna vista vacía
         if (!$this->campeonato_id) {
-            return view('livewire.fixture.fixture-index', [
+            return view('livewire.fixture.fixture-ver', [
                 'encuentrosAgrupados' => collect()
             ]);
         }
 
-        // Obtener los encuentros filtrados
         $encuentros = Encuentro::query()
             ->with(['equipoLocal', 'equipoVisitante', 'cancha', 'grupo', 'campeonato', 'fase'])
-            ->when($this->campeonato_id, fn($q) => $q->where('campeonato_id', $this->campeonato_id))
+            ->where('campeonato_id', $this->campeonato_id)
 
-            // FILTRO POR FASE (Usando fase_id que es el nombre de tu columna)
-            ->when($this->faseFiltro !== null, function ($q) {
-                $q->where('fase_id', $this->faseFiltro);
+            // FILTRO POR FASE
+            ->when($this->faseFiltro, fn($q) => $q->where('fase_id', $this->faseFiltro))
+
+            // FILTRO POR JORNADA (Número de fecha)
+            ->when($this->jornadaFiltro, fn($q) => $q->where('fecha_encuentro', $this->jornadaFiltro))
+
+            // FILTRO POR EQUIPO LOCAL (Búsqueda por nombre)
+            ->when($this->equipoLocalFiltro, function ($q) {
+                $q->whereHas('equipoLocal', function ($query) {
+                    $query->where('nombre', 'like', '%' . $this->equipoLocalFiltro . '%');
+                });
             })
 
-            // Otros filtros que mencionas tener (ejemplos basados en tus variables)
+            // FILTRO POR EQUIPO VISITANTE (Búsqueda por nombre)
+            ->when($this->equipoVisitanteFiltro, function ($q) {
+                $q->whereHas('equipoVisitante', function ($query) {
+                    $query->where('nombre', 'like', '%' . $this->equipoVisitanteFiltro . '%');
+                });
+            })
+
+            // Otros filtros existentes
             ->when($this->grupoFiltro, fn($q) => $q->where('grupo_id', $this->grupoFiltro))
             ->when($this->fechaFiltro, fn($q) => $q->whereDate('fecha', $this->fechaFiltro))
             ->when($this->estadoFiltro, fn($q) => $q->where('estado', $this->estadoFiltro))
@@ -373,16 +386,15 @@ class FixtureVer extends Component
             ->orderBy('hora')
             ->get();
 
-        // Agrupar los encuentros por cancha
+        // Agrupar por cancha
         $encuentrosAgrupados = $encuentros->groupBy(function ($encuentro) {
-            $nombreCancha = $encuentro->cancha->nombre ?? 'Sin cancha';
-            return $nombreCancha;
+            return $encuentro->cancha->nombre ?? 'Sin cancha';
         });
 
-        // Pasar los goles almacenados en la base de datos al componente
+        // Sincronizar goles para los inputs
         foreach ($encuentros as $encuentro) {
-            $this->goles_local[$encuentro->id] = $encuentro->gol_local;
-            $this->goles_visitante[$encuentro->id] = $encuentro->gol_visitante;
+            $this->goles_local[$encuentro->id] = $this->goles_local[$encuentro->id] ?? $encuentro->gol_local;
+            $this->goles_visitante[$encuentro->id] = $this->goles_visitante[$encuentro->id] ?? $encuentro->gol_visitante;
         }
 
         return view('livewire.fixture.fixture-ver', compact('encuentrosAgrupados'));
