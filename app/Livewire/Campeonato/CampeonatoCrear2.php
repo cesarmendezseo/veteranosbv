@@ -8,6 +8,7 @@ use App\Models\Criterios_desempate;
 use App\Models\Grupo;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
+use Jantinnerezo\LivewireAlert\LivewireAlert as JantinnerezoLivewireAlert;
 use Livewire\Component;
 
 class CampeonatoCrear2 extends Component
@@ -83,8 +84,19 @@ class CampeonatoCrear2 extends Component
         }
 
         if ($this->tiene_liguilla) {
-            $rules['config_liguilla.equipos_superiores'] = 'required|integer|min:2';
+            // Solo validamos estos campos si el formato NO es grupos, 
+            // porque en tu HTML solo los muestras para 'todos_contra_todos'
+            if ($this->formato === 'todos_contra_todos') {
+                $rules['config_liguilla.equipos_superiores'] = 'required|integer|min:2';
+            }
+
+            // El formato superior sí existe para ambos casos en tu HTML
             $rules['config_liguilla.formato_superior'] = 'required|string';
+
+            // Si es grupos, validamos el criterio de clasificación que sí tienes en el HTML
+            if ($this->formato === 'grupos') {
+                $rules['config_liguilla.criterio_clasificacion'] = 'required|string';
+            }
         }
 
         return $rules;
@@ -92,63 +104,83 @@ class CampeonatoCrear2 extends Component
 
     public function save()
     {
-        $this->validate();
+        try {
+            // 1. Validar según las reglas que definimos
+            $this->validate();
 
-        DB::transaction(function () {
-            $campeonato = Campeonato::create([
-                'nombre' => $this->nombre,
-                'formato' => $this->formato,
-                'categoria_id' => $this->categoria_id,
-                'puntos_ganado' => $this->puntos_ganado,
-                'puntos_empatado' => $this->puntos_empatado,
-                'puntos_perdido' => $this->puntos_perdido,
-                // Nuevos campos de fairplay
-                'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
-                'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
-                'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
-                'cantidad_grupos' => $this->formato === 'grupos' ? $this->cantidad_grupos : 1,
-                'cantidad_equipos_grupo' => $this->formato === 'grupos' ? $this->equipos_por_grupo : $this->total_equipos,
-                'total_equipos' => $this->total_equipos ?? ($this->cantidad_grupos * $this->equipos_por_grupo),
-                'equipos_fase_arriba' => $this->tiene_liguilla
-                    ? $this->config_liguilla['equipos_superiores']
-                    : null,
+            // 2. Mapear el formato al status que acepta tu base de datos
+            $statusMap = [
+                'todos_contra_todos' => 'todos_contra_todo',
+                'grupos'             => 'fase_de_grupos',
+                'eliminacion_simple' => 'eliminacion_directa',
+                'eliminacion_doble'  => 'eliminacion_directa', // O el valor que corresponda
+            ];
 
-                'equipos_fase_abajo' => $this->tiene_liguilla
-                    ? $this->config_liguilla['equipos_inferiores']
-                    : null,
-                'status' => $this->formato,
-                'formato' => $this->formato,
+            $statusFinal = $statusMap[$this->formato] ?? $this->formato;
 
-            ]);
-
-            // Criterios de desempate (Prioridad)
-            foreach ($this->criterios as $index => $criterio) {
-                Criterios_desempate::create([
-                    'campeonato_id' => $campeonato->id,
-                    'criterio' => $criterio,
-                    'orden' => $index + 1
+            // 3. Iniciar Transacción
+            DB::transaction(function () use ($statusFinal) {
+                $campeonato = Campeonato::create([
+                    'nombre' => $this->nombre,
+                    'formato' => $this->formato,
+                    'status' => $statusFinal, // <--- Valor corregido para MySQL
+                    'categoria_id' => $this->categoria_id,
+                    'puntos_ganado' => $this->puntos_ganado,
+                    'puntos_empatado' => $this->puntos_empatado,
+                    'puntos_perdido' => $this->puntos_perdido,
+                    'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
+                    'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
+                    'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
+                    'cantidad_grupos' => $this->formato === 'grupos' ? $this->cantidad_grupos : 1,
+                    'cantidad_equipos_grupo' => $this->formato === 'grupos' ? $this->equipos_por_grupo : $this->total_equipos,
+                    'total_equipos' => $this->total_equipos ?? ($this->cantidad_grupos * $this->equipos_por_grupo),
+                    'equipos_fase_arriba' => $this->tiene_liguilla ? ($this->config_liguilla['equipos_superiores'] ?? null) : null,
+                    'equipos_fase_abajo' => $this->tiene_liguilla ? ($this->config_liguilla['equipos_inferiores'] ?? null) : null,
                 ]);
-            }
 
-            if ($this->formato === 'grupos') {
-                for ($i = 1; $i <= $this->cantidad_grupos; $i++) {
-                    $campeonato->grupos()->create([
-                        'nombre' => "Grupo " . chr(64 + $i),
-                        'cantidad_equipos' => $this->equipos_por_grupo,
-                    ]);
+                // Criterios de desempate
+                if ($this->criterios) {
+                    foreach ($this->criterios as $index => $criterio) {
+                        Criterios_desempate::create([
+                            'campeonato_id' => $campeonato->id,
+                            'criterio' => $criterio,
+                            'orden' => $index + 1
+                        ]);
+                    }
                 }
-            }
 
-            $this->crearFases($campeonato);
-        });
+                // Crear Grupos
+                if ($this->formato === 'grupos') {
+                    for ($i = 1; $i <= $this->cantidad_grupos; $i++) {
+                        $campeonato->grupos()->create([
+                            'nombre' => "Grupo " . chr(64 + $i),
+                            'cantidad_equipos' => $this->equipos_por_grupo,
+                        ]);
+                    }
+                }
 
-        LivewireAlert::success()
-            ->title('Perfecto')
-            ->text('Campeonato creado correctamente')
-            ->toast()
-            ->show();
+                $this->crearFases($campeonato);
+            });
 
-        return redirect()->route('campeonato.index');
+            \Jantinnerezo\LivewireAlert\Facades\LivewireAlert::title('¡Éxito!')
+                ->text('Campeonato creado correctamente')
+                ->success()
+                ->show();
+
+            return redirect()->route('campeonato.index');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errorMessages = implode('<br>', $e->validator->errors()->all());
+
+            \Jantinnerezo\LivewireAlert\Facades\LivewireAlert::title('Error de Validación')
+                ->html('<b>Revisa lo siguiente:</b><br>' . $errorMessages)
+                ->error()
+                ->show();
+        } catch (\Exception $e) {
+            \Jantinnerezo\LivewireAlert\Facades\LivewireAlert::title('Error inesperado')
+                ->html('<b>Detalle técnico:</b><br>' . $e->getMessage())
+                ->error()
+                ->show();
+        }
     }
 
 

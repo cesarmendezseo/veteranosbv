@@ -1,4 +1,20 @@
 <div class="space-y-4">
+     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
+        <h2 class="font-semibold text-xl text-gray-100 leading-tight">
+            {{ __('Registrar Sanciones') }}
+        </h2>
+        <div class="flex">
+            <a href="{{ route('Dashboard') }}"
+                class="cursor-pointer text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Volver
+            </a>
+        </div>
+    </div>
     {{-- Filtros --}}
     <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
@@ -38,6 +54,7 @@
                     <th class="px-4 py-2 text-center hidden sm:table-cell">Sanción (Tiempo/Fec)</th>
                     <th class="px-4 py-2 text-center hidden sm:table-cell">Estado / Cumplidas</th>
                     <th class="px-4 py-2 text-center hidden sm:table-cell">Detalle</th>
+                    <th class="px-4 py-2 text-center hidden sm:table-cell">Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -91,6 +108,26 @@
                         </td>
 
                         <td class="px-4 py-2 text-xs">{{ $jug->observacion }}</td>
+ @adminOrCan('administracion')
+                            <td class="px-4 py-2 text-center flex justify-center gap-2">
+                                <button wire:click="editarSancion({{ $jug->id }})"
+                                    class="cursor-pointer text-blue-600 hover:text-blue-900">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </button>
+                                <button wire:click="confirmarEliminacion({{ $jug->id }})"
+                                    class="cursor-pointer  text-red-600 hover:text-red-900">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </td>
+                            @endadminOrCan
                     </tr>
 
                     {{-- Fila Móvil --}}
@@ -134,6 +171,27 @@
                                 <div class="text-xs italic text-gray-500"><strong>Nota:</strong> {{ $jug->observacion }}
                                 </div>
                                 @endif
+                                 @adminOrCan('administracion')
+                    <div class="px-4 py-2 text-center flex justify-center gap-2">
+                        <button wire:click="editarSancion({{ $jug->id }})"
+                            class="cursor-pointer text-blue-600 hover:text-blue-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
+                        <button wire:click="confirmarEliminacion({{ $jug->id }})"
+                            class="cursor-pointer  text-red-600 hover:text-red-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+
+                    </div>
+                    @endadminOrCan
                             </div>
                         </td>
                     </tr>
@@ -149,4 +207,37 @@
         <div class="p-4 border-t">{{ $sanciones->links() }}</div>
         @endif
     </div>
+     @if($modalEditVisible)
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Editar Sanción</h3>
+
+            <div class="space-y-4">
+                @if($edit_medida === 'partidos')
+                <div>
+                    <label class="block text-sm font-medium">Partidos de Sanción</label>
+                    <input type="number" wire:model="edit_partidos_sancionados" class="w-full border rounded p-2">
+                </div>
+                @else
+                <div>
+                    <label class="block text-sm font-medium">Fecha de Finalización</label>
+                    <input type="date" wire:model="edit_fecha_fin" class="w-full border rounded p-2">
+                </div>
+                @endif
+
+                <div>
+                    <label class="block text-sm font-medium">Observación</label>
+                    <textarea wire:model="edit_observacion" class="w-full border rounded p-2"></textarea>
+                </div>
+            </div>
+
+           <div class="mt-6 flex justify-end gap-3">
+                <button wire:click="$set('modalEditVisible', false)"
+                    class="cursor-pointer px-4 py-2 bg-gray-300 rounded">Cancelar</button>
+                <button wire:click="actualizarSancion" class="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded">Guardar
+                    Cambios</button>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>

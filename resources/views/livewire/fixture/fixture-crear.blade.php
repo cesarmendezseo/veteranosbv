@@ -168,6 +168,33 @@
             </button>
         </div>
     </form>
+    <!-- BOTÓN BUSCAR LIBRES -->
+    <button wire:click="buscarLibres" class="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded mt-4">
+        Buscar equipos libres
+    </button>
+
+    <!-- LISTA LIBRES -->
+    @if (!empty($libres))
+    <div class="mt-6 p-4 bg-gray-100 rounded">
+        <h3 class="text-lg font-bold mb-2">Equipos libres por fecha</h3>
+
+        @foreach($libres as $fecha => $lista)
+        <div class="mb-4">
+            <strong>Fecha {{ $fecha }}:</strong>
+            @if ($lista->isEmpty())
+            <span class="text-red-600">Ningún equipo quedó libre</span>
+            @else
+            <ul class="list-disc ml-6">
+                @foreach ($lista as $equipo)
+                <li>{{ $equipo->nombre }}</li>
+                @endforeach
+            </ul>
+            @endif
+        </div>
+        @endforeach
+
+    </div>
+    @endif
 
     {{-- LISTADO DE ENCUENTROS REGISTRADOS --}}
     <div class="mt-8 mb-10">
@@ -182,7 +209,7 @@
                 class="hidden lg:flex items-center justify-between border-b last:border-0 py-4 px-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                 <div class="w-40">
                     <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full uppercase">
-                        {{ $encuentro->fase }}
+                        {{ $encuentro->fase_campeonato->nombre }}
                     </span>
                 </div>
 

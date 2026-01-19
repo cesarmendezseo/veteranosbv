@@ -33,6 +33,7 @@ class FixtureCrear extends Component
     public $fase_nombre = 'regular';
     public $fase_seleccionada; // Nueva propiedad para el selector manual
     public $fases_campeonato = [];
+    public $libres = [];
 
 
     public function mount($campeonatoId)
@@ -51,10 +52,15 @@ class FixtureCrear extends Component
         $this->updatedCampeonatoSeleccionado();
     }
 
+    /* ======================================================
+     | CARGA DINÁMICA DE EQUIPOS POR GRUPO
+     ===================================================== */
 
     public function updatedFaseSeleccionada($value)
     {
         $this->fase_seleccionada = $value;
+        $this->cargarEquiposFiltrados();
+        /*  $this->fase_seleccionada = $value;
 
         // 1. Obtener IDs de equipos que ya perdieron en esta fase
         $eliminadosIds = Encuentro::where('fase_id', $this->fase_seleccionada)
@@ -77,7 +83,7 @@ class FixtureCrear extends Component
             $this->equipos = Equipo::whereHas('campeonatos', function ($q) {
                 $q->where('campeonato_id', $this->campeonato_id);
             })->get();
-        }
+        } */
     }
 
     public function cargarEquiposSegunFase()
@@ -159,38 +165,24 @@ class FixtureCrear extends Component
     public function updatedCampeonatoSeleccionado()
     {
         if ($this->campeonatoSeleccionado) {
-            $this->campeonato = Campeonato::with(['faseActual.equipos'])->find($this->campeonatoSeleccionado);
+            $this->campeonato = Campeonato::find($this->campeonatoSeleccionado);
             $this->campeonato_id = $this->campeonato->id;
+            $this->fase_seleccionada = $this->campeonato->fase_actual_id;
 
-            // 1. Si estamos en Liguilla (Oro/Plata) y hay equipos designados
-            if ($this->campeonato->faseActual && $this->campeonato->faseActual->equipos->count() > 0) {
-                $this->equipos = $this->campeonato->faseActual->equipos()->orderBy('nombre')->get();
-                $this->grupos = [];
-                $this->fase_nombre = $this->campeonato->faseActual->nombre;
-            }
-            // 2. Si es fase de grupos regular
-            elseif ($this->campeonato->formato === 'grupos') {
-                $this->grupos = Grupo::where('campeonato_id', $this->campeonato_id)->get();
-                $this->equipos = [];
-            }
-            // 3. Si es todos contra todos regular
-            else {
-                $this->grupos = [];
-                $this->equipos = Equipo::whereHas('campeonatos', function ($query) {
-                    $query->where('campeonato_id', $this->campeonato_id);
-                })->orderBy('nombre')->get();
-            }
+            // Cargar grupos si existen
+            $this->grupos = Grupo::where('campeonato_id', $this->campeonato_id)->get();
+
+            $this->cargarEquiposFiltrados();
         }
     }
+    /* ======================================================
+        | CARGA DINÁMICA DE EQUIPOS POR GRUPO
+    ===========================================================*/
+
 
     public function updatedGrupoId()
     {
-        if ($this->grupo_id) {
-            $this->equipos = Equipo::whereHas('campeonatos', function ($query) {
-                $query->where('campeonato_equipo.campeonato_id', $this->campeonato_id)
-                    ->where('campeonato_equipo.grupo_id', $this->grupo_id);
-            })->get();
-        }
+        $this->cargarEquiposFiltrados();
     }
 
     /* =====================================================
@@ -276,12 +268,164 @@ class FixtureCrear extends Component
             'fecha_encuentro' => $this->jornada,
         ]);
 
-
+        // REFRESCAR LA LISTA DE EQUIPOS DISPONIBLES
+        $this->cargarEquiposFiltrados();
         LivewireAlert::title('¡Éxito!')
             ->text('Encuentro creado correctamente.')
             ->success()
             ->show();
         $this->reset(['fecha', 'hora', 'equipo_local_id', 'equipo_visitante_id']);
+    }
+    /* 
+    =====================================================
+     | CARGA DE EQUIPOS FILTRADOS (ELIMINADOS)
+     =====================================================
+    */
+    public function cargarEquiposFiltrados()
+    {
+        if (!$this->fase_seleccionada) return;
+
+        $faseObj = \App\Models\FaseCampeonato::find($this->fase_seleccionada);
+        if (!$faseObj) return;
+
+        // 1. Obtener IDs de equipos que ya perdieron EN ESTA FASE
+        // (Solo para fases que no sean 'Regular', donde sí hay eliminación directa)
+        $eliminadosIds = Encuentro::where('fase_id', $this->fase_seleccionada)
+            ->whereNotNull('perdedor_id')
+            ->pluck('perdedor_id')
+            ->toArray();
+
+        // 2. Si la fase tiene equipos asignados (Oro/Plata/Playoffs)
+        if ($faseObj->equipos()->count() > 0) {
+            $this->equipos = $faseObj->equipos()
+                ->whereNotIn('equipos.id', $eliminadosIds) // Solo los que siguen vivos
+                ->orderBy('nombre')
+                ->get();
+            $this->grupos = [];
+        }
+        // 3. Si es Fase Regular pero queremos filtrar por grupo
+        elseif ($this->grupo_id) {
+            $this->equipos = Equipo::whereHas('campeonatos', function ($query) {
+                $query->where('campeonato_equipo.campeonato_id', $this->campeonato_id)
+                    ->where('campeonato_equipo.grupo_id', $this->grupo_id);
+            })
+                ->whereNotIn('id', $eliminadosIds)
+                ->get();
+        }
+        // 4. Fase Regular general
+        else {
+            $this->equipos = Equipo::whereHas('campeonatos', function ($query) {
+                $query->where('campeonato_id', $this->campeonato_id);
+            })
+                ->whereNotIn('id', $eliminadosIds)
+                ->orderBy('nombre')
+                ->get();
+        }
+    }
+
+    /* =====================================================
+     | BÚSQUEDA DE EQUIPOS LIBRES POR FECHA
+     =====================================================*/
+    public function buscarLibres()
+    {
+        /* ===============================================================
+        1) CARGAR EQUIPOS SEGÚN FORMATO (GRUPOS o TODOS CONTRA TODOS)
+        =============================================================== */
+        if ($this->grupo_id) {
+            // Equipos del grupo
+            $equipos = Equipo::select('equipos.*', 'campeonato_equipo.grupo_id')
+                ->join('campeonato_equipo', 'equipos.id', '=', 'campeonato_equipo.equipo_id')
+                ->where('campeonato_equipo.campeonato_id', $this->campeonato_id)
+                ->where('campeonato_equipo.grupo_id', $this->grupo_id)
+                ->where('equipos.nombre', '!=', 'Sin Equipo')
+                ->get();
+        } else {
+            // Todos los equipos del campeonato
+            $equipos = Equipo::select('equipos.*', 'campeonato_equipo.grupo_id')
+                ->join('campeonato_equipo', 'equipos.id', '=', 'campeonato_equipo.equipo_id')
+                ->where('campeonato_equipo.campeonato_id', $this->campeonato_id)
+                ->where('equipos.nombre', '!=', 'Sin Equipo')
+                ->get();
+        }
+        /* ===============================================================
+        2) TRAER FECHAS
+        =============================================================== */
+        $fechas = Encuentro::where('campeonato_id', $this->campeonato_id)
+            ->distinct()
+            ->pluck('fecha_encuentro');
+
+        $libresPorFecha = [];
+
+        /* ===============================================================
+        3) CALCULAR LIBRES POR FECHA
+        =============================================================== */
+        foreach ($fechas as $fecha) {
+
+            $locales = Encuentro::where('campeonato_id', $this->campeonato_id)
+                ->where('fecha_encuentro', $fecha)
+                ->pluck('equipo_local_id');
+
+            $visitantes = Encuentro::where('campeonato_id', $this->campeonato_id)
+                ->where('fecha_encuentro', $fecha)
+                ->pluck('equipo_visitante_id');
+
+            $equiposQueJuegan = $locales->merge($visitantes)->unique();
+
+            // Equipos libres
+            $libres = $equipos->whereNotIn('id', $equiposQueJuegan);
+
+            $libresPorFecha[$fecha] = $libres->values();
+
+            /* ===============================================================
+            4) CREAR AUTOMÁTICAMENTE EL ENCUENTRO ENTRE LIBRES
+            =============================================================== */
+            if ($libres->count() === 2) {
+
+                $equipoA = $libres->values()[0];
+                $equipoB = $libres->values()[1];
+
+                $grupoA = $equipoA->pivot->grupo_id ?? null;
+                $grupoB = $equipoB->pivot->grupo_id ?? null;
+
+                $grupoDelEncuentro = $grupoA ?: $grupoB;
+
+                $fechaReal = now()->toDateString();
+                $horaAuto = '00:00:00'; // Asegúrate de incluir los segundos
+                $canchaAuto = Canchas::first()->id ?? 1;
+
+                // Verificar que no exista ya el enfrentamiento
+                $existe = Encuentro::where('campeonato_id', $this->campeonato_id)
+                    ->where('fecha_encuentro', $fecha)
+                    ->where(function ($q) use ($equipoA, $equipoB) {
+                        $q->where(function ($q2) use ($equipoA, $equipoB) {
+                            $q2->where('equipo_local_id', $equipoA->id)
+                                ->where('equipo_visitante_id', $equipoB->id);
+                        })
+                            ->orWhere(function ($q2) use ($equipoA, $equipoB) {
+                                $q2->where('equipo_local_id', $equipoB->id)
+                                    ->where('equipo_visitante_id', $equipoA->id);
+                            });
+                    })
+                    ->exists();
+
+                if (!$existe) {
+                    Encuentro::create([
+                        'campeonato_id' => $this->campeonato_id,
+                        'grupo_id' => $grupoDelEncuentro,
+                        'fecha' => $fechaReal,
+                        'hora' => $horaAuto,
+                        'cancha_id' => $canchaAuto,
+                        'estado' => 'programado',
+                        'equipo_local_id' => $equipoA->id,
+                        'equipo_visitante_id' => $equipoB->id,
+                        'gol_local' => 0,
+                        'gol_visitante' => 0,
+                        'fecha_encuentro' => $fecha,
+                    ]);
+                }
+            }
+        }
+        $this->libres = $libresPorFecha;
     }
 
     /*====================================================
