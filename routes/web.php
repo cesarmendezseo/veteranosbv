@@ -41,6 +41,7 @@ use App\Livewire\Frontend\Fixture\FixtureIndex as FixtureFixtureIndex;
 use App\Livewire\Frontend\Fixture\FixtureVer as FixtureFixtureVer;
 use App\Livewire\Frontend\Fixture\FrontEliminatoria;
 use App\Livewire\Frontend\Fixture\FrontEliminatoriaVer;
+use App\Livewire\Frontend\ListadoBuenaFe as FrontendListadoBuenaFe;
 use App\Livewire\Frontend\PaginaPrincipal;
 use App\Livewire\Frontend\PaginaPrincipal\PrincipalIndex;
 use App\Livewire\Frontend\ProximosPartidos\ProximosPartidosIndex;
@@ -79,7 +80,7 @@ Route::get('/frontend/{id}/sanciones', Sanciones::class)->name('frontend.sancion
 Route::get('/frontend/principal/{id}index', PrincipalIndex::class)->name('frontend.principal-index');
 Route::get('/frontend/{id}/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados1');
 Route::get('/frontend/tarjetas/{id}', \App\Livewire\Frontend\Estadistica\Amarillas::class)->name('frontend.estadistica.tarjetas');
-
+Route::get('/frontend/listado-buena-fe/{campeonatoId}/ver', FrontendListadoBuenaFe::class)->name('frontend.listado-buena-fe.ver');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
