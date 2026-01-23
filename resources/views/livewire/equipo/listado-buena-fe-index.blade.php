@@ -50,7 +50,7 @@
                     <td class="px-6 py-4 text-right">
                         <div x-data="{ open: false }" class="relative inline-block text-left">
                             <button @click="open = !open"
-                                class="p-2 rounded-full  hover:bg-gray-100 dark:hover:bg-gray-700 text-black cursor-pointer dark:text-white {{-- focus:outline-none focus:ring-2 focus:ring-blue-400 --}}">
+                                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-black cursor-pointer dark:text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-8">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -65,7 +65,8 @@
                                 x-transition:leave="transition ease-in duration-75"
                                 x-transition:leave-start="transform opacity-100 scale-100"
                                 x-transition:leave-end="transform opacity-0 scale-95"
-                                class="absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 dark:border-gray-900 rounded-lg z-50">
+                                class="absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 dark:border-gray-900 rounded-lg z-50"
+                                :class="{ 'bottom-full mb-2': $el.getBoundingClientRect().bottom + 200 > window.innerHeight }">
                                 <ul class="py-1 text-sm bg-white text-black dark:bg-gray-800 ">
                                     <li>
                                         <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}"
@@ -99,6 +100,7 @@
                                 </ul>
                             </div>
                         </div>
+
                     </td>
                 </tr>
                 @endforeach
