@@ -41,6 +41,7 @@
                         <th class="border px-4 py-2 text-center">DNI</th>
                         <th class="border px-4 py-2 text-center">Apellido</th>
                         <th class="border px-4 py-2 text-center">Nombre</th>
+                        <th class="border px-4 py-2 text-center">Edad</th>
                         <th class="border px-4 py-2 text-center">Sanciones</th>
                         <th class="border px-4 py-2 text-center">Acción</th>
                     </tr>
@@ -56,6 +57,8 @@
                         <td class="border px-2 py-2 text-center">{{ strtoupper($jugador['jugador']->documento) }}</td>
                         <td class="border px-2 py-2">{{ strtoupper($jugador['jugador']->apellido) }}</td>
                         <td class="border px-2 py-2">{{ strtoupper($jugador['jugador']->nombre) }}</td>
+                        <td class="border px-2 py-2 text-center">{{ strtoupper($jugador['jugador']->edad) }}</td>
+
                         <td class="border px-2 py-2 max-w-[250px]">
                             @if ($sancionesJugador->isNotEmpty())
                             @foreach ($sancionesJugador as $sancion)
@@ -143,6 +146,13 @@
                         DNI: {{ strtoupper($jugadorModel->documento) }}
                     </span>
                 </div>
+
+                <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    <span class="inline-block bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                        DNI: {{ strtoupper($jugadorModel->edad) }}
+                    </span>
+                </div>
+
             </div>
 
             <div class="space-y-2">

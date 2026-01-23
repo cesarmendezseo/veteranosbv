@@ -58,6 +58,7 @@
                                     <th class="px-4 py-3">#</th>
                                     <th class="px-4 py-3 text-left">Apellido</th>
                                     <th class="px-4 py-3 text-left">Nombre</th>
+                                    <th class="px-4 py-3 text-left">Edad</th>
 
                                     <th class="px-4 py-3">Estado</th>
                                     <th class="px-4 py-3">Acción</th>
@@ -88,6 +89,9 @@
                                     <!-- NOMBRE -->
                                     <td class="px-4 py-3 text-left font-semibold tracking-wide">
                                         {{ strtoupper($jugador['jugador']->nombre) }}
+                                    </td>
+                                    <td class="px-4 py-3 text-left font-semibold tracking-wide">
+                                        {{ strtoupper($jugador['jugador']->edad) }}
                                     </td>
 
 
@@ -171,6 +175,9 @@
                                 <div class="text-lg font-bold text-black dark:text-white">
                                     {{ strtoupper($jugadorModel->apellido) }}, {{ strtoupper($jugadorModel->nombre) }}
                                 </div>
+                                <td class="px-4 py-3 text-left font-semibold tracking-wide">
+                                    Edad: {{ strtoupper($jugador['jugador']->edad) }}
+                                </td>
 
                             </div>
 
