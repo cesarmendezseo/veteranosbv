@@ -49,6 +49,7 @@ class ListadoBuenaFeVer extends Component
 
     public function calcularPeriodoSancion($fechaInicio, $fechaFin)
     {
+
         // Validar que ambas fechas existan Y no estén vacías
         if (!$fechaInicio || !$fechaFin || $fechaInicio === '' || $fechaFin === '') {
             return null;
@@ -82,16 +83,24 @@ class ListadoBuenaFeVer extends Component
     {
 
         if ($this->campeonatoId && $equipoId) {
-            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with(['jugador', 'jugador.sanciones' => function ($q) {
-                // Traer TODAS las sanciones activas, sin filtrar por campeonato
-                $q->where('cumplida', false);
-            }])
+            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with([
+                'jugador',
+                'jugador.sanciones' => function ($q) {
+                    $q->where(function ($q2) {
+                        $q2->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                            ->orWhere(function ($q3) {
+                                $q3->whereNotNull('fecha_fin')
+                                    ->where('fecha_fin', '>=', now());
+                            });
+                    });
+                }
+            ])
                 ->where('campeonato_id', $this->campeonatoId)
                 ->where('equipo_id', $equipoId)
                 ->whereNull('fecha_baja')
                 ->get()
                 ->map(function ($registro) {
-                    // Las sanciones ahora vienen desde jugador.sanciones
+
                     $sancionesConPeriodo = $registro->jugador->sanciones->map(function ($sancion) {
                         $sancion->periodo_texto = $this->calcularPeriodoSancion(
                             $sancion->fecha_inicio,
@@ -138,7 +147,7 @@ class ListadoBuenaFeVer extends Component
 
         foreach ($sanciones as $sancion) {
             $jugador = $sancion->jugador;
-           $equipo = $jugador->equipo_id;
+            $equipo = $jugador->equipo_id;
 
             $encuentros = Encuentro::where('campeonato_id', $sancion->campeonato_id)
                 ->where('estado', 'Jugado')

@@ -40,8 +40,8 @@ class SancionesMostrar extends Component
     {
         $this->resetPage();
     }
-    
-     public function editarSancion($id)
+
+    public function editarSancion($id)
     {
         $sancion = Sanciones::findOrFail($id);
 
@@ -114,7 +114,10 @@ class SancionesMostrar extends Component
 
             // 2. Filtro: Solo los que aún deben fechas
             ->when($this->soloPendientes, function ($query) {
-                $query->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
+                $query->where(function ($q) {
+                    $q->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                        ->orWhere('fecha_fin', '>=', now());
+                });
             })
 
             // 3. Filtro por Búsqueda de texto
