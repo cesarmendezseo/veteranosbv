@@ -167,7 +167,7 @@ class SancionesCrear extends Component
 
         $rules = [
             'jugador_id' => 'required|exists:jugadors,id',
-            'partido_id' => 'required', // <--- Esto es lo que está fallando según tu dd()
+            'partido_id' => 'nullable', // <--- Esto es lo que está fallando según tu dd()
             'motivo' => 'required|string',
             'tipo_medida' => 'required|in:partidos,tiempo',
         ];

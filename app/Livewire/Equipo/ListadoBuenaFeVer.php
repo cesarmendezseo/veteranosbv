@@ -138,11 +138,7 @@ class ListadoBuenaFeVer extends Component
 
         foreach ($sanciones as $sancion) {
             $jugador = $sancion->jugador;
-            // Corregir: La columna equipo_id está en el modelo Jugador si la relación es correcta.
-            // Si el jugador ya no está asociado a un equipo (como al dar de baja), 
-            // esta línea podría fallar si el modelo Jugador no tiene ese campo.
-            // Asumo que el modelo Jugador tiene un campo equipo_id que apunta al equipo actual.
-            $equipo = $jugador->equipo_id;
+           $equipo = $jugador->equipo_id;
 
             $encuentros = Encuentro::where('campeonato_id', $sancion->campeonato_id)
                 ->where('estado', 'Jugado')
