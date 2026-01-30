@@ -57,22 +57,23 @@ class ListadoBuenaFeVer extends Component
 
         try {
             $inicio = \Carbon\Carbon::parse($fechaInicio);
-            $fin = \Carbon\Carbon::parse($fechaFin);
+            $fin    = \Carbon\Carbon::parse($fechaFin);
 
-            $diffAnios = $inicio->diffInYears($fin);
-            $diffMeses = $inicio->copy()->addYears($diffAnios)->diffInMonths($fin);
+            $diff = $inicio->diff($fin);
 
             $resultado = [];
 
-            if ($diffAnios > 0) {
-                $resultado[] = $diffAnios . ($diffAnios == 1 ? ' año' : ' años');
+            if ($diff->y > 0) {
+                $resultado[] = $diff->y . ($diff->y === 1 ? ' año' : ' años');
             }
 
-            if ($diffMeses > 0) {
-                $resultado[] = $diffMeses . ($diffMeses == 1 ? ' mes' : ' meses');
+            if ($diff->m > 0) {
+                $resultado[] = $diff->m . ($diff->m === 1 ? ' mes' : ' meses');
             }
 
-            return !empty($resultado) ? implode(' y ', $resultado) : 'Menos de 1 mes';
+            return $resultado
+                ? implode(' y ', $resultado)
+                : 'Menos de 1 mes';
         } catch (\Exception $e) {
             return null;
         }

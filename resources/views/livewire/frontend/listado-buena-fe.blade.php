@@ -203,7 +203,7 @@
                                         </div>
                                         <div class="text-xs text-black dark:text-white text-center">
                                             @if($sancion->periodo_texto)
-                                            <strong class="block">{{ $sancion->periodo_texto }}</strong>
+                                            <strong class="block">Restan: {{ $sancion->periodo_texto }}</strong>
                                             <small class="block mt-1 opacity-80 text-[10px]">
                                                 {{ \Carbon\Carbon::parse($sancion->fecha_inicio)->format('d/m/Y') }} -
                                                 {{ \Carbon\Carbon::parse($sancion->fecha_fin)->format('d/m/Y') }}

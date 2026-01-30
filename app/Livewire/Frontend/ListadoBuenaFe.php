@@ -57,22 +57,23 @@ class ListadoBuenaFe extends Component
 
         try {
             $inicio = \Carbon\Carbon::parse($fechaInicio);
-            $fin = \Carbon\Carbon::parse($fechaFin);
+            $fin    = \Carbon\Carbon::parse($fechaFin);
 
-            $diffAnios = $inicio->diffInYears($fin);
-            $diffMeses = $inicio->copy()->addYears($diffAnios)->diffInMonths($fin);
+            $diff = $inicio->diff($fin);
 
             $resultado = [];
 
-            if ($diffAnios > 0) {
-                $resultado[] = $diffAnios . ($diffAnios == 1 ? ' año' : ' años');
+            if ($diff->y > 0) {
+                $resultado[] = $diff->y . ($diff->y === 1 ? ' año' : ' años');
             }
 
-            if ($diffMeses > 0) {
-                $resultado[] = $diffMeses . ($diffMeses == 1 ? ' mes' : ' meses');
+            if ($diff->m > 0) {
+                $resultado[] = $diff->m . ($diff->m === 1 ? ' mes' : ' meses');
             }
 
-            return !empty($resultado) ? implode(' y ', $resultado) : 'Menos de 1 mes';
+            return $resultado
+                ? implode(' y ', $resultado)
+                : 'Menos de 1 mes';
         } catch (\Exception $e) {
             return null;
         }
@@ -83,16 +84,24 @@ class ListadoBuenaFe extends Component
     {
 
         if ($this->campeonatoId && $equipoId) {
-            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with(['jugador', 'jugador.sanciones' => function ($q) {
-                // Traer TODAS las sanciones activas, sin filtrar por campeonato
-                $q->where('cumplida', false);
-            }])
+            $this->jugadoresEquipos = CampeonatoJugadorEquipo::with([
+                'jugador',
+                'jugador.sanciones' => function ($q) {
+                    $q->where(function ($q2) {
+                        $q2->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+                            ->orWhere(function ($q3) {
+                                $q3->whereNotNull('fecha_fin')
+                                    ->where('fecha_fin', '>=', now());
+                            });
+                    });
+                }
+            ])
                 ->where('campeonato_id', $this->campeonatoId)
                 ->where('equipo_id', $equipoId)
                 ->whereNull('fecha_baja')
                 ->get()
                 ->map(function ($registro) {
-                    // Las sanciones ahora vienen desde jugador.sanciones
+
                     $sancionesConPeriodo = $registro->jugador->sanciones->map(function ($sancion) {
                         $sancion->periodo_texto = $this->calcularPeriodoSancion(
                             $sancion->fecha_inicio,
