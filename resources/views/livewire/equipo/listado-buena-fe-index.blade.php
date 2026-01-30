@@ -48,58 +48,35 @@
 
                     {{-- MENÚ DE OPCIONES --}}
                     <td class="px-6 py-4 text-right">
-                        <div x-data="{ open: false }" class="relative inline-block text-left">
-                            <button @click="open = !open"
-                                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-black cursor-pointer dark:text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-8">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 6v.01M12 12v.01M12 18v.01" />
-                                </svg>
-                            </button>
 
-                            <div x-show="open" @click.outside="open = false"
-                                x-transition:enter="transition ease-out duration-100"
-                                x-transition:enter-start="transform opacity-0 scale-95"
-                                x-transition:enter-end="transform opacity-100 scale-100"
-                                x-transition:leave="transition ease-in duration-75"
-                                x-transition:leave-start="transform opacity-100 scale-100"
-                                x-transition:leave-end="transform opacity-0 scale-95"
-                                class="absolute right-0 mt-2 w-40 origin-top-right bg-white border border-gray-200 dark:border-gray-900 rounded-lg z-50"
-                                :class="{ 'bottom-full mb-2': $el.getBoundingClientRect().bottom + 200 > window.innerHeight }">
-                                <ul class="py-1 text-sm bg-white text-black dark:bg-gray-800 ">
-                                    <li>
-                                        <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}"
-                                            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-400  dark:text-white dark:hover:text-gray-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor"
-                                                class="w-5 h-5 mr-2 text-gray-800 dark:text-white">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                            </svg>
-                                            Ver
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}"
-                                            class="flex items-center gap-2 px-4 py-2 hover:bg-gray-400  dark:text-white dark:hover:text-gray-800">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="lucide lucide-badge-plus-icon lucide-badge-plus">
-                                                <path
-                                                    d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                                <line x1="12" x2="12" y1="8" y2="16" />
-                                                <line x1="8" x2="16" y1="12" y2="12" />
-                                            </svg>
-                                            <span class="ml-2"> Crear</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <ul class="flex gap-2 py-1">
+                            <li>
+                                <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold
+                  bg-blue-600 text-white rounded-full
+                  hover:bg-blue-700 transition shadow">
+                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178" />
+                                    </svg>
+                                    Ver
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold
+                  bg-emerald-600 text-white rounded-full
+                  hover:bg-emerald-700 transition shadow">
+                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                    Crear
+                                </a>
+                            </li>
+                        </ul>
+
+
 
                     </td>
                 </tr>
