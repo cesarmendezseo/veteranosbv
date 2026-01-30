@@ -51,6 +51,7 @@ use App\Livewire\Jugadore\JugadoresCrear;
 use App\Livewire\Jugadore\JugadoresEditar;
 use App\Livewire\Jugadore\JugadoresIndex;
 use App\Livewire\Roles\AccessControlPanel;
+use App\Livewire\Sanciones\CrearAdministrador;
 use App\Livewire\Sanciones\SancionesCrear;
 use App\Livewire\Sanciones\SancionesIndex;
 use App\Livewire\Sanciones\SancionesVer;
@@ -200,6 +201,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/sanciones/{campeonatoId}/crear', SancionesCrear::class)->name('sanciones.crearSanciones');
         Route::get('/sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class,)->name('sanciones.actualizar');
+        Route::get('/sanciones/crearAdmin', CrearAdministrador::class)->name('sanciones.sanciones-administrador');
     });
     //==============FIN SANCIONES========================
     //==============ESTADISTICA========================
