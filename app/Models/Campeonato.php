@@ -82,6 +82,10 @@ class Campeonato extends Model
         return $this->belongsTo(FaseCampeonato::class, 'fase_actual_id');
     }
 
+    public function criterioDesempate()
+    {
+        return $this->belongsTo(Criterios_desempate::class);
+    }
 
     private function crearPartidosEliminatorios(array $ids, $faseModel, $subTipo)
     {

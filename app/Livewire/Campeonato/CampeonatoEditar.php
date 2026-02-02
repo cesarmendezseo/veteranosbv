@@ -4,17 +4,16 @@ namespace App\Livewire\Campeonato;
 
 use App\Models\Campeonato;
 use App\Models\Categoria;
-use Livewire\Component;
 use App\Models\Criterios_desempate;
+use Livewire\Component;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
-use SweetAlert2\Laravel\Swal; // Asegúrate de que este namespace es correcto, puede ser solo \Illuminate\Support\Facades\Session para mensajes flash estándar.
 
 class CampeonatoEditar extends Component
 {
+    public $campeonatoId;
     public $nombre;
     public $formato = '';
     public $cantidad_grupos;
-    public $cantidad_equipos_grupo; // Este parece ser un campo redundante en tu lógica actual, usaremos $equipos_por_grupo
     public $puntos_victoria;
     public $puntos_empate;
     public $puntos_derrota;
@@ -24,24 +23,22 @@ class CampeonatoEditar extends Component
     public $total_equipos;
     public $equipos_por_grupo;
     public $categoria_id;
-    public $categorias;
-    public $criterios;
-    public $campeonatoId;
-    // public $Criterios_desempate; // Este no es necesario como propiedad pública
 
-    protected $listeners = ['actualizarVista' => '$refresh']; // Listener opcional para refrescar si es necesario
+    // Colecciones y Arrays
+    public $categorias;
+    public $criterios = []; // Inicializar como array vacío
 
     public function mount($campeonatoId)
     {
         $this->campeonatoId = $campeonatoId;
-        $campeonato = Campeonato::with('grupos', 'categoria', 'criterioDesempate')
+        $campeonato = Campeonato::with(['categoria', 'criterioDesempate'])
             ->findOrFail($campeonatoId);
 
         $this->nombre = $campeonato->nombre;
         $this->formato = $campeonato->formato;
         $this->cantidad_grupos = $campeonato->cantidad_grupos;
-        // Asignación correcta
         $this->equipos_por_grupo = $campeonato->cantidad_equipos_grupo;
+        $this->total_equipos = $campeonato->total_equipos;
 
         $this->puntos_victoria = $campeonato->puntos_ganado;
         $this->puntos_empate = $campeonato->puntos_empatado;
@@ -53,63 +50,85 @@ class CampeonatoEditar extends Component
         $this->categoria_id = $campeonato->categoria_id;
         $this->categorias = Categoria::all();
 
-        // Cargar total_equipos: si es 'todos_contra_todos' o eliminacion, se carga de la tabla principal
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'eliminacion_simple' || $this->formato === 'eliminacion_doble') {
-            $this->total_equipos = $campeonato->cantidad_equipos;
-        } else {
-            // Tu lógica anterior no era clara, pero para edición, total_equipos ya debería estar en la tabla
-            $this->total_equipos = $campeonato->cantidad_equipos;
-        }
+        // CORRECCIÓN AQUÍ: Convertir explícitamente a array asociativo simple
+        $this->criterios = $campeonato->criterioDesempate()
+            ->orderBy('orden')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'criterio' => $item->criterio,
+                    'orden' => $item->orden
+                ];
+            })
+            ->toArray();
 
-        // Si querés guardar los criterios para usar en la vista también:
-        $this->criterios = $campeonato->criterioDesempate->sortBy('orden')->all();
+
+        // Definimos cuáles deberían ser los criterios por defecto
+        $criteriosBase = ['puntos', 'diferencia_goles', 'goles_favor', 'fair_play'];
+
+        // Obtenemos los que ya existen en la BD
+        $existentes = $campeonato->criterioDesempate()
+            ->orderBy('orden')
+            ->get();
+
+        if ($existentes->count() > 0) {
+            // Si ya existen, los cargamos
+            $this->criterios = $existentes->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'criterio' => $item->criterio,
+                    'orden' => $item->orden
+                ];
+            })->toArray();
+
+            // OPCIONAL: Si solo trajo 3 pero quieres que siempre sean 4, 
+            // buscamos cuál falta y lo agregamos al final
+            $nombresExistentes = $existentes->pluck('criterio')->toArray();
+            foreach ($criteriosBase as $base) {
+                if (!in_array($base, $nombresExistentes)) {
+                    $this->criterios[] = [
+                        'id' => null,
+                        'criterio' => $base,
+                        'orden' => count($this->criterios) + 1
+                    ];
+                }
+            }
+        } else {
+            // Si no tiene ninguno, creamos los 4 desde cero
+            foreach ($criteriosBase as $index => $base) {
+                $this->criterios[] = [
+                    'id' => null,
+                    'criterio' => $base,
+                    'orden' => $index + 1
+                ];
+            }
+        }
     }
 
 
-    /**
-     * Define las reglas de validación condicionales.
-     */
+
     protected function rules()
     {
-        $rules = [
+        return [
             'nombre' => 'required|string|max:255',
-            'formato' => 'required|string|in:todos_contra_todos,grupos,eliminacion_simple,eliminacion_doble',
+            'formato' => 'required|string',
             'categoria_id' => 'required|exists:categorias,id',
-
-            // Reglas para Fair Play (son necesarias para todos los formatos)
-            'puntos_tarjeta_amarilla' => 'required|integer|min:-100|max:100',
-            'puntos_doble_amarilla' => 'required|integer|min:-100|max:100',
-            'puntos_tarjeta_roja' => 'required|integer|min:-100|max:100',
+            'puntos_tarjeta_amarilla' => 'required|integer',
+            'puntos_doble_amarilla' => 'required|integer',
+            'puntos_tarjeta_roja' => 'required|integer',
+            'total_equipos' => 'required_if:formato,todos_contra_todos,eliminacion_simple,eliminacion_doble',
+            'cantidad_grupos' => 'required_if:formato,grupos',
+            'equipos_por_grupo' => 'required_if:formato,grupos',
         ];
-
-        // Reglas CONDICIONALES según el formato
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'eliminacion_simple' || $this->formato === 'eliminacion_doble') {
-            // Se requiere el total de equipos
-            $rules['total_equipos'] = 'required|integer|min:2';
-        }
-
-        if ($this->formato === 'grupos') {
-            // Se requieren grupos y equipos por grupo
-            $rules['cantidad_grupos'] = 'required|integer|min:1';
-            $rules['equipos_por_grupo'] = 'required|integer|min:2';
-        }
-
-        // Puntos solo se requieren para formatos de LIGA
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'grupos') {
-            $rules['puntos_victoria'] = 'required|integer|min:0';
-            $rules['puntos_empate'] = 'required|integer|min:0';
-            $rules['puntos_derrota'] = 'required|integer|min:0';
-        }
-
-        return $rules;
     }
-
 
     public function moveCriterioUp($index)
     {
         if ($index > 0) {
-            $temp = $this->criterios[$index - 1];
-            $this->criterios[$index - 1] = $this->criterios[$index];
+            $prevIndex = $index - 1;
+            $temp = $this->criterios[$prevIndex];
+            $this->criterios[$prevIndex] = $this->criterios[$index];
             $this->criterios[$index] = $temp;
         }
     }
@@ -117,93 +136,69 @@ class CampeonatoEditar extends Component
     public function moveCriterioDown($index)
     {
         if ($index < count($this->criterios) - 1) {
-            $temp = $this->criterios[$index + 1];
-            $this->criterios[$index + 1] = $this->criterios[$index];
+            $nextIndex = $index + 1;
+            $temp = $this->criterios[$nextIndex];
+            $this->criterios[$nextIndex] = $this->criterios[$index];
             $this->criterios[$index] = $temp;
         }
     }
 
-
     public function editar()
     {
-        // 1. Validar usando las reglas condicionales
         $this->validate();
-
         $campeonato = Campeonato::findOrFail($this->campeonatoId);
 
-        // 2. Determinar los valores por defecto/seguros (usando 0 en lugar de null)
         $data = [
             'nombre' => $this->nombre,
             'formato' => $this->formato,
             'categoria_id' => $this->categoria_id,
+            'puntos_ganado' => $this->puntos_victoria,
+            'puntos_empatado' => $this->puntos_empate,
+            'puntos_perdido' => $this->puntos_derrota,
             'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
             'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
             'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
-
-            // **IMPORTANTE: Usamos 0 para campos NOT NULL cuando no son relevantes**
-            'cantidad_grupos' => 0,
-            'cantidad_equipos_grupo' => 0,
-            'puntos_ganado' => 0,
-            'puntos_empatado' => 0,
-            'puntos_perdido' => 0,
-            'cantidad_equipos' => 0, // Usar 0 en lugar de null si 'cantidad_equipos' también es NOT NULL
         ];
 
-        // 3. Sobreescribir valores basados en el formato
-
-        // Si es formato de liga o eliminación simple/doble
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'eliminacion_simple' || $this->formato === 'eliminacion_doble') {
-            $data['cantidad_equipos'] = $this->total_equipos;
-        }
-
-        // Si es formato de grupos
+        // Lógica de asignación de equipos
         if ($this->formato === 'grupos') {
             $data['cantidad_grupos'] = $this->cantidad_grupos;
             $data['cantidad_equipos_grupo'] = $this->equipos_por_grupo;
-            $data['cantidad_equipos'] = $this->cantidad_grupos * $this->equipos_por_grupo;
+            $data['total_equipos'] = $this->cantidad_grupos * $this->equipos_por_grupo;
+        } else {
+            $data['cantidad_grupos'] = 1;
+            $data['cantidad_equipos_grupo'] = $this->total_equipos;
+            $data['total_equipos'] = $this->total_equipos;
         }
 
-        // Si es formato de liga (todos_contra_todos o grupos)
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'grupos') {
-            $data['puntos_ganado'] = $this->puntos_victoria;
-            $data['puntos_empatado'] = $this->puntos_empate;
-            $data['puntos_perdido'] = $this->puntos_derrota;
+        // Lógica de puntos
+        if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
+            $data['puntos_ganado'] = $this->puntos_victoria ?? 0;
+            $data['puntos_empatado'] = $this->puntos_empate ?? 0;
+            $data['puntos_perdido'] = $this->puntos_derrota ?? 0;
         }
 
-        // 4. Actualizar el campeonato
         $campeonato->update($data);
 
-        // 5. Actualizar criterios de desempate (Solo si es liga o grupos)
-        if ($this->formato === 'todos_contra_todos' || $this->formato === 'grupos') {
-            // ... (Tu lógica para guardar criterios) ...
+        // ACTUALIZACIÓN DE CRITERIOS
+        if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
+            // Eliminar antiguos y crear nuevos basándose en el orden del array
             Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
-            foreach ($this->criterios as $index => $criterio) {
+
+            foreach ($this->criterios as $index => $criterioData) {
                 Criterios_desempate::create([
                     'campeonato_id' => $campeonato->id,
-                    'criterio' => is_array($criterio) ? $criterio['criterio'] : $criterio->criterio,
+                    'criterio' => $criterioData['criterio'],
                     'orden' => $index + 1,
                 ]);
             }
         } else {
-            // Eliminar criterios si el formato es de eliminación
             Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
         }
 
-
-        // Flash message to indicate success
-        LivewireAlert::title('Ok')
-            ->text('Campeonato actualizado correctamente')
-            ->success()
-            ->toast()
-            ->position('center')
-            ->show();
-
+        $this->alert('success', 'Campeonato actualizado correctamente');
         return redirect()->route('campeonato.index');
     }
-
-
-
-
 
     public function render()
     {
