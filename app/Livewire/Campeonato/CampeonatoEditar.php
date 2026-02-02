@@ -196,7 +196,11 @@ class CampeonatoEditar extends Component
             Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
         }
 
-        $this->alert('success', 'Campeonato actualizado correctamente');
+
+        LivewireAlert::title('Campeoanto actualizado correctamente')
+            ->success()
+            ->toast()
+            ->show();
         return redirect()->route('campeonato.index');
     }
 
