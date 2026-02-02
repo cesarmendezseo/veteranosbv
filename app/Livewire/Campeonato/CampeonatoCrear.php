@@ -5,7 +5,9 @@ namespace App\Livewire\Campeonato;
 use App\Models\Campeonato;
 use App\Models\Categoria;
 use App\Models\Criterios_desempate;
+use App\Models\FaseCampeonato;
 use App\Models\Grupo;
+use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 use SweetAlert2\Laravel\Swal;
 use Livewire\Component;
@@ -38,6 +40,7 @@ class CampeonatoCrear extends Component
 
     public function mount()
     {
+
         $this->categorias = Categoria::all();
     }
 
@@ -120,79 +123,83 @@ class CampeonatoCrear extends Component
         }
     }
 
-
     public function save()
     {
-
         $this->validate();
-        // Determinar los valores por defecto para los campos relacionados con grupos
+
+        // 1. Mapeo de formato a tipo de fase
         $isGrupos = $this->formato === 'grupos';
         $isEliminacion = in_array($this->formato, ['eliminacion_simple', 'eliminacion_doble']);
-        $isTodosContraTodos = $this->formato === 'todos_contra_todos';
 
-        // Determinar el status inicial
-        $statusInicial = 'todos_contra_todos'; // Por defecto, el de la BD
-        if ($isGrupos) {
-            $statusInicial = 'fase_de_grupos';
-        } elseif ($isEliminacion) {
-            $statusInicial = 'eliminacion_directa';
-        }
+        $statusInicial = $isGrupos ? 'fase_de_grupos' : ($isEliminacion ? 'eliminacion_directa' : 'todos_contra_todos');
 
-        $campeonato = Campeonato::create([
+        // El tipo de fase para el modelo FaseCampeonato
+        $tipoFase = $this->formato;
 
-            'nombre' => $this->nombre,
-            'formato' => $this->formato,
-            // Asignar null o 1 a los campos de grupos si no es formato 'grupos'
-            'cantidad_grupos' => $isGrupos ? (int) $this->cantidad_grupos : 1,
-            'cantidad_equipos_grupo' => $isGrupos ? (int) $this->equipos_por_grupo : 0,
-            // **CORRECCIÓN PRINCIPAL**: Asegurarse de que el total de equipos sea INT
-            'total_equipos' => intval($this->total_equipos),
+        try {
+            DB::transaction(function () use ($isGrupos, $statusInicial, $tipoFase) {
 
-            'puntos_ganado' => $this->puntos_ganado,
-            'puntos_empatado' =>  $this->puntos_empatado,
-            'puntos_perdido' => $this->puntos_perdido,
-            'categoria_id' => (int) $this->categoria_id,
-            'status' => $statusInicial, // Asignar el status inicial
-            'config_sancion' => 'cada_7dias', // Valor por defecto
-
-        ]);
-
-        // Guardar criterios de desempate (Solo son relevantes para liga/grupos)
-        if ($isGrupos || $isTodosContraTodos) {
-            foreach ($this->criterios as $index => $criterio) {
-                Criterios_desempate::create([
-                    'campeonato_id' => $campeonato->id,
-                    'criterio' => $criterio,
-                    'orden' => $index + 1,
+                // 2. Crear el Campeonato primero
+                $campeonato = \App\Models\Campeonato::create([
+                    'nombre' => $this->nombre,
+                    'formato' => $this->formato,
+                    'cantidad_grupos' => $isGrupos ? (int) $this->cantidad_grupos : 1,
+                    'cantidad_equipos_grupo' => $isGrupos ? (int) $this->equipos_por_grupo : 0,
+                    'total_equipos' => intval($this->total_equipos),
+                    'puntos_ganado' => $this->puntos_ganado,
+                    'puntos_empatado' => $this->puntos_empatado,
+                    'puntos_perdido' => $this->puntos_perdido,
+                    'categoria_id' => (int) $this->categoria_id,
+                    'status' => $statusInicial,
+                    'config_sancion' => 'cada_7dias',
+                    // 'fase_actual_id' se queda null momentáneamente
                 ]);
-            }
-        }
 
-
-        // Crear los grupos/la "llave"
-        if ($isGrupos) {
-            // Lógica existente para crear N grupos (A, B, C...)
-            $letras = range('A', 'Z');
-
-            for ($i = 0; $i < $this->cantidad_grupos; $i++) {
-                Grupo::create([
+                // 3. Crear la Fase Inicial usando tu modelo FaseCampeonato
+                $fase = \App\Models\FaseCampeonato::create([
                     'campeonato_id' => $campeonato->id,
-                    'nombre' => 'Grupo ' . $letras[$i],
-                    'cantidad_equipos' => $this->cantidad_equipos_grupo,
+                    'nombre' => $isGrupos ? 'Fase de Grupos' : 'Fase Regular',
+                    'tipo_fase' => $tipoFase,
+                    'orden' => 1,
+                    'estado' => 'activa', // Usando el string que espera tu lógica
+                    'reglas_clasificacion' => [], // Array vacío por el cast
                 ]);
-            }
+
+                // 4. AHORA vinculamos la fase al campeonato (CORRECCIÓN DEL NULL)
+                $campeonato->update([
+                    'fase_actual_id' => $fase->id
+                ]);
+
+                // 5. Criterios de desempate
+                if ($this->formato === 'todos_contra_todos' || $isGrupos) {
+                    foreach ($this->criterios as $index => $criterio) {
+                        \App\Models\Criterios_desempate::create([
+                            'campeonato_id' => $campeonato->id,
+                            'criterio' => $criterio,
+                            'orden' => $index + 1,
+                        ]);
+                    }
+                }
+
+                // 6. Lógica de Grupos
+                if ($isGrupos) {
+                    $letras = range('A', 'Z');
+                    for ($i = 0; $i < $this->cantidad_grupos; $i++) {
+                        \App\Models\Grupo::create([
+                            'campeonato_id' => $campeonato->id,
+                            'nombre' => 'Grupo ' . $letras[$i],
+                            'cantidad_equipos' => $this->equipos_por_grupo,
+                        ]);
+                    }
+                }
+            });
+
+            $this->alert('success', '¡Campeonato y Fase inicial creados!');
+            return redirect()->route('campeonato.index');
+        } catch (\Exception $e) {
+            // En caso de error, LivewireAlert o un log
+            session()->flash('error', 'Error: ' . $e->getMessage());
         }
-
-        // ... Alerta de éxito y redirección
-        LivewireAlert::title('Perfecto!!')
-            ->text('Campeonato creado correctamente')
-            ->success()
-            ->toast()
-            ->show();
-
-
-
-        return redirect()->route('campeonato.index'); // Redirige a la lista de campeonatos
     }
 
 

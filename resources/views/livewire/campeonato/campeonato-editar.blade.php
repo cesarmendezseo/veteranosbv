@@ -185,11 +185,69 @@
                     @error('puntos_tarjeta_roja') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 </div>
             </div>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Fase Actual del Campeonato
+                </label>
+                <select wire:model="fase_actual_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    @foreach($fases_campeonato as $fase)
+                    <option value="{{ $fase->id }}">{{ $fase->nombre }} (Orden: {{ $fase->orden }})</option>
+                    @endforeach
+                </select>
+                @error('fase_actual_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+            </div>
+            <h3 class="text-lg font-bold mb-4 text-blue-900 dark:text-blue-400 uppercase tracking-wider">Estructura de
+                Fases</h3>
 
+            <div class="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8">
+                <div class="space-y-4">
+                    @foreach($fases_data as $index => $fase)
+                    <div
+                        class="flex flex-wrap md:flex-nowrap gap-4 items-end border-b border-gray-200 dark:border-gray-700 pb-4">
+                        <div class="w-12 text-center font-bold text-gray-500">#{{ $index + 1 }}</div>
+
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500">Nombre de la Fase</label>
+                            <input type="text" wire:model="fases_data.{{ $index }}.nombre"
+                                class="w-full bg-white border border-gray-300 text-sm rounded-lg p-2 dark:bg-gray-800 dark:text-white">
+                        </div>
+
+                        <div class="w-40">
+                            <label class="block text-xs font-medium text-gray-500">Tipo</label>
+                            <select wire:model="fases_data.{{ $index }}.tipo_fase"
+                                class="w-full bg-white border border-gray-300 text-sm rounded-lg p-2 dark:bg-gray-800 dark:text-white">
+                                <option value="liga">Liga (Puntos)</option>
+                                <option value="eliminacion">Eliminación Directa</option>
+                            </select>
+                        </div>
+
+                        <button type="button" wire:click="eliminarFase({{ $index }})"
+                            class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+
+                <button type="button" wire:click="agregarFase"
+                    class="mt-4 inline-flex items-center gap-2 text-sm text-blue-700 hover:text-blue-900 font-semibold">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Añadir otra fase (Playoffs, Final, etc.)
+                </button>
+            </div>
             {{-- Botones de Acción --}}
             <div class="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button type="submit"
-                    class="inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white px-6 py-2.5 rounded-lg font-medium transition-all shadow-sm">
+                    class="cursor-pointer inline-flex items-center gap-2 bg-blue-900 hover:bg-blue-800 text-white px-6 py-2.5 rounded-lg font-medium transition-all shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
@@ -204,6 +262,7 @@
                     <span>Cancelar</span>
                 </a>
             </div>
+
         </form>
     </div>
 

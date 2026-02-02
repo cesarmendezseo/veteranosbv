@@ -5,6 +5,8 @@ namespace App\Livewire\Campeonato;
 use App\Models\Campeonato;
 use App\Models\Categoria;
 use App\Models\Criterios_desempate;
+use App\Models\FaseCampeonato;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
@@ -23,7 +25,9 @@ class CampeonatoEditar extends Component
     public $total_equipos;
     public $equipos_por_grupo;
     public $categoria_id;
-
+    public $fase_actual_id; // Nueva propiedad
+    public $fases_campeonato = []; // Para el select
+    public $fases_data = [];
     // Colecciones y Arrays
     public $categorias;
     public $criterios = []; // Inicializar como array vacío
@@ -31,8 +35,35 @@ class CampeonatoEditar extends Component
     public function mount($campeonatoId)
     {
         $this->campeonatoId = $campeonatoId;
-        $campeonato = Campeonato::with(['categoria', 'criterioDesempate'])
+        $campeonato = Campeonato::with(['categoria', 'criterioDesempate', 'fases'])
             ->findOrFail($campeonatoId);
+        $fasesColeccion = $campeonato->fases ?: collect();
+        $this->campeonatoId = $campeonatoId;
+        $campeonato = Campeonato::with(['categoria', 'criterioDesempate', 'fases'])
+            ->findOrFail($campeonatoId);
+        $tipoFase = ($this->formato === 'todos_contra_todos' || $this->formato === 'grupos') ? 'liga' : 'eliminacion';
+        if ($campeonato->fases->isEmpty()) {
+            // Si no existen fases, creamos una "Fase Regular" por defecto
+            $nuevaFase = FaseCampeonato::create([
+                'campeonato_id' => $campeonato->id,
+                'nombre' => 'Fase Regular',
+                'tipo_fase'     => $tipoFase,
+                'orden' => 1,
+                'estado' => 'pendiente'
+            ]);
+
+            // Actualizamos el campeonato para que apunte a esta nueva fase
+            $campeonato->update(['fase_actual_id' => $nuevaFase->id]);
+
+            // Refrescamos la relación y asignamos el ID a la propiedad de Livewire
+            $campeonato->load('fases');
+            $this->fase_actual_id = $nuevaFase->id;
+        } else {
+            // Si ya existen, simplemente asignamos la que tiene el campeonato
+            $this->fase_actual_id = $campeonato->fase_actual_id;
+        }
+
+        $this->fases_campeonato = $campeonato->fases;
 
         $this->nombre = $campeonato->nombre;
         $this->formato = $campeonato->formato;
@@ -104,9 +135,34 @@ class CampeonatoEditar extends Component
                 ];
             }
         }
+        // Cargar las fases como un array editable
+        $this->fases_data = $campeonato->fases->map(function ($fase) {
+
+            return [
+                'id' => $fase->id,
+                'nombre' => $fase->nombre,
+                'tipo_fase' => $fase->tipo_fase,
+                'orden' => $fase->orden,
+            ];
+        })->toArray();
     }
 
+    public function agregarFase()
+    {
+        $nuevoOrden = count($this->fases_data) + 1;
+        $this->fases_data[] = [
+            'id' => null, // null indica que es nueva
+            'nombre' => 'Nueva Fase ' . $nuevoOrden,
+            'tipo_fase' => 'liga',
+            'orden' => $nuevoOrden,
+        ];
+    }
 
+    public function eliminarFase($index)
+    {
+        unset($this->fases_data[$index]);
+        $this->fases_data = array_values($this->fases_data); // Reindexar
+    }
 
     protected function rules()
     {
@@ -145,63 +201,93 @@ class CampeonatoEditar extends Component
 
     public function editar()
     {
+
         $this->validate();
         $campeonato = Campeonato::findOrFail($this->campeonatoId);
 
-        $data = [
-            'nombre' => $this->nombre,
-            'formato' => $this->formato,
-            'categoria_id' => $this->categoria_id,
-            'puntos_ganado' => $this->puntos_victoria,
-            'puntos_empatado' => $this->puntos_empate,
-            'puntos_perdido' => $this->puntos_derrota,
-            'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
-            'puntos_doble_amarilla' => $this->puntos_doble_amarilla,
-            'puntos_tarjeta_roja' => $this->puntos_tarjeta_roja,
-        ];
+        try {
+            DB::transaction(function () use ($campeonato) {
 
-        // Lógica de asignación de equipos
-        if ($this->formato === 'grupos') {
-            $data['cantidad_grupos'] = $this->cantidad_grupos;
-            $data['cantidad_equipos_grupo'] = $this->equipos_por_grupo;
-            $data['total_equipos'] = $this->cantidad_grupos * $this->equipos_por_grupo;
-        } else {
-            $data['cantidad_grupos'] = 1;
-            $data['cantidad_equipos_grupo'] = $this->total_equipos;
-            $data['total_equipos'] = $this->total_equipos;
+                // 1. Preparar datos base
+                $data = [
+                    'nombre'                  => $this->nombre,
+                    'formato'                 => $this->formato,
+                    'categoria_id'            => $this->categoria_id,
+                    'fase_actual_id' => $this->fase_actual_id,
+                    'puntos_tarjeta_amarilla' => $this->puntos_tarjeta_amarilla,
+                    'puntos_doble_amarilla'   => $this->puntos_doble_amarilla,
+                    'puntos_tarjeta_roja'     => $this->puntos_tarjeta_roja,
+                ];
+
+                // 2. Lógica de equipos y grupos
+                if ($this->formato === 'grupos') {
+                    $data['cantidad_grupos']        = (int) $this->cantidad_grupos;
+                    $data['cantidad_equipos_grupo'] = (int) $this->equipos_por_grupo;
+                    $data['total_equipos']          = $data['cantidad_grupos'] * $data['cantidad_equipos_grupo'];
+                } else {
+                    $data['cantidad_grupos']        = 1;
+                    $data['cantidad_equipos_grupo'] = (int) $this->total_equipos;
+                    $data['total_equipos']          = (int) $this->total_equipos;
+                }
+
+                // 3. Lógica de puntos (Solo si el formato los requiere)
+                if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
+                    $data['puntos_ganado']   = $this->puntos_victoria ?? 0;
+                    $data['puntos_empatado'] = $this->puntos_empate ?? 0;
+                    $data['puntos_perdido']  = $this->puntos_derrota ?? 0;
+                }
+
+                // 4. Actualizar Campeonato
+                $campeonato->update($data);
+
+                // 5. ACTUALIZACIÓN DE CRITERIOS
+                // Borramos y recreamos para asegurar que el orden ($index) sea exacto al de la vista
+                Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
+
+                if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
+                    foreach ($this->criterios as $index => $criterioData) {
+                        Criterios_desempate::create([
+                            'campeonato_id' => $campeonato->id,
+                            'criterio'      => $criterioData['criterio'],
+                            'orden'         => $index + 1,
+                        ]);
+                    }
+                }
+                // Sincronizar Fases
+                $idsMantener = [];
+                foreach ($this->fases_data as $index => $fData) {
+                    $fase = FaseCampeonato::updateOrCreate(
+                        ['id' => $fData['id']],
+                        [
+                            'campeonato_id' => $campeonato->id,
+                            'nombre' => $fData['nombre'],
+                            'tipo_fase' => $fData['tipo_fase'],
+                            'orden' => $index + 1,
+                            'estado' => 'pendiente'
+                        ]
+                    );
+                    $idsMantener[] = $fase->id;
+                }
+                // Eliminar fases que el usuario quitó de la lista
+                $campeonato->fases()->whereNotIn('id', $idsMantener)->delete();
+            });
+
+            // Notificación de éxito
+
+            LivewireAlert::title('Campeonato actualizado correctamente')
+                ->success()
+                ->toast()
+                ->show();
+
+            return redirect()->route('campeonato.index');
+        } catch (\Exception $e) {
+
+            LivewireAlert::title('Hubo un error al actualizar:')
+                ->text($e->getMessage())
+                ->error()
+                ->toast()
+                ->show();
         }
-
-        // Lógica de puntos
-        if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
-            $data['puntos_ganado'] = $this->puntos_victoria ?? 0;
-            $data['puntos_empatado'] = $this->puntos_empate ?? 0;
-            $data['puntos_perdido'] = $this->puntos_derrota ?? 0;
-        }
-
-        $campeonato->update($data);
-
-        // ACTUALIZACIÓN DE CRITERIOS
-        if (in_array($this->formato, ['todos_contra_todos', 'grupos'])) {
-            // Eliminar antiguos y crear nuevos basándose en el orden del array
-            Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
-
-            foreach ($this->criterios as $index => $criterioData) {
-                Criterios_desempate::create([
-                    'campeonato_id' => $campeonato->id,
-                    'criterio' => $criterioData['criterio'],
-                    'orden' => $index + 1,
-                ]);
-            }
-        } else {
-            Criterios_desempate::where('campeonato_id', $campeonato->id)->delete();
-        }
-
-
-        LivewireAlert::title('Campeoanto actualizado correctamente')
-            ->success()
-            ->toast()
-            ->show();
-        return redirect()->route('campeonato.index');
     }
 
     public function render()

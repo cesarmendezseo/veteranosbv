@@ -73,7 +73,7 @@ Route::get('/tabla-posicion/{campeonatoId}/verHistorial', TablaPosicionResultado
 Route::get('/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados');
 /* Route::get('/fixture-index', FixtureFixtureIndex::class)->name('frontend.fixture.index');*/
 Route::get('/fixture/{campeonatoId}/ver-fixture', FixtureFixtureVer::class)->name('frontend.fixture.verFixture');
-Route::get('/frontend/proximo-partidos', ProximosPartidosIndex::class)->name('frontend.proximoPartidos');
+Route::get('/frontend/{campeonatoId}/proximo-partidos', ProximosPartidosIndex::class)->name('frontend.proximoPartidos');
 Route::get('/frontend/eliminatoria/{campeonatoId}', FrontEliminatoriaVer::class)->name('frontend.eliminatoria.ver');
 Route::get('/frontend/eliminatoria', FrontEliminatoria::class)->name('frontend.eliminatoria.index');
 Route::get('/frontend/goleadores', Goleador::class)->name('frontend.goleadores.index');

@@ -3,10 +3,10 @@
 
     <div class="w-full ">
         <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center relative z-10">
-            <h1 class="text-lg font-bold">Fixture - encuentros</h1>
+            <h1 class="text-lg font-bold">Proximos Encuentros</h1>
 
             <!--Nav para móvil (se muestra hasta md)  -->
-            <nav class="flex md:hidden space-x-4">
+            {{-- <nav class="flex md:hidden space-x-4">
                 <a href="{{ route('frontend.fixture.index') }}" wire:navigate
                     class="text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -15,10 +15,10 @@
                             d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                 </a>
-            </nav>
+            </nav> --}}
 
             <!--Nav para escritorio (md en adelante)  -->
-            <nav class="hidden md:flex space-x-4">
+            {{-- <nav class="hidden md:flex space-x-4">
                 <a href="{{ route('frontend.fixture.index') }}"
                     class="text-white px-4 py-2 rounded flex items-center gap-2 hover:underline">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -27,7 +27,7 @@
                             d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>Volver
                 </a>
-            </nav>
+            </nav> --}}
         </div>
         <!-- FILTROS ESCRITORIO-->
         <div class="hidden md:block mb-4 grid grid-cols-1 md:grid-cols-1 gap-4 bg-gray-200 p-3 rounded-lg shadow-md">

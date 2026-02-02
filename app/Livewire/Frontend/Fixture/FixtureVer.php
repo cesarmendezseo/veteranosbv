@@ -45,9 +45,10 @@ class FixtureVer extends Component
     public $encuentrosPorCancha = [];
     public $equipoFiltro;
 
-    public function mount()
+    public function mount($campeonatoId)
     {
-        $this->campeonatoId = Configuracion::get('campeonato_principal');
+
+        $this->campeonatoId = $campeonatoId;
         $this->canchas = Canchas::all(); // Cargar todas las canchas
         // Obtener los años disponibles
 
