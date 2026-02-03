@@ -84,6 +84,7 @@ class ListadoBuenaFeVer extends Component
     {
 
         if ($this->campeonatoId && $equipoId) {
+
             $this->jugadoresEquipos = CampeonatoJugadorEquipo::with([
                 'jugador',
                 'jugador.sanciones' => function ($q) {

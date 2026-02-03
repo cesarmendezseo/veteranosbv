@@ -50,7 +50,7 @@
                     @foreach ($jugadoresEquipos as $jugador)
                     @php
                     // Usar las sanciones que vienen con el jugador (ya tienen periodo_texto calculado)
-                    $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
+                    $sancionesJugador = $jugador['sanciones'];
                     @endphp
                     <tr class="text-sm text-gray-900 dark:text-white">
                         <td class="border px-2 py-2 text-center">{{ strtoupper($loop->iteration) }}</td>
@@ -131,7 +131,7 @@
         @foreach ($jugadoresEquipos as $jugador)
         @php
         // Usar las sanciones que vienen con el jugador (ya tienen periodo_texto calculado)
-        $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
+        $sancionesJugador = $jugador['sanciones'];
         $jugadorModel = $jugador['jugador'];
         @endphp
 

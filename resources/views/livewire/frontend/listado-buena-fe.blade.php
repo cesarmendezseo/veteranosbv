@@ -69,7 +69,7 @@
                             <tbody class="backdrop-blur-xl">
                                 @foreach ($jugadoresEquipos as $jugador)
                                 @php
-                                $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
+                                $sancionesJugador = $jugador['sanciones'];
                                 @endphp
                                 <tr class="border-b border-white/10 hover:bg-white/10 transition">
 
@@ -156,7 +156,7 @@
                 <div class="lg:hidden space-y-4">
                     @foreach ($jugadoresEquipos as $jugador)
                     @php
-                    $sancionesJugador = $jugador['sanciones']->where('cumplida', false);
+                    $sancionesJugador = $jugador['sanciones'];
                     $jugadorModel = $jugador['jugador'];
                     @endphp
 
