@@ -36,6 +36,8 @@ class ProximosPartidosIndex extends Component
     {
         // Traemos encuentros asegurando que incluya ambos estados (Case Insensitive)
         $proximos = Encuentro::with(['equipoLocal', 'equipoVisitante', 'campeonato', 'cancha'])
+            ->leftJoin('canchas', 'encuentros.cancha_id', '=', 'canchas.id') // Unimos con canchas
+            ->select('encuentros.*') // Evitamos que los campos de canchas sobreescriban al encuentro
             ->where('campeonato_id', $this->campeonatoId)
             ->where(function ($query) {
                 $query->where('estado', 'like', 'programado')
@@ -44,8 +46,10 @@ class ProximosPartidosIndex extends Component
             ->when($this->jornadaSeleccionada, function ($query) {
                 return $query->where('fecha_encuentro', $this->jornadaSeleccionada);
             })
-            ->orderBy('fecha', 'asc')
-            ->orderBy('hora', 'asc')
+            // ORDEN PRIORITARIO:
+            ->orderBy('canchas.nombre', 'asc') // 1. Por nombre de cancha
+            ->orderBy('fecha', 'asc')          // 2. Por fecha
+            ->orderBy('hora', 'asc')           // 3. Por hora
             ->get();
 
         $proximosEliminatorias = Eliminatoria::with(['equipoLocal', 'equipoVisitante', 'campeonato'])
