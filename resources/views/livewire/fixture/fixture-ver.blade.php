@@ -21,6 +21,9 @@
                     </svg>
                 </a>
 
+
+
+
                 @adminOrCan('administrador|comision')
                 <a href="{{ route('fixture.automatico') }}"
                     class="px-3 py-2 text-white rounded flex items-center gap-1">
@@ -64,7 +67,14 @@
                     Volver
                 </a>
 
-                @adminOrCan()
+                @adminOrCan('administrador')
+                <button wire:click="desprogramarTodoElCampeonato"
+                    wire:confirm="¿Estás seguro? Esto quitará la fecha y cancha de TODOS los partidos programados de este campeonato."
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow">
+                    <i class="fas fa-undo mr-2"></i> Resetear Fixture (Desprogramar Todo)
+                </button>
+                @endadminOrCan
+                @adminOrCan('administrador|comision')
                 <a href="{{ route('fixture.automatico') }}"
                     class="px-3 py-2 text-white rounded flex items-center gap-1">
                     <!-- icono crear automático -->

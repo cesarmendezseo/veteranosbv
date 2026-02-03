@@ -195,7 +195,7 @@ class FixtureAutomatico extends Component
                     'fecha' => $fechaInicio->copy()->addDays(($jornada - 1) * 7)->format('Y-m-d'),
                     'hora' => $horarios[$indiceCanchaHora % count($horarios)],
                     'cancha_id' => $canchaId,
-                    'estado' => 'programado',
+                    'estado' => 'por_programar',
 
                     'equipo_local_id' => $local,
                     'equipo_visitante_id' => $visitante,

@@ -4,40 +4,43 @@ namespace App\Livewire\Frontend\ProximosPartidos;
 
 use App\Models\Eliminatoria;
 use App\Models\Encuentro;
-use Carbon\Carbon;
 use Livewire\Component;
 
 class ProximosPartidosIndex extends Component
 {
     public $campeonatoId;
-
-    public $jornadaSeleccionada = ''; // Filtro seleccionado
-    public $jornadasDisponibles = []; // Lista para el select
+    public $jornadaSeleccionada = '';
+    public $jornadasDisponibles = [];
 
     public function mount($campeonatoId)
     {
         $this->campeonatoId = $campeonatoId;
 
-        // 1. Obtenemos todas las jornadas disponibles
+        // Cargamos jornadas de partidos en AMBOS estados
         $this->jornadasDisponibles = Encuentro::where('campeonato_id', $this->campeonatoId)
+            ->where(function ($q) {
+                $q->where('estado', 'like', 'programado')
+                    ->orWhere('estado', 'like', 'por_programar');
+            })
             ->whereNotNull('fecha_encuentro')
             ->distinct()
             ->orderBy('fecha_encuentro', 'asc')
             ->pluck('fecha_encuentro');
 
-        // 2. Establecemos la primera jornada como valor inicial por defecto
-        // Si la lista no está vacía, toma la primera; si no, queda vacío.
-        if ($this->jornadasDisponibles->count() > 0) {
+        if ($this->jornadaSeleccionada == '' && $this->jornadasDisponibles->count() > 0) {
             $this->jornadaSeleccionada = $this->jornadasDisponibles->first();
         }
     }
 
     public function render()
     {
-        // Consultamos los encuentros filtrando SIEMPRE por la jornada seleccionada
-        // Ya no dependemos de "Carbon::now()" porque queremos ver la jornada completa
-        $proximos = Encuentro::with(['equipoLocal', 'equipoVisitante', 'campeonato'])
+        // Traemos encuentros asegurando que incluya ambos estados (Case Insensitive)
+        $proximos = Encuentro::with(['equipoLocal', 'equipoVisitante', 'campeonato', 'cancha'])
             ->where('campeonato_id', $this->campeonatoId)
+            ->where(function ($query) {
+                $query->where('estado', 'like', 'programado')
+                    ->orWhere('estado', 'like', 'por_programar');
+            })
             ->when($this->jornadaSeleccionada, function ($query) {
                 return $query->where('fecha_encuentro', $this->jornadaSeleccionada);
             })
@@ -47,7 +50,10 @@ class ProximosPartidosIndex extends Component
 
         $proximosEliminatorias = Eliminatoria::with(['equipoLocal', 'equipoVisitante', 'campeonato'])
             ->where('campeonato_id', $this->campeonatoId)
-            ->where('estado', 'programado')
+            ->where(function ($q) {
+                $q->where('estado', 'like', 'programado')
+                    ->orWhere('estado', 'like', 'por_programar');
+            })
             ->orderBy('fecha', 'asc')
             ->get();
 

@@ -337,6 +337,36 @@ class FixtureVer extends Component
 
     //============================
 
+    public function desprogramarTodoElCampeonato()
+    {
+        if (!$this->campeonato_id) {
+            LivewireAlert::title('Error')
+                ->text('No hay un campeonato seleccionado.')
+                ->error()
+                ->show();
+            return;
+        }
+
+        // Actualización masiva mediante Eloquent
+        Encuentro::where('campeonato_id', $this->campeonato_id)
+            ->where('estado', 'programado') // Solo los que están programados
+            ->update([
+                'estado' => 'por_programar',
+                'fecha'  => '2000-01-01', // Formato YYYY-MM-DD
+                'hora'   => '00:00:00',   // Formato HH:MM:SS
+                'cancha_id' => null,
+            ]);
+
+        // Opcional: Si tienes variables de filtros que limpian fechas, resetéalas
+        $this->fechaFiltro = null;
+
+        LivewireAlert::title('Éxito')
+            ->text('Todos los encuentros programados han vuelto a "Por programar".')
+            ->success()
+            ->show();
+    }
+
+
     public function render()
     {
         if ($this->fechaFiltro) {
