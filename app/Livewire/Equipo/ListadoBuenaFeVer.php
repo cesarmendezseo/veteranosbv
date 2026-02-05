@@ -26,7 +26,8 @@ class ListadoBuenaFeVer extends Component
     public $fecha;
     public $itemId;
     public $sanciones;
-    public $jornada;         // Asegúrate de que esta también esté
+    public $jornada;
+    public $campeonatoExport;    // Asegúrate de que esta también esté
 
     public $estado;
 
@@ -38,6 +39,7 @@ class ListadoBuenaFeVer extends Component
 
     public function mount($campeonatoId)
     {
+        $this->campeonatoExport = $campeonatoId;
         $this->campeonatoId = $campeonatoId;
         $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
 
@@ -205,7 +207,7 @@ class ListadoBuenaFeVer extends Component
 
         return Excel::download(
             new CampeonatoCompletoExport(
-                $this->campeonatoId,
+                $this->campeonatoExport,
                 $nombreTorneo,
                 $this->fecha
             ),

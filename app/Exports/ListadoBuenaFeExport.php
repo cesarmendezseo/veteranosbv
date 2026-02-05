@@ -33,12 +33,12 @@ class ListadoBuenaFeExport implements
     private $torneoNombre;
     private $fecha;
 
-    public function __construct($equipoId, $torneoNombre, $campeonatoId, $fecha)
+    public function __construct($equipoId, $torneoNombre, $campeonatoExport, $fecha)
     {
         $this->equipoId = $equipoId;
         $this->equipoNombre = \App\Models\Equipo::find($equipoId)->nombre ?? 'Equipo';
         $this->torneoNombre = $torneoNombre ?? 'Torneo Oficial';
-        $this->campeonato_id = $campeonatoId;
+        $this->campeonato_id = $campeonatoExport;
         $this->fecha = $fecha;
     }
 
