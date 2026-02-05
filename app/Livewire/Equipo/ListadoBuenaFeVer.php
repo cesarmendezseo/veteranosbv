@@ -169,7 +169,7 @@ class ListadoBuenaFeVer extends Component
     }
 
     // 🆕 Cuando se selecciona un encuentro
-    public function updatedEncuentroSeleccionado($encuentroId)
+    /*  public function updatedEncuentroSeleccionado($encuentroId)
     {
         if ($encuentroId) {
             $encuentro = collect($this->encuentrosDisponibles)->firstWhere('id', $encuentroId);
@@ -181,7 +181,7 @@ class ListadoBuenaFeVer extends Component
             }
         }
     }
-
+ */
     // Exportar a Excel
     public function exportarJugadores()
     {
