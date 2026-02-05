@@ -26,6 +26,9 @@ class ListadoBuenaFeVer extends Component
     public $fecha;
     public $itemId;
     public $sanciones;
+    public $jornada;         // Asegúrate de que esta también esté
+
+    public $estado;
 
     // 🆕 NUEVAS PROPIEDADES PARA ENCUENTROS
     public $encuentrosDisponibles = [];
@@ -57,16 +60,21 @@ class ListadoBuenaFeVer extends Component
 
             $resultado = [];
 
-            if ($diff->y > 0) {
-                $resultado[] = $diff->y . ($diff->y === 1 ? ' año' : ' años');
+            // Forzamos (int) para eliminar los decimales infinitos en Excel
+            $años = (int) $diff->y;
+            $meses = (int) $diff->m;
+
+            if ($años > 0) {
+                $resultado[] = $años . ($años === 1 ? ' año' : ' años');
             }
 
-            if ($diff->m > 0) {
-                $resultado[] = $diff->m . ($diff->m === 1 ? ' mes' : ' meses');
+            if ($meses > 0) {
+                $resultado[] = $meses . ($meses === 1 ? ' mes' : ' meses');
             }
 
-            return $resultado
-                ? implode(' y ', $resultado)
+            // Importante: devolver el resultado como String explícito
+            return !empty($resultado)
+                ? (string) implode(' y ', $resultado)
                 : 'Menos de 1 mes';
         } catch (\Exception $e) {
             return null;
@@ -120,13 +128,18 @@ class ListadoBuenaFeVer extends Component
     // 🆕 Método para cargar encuentros
     public function cargarEncuentrosDelEquipo($equipoId)
     {
+        if (!$equipoId) {
+            $this->encuentrosDisponibles = [];
+            return;
+        }
+
         $this->encuentrosDisponibles = Encuentro::where('campeonato_id', $this->campeonatoId)
             ->where(function ($q) use ($equipoId) {
                 $q->where('equipo_local_id', $equipoId)
                     ->orWhere('equipo_visitante_id', $equipoId);
             })
             ->with(['equipoLocal', 'equipoVisitante'])
-            ->orderBy('fecha_encuentro', 'asc') // Ordenar ascendente para numerar correctamente
+            ->orderBy('fecha_encuentro', 'asc')
             ->get()
             ->map(function ($encuentro, $index) use ($equipoId) {
                 $equipoRival = $encuentro->equipo_local_id == $equipoId
@@ -135,35 +148,24 @@ class ListadoBuenaFeVer extends Component
 
                 $condicion = $encuentro->equipo_local_id == $equipoId ? 'LOCAL' : 'VISITANTE';
 
-                // Número de fecha basado en el índice (1, 2, 3, etc.)
-                $numeroFecha = $index + 1;
+                // Forzamos entero para evitar decimales en la jornada
+                $numeroFecha = (int) ($index + 1);
 
-                // Buscar el campo de cancha
-                $cancha = $encuentro->cancha
-                    ?? $encuentro->nombre_cancha
-                    ?? $encuentro->lugar
-                    ?? '';
+                $cancha = $encuentro->cancha ?? $encuentro->nombre_cancha ?? $encuentro->lugar ?? 'A definir';
 
                 return [
                     'id' => $encuentro->id,
-                    'label' => 'Fecha ' . $numeroFecha . ' - ' .
-                        \Carbon\Carbon::parse($encuentro->fecha_encuentro)->format('d/m/Y') .
-                        ' vs ' . strtoupper($equipoRival->nombre) .
-                        ' (' . $condicion . ')' .
-                        (isset($encuentro->estado) && $encuentro->estado ? ' - ' . $encuentro->estado : ''),
-                    'fecha' => $encuentro->fecha_encuentro,
+                    'label' => "Jornada {$numeroFecha} - " .
+                        strtoupper($equipoRival->nombre) . " ({$condicion})",
                     'jornada' => $numeroFecha,
                     'cancha' => $cancha,
                     'condicion' => $condicion,
-                    'estado' => $encuentro->estado ?? 'Pendiente'
+                    'estado' => strtoupper($encuentro->estado ?? 'PENDIENTE')
                 ];
-            })
-            ->values(); // Reindexar la colección
+            })->toArray(); // Usar toArray() es más seguro para Livewire en producción
 
-        // Resetear selección
-        $this->encuentroSeleccionado = null;
-        $this->fechaJornada = null;
-        $this->nombreCancha = null;
+        // Solo resetear si realmente cambió el equipo, no siempre.
+        $this->reset(['encuentroSeleccionado', 'nombreCancha', 'estado']);
     }
 
     // 🆕 Cuando se selecciona un encuentro

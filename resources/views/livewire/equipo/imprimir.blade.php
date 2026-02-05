@@ -247,7 +247,7 @@
 
             <div class="info-partido">
                 <div style="grid-column: 1 / 2;">
-                    <div class="info-fecha">FECHA: {{ $fecha }}</div>
+                    <div class="info-fecha">FECHA:________</div>
                     <div class="info-cancha">CANCHA:________________ {{ $cancha }}</div>
                     <div class="info-equipo">{{ strtoupper($equipoNombre) }}</div>
                 </div>

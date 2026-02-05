@@ -32,34 +32,39 @@
 
     </div>
     {{-- 🆕 SELECT DE JORNADAS/ENCUENTROS --}}
-    @if($equipoSeleccionado && count($encuentrosDisponibles) > 0)
+    {{-- @if($equipoSeleccionado && count($encuentrosDisponibles) > 0)
     <div class="mb-4 bg-gray-500 p-4 rounded shadow-md">
-        <label class="block mb-2 font-semibold text-white">Seleccione la jornada/encuentro</label>
+        {{-- <label class="block mb-2 font-semibold text-white">Seleccione la jornada/encuentro</label>
         <select wire:model.live="encuentroSeleccionado" class="border bg-blue-900 text-white rounded p-2 w-full">
             <option value="">-- Seleccionar jornada --</option>
             @foreach ($encuentrosDisponibles as $encuentro)
             <option value="{{ $encuentro['id'] }}">{{ $encuentro['label'] }}</option>
             @endforeach
-        </select>
+        </select> --}
 
         @if($encuentroSeleccionado)
         <div class="mt-2 text-white text-sm">
-            <p><strong>Fecha seleccionada:</strong> {{ $fechaJornada }}</p>
+            {{-- 1. Cambiado de $fechaJornada a $jornada para evitar el error 'fecha' --}
+            <p><strong>Jornada:</strong> {{ $jornada }}</p>
+
+            {{-- 2. Corregido: Si $nombreCancha ya es un texto (string), no uses ->nombre --}
             @if($nombreCancha)
-            <p><strong>Cancha:</strong> {{ $nombreCancha->nombre }}</p>
+            <p><strong>Cancha:</strong> {{ is_object($nombreCancha) ? $nombreCancha->nombre : $nombreCancha }}</p>
             @endif
+
+            {{-- 3. Agregado: Ver el estado ayuda a confirmar que los datos cargaron bien --}
+            <p><strong>Estado:</strong> <span class="uppercase">{{ $estado }}</span></p>
         </div>
         @endif
     </div>
-    @endif
+    @endif --}}
 
-    <!-- Select de equipos -->
     <div class="mb-4 bg-gray-500 p-4 rounded shadow-md">
         <label class="block mb-2 font-semibold text-white">Seleccione un equipo</label>
         <select wire:model.live="equipoSeleccionado" class="border bg-blue-900 text-white rounded p-2 w-full">
             <option value="">-- Elegir --</option>
             @foreach ($equiposDelCampeonato as $equipo)
-            <option value="{{ $equipo->id }}">{{strtoupper( $equipo->nombre )}}</option>
+            <option value="{{ $equipo->id }}">{{ strtoupper($equipo->nombre) }}</option>
             @endforeach
         </select>
     </div>
