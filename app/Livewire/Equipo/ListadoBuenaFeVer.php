@@ -207,7 +207,7 @@ class ListadoBuenaFeVer extends Component
 
         return Excel::download(
             new CampeonatoCompletoExport(
-                $this->campeonatoExport,
+                $this->campeonatoId,
                 $nombreTorneo,
                 $this->fecha
             ),

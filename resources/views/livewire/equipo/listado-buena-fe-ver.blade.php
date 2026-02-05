@@ -19,9 +19,7 @@
         @endif
         @adminOrCan('comision|administrador')
         <!-- Exportar todo el campeonato -->
-        <button wire:click="exportarCampeonatoCompleto" class="cursor-pointer btn btn-success">
-            📥 Exportar Campeonato Completo
-        </button>
+
         {{-- 🖨️ BOTÓN DE IMPRIMIR --}}
         <button wire:click="abrirPlanillaImprimible"
             class="cursor-pointer p-2 hover:underline bg-green-600 rounded px-4">
