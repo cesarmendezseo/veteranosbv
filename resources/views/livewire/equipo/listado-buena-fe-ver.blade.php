@@ -17,6 +17,13 @@
         <button wire:click="exportarJugadores" class="cursor-pointer p-2 hover:underline">Exportar</button>
         @endadminOrCan
         @endif
+        @adminOrCan('comision|administrador')
+        <!-- Exportar todo el campeonato -->
+        <button wire:click="exportarCampeonatoCompleto" class="cursor-pointer btn btn-success">
+            📥 Exportar Campeonato Completo
+        </button>
+        @endadminOrCan
+
     </div>
 
     <!-- Select de equipos -->

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Equipo;
 
+use App\Exports\CampeonatoCompletoExport;
 use App\Exports\ListadoBuenaFeExport;
 use App\Models\Campeonato;
 use App\Models\CampeonatoJugadorEquipo;
@@ -141,6 +142,22 @@ class ListadoBuenaFeVer extends Component
             'Fecha-' . $this->fecha . ' ' .  strtoupper(Str::slug($equipo->nombre)) . '.xlsx'
         );
     }
+
+
+    public function exportarCampeonatoCompleto()
+    {
+        $nombreTorneo = $this->campeonato->nombre;
+
+        return Excel::download(
+            new CampeonatoCompletoExport(
+                $this->campeonatoId,
+                $nombreTorneo,
+                $this->fecha
+            ),
+            'Campeonato-' . $this->fecha . '-' . strtoupper(Str::slug($nombreTorneo)) . '-COMPLETO.xlsx'
+        );
+    }
+
 
     // Actualizar sanciones
     public function actualizarSanciones()
