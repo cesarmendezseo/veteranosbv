@@ -126,6 +126,17 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/equipo/listado-buena-fe/{campeonatoId}/crear', ListadoBuenaFeCrear::class)->name('listado-buena-fe.crear');
         Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver1', ListadoBuenaFeVer::class)->name('listado-buena-fe.ver1');
+        Route::get('/planilla/imprimir/{equipoId}/{campeonatoId}/{jornada?}/{cancha?}', function ($equipoId, $campeonatoId, $jornada = null, $cancha = null) {
+            $campeonato = \App\Models\Campeonato::find($campeonatoId);
+
+            return view('planilla.imprimir', [
+                'equipoId' => $equipoId,
+                'torneoNombre' => $campeonato->nombre ?? 'Torneo',
+                'campeonatoId' => $campeonatoId,
+                'fecha' => $jornada ?? now()->format('d/m/Y'),
+                'cancha' => $cancha ?? ''
+            ]);
+        })->name('planilla.imprimir');
     });
     //=================FIN EQUIPOS====================
 

@@ -18,40 +18,33 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 
 class ListadoBuenaFeVer extends Component
 {
-
-    public $campeonato;             // un solo campeonato
-    public $campeonatoId;           // id recibido
-    public $equiposDelCampeonato;   // equipos del campeonato
-    public $equipoSeleccionado;     // id del equipo elegido
-    public $jugadoresEquipos = []; // jugadores del equipo
+    public $campeonato;
+    public $campeonatoId;
+    public $equiposDelCampeonato;
+    public $equipoSeleccionado;
+    public $jugadoresEquipos = [];
     public $fecha;
     public $itemId;
     public $sanciones;
 
+    // 🆕 NUEVAS PROPIEDADES PARA ENCUENTROS
+    public $encuentrosDisponibles = [];
+    public $encuentroSeleccionado;
+    public $fechaJornada;
+    public $nombreCancha;
+
     public function mount($campeonatoId)
     {
-        // Guardo el id
         $this->campeonatoId = $campeonatoId;
-
-
-
-        // Cargo el campeonato con sus equipos
         $this->campeonato = Campeonato::with('equipos')->find($campeonatoId);
 
-        // Carga y ordenamiento robusto: 
-        // 1. Eliminamos la línea setRelation (es redundante aquí).
-        // 2. Aplicamos la ordenación a la propiedad pública $equiposDelCampeonato,
-        //    usando una función que ignora mayúsculas/minúsculas y espacios.
         $this->equiposDelCampeonato = $this->campeonato
             ? $this->campeonato->equipos->sortBy(fn($equipo) => strtoupper(trim($equipo->nombre)))
             : collect();
     }
 
-
     public function calcularPeriodoSancion($fechaInicio, $fechaFin)
     {
-
-        // Validar que ambas fechas existan Y no estén vacías
         if (!$fechaInicio || !$fechaFin || $fechaInicio === '' || $fechaFin === '') {
             return null;
         }
@@ -80,12 +73,11 @@ class ListadoBuenaFeVer extends Component
         }
     }
 
-    // Cuando se elige un equipo en el select
+    // 🆕 Cuando se elige un equipo, cargar sus encuentros
     public function updatedEquipoSeleccionado($equipoId)
     {
-
         if ($this->campeonatoId && $equipoId) {
-
+            // Cargar jugadores
             $this->jugadoresEquipos = CampeonatoJugadorEquipo::with([
                 'jugador',
                 'jugador.sanciones' => function ($q) {
@@ -103,7 +95,6 @@ class ListadoBuenaFeVer extends Component
                 ->whereNull('fecha_baja')
                 ->get()
                 ->map(function ($registro) {
-
                     $sancionesConPeriodo = $registro->jugador->sanciones->map(function ($sancion) {
                         $sancion->periodo_texto = $this->calcularPeriodoSancion(
                             $sancion->fecha_inicio,
@@ -120,11 +111,74 @@ class ListadoBuenaFeVer extends Component
                 ->unique(fn($item) => $item['jugador']->id)
                 ->sortBy(fn($item) => strtolower($item['jugador']->apellido))
                 ->values();
+
+            // 🆕 Cargar encuentros del equipo seleccionado
+            $this->cargarEncuentrosDelEquipo($equipoId);
         }
     }
 
+    // 🆕 Método para cargar encuentros
+    public function cargarEncuentrosDelEquipo($equipoId)
+    {
+        $this->encuentrosDisponibles = Encuentro::where('campeonato_id', $this->campeonatoId)
+            ->where(function ($q) use ($equipoId) {
+                $q->where('equipo_local_id', $equipoId)
+                    ->orWhere('equipo_visitante_id', $equipoId);
+            })
+            ->with(['equipoLocal', 'equipoVisitante'])
+            ->orderBy('fecha_encuentro', 'asc') // Ordenar ascendente para numerar correctamente
+            ->get()
+            ->map(function ($encuentro, $index) use ($equipoId) {
+                $equipoRival = $encuentro->equipo_local_id == $equipoId
+                    ? $encuentro->equipoVisitante
+                    : $encuentro->equipoLocal;
 
+                $condicion = $encuentro->equipo_local_id == $equipoId ? 'LOCAL' : 'VISITANTE';
 
+                // Número de fecha basado en el índice (1, 2, 3, etc.)
+                $numeroFecha = $index + 1;
+
+                // Buscar el campo de cancha
+                $cancha = $encuentro->cancha
+                    ?? $encuentro->nombre_cancha
+                    ?? $encuentro->lugar
+                    ?? '';
+
+                return [
+                    'id' => $encuentro->id,
+                    'label' => 'Fecha ' . $numeroFecha . ' - ' .
+                        \Carbon\Carbon::parse($encuentro->fecha_encuentro)->format('d/m/Y') .
+                        ' vs ' . strtoupper($equipoRival->nombre) .
+                        ' (' . $condicion . ')' .
+                        (isset($encuentro->estado) && $encuentro->estado ? ' - ' . $encuentro->estado : ''),
+                    'fecha' => $encuentro->fecha_encuentro,
+                    'jornada' => $numeroFecha,
+                    'cancha' => $cancha,
+                    'condicion' => $condicion,
+                    'estado' => $encuentro->estado ?? 'Pendiente'
+                ];
+            })
+            ->values(); // Reindexar la colección
+
+        // Resetear selección
+        $this->encuentroSeleccionado = null;
+        $this->fechaJornada = null;
+        $this->nombreCancha = null;
+    }
+
+    // 🆕 Cuando se selecciona un encuentro
+    public function updatedEncuentroSeleccionado($encuentroId)
+    {
+        if ($encuentroId) {
+            $encuentro = collect($this->encuentrosDisponibles)->firstWhere('id', $encuentroId);
+
+            if ($encuentro) {
+                $this->fechaJornada = 'Jornada ' . $encuentro['jornada'];
+                $this->fecha = \Carbon\Carbon::parse($encuentro['fecha'])->format('d/m/Y');
+                $this->nombreCancha = $encuentro['cancha'];
+            }
+        }
+    }
 
     // Exportar a Excel
     public function exportarJugadores()
@@ -137,12 +191,11 @@ class ListadoBuenaFeVer extends Component
                 $this->equipoSeleccionado,
                 $nombreTorneo,
                 $this->campeonatoId,
-                $this->fecha
+                $this->fechaJornada ?? $this->fecha
             ),
-            'Fecha-' . $this->fecha . ' ' .  strtoupper(Str::slug($equipo->nombre)) . '.xlsx'
+            'Fecha-' . ($this->fechaJornada ?? $this->fecha) . ' ' .  strtoupper(Str::slug($equipo->nombre)) . '.xlsx'
         );
     }
-
 
     public function exportarCampeonatoCompleto()
     {
@@ -158,8 +211,27 @@ class ListadoBuenaFeVer extends Component
         );
     }
 
+    // 🆕 Actualizado para incluir la jornada
+    public function abrirPlanillaImprimible()
+    {
+        if (!$this->equipoSeleccionado) {
+            LivewireAlert::title('Atención')
+                ->text('Debe seleccionar un equipo primero')
+                ->warning()
+                ->toast()
+                ->show();
+            return;
+        }
 
-    // Actualizar sanciones
+        return redirect()->route('planilla.imprimir', [
+            'equipoId' => $this->equipoSeleccionado,
+            'campeonatoId' => $this->campeonatoId,
+            'jornada' => $this->fechaJornada ?? 'Sin jornada',
+            'cancha' => $this->nombreCancha ?? ''
+        ]);
+    }
+
+    // ... resto de métodos (actualizarSanciones, darDeBaja, etc.)
     public function actualizarSanciones()
     {
         $sanciones = Sanciones::where('cumplida', false)->get();
@@ -188,12 +260,8 @@ class ListadoBuenaFeVer extends Component
         $this->dispatch('actualizar-sancion');
     }
 
-
-
-    //DAR DE BAJA JUGADORES
     public function darDeBaja($jugadorId)
     {
-
         $this->itemId = $jugadorId;
 
         LivewireAlert::title('Dar de Baja')
@@ -204,22 +272,17 @@ class ListadoBuenaFeVer extends Component
             ->show();
     }
 
-
     public function keepItem($jugadorData)
     {
-        // No hacer nada, solo para manejar la negación
+        // No hacer nada
     }
 
     public function bajaJugador($jugadorData)
     {
-
         $jugadorId = is_array($jugadorData) ? $jugadorData['id'] : $jugadorData;
-        // Buscar el equipo "Sin equipo"
         $equipoPorDefecto = DB::table('equipos')->where('nombre', 'Sin equipo')->first();
 
         if (!$equipoPorDefecto) {
-            // Si no existe, mostrar mensaje y salir
-            $this->dispatch('error', 'Debe crear un equipo llamado "Sin equipo" antes de dar de baja.');
             LivewireAlert::title('!Atención')
                 ->text('Debe crear un equipo llamado "Sin equipo" antes de dar de baja.')
                 ->error()
@@ -229,28 +292,23 @@ class ListadoBuenaFeVer extends Component
             return;
         }
 
-
         $equipoId = $equipoPorDefecto->id;
 
-        // Cerrar la relación actual en historial
         DB::table('campeonato_jugador_equipo')
             ->where('jugador_id', $jugadorId)
             ->whereNull('fecha_baja')
             ->update(['fecha_baja' => now()->toDateString()]);
 
-
-        // Insertar nuevo registro en historial con el equipo por defecto
         try {
             DB::table('campeonato_jugador_equipo')->insert([
                 'jugador_id' => $jugadorId,
                 'equipo_id' => $equipoId,
-                'campeonato_id' => $this->campeonato->id, // Ajusta esto según tu lógica
-                'categoria_id' => $this->campeonato->categoria_id, // Ajusta esto según tu lógica
+                'campeonato_id' => $this->campeonato->id,
+                'categoria_id' => $this->campeonato->categoria_id,
                 'fecha_alta' => now()->toDateString(),
                 'fecha_baja' => null,
             ]);
         } catch (\Exception $e) {
-            // En lugar de dd(), que detiene el script, logueamos el error y mostramos una alerta.
             \Illuminate\Support\Facades\Log::error("Error al insertar jugador de baja: " . $e->getMessage());
             LivewireAlert::title('Error')
                 ->text('Ocurrió un error al intentar mover el jugador a "Sin equipo".')
@@ -258,11 +316,9 @@ class ListadoBuenaFeVer extends Component
                 ->toast()
                 ->timer(5000)
                 ->show();
-            return; // Detener la ejecución si hay un error de DB
+            return;
         }
 
-
-        // Actualizar el jugador
         DB::table('jugadors')
             ->where('id', $jugadorId)
             ->update(['equipo_id' => $equipoId]);
@@ -275,8 +331,6 @@ class ListadoBuenaFeVer extends Component
             ->show();
         $this->updatedEquipoSeleccionado($this->equipoSeleccionado);
     }
-
-
 
     public function render()
     {

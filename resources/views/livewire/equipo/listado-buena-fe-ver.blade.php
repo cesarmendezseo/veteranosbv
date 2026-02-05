@@ -22,9 +22,36 @@
         <button wire:click="exportarCampeonatoCompleto" class="cursor-pointer btn btn-success">
             📥 Exportar Campeonato Completo
         </button>
+        {{-- 🖨️ BOTÓN DE IMPRIMIR --}}
+        <button wire:click="abrirPlanillaImprimible"
+            class="cursor-pointer p-2 hover:underline bg-green-600 rounded px-4">
+            🖨️ Imprimir Planilla
+        </button>
         @endadminOrCan
 
+
     </div>
+    {{-- 🆕 SELECT DE JORNADAS/ENCUENTROS --}}
+    @if($equipoSeleccionado && count($encuentrosDisponibles) > 0)
+    <div class="mb-4 bg-gray-500 p-4 rounded shadow-md">
+        <label class="block mb-2 font-semibold text-white">Seleccione la jornada/encuentro</label>
+        <select wire:model.live="encuentroSeleccionado" class="border bg-blue-900 text-white rounded p-2 w-full">
+            <option value="">-- Seleccionar jornada --</option>
+            @foreach ($encuentrosDisponibles as $encuentro)
+            <option value="{{ $encuentro['id'] }}">{{ $encuentro['label'] }}</option>
+            @endforeach
+        </select>
+
+        @if($encuentroSeleccionado)
+        <div class="mt-2 text-white text-sm">
+            <p><strong>Fecha seleccionada:</strong> {{ $fechaJornada }}</p>
+            @if($nombreCancha)
+            <p><strong>Cancha:</strong> {{ $nombreCancha->nombre }}</p>
+            @endif
+        </div>
+        @endif
+    </div>
+    @endif
 
     <!-- Select de equipos -->
     <div class="mb-4 bg-gray-500 p-4 rounded shadow-md">
@@ -39,6 +66,7 @@
 
     <!-- Tabla de jugadores -->
     @if (!empty($jugadoresEquipos))
+
     <div class="overflow-x-auto rounded-lg border border-gray-300 dark:border-gray-600">
         <div class="hidden lg:block">
             <table class="min-w-full table-fixed border-collapse bg-white dark:bg-gray-700">
@@ -228,4 +256,5 @@
         @endforeach
     </div>
     @endif
+
 </div>
