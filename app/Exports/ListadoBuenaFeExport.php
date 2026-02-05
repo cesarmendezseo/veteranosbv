@@ -40,12 +40,15 @@ class ListadoBuenaFeExport implements
      * 👉 ACA DEFINIMOS QUIÉNES APARECEN
      * TODOS los jugadores del equipo/campeonato
      */
-    public function collection(): Collection
+    public function collection()
     {
-        return CampeonatoJugadorEquipo::with('jugador')
+        return CampeonatoJugadorEquipo::with([
+            'jugador',
+            'equipo'
+        ])
             ->where('campeonato_id', $this->campeonato_id)
-            ->where('equipo_id', $this->equipoId)
-            ->whereNull('fecha_baja')
+            ->whereNull('fecha_baja') // 👈 SOLO LOS ACTIVOS EN ESTE CAMPEONATO
+            ->orderBy('equipo_id')
             ->orderBy(
                 Jugador::select('apellido')
                     ->whereColumn('jugadores.id', 'campeonato_jugador_equipo.jugador_id')
