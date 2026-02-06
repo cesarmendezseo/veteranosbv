@@ -28,84 +28,75 @@ class Imprimir extends Component
         $this->cargarJugadores();
     }
 
-    public function cargarJugadores()
-    {
-        $this->jugadores = CampeonatoJugadorEquipo::with(['jugador'])
-            ->where('campeonato_id', $this->campeonatoId)
-            ->where('equipo_id', $this->equipoId)
-            ->whereNull('fecha_baja')
-            ->get()
-            ->sortBy(fn($registro) => $registro->jugador->apellido)
-            ->values()
-            ->map(function ($registro, $index) {
-                $jugador = $registro->jugador;
-
-                $sancionActiva = Sanciones::where('jugador_id', $jugador->id)
-                    ->where('cumplida', false)
-                    ->first();
-
-                $leyenda = '';
-                $firma = '';
-                $tieneSancion = false;
-
-                if ($sancionActiva) {
-                    $tieneSancion = true;
-                    $firma = 'SUSPENDIDO';
-
-                    if ($sancionActiva->fecha_inicio && $sancionActiva->fecha_fin) {
-                        $leyenda = $this->calcularPeriodoSancion(
-                            $sancionActiva->fecha_inicio,
-                            $sancionActiva->fecha_fin
-                        );
-                    } else {
-                        $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
-
-                        if (str_contains($motivo, 'amarilla')) {
-                            $leyenda = 'PAGA';
-                        } else {
-                            $pendientes = $sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos;
-                            $leyenda = $pendientes . ' FECHAS';
-                        }
-                    }
-                }
-
-                return [
-                    'numero' => $index + 1,
-                    'dni' => strtoupper($jugador->documento ?? ''),
-                    'apellido' => strtoupper($jugador->apellido ?? ''),
-                    'nombre' => strtoupper($jugador->nombre ?? ''),
-                    'firma' => strtoupper($firma),
-                    'sancion' => strtoupper($leyenda),
-                    'tieneSancion' => $tieneSancion
-                ];
+  
+public function cargarJugadores()
+{
+    $this->jugadores = CampeonatoJugadorEquipo::with([
+        'jugador',
+        'jugador.sanciones' => function ($q) {
+            $q->where(function ($q2) {
+                // Sanciones por partidos pendientes
+                $q2->where('medida', 'partidos')
+                   ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados');
+            })->orWhere(function ($q3) {
+                // Sanciones por tiempo vigentes
+                $q3->where('medida', 'tiempo')
+                   ->whereNotNull('fecha_fin')
+                   ->where('fecha_fin', '>=', now());
             });
-    }
-
-    /*  private function calcularPeriodoSancion($fechaInicio, $fechaFin)
-    {
-        if (!$fechaInicio || !$fechaFin) return '';
-
-        try {
-            $inicio = \Carbon\Carbon::parse($fechaInicio);
-            $fin = \Carbon\Carbon::parse($fechaFin);
-
-            // diff() devuelve enteros, diffInYears() puede devolver floats en ciertas versiones
-            $diferencia = $inicio->diff($fin);
-            $anios = $diferencia->y;
-            $meses = $diferencia->m;
-
-            $partes = [];
-            if ($anios > 0) $partes[] = $anios . ($anios == 1 ? ' año' : ' años');
-            if ($meses > 0) $partes[] = $meses . ($meses == 1 ? ' mes' : ' meses');
-
-            $textoTiempo = !empty($partes) ? implode(' y ', $partes) : 'Menos de 1 mes';
-
-            // Retornamos el tiempo Y las fechas entre paréntesis como en tu imagen
-            return $textoTiempo;
-        } catch (\Exception $e) {
-            return '';
         }
-    } */
+    ])
+    ->where('campeonato_id', $this->campeonatoId)
+    ->where('equipo_id', $this->equipoId)
+    ->whereNull('fecha_baja')
+    ->get()
+    ->sortBy(fn($registro) => $registro->jugador->apellido)
+    ->values()
+    ->map(function ($registro, $index) {
+        $jugador = $registro->jugador;
+
+        // 🔥 Usar la relación cargada
+        $sancionActiva = $jugador->sanciones->first();
+
+        $leyenda = '';
+        $firma = '';
+        $tieneSancion = false;
+
+        if ($sancionActiva) {
+            $tieneSancion = true;
+            $firma = 'SUSPENDIDO';
+
+            if ($sancionActiva->medida === 'tiempo') {
+                $leyenda = $this->calcularPeriodoSancion(
+                    $sancionActiva->fecha_inicio,
+                    $sancionActiva->fecha_fin
+                );
+            } elseif ($sancionActiva->medida === 'partidos') {
+                $motivo = strtolower(trim($sancionActiva->motivo ?? ''));
+
+                if (str_contains($motivo, 'amarilla')) {
+                    $leyenda = 'PAGA';
+                } else {
+                    $pendientes = $sancionActiva->partidos_sancionados - $sancionActiva->partidos_cumplidos;
+                    $leyenda = $pendientes . ' FECHAS';
+                }
+            }
+        }
+
+        return [
+            'numero' => $index + 1,
+            'dni' => strtoupper($jugador->documento ?? ''),
+            'apellido' => strtoupper($jugador->apellido ?? ''),
+            'nombre' => strtoupper($jugador->nombre ?? ''),
+            'firma' => strtoupper($firma),
+            'sancion' => strtoupper($leyenda),
+            'tieneSancion' => $tieneSancion
+        ];
+    });
+}
+       
+
+   
     private function calcularPeriodoSancion($fechaInicio, $fechaFin)
     {
         if (!$fechaInicio || !$fechaFin) return '';
