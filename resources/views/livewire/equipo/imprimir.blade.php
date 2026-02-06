@@ -11,43 +11,59 @@
 
     <div id="planilla-imprimible" class="bg-white">
         <style>
-            @media print {
-                @page {
-                    size: legal;
-                    margin: 0.3in;
-                }
+           @media print {
+        @page {
+            size: 8.5in 14in; /* 21.59cm x 35.56cm - Tamaño Legal exacto */
+            margin: 0.3in;
+        }
 
-                body * {
-                    visibility: hidden;
-                }
+        body {
+            margin: 0;
+            padding: 0;
+        }
 
-                #planilla-imprimible,
-                #planilla-imprimible * {
-                    visibility: visible;
-                }
+        body * {
+            visibility: hidden;
+        }
 
-                #planilla-imprimible {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                }
+        #planilla-imprimible,
+        #planilla-imprimible * {
+            visibility: visible;
+        }
 
-                .no-print {
-                    display: none !important;
-                }
-            }
+        #planilla-imprimible {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            page-break-after: avoid;
+        }
 
-            .planilla-container {
-                font-family: Arial, sans-serif;
-                max-width: 8.5in;
-                margin: 0 auto;
-                background: white;
-                padding: 10px;
-                /* Reducido */
-                font-size: 11px;
-            }
+        .no-print {
+            display: none !important;
+        }
 
+        /* 🔥 FORZAR que todo entre en UNA página */
+        .planilla-container {
+            max-height: 13in; /* 14in - márgenes */
+            overflow: hidden;
+        }
+
+        /* Prevenir saltos de página */
+        table, thead, tbody, tr, td, th {
+            page-break-inside: avoid !important;
+        }
+    }
+
+    .planilla-container {
+        font-family: Arial, sans-serif;
+        max-width: 8.5in; /* Ancho Legal */
+        margin: 0 auto;
+        background: white;
+        padding: 10px;
+        font-size: 11px;
+    }
             .header-logo {
                 display: flex;
                 justify-content: space-between;
@@ -175,7 +191,7 @@
                 /* Padding mínimo para que entren las 30 filas */
                 text-align: left;
                 height: 18px !important;
-                font-size: 10px;
+                font-size: 13px;
             }
 
             table td:nth-child(1),
@@ -195,7 +211,7 @@
             }
 
             .leyenda-sancion {
-                font-size: 9px;
+                font-size: 12px;
                 line-height: 0.9;
                 display: block;
             }
@@ -206,27 +222,35 @@
             }
 
             .titulo-cuerpo-tecnico {
-                background: #F0F0F0;
-                text-align: center;
-                padding: 5px;
-                font-weight: bold;
-                font-size: 12px;
-                border: 1px solid black;
-            }
+    background: #F0F0F0;
+    text-align: center;
+    padding: 2px; /* Reducido de 3px */
+    font-weight: bold;
+    font-size: 9px; /* Reducido de 10px */
+    border: 1px solid black;
+    margin-top: 3px; /* Agregar espacio arriba */
+}
 
-            .cuerpo-tecnico-headers th {
-                background: #3490DC;
-                font-size: 10px;
-                padding: 4px;
-            }
+.cuerpo-tecnico-headers th {
+    background: #3490DC;
+    font-size: 9px; /* Reducido de 10px */
+    padding: 1px; /* Reducido de 2px */
+}
+
+/* 🆕 Agregar estilos específicos para las celdas de cuerpo técnico */
+table:last-of-type td {
+    padding: 1px 2px !important; /* Más compacto */
+    height: 14px !important; /* Altura reducida */
+    font-size: 9px; /* Letra más chica */
+}
 
             .imagen-cambios {
                 margin-top: 5px;
-                text-align: right;
+                text-align: left;
             }
 
             .imagen-cambios img {
-                height: 130px;
+                height: 150px;
                 /* Reducido para asegurar el fin de hoja */
             }
         </style>
@@ -266,7 +290,7 @@
                         <th style="width: 4%;">N°</th>
                         <th style="width: 10%;">DNI</th>
                         <th style="width: 20%;">Apellido</th>
-                        <th style="width: 20%;">Nombre</th>
+                        <th style="width: 25%;">Nombre</th>
                         <th style="width: 12%;">Firmas</th>
                         <th style="width: 5%;">Gol</th>
                         <th style="width: 5%;">Tarj.</th>

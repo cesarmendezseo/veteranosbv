@@ -117,7 +117,7 @@ public function cargarJugadores()
             $textoTiempo = !empty($partes) ? implode(' y ', $partes) : 'Menos de 1 mes';
 
             // Retornamos el tiempo y el rango de fechas en una línea secundaria pequeña
-            return $textoTiempo . "<br><small>(" . $inicio->format('d/m/Y') . " - " . $fin->format('d/m/Y') . ")</small>";
+            return $textoTiempo /* . "<br><small>(" . $inicio->format('d/m/Y') . " - " . $fin->format('d/m/Y') . ")</small>" */;
         } catch (\Exception $e) {
             return '';
         }
