@@ -77,6 +77,11 @@
                 wire:navigate>{{ __('Roles y Permisos') }}
             </flux:navlist.item>
             @endrole
+            @role('administrador')
+            <flux:navlist.item icon="user-plus" :href="route('admin.auditoria-log')" :current="request()->routeIs('admin.auditoria-log')"
+                wire:navigate>{{ __('Auditoria') }}
+            </flux:navlist.item>
+            @endrole
             <form method="POST" action="{{ route('logout') }}" class="w-full">
                 @csrf
                 <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle"

@@ -6,10 +6,12 @@ use App\NormalizesAttributes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Jugador extends Model
+use OwenIt\Auditing\Contracts\Auditable; // <--- ESTA es la interfaz correcta
+use OwenIt\Auditing\Auditable as AuditableTrait; // El trait para la lógica
+class Jugador extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
     use NormalizesAttributes;
 
     protected $normalizable = ['nombre', 'apellido', 'email', 'direccion', 'ciudad', 'provincia'];

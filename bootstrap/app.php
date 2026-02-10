@@ -22,4 +22,13 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withEvents(discover: [
+        //
+    ])
+    ->booting(function () {
+        // Registramos ambos eventos usando el mismo Listener
+        Event::listen(RoleAssigned::class, AuditRoleAssignment::class);
+        Event::listen(RoleRemoved::class, AuditRoleAssignment::class);
+    })
+    ->create(); 

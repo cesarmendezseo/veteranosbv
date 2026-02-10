@@ -61,6 +61,8 @@ use App\Livewire\UserList;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Spatie\Permission\Middleware\PermissionMiddleware;
+use App\Livewire\Admin\AuditLog;
+
 
 Route::get('/home', function () {
     return view('welcome');
@@ -110,6 +112,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:administrador'])->group(function () {
         Route::get('/rol/panel-control', AccessControlPanel::class)->name('rol.panel');
     });
+    Route::middleware(['permission:administrador'])->group(function () {
+        Route::get('/admin/auditoria-log', AuditLog::class)->name('admin.auditoria-log');
+    });
+
     //=============== FIN ROLES Y PERMIOS ===========================  
 
     //===================EQUIPOS ===================================

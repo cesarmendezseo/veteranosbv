@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\Facades\LivewireAlert as FacadesLivewireAlert;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use OwenIt\Auditing\Contracts\Auditable; // <--- ESTA es la interfaz correcta
+use OwenIt\Auditing\Auditable as AuditableTrait; // El trait para la lógica
 
-class Campeonato extends Model
+class Campeonato extends Model implements Auditable
+
 {
-    use HasFactory, NormalizesAttributes;
+    use HasFactory, NormalizesAttributes, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'nombre',

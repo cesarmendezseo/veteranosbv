@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable; // <--- ESTA es la interfaz correcta
+use OwenIt\Auditing\Auditable as AuditableTrait; // El trait para la lógica
 
-class CampeonatoJugadorEquipo extends Model
+class CampeonatoJugadorEquipo extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'campeonato_jugador_equipo';
 
     protected $fillable = [
