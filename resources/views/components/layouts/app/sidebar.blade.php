@@ -56,7 +56,7 @@
                 :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadisticas') }}
             </flux:navlist.item>
             @endrole
-            @role('administrador|comision')
+            @role('administrador|comision|secretatiorio')
             <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
                 :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Historial Jugadores') }}
             </flux:navlist.item>
