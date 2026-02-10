@@ -3,12 +3,14 @@
 
         <div class="grid grid-cols-4 gap-3 mb-2">
             <!-- Tarjeta -->
+            @adminOrCan('administrador|comision')
             <a href="{{ route('jugadores.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
               hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
                 <img src="{{ asset('images/jugador.jpg') }}" alt="Jugadores"
                     class="w-10 h-10 sm:w-18 sm:h-18 object-cover rounded-full mb-2">
                 <span class="text-xs sm:text-base font-medium text-gray-700 leading-tight">Jugadores</span>
             </a>
+            @endadminOrCan
 
             <a href="{{ route('fixture.index') }}" class="h-30 sm:h-48 flex flex-col items-center justify-center bg-white rounded-2xl shadow-md p-3 
               hover:shadow-lg hover:scale-105 transition transform duration-300 ease-in-out text-center">
@@ -46,7 +48,7 @@
                 <h2 class="text-xs sm:text-base font-medium text-gray-700 leading-tight">Tabla de Posición</h2>
             </a>
 
-            @adminOrCan('comision')
+            @adminOrCan('comision|administrador|secretario')
             <a href="{{ route('altas-bajas.index') }}" class="h-30 sm:h-48 flex flex-col items-center bg-white rounded-2xl shadow-md p-3 
               hover:shadow-xl hover:scale-105 transition transform duration-300 ease-in-out text-center">
                 <img src="{{ asset('images/altas-bajas.png') }}" alt="Altas y Bajas"

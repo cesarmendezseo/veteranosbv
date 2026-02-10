@@ -127,11 +127,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'subirLogo'])->name('equipo.logo.upload');
     Route::post('/equipo/{equipoId}/logo', [LogoEquipoController::class, 'guardarLogo'])->name('equipo.logo.guardar');
     Route::get('/equipo/listado-buena-fe', ListadoBuenaFeIndex::class)->name('listado-buena-fe');
-    Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver', ListadoBuenaFe::class)->name('listado-buena-fe.ver');
+    Route::middleware(['permission:comision|administrador|secretario'])->group(function () {
+        Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver', ListadoBuenaFe::class)->name('listado-buena-fe.ver');
+        Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver1', ListadoBuenaFeVer::class)->name('listado-buena-fe.ver1');
+    });
     //
     Route::middleware(['permission:comision|administrador'])->group(function () {
         Route::get('/equipo/listado-buena-fe/{campeonatoId}/crear', ListadoBuenaFeCrear::class)->name('listado-buena-fe.crear');
-        Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver1', ListadoBuenaFeVer::class)->name('listado-buena-fe.ver1');
+
         Route::get('/planilla/imprimir/{equipoId}/{campeonatoId}/{jornada?}/{cancha?}', function ($equipoId, $campeonatoId, $jornada = null, $cancha = null) {
             $campeonato = \App\Models\Campeonato::find($campeonatoId);
 
@@ -215,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('sanciones/{campeonatoId}/ver', SancionesVer::class)->name('sanciones.ver');
     Route::get('sanciones/mostrar', \App\Livewire\Sanciones\SancionesMostrar::class)->name('sanciones.mostrar');
     Route::get('sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class)->name('sanciones.actualizar');
-    Route::middleware(['permission:comision|administrador'])->group(function () {
+    Route::middleware(['permission:comision|administrador|secretario'])->group(function () {
         Route::get('/sanciones/{campeonatoId}/crear', SancionesCrear::class)->name('sanciones.crearSanciones');
         Route::get('/sanciones/actualizar', \App\Livewire\Sanciones\SancionesActualizar::class,)->name('sanciones.actualizar');
         Route::get('/sanciones/crearAdmin', CrearAdministrador::class)->name('sanciones.sanciones-administrador');
