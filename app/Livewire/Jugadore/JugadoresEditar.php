@@ -83,7 +83,7 @@ class JugadoresEditar extends Component
             $errores = collect($e->validator->errors()->all())->implode("\n");
             $this->dispatch('alertaError', message: $errores);
             LivewireAlert::title('Error!!!')
-                ->text('Verifique esta teniendo un error en lo siguiente: $errores')
+                ->text('Verifique esta teniendo un error en lo siguiente:', $errores)
                 ->asConfirm()
                 ->error()
                 ->show();
