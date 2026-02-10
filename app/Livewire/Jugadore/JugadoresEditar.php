@@ -76,8 +76,8 @@ class JugadoresEditar extends Component
                 'tipo_documento.required' => 'Debe seleccionar un tipo de documento.',
                 'num_socio.unique' => 'El número de socio ya está en uso.',
                 'email.email' => 'El formato del correo no es válido.',
-                'foto.image' => 'La foto debe ser una imagen.',
-                'foto.max' => 'La foto no debe superar los 2 MB.',
+                //'foto.image' => 'La foto debe ser una imagen.',
+                //'foto.max' => 'La foto no debe superar los 2 MB.',
             ]);
         } catch (ValidationException $e) {
             // $errores = collect($e->validator->errors()->all())->implode("\n");
