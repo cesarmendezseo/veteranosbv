@@ -24,6 +24,7 @@
 
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                 wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+            @role('administrador|comision')
             <flux:navlist.item icon="shirt" :href="route('jugadores.index')"
                 :current="request()->routeIs('jugadores.index')" wire:navigate>{{ __('Jugadores') }}
             </flux:navlist.item>
@@ -33,6 +34,8 @@
             <flux:navlist.item icon="git-fork" :href="route('fixture.index')"
                 :current="request()->routeIs('fixture.index')" wire:navigate>{{ __('Fixture') }}
             </flux:navlist.item>
+            @endrole
+            @role('administrador|comision|secretario')
             <flux:navlist.item icon="numbered-list" :href="route('listado-buena-fe')"
                 :current="request()->routeIs('listado-buena-fe')" wire:navigate>{{ __('Listado Buena fe') }}
             </flux:navlist.item>
@@ -52,11 +55,12 @@
             <flux:navlist.item icon="identidication" :href="route('estadistica.index')"
                 :current="request()->routeIs('estadistica.index')" wire:navigate>{{ __('Estadisticas') }}
             </flux:navlist.item>
+            @endrole
             @role('administrador|comision')
             <flux:navlist.item icon="git-pull-request-draft" :href="route('altas-bajas.index')"
                 :current="request()->routeIs('altas-bajas.index')" wire:navigate>{{ __('Historial Jugadores') }}
             </flux:navlist.item>
-            @endrole
+
             <flux:navlist.item icon="album" :href="route('categoria.index')"
                 :current="request()->routeIs('categoria.index')" wire:navigate>{{ __('Categoria') }}
             </flux:navlist.item>
@@ -67,7 +71,7 @@
             <flux:navlist.item icon="shield" :href="route('equipo.index')" :current="request()->routeIs('equipo.index')"
                 wire:navigate>{{ __('Equipos') }}</flux:navlist.item>
 
-            @role('administrador|comision')
+
             <flux:navlist.item icon="cog" :href="route('config.index')" :current="request()->routeIs('config.index')"
                 wire:navigate>{{ __('Config') }}
             </flux:navlist.item>

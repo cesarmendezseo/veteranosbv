@@ -62,7 +62,7 @@
                                     Ver
                                 </a>
                             </li>
-
+                            @adminOrCan('administrador|comision')
                             <li>
                                 <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold
                   bg-emerald-600 text-white rounded-full
@@ -74,6 +74,7 @@
                                     Crear
                                 </a>
                             </li>
+                            @endadminOrCan
                         </ul>
 
 
@@ -120,6 +121,7 @@
                                     Ver
                                 </a>
                             </li>
+                            @adminOrCan('administrador|comision')
                             <li>
                                 <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}"
                                     class="flex items-center gap-2 px-4 py-2 hover:bg-gray-400  dark:text-white dark:hover:text-gray-800">
@@ -134,6 +136,7 @@
                                     <span class="ml-2"> Crear</span>
                                 </a>
                             </li>
+                            @endadminOrCan
                         </ul>
                     </div>
                 </div>
