@@ -130,11 +130,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['permission:comision|administrador|secretario'])->group(function () {
         Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver', ListadoBuenaFe::class)->name('listado-buena-fe.ver');
         Route::get('/equipo/listado-buena-fe/{campeonatoId}/ver1', ListadoBuenaFeVer::class)->name('listado-buena-fe.ver1');
-    });
-    //
-    Route::middleware(['permission:comision|administrador'])->group(function () {
-        Route::get('/equipo/listado-buena-fe/{campeonatoId}/crear', ListadoBuenaFeCrear::class)->name('listado-buena-fe.crear');
-
         Route::get('/planilla/imprimir/{equipoId}/{campeonatoId}/{jornada?}/{cancha?}', function ($equipoId, $campeonatoId, $jornada = null, $cancha = null) {
             $campeonato = \App\Models\Campeonato::find($campeonatoId);
 
@@ -146,6 +141,10 @@ Route::middleware(['auth'])->group(function () {
                 'cancha' => $cancha ?? ''
             ]);
         })->name('planilla.imprimir');
+    });
+    //
+    Route::middleware(['permission:comision|administrador'])->group(function () {
+        Route::get('/equipo/listado-buena-fe/{campeonatoId}/crear', ListadoBuenaFeCrear::class)->name('listado-buena-fe.crear');
     });
     //=================FIN EQUIPOS====================
 
@@ -226,14 +225,14 @@ Route::middleware(['auth'])->group(function () {
     //==============FIN SANCIONES========================
     //==============ESTADISTICA========================
     Route::get('/estadistica', \App\Livewire\Estadistica\EstadisticaIndex::class)->name('estadistica.index');
-    Route::middleware(['permission:comision|administrador'])->group(function () {
+    Route::middleware(['permission:comision|administrador|secretario'])->group(function () {
         Route::get('/estadistica/{campeonatoId}/ver', \App\Livewire\Estadistica\EstadisticaVer::class)->name('estadistica.ver');
         Route::get('/estadistica/cargar', \App\Livewire\Estadistica\EstadisticaCargar::class)->name('estadistica.cargar');
     });
     //==============FIN ESTADISTICA========================
 
     //==============ALTAS Y BAJAS========================
-    Route::middleware(['permission:comision|administrador'])->group(function () {
+    Route::middleware(['permission:comision|administrador|secretario'])->group(function () {
         Route::get('/altas-bajas', \App\Livewire\AltasBajas\AltasBajasIndex::class)->name('altas-bajas.index');
         Route::get('/altas-bajas/historial', \App\Livewire\AltasBajas\Historial::class)->name('altas-bajas.historial');
     });
