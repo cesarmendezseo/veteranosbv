@@ -102,7 +102,7 @@
                             :style="`top:${top}px; left:${left}px`" x-transition.opacity>
 
                             <!-- CREAR -->
-                            @adminOrCan('comision')
+                            @adminOrCan('comision|secretario|administrador')
                             <a href="{{ route('estadistica.ver', $campeonato->id) }}"
                                 class="flex items-center gap-2 hover:underline dark:text-white ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -131,7 +131,8 @@
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span
                         class="text-gray-600 dark:text-accent">Campeonato:</span>
-                    {{ ucwords($campeonato->nombre) }}</h3>
+                    {{ ucwords($campeonato->nombre) }}
+                </h3>
                 <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false"
                     @scroll.window="open=false">
                     <button x-ref="trigger" @click="
@@ -193,7 +194,7 @@
                         </a>
 
                         <!-- CREAR -->
-                        @adminOrCan('comision')
+                        @adminOrCan('comision|secretario|administrador')
                         <a href="{{ route('estadistica.ver', $campeonato->id) }}"
                             class="flex items-center gap-2 hover:underline text-sm pb-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
@@ -228,7 +229,7 @@
                     Todos contra Todos
                     @else
                     {{ ucfirst($campeonato->formato) }}
-                    @endif
+                @endif
                 </p> --}}
                 <p><span class="font-semibold">Categoría:</span> {{ ucfirst($campeonato->categoria->nombre) }}
                 </p>
