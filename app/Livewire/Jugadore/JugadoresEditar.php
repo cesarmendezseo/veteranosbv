@@ -80,10 +80,12 @@ class JugadoresEditar extends Component
                 'foto.max' => 'La foto no debe superar los 2 MB.',
             ]);
         } catch (ValidationException $e) {
-            $errores = collect($e->validator->errors()->all())->implode("\n");
-            $this->dispatch('alertaError', message: $errores);
+            // $errores = collect($e->validator->errors()->all())->implode("\n");
+            // 1. Convertimos los errores en una lista legible
+            $errores = collect($e->validator->errors()->all())->join("<br>");
+
             LivewireAlert::title('Error!!!')
-                ->text('Verifique esta teniendo un error en lo siguiente:', $errores)
+                ->text('Verifique esta teniendo un error en lo siguiente:' . $errores)
                 ->asConfirm()
                 ->error()
                 ->show();
