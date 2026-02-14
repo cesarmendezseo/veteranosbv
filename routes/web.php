@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use App\Livewire\Admin\AuditLog;
-
+use App\Livewire\Frontend\Resultados;
 
 Route::get('/home', function () {
     return view('welcome');
@@ -84,6 +84,8 @@ Route::get('/frontend/principal/{id}index', PrincipalIndex::class)->name('fronte
 Route::get('/frontend/{id}/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados1');
 Route::get('/frontend/tarjetas/{id}', \App\Livewire\Frontend\Estadistica\Amarillas::class)->name('frontend.estadistica.tarjetas');
 Route::get('/frontend/listado-buena-fe/{campeonatoId}/ver', FrontendListadoBuenaFe::class)->name('frontend.listado-buena-fe.ver');
+Route::get('/frontend/resultados/{campeonatoId}/ver', Resultados::class)->name('frontend.resultados');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

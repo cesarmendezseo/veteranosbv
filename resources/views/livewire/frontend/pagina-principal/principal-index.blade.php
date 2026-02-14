@@ -226,6 +226,33 @@
                         </div>
                     </div>
                 </a>
+                <!-- Card: resultados -->
+                <a href="{{ Route('frontend.resultados', $campeonato->id) }}"
+                    class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600/90 to-purple-800/90 backdrop-blur-xl border border-purple-400/20 p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-400/0 to-purple-600/0 group-hover:from-purple-400/20 group-hover:to-purple-600/20 transition-all duration-500">
+                    </div>
+                    <div class="relative flex items-center justify-between">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-pink-400 rounded-full animate-pulse"></div>
+                                <span
+                                    class="text-xs font-semibold text-pink-300 uppercase tracking-wider">Encuentros</span>
+                            </div>
+                            <h2 class="text-2xl font-bold text-white">Resultados Partidos</h2>
+                            <p class="text-sm text-purple-200/80">Todos los resultados de las fechas .</p>
+                        </div>
+                        <div
+                            class="w-14 h-14 flex items-center justify-center bg-white/10 rounded-2xl backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300 group-hover:rotate-12">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="currentColor"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
 
             </div>
         </div>
