@@ -228,7 +228,7 @@
                 </a>
                 <!-- Card: resultados -->
                 <a href="{{ Route('frontend.resultados', $campeonato->id) }}"
-                    class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600/90 to-purple-800/90 backdrop-blur-xl border border-purple-400/20 p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50">
+                    class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600/90 to-blue-800/90 backdrop-blur-xl border border-blue-400/20 p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/50">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-purple-400/0 to-purple-600/0 group-hover:from-purple-400/20 group-hover:to-purple-600/20 transition-all duration-500">
                     </div>

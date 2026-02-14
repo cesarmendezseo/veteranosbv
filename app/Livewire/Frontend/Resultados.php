@@ -8,14 +8,16 @@ use Livewire\Component;
 class Resultados extends Component
 {
     public $jornadaSeleccionada;
+    public $campeonatoId;
 
-    public function mount()
+    public function mount($campeonatoId)
     {
-        // Buscamos la primera jornada (la menor)
-        $primeraJornada = Encuentro::min('fecha_encuentro');
+        $this->campeonatoId = $campeonatoId;
+        // Buscamos la primera jornada PERO solo de este campeonato
+        $primeraJornada = Encuentro::where('campeonato_id', $this->campeonatoId)
+            ->min('fecha_encuentro');
 
-        // Asignamos la primera jornada al cargar la página
-        $this->jornadaSeleccionada = $primeraJornada ?? 'Fecha 1';
+        $this->jornadaSeleccionada = $primeraJornada ?? '1';
     }
 
     public function setJornada($jornada)
@@ -25,13 +27,16 @@ class Resultados extends Component
 
     public function render()
     {
-        // Ordenamos de menor a mayor para que los botones salgan en orden (1, 2, 3...)
-        $jornadasDisponibles = Encuentro::select('fecha_encuentro')
+        // 1. Botones: Solo jornadas que existan en ESTE campeonato
+        $jornadasDisponibles = Encuentro::where('campeonato_id', $this->campeonatoId)
+            ->select('fecha_encuentro')
             ->distinct()
             ->orderBy('fecha_encuentro', 'asc')
             ->pluck('fecha_encuentro');
 
+        // 2. Resultados: Filtrados por jornada Y por campeonato
         $resultados = Encuentro::with(['equipoLocal', 'equipoVisitante', 'cancha'])
+            ->where('campeonato_id', $this->campeonatoId) // <--- Filtro crítico
             ->where('fecha_encuentro', $this->jornadaSeleccionada)
             ->whereNotNull('gol_local')
             ->orderBy('fecha', 'asc')
