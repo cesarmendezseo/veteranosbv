@@ -59,7 +59,7 @@
                         <td class="px-4 py-4 text-left uppercase font-bold {{ $partido->gol_visitante > $partido->gol_local ? 'text-emerald-400' : '' }}">
                             {{ $partido->equipoVisitante->nombre }}
                         </td>
-                        <td class="px-4 py-4 text-[10px] uppercase font-bold opacity-60">Finalizado</td>
+                        <td class="px-4 py-4 text-[10px] uppercase font-bold opacity-60">{{ $partido->estado }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -69,24 +69,50 @@
         {{-- Móvil --}}
         <div class="sm:hidden space-y-4">
             @foreach($resultados as $partido)
-            <div wire:key="mobile-{{ $partido->id }}" class="bg-white/10 border border-white/20 rounded-2xl overflow-hidden shadow-lg">
-                <div class="bg-emerald-600/40 p-2 text-center border-b border-white/10">
-                    <span class="text-[10px] font-bold text-white uppercase tracking-widest">Resultado Final</span>
+            <div wire:key="mobile-{{ $partido->id }}"
+                class="bg-slate-800/90 dark:bg-white/10 border border-slate-700/50 dark:border-white/20 rounded-2xl overflow-hidden shadow-xl backdrop-blur-md">
+
+                {{-- Cabecera de la tarjeta --}}
+                <div class="bg-emerald-600/60 p-2 text-center border-b border-white/10">
+                    <span class="text-[10px] font-bold text-white uppercase tracking-widest">
+                        {{ $partido->estado ?? 'Finalizado' }}
+                    </span>
                 </div>
+
+                {{-- Contenedor de Marcador --}}
                 <div class="p-5 flex items-center justify-between gap-4">
+
+                    {{-- Local --}}
                     <div class="flex-1 flex flex-col items-center text-center">
-                        <span class="text-xs font-bold mb-1 {{ $partido->gol_local > $partido->gol_visitante ? 'text-emerald-400' : 'text-white' }}">
-                            {{ $partido->equipoLocal->nombre }}
+                        <span class="text-[11px] font-bold mb-2 h-8 flex items-center leading-tight {{ $partido->gol_local > $partido->gol_visitante ? 'text-emerald-400' : 'text-slate-300 dark:text-white' }}">
+                            {{ strtoupper($partido->equipoLocal->nombre) }}
                         </span>
-                        <span class="text-2xl font-black text-white leading-none">{{ $partido->gol_local }}</span>
+                        <span class="text-3xl font-black text-white leading-none bg-black/20 w-12 h-12 flex items-center justify-center rounded-lg border border-white/5">
+                            {{ $partido->gol_local }}
+                        </span>
                     </div>
-                    <div class="text-white/30 font-bold text-xl italic">vs</div>
+
+                    {{-- Divisor --}}
+                    <div class="flex flex-col items-center">
+                        <div class="text-emerald-500 font-black text-xs italic opacity-50 mb-1">VS</div>
+                        <div class="h-8 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                    </div>
+
+                    {{-- Visitante --}}
                     <div class="flex-1 flex flex-col items-center text-center">
-                        <span class="text-xs font-bold mb-1 {{ $partido->gol_visitante > $partido->gol_local ? 'text-emerald-400' : 'text-white' }}">
-                            {{ $partido->equipoVisitante->nombre }}
+                        <span class="text-[11px] font-bold mb-2 h-8 flex items-center leading-tight {{ $partido->gol_visitante > $partido->gol_local ? 'text-emerald-400' : 'text-slate-300 dark:text-white' }}">
+                            {{ strtoupper($partido->equipoVisitante->nombre) }}
                         </span>
-                        <span class="text-2xl font-black text-white leading-none">{{ $partido->gol_visitante }}</span>
+                        <span class="text-3xl font-black text-white leading-none bg-black/20 w-12 h-12 flex items-center justify-center rounded-lg border border-white/5">
+                            {{ $partido->gol_visitante }}
+                        </span>
                     </div>
+                </div>
+
+                {{-- Info Extra (Cancha/Fecha) --}}
+                <div class="px-5 py-2 bg-black/30 flex justify-between items-center text-[9px] text-slate-400 dark:text-white/50 uppercase tracking-tighter">
+                    <span>{{ $partido->cancha->nombre ?? 'S/C' }}</span>
+                    <span>{{ $partido->fecha_encuentro }}</span>
                 </div>
             </div>
             @endforeach
