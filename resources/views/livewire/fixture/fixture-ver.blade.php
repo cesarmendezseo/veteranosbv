@@ -239,7 +239,7 @@
                     </thead>
                     <tbody>
                         @foreach ($encuentros as $encuentro)
-                        <tr
+                        <tr wire:key="encuentro-{{ $encuentro->id }}"
                             class=" border-b border-gray-400 dark:border-gray-200  hover:bg-gray-100 dark:hover:bg-gray-700">
                             <td class="px-2 sm:px-4 py-2 text-center">
                                 {{ \Carbon\Carbon::parse($encuentro->fecha)->format('d/m/Y') }}
@@ -257,12 +257,12 @@
                                 {{ strtoupper($encuentro->equipoLocal->nombre) }}
                             </td>
                             <td class="w-16 px-1 sm:px-2 py-2 text-center  dark:border-gray-200">
-                                <input type="number" wire:model="goles_local.{{ $encuentro->id }}"
+                                <input type="number" wire:model.blur="goles_local.{{ $encuentro->id }}"
                                     class="w-full px-1 sm:px-2 py-1 border border-gray-400 rounded text-center text-gray-950 bg-gray-200"
                                     min="0" />
                             </td>
                             <td class="w-16 px-1 sm:px-2 py-2 text-center ">
-                                <input type="number" wire:model="goles_visitante.{{ $encuentro->id }}"
+                                <input type="number" wire:model.blur="goles_visitante.{{ $encuentro->id }}"
                                     class="w-full px-1 sm:px-2 py-1 border  border-gray-400 rounded text-center text-gray-950 bg-gray-200"
                                     min="0" />
                             </td>
@@ -329,7 +329,7 @@
             <!--///////////------ Versión Móvil ////////////////////// -->
             <div class="sm:hidden space-y-2 ">
                 @foreach ($encuentros as $encuentro)
-                <div
+                <div wire:key="encuentro-{{ $encuentro->id }}"
                     class="border border-gray-300 bg-gray-50 shadow-2xs rounded-lg overflow-hidden  text-gray-900 dark:bg-gray-800">
                     <!-- Encabezado con fecha y hora -->
                     <div class="bg-gray-800 dark:bg-gray-500 p-2 flex justify-between items-center">
@@ -357,7 +357,7 @@
                         <div class="flex items-center justify-between mb-2">
                             <span class="font-semibold text-gray-800 dark:text-gray-100">{{
                                 strtoupper($encuentro->equipoLocal->nombre) }}</span>
-                            <input type="number" wire:model="goles_local.{{ $encuentro->id }}"
+                            <input type="number" wire:model.blur="goles_local.{{ $encuentro->id }}"
                                 class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-gray-950 bg-gray-100"
                                 min="0" />
                         </div>
@@ -366,7 +366,7 @@
                         <div class="flex items-center justify-between mb-3">
                             <span class="font-semibold text-gray-800 dark:text-gray-100">{{
                                 strtoupper($encuentro->equipoVisitante->nombre) }}</span>
-                            <input type="number" wire:model="goles_visitante.{{ $encuentro->id }}"
+                            <input type="number" wire:model.blur="goles_visitante.{{ $encuentro->id }}"
                                 class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center text-gray-950 bg-gray-100"
                                 min="0" />
                         </div>
@@ -500,49 +500,49 @@
 
 
 
-                Livewire.on('confirmar-baja', ({
-                    id
-                }) => {
-                    Swal.fire({
-                        title: 'CUIDADO...',
-                        text: "¿Estás seguro de Eliminar el encuentro?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Sí, Eliminar'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Llamás al método del componente Livewire y le pasás el parámetro
-                            Livewire.dispatch('eliminar-encuentro', {
-                                encuentroId: id
-                            });
-                        }
-                    });
+            Livewire.on('confirmar-baja', ({
+                id
+            }) => {
+                Swal.fire({
+                    title: 'CUIDADO...',
+                    text: "¿Estás seguro de Eliminar el encuentro?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, Eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Llamás al método del componente Livewire y le pasás el parámetro
+                        Livewire.dispatch('eliminar-encuentro', {
+                            encuentroId: id
+                        });
+                    }
                 });
-                //========================================
-                Livewire.on('Baja', () => {
-                    Swal.fire(
-                        'Error!!',
-                        'El encuentro no se puede eliminar porque se encuentra jugado.',
-                        'warning'
-                    );
-                });
-                //========================================
-                Livewire.on('eliminado', () => {
-                    Swal.fire(
-                        '¡Eliminado!',
-                        'El encuentro ha sido eliminado correctamente.',
-                        'success'
-                    ).then(() => {
-                        // Opcional: Recargar la página o hacer alguna acción adicional
-                        Livewire.dispatch('refresh');
-                    });
-                });
-
-
-
             });
+            //========================================
+            Livewire.on('Baja', () => {
+                Swal.fire(
+                    'Error!!',
+                    'El encuentro no se puede eliminar porque se encuentra jugado.',
+                    'warning'
+                );
+            });
+            //========================================
+            Livewire.on('eliminado', () => {
+                Swal.fire(
+                    '¡Eliminado!',
+                    'El encuentro ha sido eliminado correctamente.',
+                    'success'
+                ).then(() => {
+                    // Opcional: Recargar la página o hacer alguna acción adicional
+                    Livewire.dispatch('refresh');
+                });
+            });
+
+
+
+        });
     </script>
     @endpush
     <!--  -->

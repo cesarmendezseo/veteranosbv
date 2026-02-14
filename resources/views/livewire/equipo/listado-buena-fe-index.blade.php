@@ -2,7 +2,7 @@
 
     <div class="bg-blue-900 text-white p-2 shadow-md rounded flex justify-between items-center">
         <h2 class="font-semibold text-xl text-gray-100 leading-tight">
-            {{ __('Listado de Buena Fé Index') }}
+            {{ __('Listado de Buena Fé Index ') }}
         </h2>
     </div>
     <div class="mt-2">
@@ -48,7 +48,9 @@
 
                     {{-- MENÚ DE OPCIONES --}}
                     <td class="px-6 py-4 text-right">
-
+                       <!--  <x-ui.button variant="sliding-green" icon="view">
+                            Ver
+                        </x-ui.button> -->
                         <ul class="flex gap-2 py-1">
                             <li>
                                 <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold

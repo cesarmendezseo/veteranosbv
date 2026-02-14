@@ -1,35 +1,68 @@
-<div class="p-6 bg-white shadow-sm rounded-lg">
-    <h2 class="text-2xl font-bold mb-4">Registro de Auditoría</h2>
-
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+<div class="overflow-x-auto">
+    <div class="mb-4">
+        <input 
+            wire:model.live="search" 
+            type="text" 
+            placeholder="Buscar por ID, evento o usuario..." 
+            class="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        />
+    </div>
+    <table class="min-w-full table-auto border-collapse">
+        <thead class="bg-gray-100">
             <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Usuario</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Evento</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Modelo</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Cambios</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                <th class="px-4 py-2 text-left">Evento</th>
+                <th class="px-4 py-2 text-left">Modelo / Afectado</th>
+                <th class="px-4 py-2 text-left">Cambios (Valores Nuevos)</th>
+                <th class="px-4 py-2 text-left">Usuario</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
+        <tbody>
             @foreach($audits as $audit)
-            <tr>
-                <td class="px-4 py-2 text-sm">{{ $audit->user->name ?? 'Sistema' }}-{{ $audit->user->email ?? 'Sin email'   }}</td>
-                
-                <td class="px-4 py-2 text-sm">
-                    <span class="px-2 py-1 rounded text-white {{ $audit->event == 'created' ? 'bg-green-500' : ($audit->event == 'updated' ? 'bg-blue-500' : 'bg-red-500') }}">
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-2">
+                    <span class="px-2 py-1 rounded text-xs font-bold 
+                        {{ $audit->event == 'created' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
                         {{ strtoupper($audit->event) }}
                     </span>
                 </td>
-                <td class="px-4 py-2 text-sm">
-                    {{ class_basename($audit->auditable_type) }} (ID: {{ $audit->auditable_id }})
+                
+                <td class="px-4 py-2">
+                    <div class="font-bold text-sm">
+                        {{ class_basename($audit->auditable_type) }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                        {{-- Intentamos mostrar el nombre si el modelo lo tiene, sino el ID --}}
+                        ID: {{ $audit->auditable_id }} 
+                        @if($audit->auditable && isset($audit->auditable->nombre))
+                            - <strong>{{ $audit->auditable->nombre }}</strong>
+                        @elseif($audit->auditable && isset($audit->auditable->name))
+                            - <strong>{{ $audit->auditable->name }}</strong>
+                        @endif
+                    </div>
                 </td>
-                <td class="px-4 py-2 text-xs">
-                    <strong>Nuevos:</strong> 
-                    <pre class="bg-gray-100 p-1 rounded">{{ json_encode($audit->new_values, JSON_PRETTY_PRINT) }}</pre>
+
+                <td class="px-4 py-2">
+                    <div class="grid grid-cols-1 gap-1">
+                        @foreach($audit->new_values as $key => $value)
+                            @if(!is_null($value) && $key !== 'id')
+                                <div class="text-xs">
+                                    <span class="text-gray-400 font-semibold">{{ strtoupper(str_replace('_', ' ', $key)) }}:</span>
+                                    <span class="text-gray-800">
+                                        {{-- Manejo de booleanos o fechas --}}
+                                        @if(is_bool($value))
+                                            {{ $value ? 'SÍ' : 'NO' }}
+                                        @else
+                                            {{ $value }}
+                                        @endif
+                                    </span>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
                 </td>
-                <td class="px-4 py-2 text-sm text-gray-500">
-                    {{ $audit->created_at->format('d/m/Y H:i') }}
+
+                <td class="px-4 py-2 text-sm text-gray-600">
+                    {{ $audit->user->name ?? 'Sistema' }}
                 </td>
             </tr>
             @endforeach
