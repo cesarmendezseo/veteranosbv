@@ -69,7 +69,7 @@ Route::get('/home', function () {
 })->name('home');
 
 
-Route::get('/', PaginaPrincipal::class)->name('pagina-principal-index');
+Route::get('/', PrincipalIndex::class)->name('pagina-principal-index');
 Route::get('/tabla-posicion-index', TablaPosicionTablaPosicionIndex::class)->name('tabla-posicion-index');
 Route::get('/tabla-posicion/{campeonatoId}/verHistorial', TablaPosicionResultados::class)->name('tabla-posicion-historial');
 Route::get('/tabla-posicion', TablaPosicionResultados::class)->name('tabla-posicion-resultados');

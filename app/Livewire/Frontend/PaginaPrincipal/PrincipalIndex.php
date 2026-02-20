@@ -3,15 +3,19 @@
 namespace App\Livewire\Frontend\PaginaPrincipal;
 
 use App\Models\Campeonato;
+use App\Models\Configuracion;
 use Livewire\Component;
 
 class PrincipalIndex extends Component
 {
     public $campeonato;
+    public $campeonatoId;
 
-    public function mount($id)
+    public function mount()
     {
-        $this->campeonato = Campeonato::find($id);
+
+        $this->campeonatoId = Configuracion::get('campeonato_principal');
+        $this->campeonato = Campeonato::find($this->campeonatoId);
     }
 
     public function render()
