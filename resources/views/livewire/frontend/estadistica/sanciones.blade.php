@@ -193,13 +193,13 @@
 
                     </div>
 
-                    @if($sancion->observacion)
-                    <!-- Observación (opcional) -->
+                    <!--  @if($sancion->observacion)
+                    <!-- Observación (opcional) --
                     <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
                         <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-1">Detalle:</span>
                         <p class="text-sm text-black dark:text-white">{{ ucfirst($sancion->observacion) }}</p>
                     </div>
-                    @endif
+                    @endif -->
 
                 </div>
 
