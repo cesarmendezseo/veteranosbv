@@ -120,7 +120,7 @@
                 </a>
 
                 <!-- Card: Sanciones -->
-                <!--  <a href="{{ Route('frontend.sanciones.index', $campeonato->id) }}"
+                <a href="{{ Route('frontend.sanciones.index', $campeonato->id) }}"
                     class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-600/90 to-red-800/90 backdrop-blur-xl border border-red-400/20 p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/50">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-red-400/0 to-red-600/0 group-hover:from-red-400/20 group-hover:to-red-600/20 transition-all duration-500">
@@ -144,7 +144,7 @@
                             </svg>
                         </div>
                     </div>
-                </a> -->
+                </a>
 
                 <!-- Card: Tarjetas -->
                 <a href="{{ Route('frontend.estadistica.tarjetas', $campeonato->id) }}"

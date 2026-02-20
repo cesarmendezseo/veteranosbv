@@ -33,7 +33,7 @@
                         <th class="px-4 py-3 text-left">Jugador</th>
                         <th class="px-4 py-3 text-center">Fecha Sanción</th>
                         <th class="px-4 py-3 text-center">Partido</th>
-                        <th class="px-4 py-3 text-center">Motivo</th>
+                        <!--  <th class="px-4 py-3 text-center">Motivo</th> -->
                         <th class="px-4 py-3 text-center">Fechas</th>
                         <th class="px-4 py-3 text-center">Cumplidas</th>
                     </tr>
@@ -68,7 +68,7 @@
                         </td>
 
 
-                        <td class="px-4 py-3 text-center">
+                        <!--    <td class="px-4 py-3 text-center">
                             <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold text-white
         @if(strtolower($sancion->motivo) === 'roja' || str_contains(strtolower($sancion->motivo), 'roja'))
             bg-red-600/80 shadow-[0_0_8px_rgba(255,0,0,0.5)]
@@ -80,7 +80,7 @@
     ">
                                 {{ ucwords($sancion->motivo) }}
                             </span>
-                        </td>
+                        </td> -->
 
                         <!-- FECHAS SANCIONADAS -->
                         <td class="py-3">
