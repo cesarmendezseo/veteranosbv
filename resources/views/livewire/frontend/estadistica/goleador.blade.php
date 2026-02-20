@@ -48,7 +48,7 @@
 
                         <!-- EQUIPO -->
                         <td class="px-4 py-3 text-left text-black/80 dark:text-white/80">
-                            {{ $gol->jugador->equiposPorCampeonato->first()?->nombre ?? '-' }}
+                            {{ $gol->jugador->equipo->nombre ?? '-' }}
                         </td>
 
                         <!-- GOLES -->
