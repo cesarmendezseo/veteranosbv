@@ -19,12 +19,14 @@ class ActualizarSanciones extends Command
     {
         $this->info('Actualizando sanciones...');
 
-        // 1️⃣ Incrementar partidos cumplidos si aún no se cumplió la sanción
+        // 1️⃣ Incrementar partidos cumplidos solo si aún no alcanzó el límite
         Sanciones::where('cumplida', false)
+            ->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
             ->increment('partidos_cumplidos', 1);
 
         // 2️⃣ Marcar como cumplidas las sanciones que ya igualaron la cantidad
-        Sanciones::whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados')
+        Sanciones::where('cumplida', false)
+            ->whereColumn('partidos_cumplidos', '>=', 'partidos_sancionados')
             ->update(['cumplida' => true]);
 
         // Enviar notificación al admin (ajusta el ID o el criterio)
