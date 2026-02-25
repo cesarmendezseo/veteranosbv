@@ -28,7 +28,7 @@ class ActualizarSanciones extends Command
             ->update(['cumplida' => true]);
 
         // Enviar notificación al admin (ajusta el ID o el criterio)
-        $emailAdmin = \App\Models\Configuracion::where('clave', 'email_notificaciones')->value('valor')
+        $emailAdmin = \App\Models\Configuracion::where('key', 'email_notificaciones')->value('value')
             ?? 'cesarmendez.seo@gmail.com';
         $admin = User::where('email', $emailAdmin)->first(); // o User::where('role', 'admin')->first();
         Notification::send($admin, new SancionesActualizadas());
