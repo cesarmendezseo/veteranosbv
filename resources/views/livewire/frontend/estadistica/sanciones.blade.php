@@ -69,7 +69,14 @@
                             <!-- JUGADOR -->
                             <td class="px-4 py-3 text-left font-semibold tracking-wide">
                                 {{ strtoupper($sancion->jugador->apellido) }}, {{ strtoupper($sancion->jugador->nombre) }}
+                                <span class="ml-2 px-3 py-1 text-xs  
+             bg-gradient-to-r from-indigo-500 to-blue-500 
+             text-white rounded-full shadow-md">
+                                    {{ strtoupper($sancion->jugador->equipo?->nombre) }}
+                                </span>
+
                             </td>
+
 
                             <!-- FECHA SANCIÓN -->
                             <td class="px-4 py-3 text-center">
@@ -195,12 +202,23 @@
                     class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.3)] hover:bg-white/15 hover:shadow-[0_0_30px_rgba(255,100,0,0.4)] transition-all duration-300">
 
                     <!-- Encabezado con nombre del jugador -->
-                    <div class="bg-gradient-to-r from-orange-700/60 to-orange-500/50 p-4 border-b border-white/20">
-                        <h3 class="font-bold text-lg text-black dark:text-white">
-                            {{ strtoupper($sancion->jugador->apellido) }}, {{ strtoupper($sancion->jugador->nombre) }}
-                        </h3>
-                    </div>
+                    <div class="bg-gradient-to-r from-orange-700/60 to-orange-500/50 
+            p-4 border-b border-white/20">
 
+                        <h3 class="font-bold text-lg text-black dark:text-white leading-tight">
+                            {{ strtoupper($sancion->jugador->apellido) }},
+                            {{ strtoupper($sancion->jugador->nombre) }}
+                        </h3>
+
+                        <div class="mt-2">
+                            <span class="inline-block px-3 py-1 text-xs font-semibold
+                     bg-gradient-to-r from-indigo-500 to-blue-500
+                     text-white rounded-full shadow-md">
+                                {{ strtoupper($sancion->jugador->equipo?->nombre) }}
+                            </span>
+                        </div>
+
+                    </div>
                     <!-- Contenido -->
                     <div class="p-4 space-y-3">
 
