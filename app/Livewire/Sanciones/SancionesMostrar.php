@@ -78,11 +78,19 @@ class SancionesMostrar extends Component
 
         $sancion = Sanciones::findOrFail($this->sancion_id);
         $sancion->update([
-            'partidos_sancionados' => $this->edit_medida === 'partidos' ? $this->edit_partidos_sancionados : 0,
-            'fecha_fin' => $this->edit_medida === 'tiempo' ? $this->edit_fecha_fin : null,
+            'partidos_sancionados' => $this->edit_medida === 'partidos'
+                ? $this->edit_partidos_sancionados
+                : 0,
+
+            'fecha_inicio' => $this->edit_fecha_inicio,
+
+            'fecha_fin' => $this->edit_medida === 'tiempo'
+                ? $this->edit_fecha_fin
+                : null,
+
+            'encuentro_id' => $this->edit_encuentro_id,
+
             'observacion' => $this->edit_observacion,
-            // Recalcular si ya está cumplida
-            'cumplida' => ($this->edit_medida === 'partidos' && $sancion->partidos_cumplidos >= $this->edit_partidos_sancionados)
         ]);
 
         $this->cerrarModal();
