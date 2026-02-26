@@ -32,6 +32,7 @@ class Sanciones extends Model implements Auditable
         'fecha_inicio',
         'fecha_fin',
         'medida',
+        'encuentro_id',
     ];
 
     public function sancionable()

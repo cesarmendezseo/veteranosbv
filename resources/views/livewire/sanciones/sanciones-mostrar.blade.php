@@ -235,16 +235,6 @@
                     <textarea wire:model="edit_observacion" class="w-full border rounded p-2"></textarea>
                 </div>
             </div>
-
-            <div class="mt-6 flex justify-end gap-3">
-                <button wire:click="cerrarModal"
-                    class="cursor-pointer px-4 py-2 bg-gray-300 rounded">
-                    Cancelar
-                </button>
-                <button wire:click="actualizarSancion"
-                    class="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded">Guardar
-                    Cambios</button>
-            </div>
             <div>
                 <label class="block text-sm font-medium">Encuentro</label>
                 <select wire:model="edit_encuentro_id" class="w-full border rounded p-2">
@@ -256,6 +246,16 @@
                     @endforeach
                 </select>
             </div>
+            <div class="mt-6 flex justify-end gap-3">
+                <button wire:click="cerrarModal"
+                    class="cursor-pointer px-4 py-2 bg-gray-300 rounded">
+                    Cancelar
+                </button>
+                <button wire:click="actualizarSancion"
+                    class="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded">Guardar
+                    Cambios</button>
+            </div>
+
 
         </div>
     </div>
