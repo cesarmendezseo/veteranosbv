@@ -202,23 +202,17 @@
                     class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.3)] hover:bg-white/15 hover:shadow-[0_0_30px_rgba(255,100,0,0.4)] transition-all duration-300">
 
                     <!-- Encabezado con nombre del jugador -->
-                    <div class="bg-gradient-to-r from-orange-700/60 to-orange-500/50 
-            p-4 border-b border-white/20">
-
-                        <h3 class="font-bold text-lg text-black dark:text-white leading-tight">
-                            {{ strtoupper($sancion->jugador->apellido) }},
-                            {{ strtoupper($sancion->jugador->nombre) }}
+                    <div class="bg-gradient-to-r from-orange-700/60 to-orange-500/50 p-4 border-b border-white/20">
+                        <h3 class="font-bold text-lg text-black dark:text-white">
+                            {{ strtoupper($sancion->jugador->apellido) }}, {{ strtoupper($sancion->jugador->nombre) }}
                         </h3>
-
-                        <div class="mt-2">
-                            <span class="inline-block px-3 py-1 text-xs font-semibold
-                     bg-gradient-to-r from-indigo-500 to-blue-500
-                     text-white rounded-full shadow-md">
-                                {{ strtoupper($sancion->jugador->equipo?->nombre) }}
-                            </span>
-                        </div>
-
+                        <span class="ml-2 px-3 py-1 text-xs  
+             bg-gradient-to-r from-indigo-500 to-blue-500 
+             text-white rounded-full shadow-md">
+                            {{ strtoupper($sancion->jugador->equipo?->nombre) }}
+                        </span>
                     </div>
+
                     <!-- Contenido -->
                     <div class="p-4 space-y-3">
 
@@ -294,41 +288,52 @@
 
                         </div>
 
+                        <!-- Partido -->
+                        <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                            <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-2">Partido:</span>
+                            <div class="text-sm font-semibold text-black dark:text-white text-center">
+                                @if($sancion->sancionable)
+                                {{ strtoupper($sancion->sancionable->equipoLocal->nombre) }}
+                                vs
+                                {{ strtoupper($sancion->sancionable->equipoVisitante->nombre) }}
+                                @else
+                                <em class="text-black/50"></em>
+                                @endif
+                            </div>
 
+                        </div>
 
-                    </div>
+                        @if($sancion->observacion)
 
-                    @if($sancion->observacion)
-
-                    <!-- <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                        <!-- <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
                         <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-1">Detalle:</span>
                         <p class="text-sm text-black dark:text-white">{{ ucfirst($sancion->observacion) }}</p>
                     </div> -->
-                    @endif
+                        @endif
+
+                    </div>
 
                 </div>
-
+                @empty
+                <div
+                    class="text-center py-8 text-black/70 dark:text-white/70 font-semibold bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 p-6">
+                    @if ($search)
+                    No se encontraron sanciones para <strong>"{{ $search }}"</strong>.
+                    @else
+                    No hay sanciones registradas.
+                    @endif
+                </div>
+                @endforelse
         </div>
-        @empty
-        <div
-            class="text-center py-8 text-black/70 dark:text-white/70 font-semibold bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 p-6">
-            @if ($search)
-            No se encontraron sanciones para <strong>"{{ $search }}"</strong>.
-            @else
-            No hay sanciones registradas.
-            @endif
+
+        <!-- {{-- 📄 Paginación --}} -->
+
+        @if($sanciones->hasPages())
+        <div class="mt-8">
+            {{ $sanciones->links() }}
         </div>
-        @endforelse
+        @endif
+
     </div>
-
-    <!-- {{-- 📄 Paginación --}} -->
-
-    @if($sanciones->hasPages())
-    <div class="mt-8">
-        {{ $sanciones->links() }}
-    </div>
-    @endif
-
-</div>
 
 </div>
