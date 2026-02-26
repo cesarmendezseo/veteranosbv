@@ -295,7 +295,7 @@
                         </div>
 
                         <!-- Partido -->
-                        <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                        <!--    <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
                             <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-2">Partido:</span>
                             <div class="text-sm font-semibold text-black dark:text-white text-center">
                                 @if($sancion->sancionable)
@@ -307,7 +307,7 @@
                                 @endif
                             </div>
 
-                        </div>
+                        </div> -->
 
                         @if($sancion->observacion)
 
