@@ -44,10 +44,10 @@
                     </span>
                 </div>
                 <div>
-                    <span
-                        class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full mt-1 sm:mt-0">
-                        {{ $jug->equiposPorCampeonato->first() ? strtoupper($jug->equiposPorCampeonato->first()->nombre)
-                        : 'SIN EQUIPO' }}
+                    @php $equipo = $jug->equipoEnCampeonato($campeonatoId); @endphp
+
+                    <span class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-xs font-medium px-3 py-1 rounded-full mt-1 sm:mt-0">
+                        {{ $equipo ? strtoupper($equipo->nombre) : 'SIN EQUIPO' }}
                     </span>
                 </div>
             </div>

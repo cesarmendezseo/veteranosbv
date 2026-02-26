@@ -71,6 +71,13 @@ class Jugador extends Model implements Auditable
             ->withPivot('campeonato_id');
     }
 
+    public function equipoEnCampeonato($campeonatoId)
+    {
+        return $this->equiposPorCampeonato
+            ->where('pivot.campeonato_id', $campeonatoId)
+            ->first();
+    }
+
     protected function nombre(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
