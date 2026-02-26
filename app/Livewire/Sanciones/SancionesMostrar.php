@@ -3,6 +3,7 @@
 namespace App\Livewire\Sanciones;
 
 use App\Models\Campeonato;
+use App\Models\Encuentro;
 use Livewire\Component;
 use App\Models\Sanciones;
 use Livewire\WithPagination;
@@ -25,6 +26,10 @@ class SancionesMostrar extends Component
     public $edit_medida;
     public $modalEditVisible = false;
     public $id;
+    public $nombreJugador;
+    public $edit_encuentro_id;
+    public $edit_fecha_inicio;
+    public $edit_campeonato_id;
 
 
     // Resetear página al cambiar filtros
@@ -44,12 +49,22 @@ class SancionesMostrar extends Component
     public function editarSancion($id)
     {
         $sancion = Sanciones::findOrFail($id);
-
+        $this->nombreJugador = $sancion->jugador->apellido . ', ' . $sancion->jugador->nombre;
         $this->sancion_id = $id;
         $this->edit_medida = $sancion->medida;
         $this->edit_partidos_sancionados = $sancion->partidos_sancionados;
-        $this->edit_fecha_fin = $sancion->fecha_fin ? \Carbon\Carbon::parse($sancion->fecha_fin)->format('Y-m-d') : null;
+        $this->edit_fecha_fin = $sancion->fecha_fin
+            ? \Carbon\Carbon::parse($sancion->fecha_fin)->format('Y-m-d')
+            : null;
+
+        $this->edit_fecha_inicio = $sancion->fecha_inicio
+            ? \Carbon\Carbon::parse($sancion->fecha_inicio)->format('Y-m-d')
+            : null;
+
+        $this->edit_encuentro_id = $sancion->encuentro_id;
+        $this->edit_campeonato_id = $sancion->campeonato_id;
         $this->edit_observacion = $sancion->observacion;
+
         $this->modalEditVisible = true;
     }
 
@@ -70,7 +85,7 @@ class SancionesMostrar extends Component
             'cumplida' => ($this->edit_medida === 'partidos' && $sancion->partidos_cumplidos >= $this->edit_partidos_sancionados)
         ]);
 
-        $this->modalEditVisible = false;
+        $this->cerrarModal();
         LivewireAlert::title('Sanción actualizada')
             ->toast()
             ->success()
@@ -98,6 +113,18 @@ class SancionesMostrar extends Component
     {
         $itemId = $data['id'];
         // Keep logic
+    }
+
+    public function cerrarModal()
+    {
+        $this->reset([
+            'sancion_id',
+            'edit_partidos_sancionados',
+            'edit_fecha_fin',
+            'edit_observacion',
+            'edit_medida',
+            'modalEditVisible'
+        ]);
     }
 
     public function render()
@@ -131,10 +158,14 @@ class SancionesMostrar extends Component
             })
             ->orderBy('etapa_sancion', 'desc')
             ->paginate(20);
+        $encuentros = Encuentro::with(['equipoLocal', 'equipoVisitante'])
+            ->orderBy('fecha', 'desc')
+            ->get();
 
         return view('livewire.sanciones.sanciones-mostrar', [
             'sanciones' => $sanciones,
             'campeonatos' => $campeonatos,
+            'encuentros' => $encuentros,
         ]);
     }
 }

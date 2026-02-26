@@ -122,20 +122,25 @@ class SancionesCrear extends Component
     {
         if (!$this->jugador_id || !$this->fechaBuscada) return;
 
-        $equipoId = DB::table('campeonato_jugador_equipo')
+        // Buscar el equipo del jugador EN ESTE campeonato específico
+        $fila = DB::table('campeonato_jugador_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->where('jugador_id', $this->jugador_id)
-            ->value('equipo_id');
+            ->first(); // traemos toda la fila para poder debuggear mejor
 
-        if (!$equipoId) {
-            $this->partidoJugadorInfo = 'El jugador no tiene equipo asignado.';
+        if (!$fila || !$fila->equipo_id) {
+            $this->partidoJugadorInfo = 'El jugador no tiene equipo asignado en este campeonato.';
+            $this->partido_id = null;
             return;
         }
 
+        $equipoId = $fila->equipo_id;
+
         $query = $this->partido_tipo::with(['equipoLocal', 'equipoVisitante'])
-            ->where('campeonato_id', $this->campeonatoId)
+            ->where('campeonato_id', $this->campeonatoId) // ← asegurarse que sea el campeonato correcto
             ->where(function ($q) use ($equipoId) {
-                $q->where('equipo_local_id', $equipoId)->orWhere('equipo_visitante_id', $equipoId);
+                $q->where('equipo_local_id', $equipoId)
+                    ->orWhere('equipo_visitante_id', $equipoId);
             });
 
         if ($this->partido_tipo === Encuentro::class) {
