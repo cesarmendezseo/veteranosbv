@@ -294,52 +294,41 @@
 
                         </div>
 
-                        <!-- Partido -->
-                        <!--    <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                            <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-2">Partido:</span>
-                            <div class="text-sm font-semibold text-black dark:text-white text-center">
-                                @if($sancion->sancionable)
-                                {{ strtoupper($sancion->sancionable->equipoLocal->nombre) }}
-                                vs
-                                {{ strtoupper($sancion->sancionable->equipoVisitante->nombre) }}
-                                @else
-                                <em class="text-black/50"></em>
-                                @endif
-                            </div>
 
-                        </div> -->
-
-                        @if($sancion->observacion)
-
-                        <!-- <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                        <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-1">Detalle:</span>
-                        <p class="text-sm text-black dark:text-white">{{ ucfirst($sancion->observacion) }}</p>
-                    </div> -->
-                        @endif
 
                     </div>
 
-                </div>
-                @empty
-                <div
-                    class="text-center py-8 text-black/70 dark:text-white/70 font-semibold bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 p-6">
-                    @if ($search)
-                    No se encontraron sanciones para <strong>"{{ $search }}"</strong>.
-                    @else
-                    No hay sanciones registradas.
+                    @if($sancion->observacion)
+
+                    <!-- <div class="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                        <span class="block text-xs font-semibold text-black/70 dark:text-white/70 mb-1">Detalle:</span>
+                        <p class="text-sm text-black dark:text-white">{{ ucfirst($sancion->observacion) }}</p>
+                    </div> -->
                     @endif
+
                 </div>
-                @endforelse
+
         </div>
-
-        <!-- {{-- 📄 Paginación --}} -->
-
-        @if($sanciones->hasPages())
-        <div class="mt-8">
-            {{ $sanciones->links() }}
+        @empty
+        <div
+            class="text-center py-8 text-black/70 dark:text-white/70 font-semibold bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 p-6">
+            @if ($search)
+            No se encontraron sanciones para <strong>"{{ $search }}"</strong>.
+            @else
+            No hay sanciones registradas.
+            @endif
         </div>
-        @endif
-
+        @endforelse
     </div>
+
+    <!-- {{-- 📄 Paginación --}} -->
+
+    @if($sanciones->hasPages())
+    <div class="mt-8">
+        {{ $sanciones->links() }}
+    </div>
+    @endif
+
+</div>
 
 </div>
