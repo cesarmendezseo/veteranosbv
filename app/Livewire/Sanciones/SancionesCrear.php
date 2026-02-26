@@ -84,7 +84,8 @@ class SancionesCrear extends Component
                 $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
             })
                 ->with(['equiposPorCampeonato' => function ($query) {
-                    $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
+                    $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId)
+                        ->orderByPivot('created_at', 'desc'); // ← mismo fix acá
                 }])
                 ->where(function ($query) use ($buscar) {
                     $query->where('nombre', 'like', "%{$buscar}%")
@@ -100,8 +101,8 @@ class SancionesCrear extends Component
     public function agregarJugador($jugadorId)
     {
         $this->jugadorSeleccionado = Jugador::with(['equiposPorCampeonato' => function ($q) {
-            // AQUÍ TAMBIÉN: Especificamos la tabla pivote
-            $q->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
+            $q->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId)
+                ->orderByPivot('created_at', 'desc'); // ← trae el más reciente primero
         }])->find($jugadorId);
 
         $this->jugador_id = $jugadorId;
@@ -127,7 +128,8 @@ class SancionesCrear extends Component
         $fila = DB::table('campeonato_jugador_equipo')
             ->where('campeonato_id', $this->campeonatoId)
             ->where('jugador_id', $this->jugador_id)
-            ->first(); // traemos toda la fila para poder debuggear mejor
+            ->orderBy('created_at', 'desc') // ← el equipo actual
+            ->first();
 
         if (!$fila || !$fila->equipo_id) {
             $this->partidoJugadorInfo = 'El jugador no tiene equipo asignado en este campeonato.';
