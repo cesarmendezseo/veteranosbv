@@ -52,96 +52,44 @@
                 <!-- BOTONES DE ACCION PARA PANTALLAS MOVIL -->
                 <td class="px-6 py-4 text-right">
                     <!-- Para pantallas medianas en adelante -->
-                    <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false"
-                        @scroll.window="open=false">
-                        <button x-ref="trigger" @click="
-                            open = !open;
-                            $nextTick(() => {
-                                const btn = $refs.trigger;
-                                const rect = btn.getBoundingClientRect();
-                                const menu = $refs.menu;
 
-                                // Mostrar temporalmente para medir tamaño real
-                                const prevDisplay = menu.style.display;
-                                const prevVisibility = menu.style.visibility;
-                                menu.style.visibility = 'hidden';
-                                menu.style.display = 'block';
-
-                                const mh = menu.offsetHeight;
-                                const mw = menu.offsetWidth;
-
-                                // Restaurar estado
-                                menu.style.display = prevDisplay;
-                                menu.style.visibility = prevVisibility;
-
-                                // Posición por defecto: debajo del botón
-                                let top = rect.bottom + 8;
-                                let left = rect.right - mw;
-
-                                // Si no entra abajo, abrir arriba
-                                if (top + mh > window.innerHeight) {
-                                    top = rect.top - mh - 8;
-                                }
-
-                                // Limitar a bordes laterales
-                                left = Math.max(8, Math.min(left, window.innerWidth - mw - 8));
-
-                                $data.top = top;
-                                $data.left = left;
-                            });
-                        " class="text-gray-600 hover:text-black focus:outline-none dark:text-white cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6v.01M12 12v.01M12 18v.01" />
+                    <div class="flex items-center justify-end gap-2">
+                        <!--VER-->
+                        <a href="{{ route('sanciones.crearSanciones', $campeonato->id) }}"
+                            class="cursor-pointer text-green-600 hover:text-white border border-green-600 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-xs px-2 py-1 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
-                        </button>
+                        </a>
+                        @adminOrCan('administrador')
+                        <a href="{{ route('sanciones.actualizar') }}"
+                            class="flex items-center gap-2 hover:underline dark:text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
 
-                        <div x-ref="menu" x-cloak x-show="open" @click.away="open=false"
-                            class="fixed z-50 flex flex-col gap-2 p-2 rounded-lg shadow-lg bg-gray-100 dark:bg-gray-800 dark:border dark:border-gray-700"
-                            :style="`top:${top}px; left:${left}px`" x-transition.opacity>
-                            <!--VER-->
-                            <a href="{{ route('sanciones.crearSanciones', $campeonato->id) }}"
-                                class="flex items-center gap-2 hover:underline dark:text-white ">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                                <span class="ml-1">Crear Sanciones</span>
-                            </a>
-                            @adminOrCan('administrador')
-                            <a href="{{ route('sanciones.actualizar') }}"
-                                class="flex items-center gap-2 hover:underline dark:text-white ">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                </svg>
-
-                                <span class="ml-1">Actualizar Sanciones</span>
-                            </a>
-                            @endadminOrCan
-                            <!-- CREAR -->
-                            @adminOrCan('comision')
-                            <a href="{{ route('sanciones.sanciones-administrador') }}"
-                                class="flex items-center gap-2 hover:underline dark:text-white ">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="lucide lucide-badge-plus">
-                                    <path
-                                        d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
-                                    <line x1="12" x2="12" y1="8" y2="16" />
-                                    <line x1="8" x2="16" y1="12" y2="12" />
-                                </svg>
-                                <span>Crear Sanciones Admin</span>
-                            </a>
-                            @endadminOrCan
-                        </div>
+                            <span class="ml-1">Actualizar </span>
+                        </a>
+                        @endadminOrCan
+                        <!-- CREAR -->
+                        @adminOrCan('comision')
+                        <a href="{{ route('sanciones.sanciones-administrador') }}"
+                            class="flex items-center gap-2 hover:underline dark:text-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-badge-plus">
+                                <path
+                                    d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                                <line x1="12" x2="12" y1="8" y2="16" />
+                                <line x1="8" x2="16" y1="12" y2="12" />
+                            </svg>
+                            <span>Crear Sanciones Admin</span>
+                        </a>
+                        @endadminOrCan
                     </div>
-
                 </td>
             </tr>
             @endforeach
@@ -154,7 +102,8 @@
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span
                         class="text-gray-600 dark:text-accent">Campeonato:</span>
-                    {{ ucwords($campeonato->nombre) }}</h3>
+                    {{ ucwords($campeonato->nombre) }}
+                </h3>
                 <div x-data="{ open: false, top: 0, left: 0 }" class="relative" @keydown.escape.window="open=false"
                     @scroll.window="open=false">
                     <button x-ref="trigger" @click="
@@ -251,7 +200,7 @@
                     Todos contra Todos
                     @else
                     {{ ucfirst($campeonato->formato) }}
-                    @endif
+                @endif
                 </p> --}}
                 <p><span class="font-semibold">Categoría:</span> {{ ucfirst($campeonato->categoria->nombre) }}
                 </p>

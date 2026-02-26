@@ -48,40 +48,35 @@
 
                     {{-- MENÚ DE OPCIONES --}}
                     <td class="px-6 py-4 text-right">
-                       <!--  <x-ui.button variant="sliding-green" icon="view">
-                            Ver
-                        </x-ui.button> -->
-                        <ul class="flex gap-2 py-1">
-                            <li>
-                                <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold
-                  bg-blue-600 text-white rounded-full
-                  hover:bg-blue-700 transition shadow">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178" />
-                                    </svg>
-                                    Ver
-                                </a>
-                            </li>
+                        <div class="flex items-center justify-end gap-2">
+                            {{-- VER --}}
+                            <a href="{{ route('listado-buena-fe.ver1', $campeonato->id) }}" title="Ver"
+                                class="cursor-pointer text-blue-600 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-xs px-2 py-1 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+
+                            </a>
+
+                            {{-- CREAR --}}
+
                             @adminOrCan('administrador|comision')
-                            <li>
-                                <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold
-                  bg-emerald-600 text-white rounded-full
-                  hover:bg-emerald-700 transition shadow">
-                                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    Crear
-                                </a>
-                            </li>
+                            <a href="{{ route('listado-buena-fe.crear', $campeonato->id) }}" title="Crear"
+                                class="cursor-pointer text-green-600 hover:text-white border border-green-600 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-xs px-2 py-1 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </a>
                             @endadminOrCan
-                        </ul>
 
-
-
+                        </div>
                     </td>
+
                 </tr>
                 @endforeach
             </tbody>
