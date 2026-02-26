@@ -81,10 +81,10 @@ class SancionesCrear extends Component
             $buscar = trim($this->buscarJugador);
 
             $this->jugadores = Jugador::whereHas('equiposPorCampeonato', function ($query) {
-                $query->wherePivot('campeonato_id', $this->campeonatoId);
+                $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
             })
                 ->with(['equiposPorCampeonato' => function ($query) {
-                    $query->wherePivot('campeonato_id', $this->campeonatoId);
+                    $query->where('campeonato_jugador_equipo.campeonato_id', $this->campeonatoId);
                 }])
                 ->where(function ($query) use ($buscar) {
                     $query->where('nombre', 'like', "%{$buscar}%")
