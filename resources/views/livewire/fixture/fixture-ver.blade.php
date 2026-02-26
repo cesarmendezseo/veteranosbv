@@ -225,10 +225,11 @@
                     class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 shadow-md sm:rounded-lg">
                     <thead class="text-xs text-gray-100 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th class="px-2 sm:px-4 py-2 text-center">Fecha</th>
+                            <th class="px-2 sm:px-4 py-2 text-center">Día</th>
+                            <th class="px-2 sm:px-4 py-2 text-center">Hora</th>
 
                             <th class="px-2 sm:px-4 py-2 text-center"> Fase</th>
-                            <th class="px-2 sm:px-4 py-2 text-center"> Jornada</th>
+                            <th class="px-2 sm:px-4 py-2 text-center"> Fecha</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Local</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Gol</th>
                             <th class="px-2 sm:px-4 py-2 text-center">Gol</th>
@@ -245,10 +246,12 @@
                                 {{ \Carbon\Carbon::parse($encuentro->fecha)->format('d/m/Y') }}
                             </td>
                             <td class="px-2 sm:px-4 py-2 text-center">
+                                {{ \Carbon\Carbon::parse($encuentro->hora)->format('H:i') }}
+                            </td>
+                            <td class="px-2 sm:px-4 py-2 text-center">
                                 <span class="px-2 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
                                     {{ $encuentro->fase_campeonato->nombre ?? $encuentro->fase }}
                                 </span>
-
                             <td
                                 class="px-2 sm:px-4 py-2 text-center text-sm text-gray-800 font-semibold  dark:text-gray-200">
                                 {{ $encuentro->fecha_encuentro }}
@@ -277,12 +280,11 @@
                             <td class="px-1 sm:px-3 py-2">
                                 <div class="flex items-center justify-center space-x-1">
                                     <button wire:click="guardarGoles({{ $encuentro->id }})" title="Guardar"
-                                        class="cursor-pointer text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        class="cursor-pointer text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-2 py-1 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                             stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save">
-                                            <path
-                                                d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                                            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
                                             <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
                                             <path d="M7 3v4a1 1 0 0 0 1 1h7" />
                                         </svg>
@@ -290,25 +292,22 @@
                                     @endadminOrCan
                                     @adminOrCan('administrador|comision')
                                     <button wire:click="editEncuentro({{ $encuentro->id }})"
-                                        class="cursor-pointer text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+                                        class="cursor-pointer text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-xs px-2 py-1 text-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
                                         title="Editar">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-square-pen">
+                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen">
                                             <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                            <path
-                                                d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                                            <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                                         </svg>
                                     </button>
 
-                                    <button wire:click="eliminarEncuentro ({{ $encuentro->id }} )   "
-                                        class="cursor-pointer text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 sm:px-5 py-2 text-center me-1 sm:me-2 mb-1 sm:mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                                    <button wire:click="eliminarEncuentro({{ $encuentro->id }})"
+                                        class="cursor-pointer text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-2 py-1 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                                         title="Eliminar">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="lucide lucide-trash-2">
+                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2">
                                             <path d="M3 6h18" />
                                             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
                                             <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
@@ -316,8 +315,6 @@
                                             <line x1="14" x2="14" y1="11" y2="17" />
                                         </svg>
                                     </button>
-
-
                                 </div>
                             </td>
                             @endadminOrCan
