@@ -88,7 +88,9 @@ class SancionesMostrar extends Component
                 ? $this->edit_fecha_fin
                 : null,
 
-            'encuentro_id' => $this->edit_encuentro_id,
+
+            'sancionable_id' => $this->edit_encuentro_id,
+            'sancionable_type' => \App\Models\Encuentro::class,
 
             'observacion' => $this->edit_observacion,
         ]);
