@@ -21,6 +21,8 @@ class Sanciones extends Component
     public $campeonatoId;
     public $partidoJugadorInfo = null;
     public $partido_id;
+    public $ordenFecha = 'desc'; // desc = más reciente primero
+    public $etapaSeleccionada = null;
 
     public function mount($id)
     {
@@ -28,7 +30,22 @@ class Sanciones extends Component
         $this->campeonatoId = $id;
     }
 
+    public function updatedOrdenFecha()
+    {
+        $this->resetPage();
+    }
+
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function setEtapa($etapa)
+    {
+        $this->etapaSeleccionada = $etapa === $this->etapaSeleccionada ? null : $etapa; // toggle
+        $this->resetPage();
+    }
+
+    public function updatedSearch()
     {
         $this->resetPage();
     }
@@ -106,8 +123,9 @@ class Sanciones extends Component
                     });
                 });
             })
-            ->orderBy('etapa_sancion', 'asc')  // Cambia a 'asc' si quieres de menor a mayor
+            ->orderBy('etapa_sancion', $this->ordenFecha)
             ->paginate(20);
+
 
         return view('livewire.frontend.estadistica.sanciones', [
             'sanciones' => $sanciones,

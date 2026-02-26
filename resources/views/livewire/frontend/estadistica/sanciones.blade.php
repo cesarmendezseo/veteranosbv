@@ -13,14 +13,27 @@
             </h1>
         </div>
 
+
+
         {{-- Filtro de búsqueda --}}
-        <div class="mb-6">
-            <div
-                class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-[0_0_15px_rgba(0,0,0,0.3)]">
-                <input type="text" wire:model.live="search" placeholder="🔍 Buscar jugador por nombre o documento"
-                    class="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-black dark:text-white placeholder-black/60 dark:placeholder-white/60 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-[0_0_10px_rgba(0,0,0,0.2)]" />
-            </div>
+        <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
+
+            <!-- Filtro -->
+            <select wire:model.live="ordenFecha"
+                class="px-3 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-black dark:text-white focus:ring-2 focus:ring-blue-500 shadow-[0_0_10px_rgba(0,0,0,0.2)]">
+                <option value="desc">📅 Más reciente primero</option>
+                <option value="asc">📅 Más antigua primero</option>
+            </select>
+
+            <!-- Buscador -->
+            <input type="text"
+                wire:model.live="search"
+                placeholder="🔍 Buscar jugador por nombre o documento"
+                class="flex-1 px-4 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-black dark:text-white placeholder-black/60 dark:placeholder-white/60 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-[0_0_10px_rgba(0,0,0,0.2)]" />
+
         </div>
+
+
 
         {{-- 📌 Versión Escritorio --}}
         <div class="hidden sm:block overflow-x-auto rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.3)]">
