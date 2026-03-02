@@ -22,12 +22,25 @@
             <option value="pendientes">Pendientes</option>
         </select>
 
+        {{-- Campeonato --}}
         <select wire:model.live="campeonato_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            >
-            <option value="">Campeonato</option>
+
+            <option value="">Todos los campeonatos</option>
             @foreach($campeonatos as $campeonato)
             <option value="{{ $campeonato->id }}">
                 {{ strtoupper($campeonato->nombre) }}
+            </option>
+            @endforeach
+        </select>
+
+        {{-- Etapa --}}
+        <select wire:model.live="etapa" @disabled(!$campeonato_id) class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+            <option value="">Todas las etapas</option>
+
+            @foreach($this->etapas as $etapa)
+            <option value="{{ $etapa }}">
+                {{ ucwords($etapa) }}
             </option>
             @endforeach
         </select>

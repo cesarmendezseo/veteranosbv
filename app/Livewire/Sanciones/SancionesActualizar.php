@@ -18,6 +18,7 @@ class SancionesActualizar extends Component
     public $search = '';
     public $campeonatos = [];
     public $filtroCumplidas = 'todas'; // todas | cumplidas | pendientes
+    public $etapa;
 
     public function mount()
     {
@@ -138,12 +139,28 @@ class SancionesActualizar extends Component
     public function updatedCampeonatoId()
     {
         $this->resetPage();
+        $this->etapa = null;
     }
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
+    public function getEtapasProperty()
+    {
+        return \App\Models\Sanciones::query()
+            ->when(
+                $this->campeonato_id,
+                fn($q) =>
+                $q->where('campeonato_id', $this->campeonato_id)
+            )
+            ->select('etapa_sancion')
+            ->distinct()
+            ->orderBy('etapa_sancion')
+            ->pluck('etapa_sancion');
+    }
+
 
     /* =========================================================
      *  RENDER
@@ -173,6 +190,10 @@ class SancionesActualizar extends Component
                 $this->filtroCumplidas === 'pendientes',
                 fn($q) =>
                 $q->whereColumn('partidos_cumplidos', '<', 'partidos_sancionados')
+            )->when(
+                $this->etapa,
+                fn($q) =>
+                $q->where('etapa_sancion', $this->etapa)
             )
             ->orderBy('created_at', 'desc')
             ->paginate(20);
