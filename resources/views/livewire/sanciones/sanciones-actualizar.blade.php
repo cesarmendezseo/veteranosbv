@@ -11,15 +11,25 @@
                 <option value="">Seleccione Campeonato</option>
                 @foreach ($campeonatos as $campeonato)
                 <option value="{{ $campeonato->id }}">{{ $campeonato->nombre }}</option>
-                @endforeach
+            @endforeach
             </select> --}}
 
         </div>
         <select wire:model.live="filtroCumplidas"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option value="todas">Todas</option>
+            <option value="todas">Cumplimiento</option>
             <option value="cumplidas">Cumplidas</option>
             <option value="pendientes">Pendientes</option>
+        </select>
+
+        <select wire:model.live="campeonato_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            >
+            <option value="">Campeonato</option>
+            @foreach($campeonatos as $campeonato)
+            <option value="{{ $campeonato->id }}">
+                {{ strtoupper($campeonato->nombre) }}
+            </option>
+            @endforeach
         </select>
         {{-- Filtro --}}
         <div class="w-full sm:w-1/2">
@@ -46,9 +56,10 @@
                 <tr>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Documento</th>
                     <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Jugador</th>
+                    <th class="px-2 sm:px-4 py-2 text-left hidden sm:table-cell">Campeonato</th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Fecha Sancion</th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Cantidad de Sanción</th>
-                    <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Cumplidas</th>
+                    <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Cumplidas </th>
                     <th class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">Acción</th>
 
                 </tr>
@@ -61,6 +72,7 @@
                     <td class="px-2 sm:px-4 py-2 hidden sm:table-cell">
                         {{ strtoupper($jug->jugador->apellido) }}, {{ strtoupper($jug->jugador->nombre) }}
                     </td>
+                    <td>{{ strtoupper($jug->campeonato->nombre) }}</td>
                     <td class="px-2 sm:px-4 py-2 text-center hidden sm:table-cell">
                         {{ ucfirst($jug->etapa_sancion) }}
                     </td>
