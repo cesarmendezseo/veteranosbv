@@ -117,6 +117,12 @@ class Sanciones extends Component
         $this->resetPage();
     }
 
+    public function setJornada($jornada)
+    {
+        $this->jornadaSeleccionada = ($jornada === '' || $jornada === null) ? null : $jornada;
+        $this->resetPage();
+    }
+
     public function render()
     {
         // Obtenemos solo los números de las jornadas que tienen sanciones en este campeonato

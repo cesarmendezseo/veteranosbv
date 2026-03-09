@@ -15,9 +15,8 @@
 
         {{-- 1. BOTONES DE FECHAS --}}
         <div class="mb-6">
-
             <button
-                wire:click="$set('jornadaSeleccionada', null)"
+                wire:click="setJornada(null)"
                 class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all {{ is_null($jornadaSeleccionada) ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
                 Todas
             </button>
@@ -25,12 +24,11 @@
             @foreach($botonesJornadas as $jornada)
             <button
                 wire:key="jornada-btn-{{ $jornada }}"
-                wire:click="$set('jornadaSeleccionada', {{ $jornada }})"
+                wire:click="setJornada('{{ $jornada }}')"
                 class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all {{ $jornadaSeleccionada == $jornada ? 'bg-blue-600 text-white ring-2 ring-blue-400' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
                 {{ $jornada }}
             </button>
             @endforeach
-
         </div>
 
         {{-- Filtro de búsqueda --}}
