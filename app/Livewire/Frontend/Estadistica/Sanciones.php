@@ -113,12 +113,7 @@ class Sanciones extends Component
 
     public function updatedJornadaSeleccionada($value)
     {
-        // Si el valor es una cadena vacía (lo que envía el select en "Todas")
-        // lo convertimos a null para que el ->when() funcione perfecto.
-        if ($value === '') {
-            $this->jornadaSeleccionada = null;
-        }
-
+        $this->jornadaSeleccionada = ($value === '' || $value === null) ? null : $value;
         $this->resetPage();
     }
 
@@ -137,7 +132,7 @@ class Sanciones extends Component
                 'sancionable.equipoVisitante'
             ])
             ->where('campeonato_id', $this->campeonatoId)
-            ->when($this->jornadaSeleccionada, function ($query) {
+            ->when($this->jornadaSeleccionada !== null && $this->jornadaSeleccionada !== '', function ($query) {
                 $query->where('etapa_sancion', $this->jornadaSeleccionada);
             })
             ->when($this->search, function ($query) {

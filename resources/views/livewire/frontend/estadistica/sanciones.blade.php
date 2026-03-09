@@ -24,7 +24,8 @@
                     wire:model.live="jornadaSeleccionada"
                     class="w-full bg-gray-800 border-gray-700 text-white rounded-lg p-2.5">
 
-                    <option value="">Todas las jornadas</option> @foreach($botonesJornadas as $jornada)
+                    <option value="">Todas las jornadas</option>
+                    @foreach($botonesJornadas as $jornada)
                     <option value="{{ $jornada }}">Jornada {{ $jornada }}</option>
                     @endforeach
                 </select>
