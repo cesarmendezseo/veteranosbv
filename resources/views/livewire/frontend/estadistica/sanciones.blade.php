@@ -13,17 +13,44 @@
             </h1>
         </div>
 
+        {{-- 1. BOTONES DE FECHAS --}}
+        <div class="mb-6">
+            <div class="block md:hidden">
+                <label for="jornada-select" class="block text-sm font-medium text-gray-400 mb-2">
+                    Seleccionar Jornada
+                </label>
+                <select
+                    id="jornada-select"
+                    wire:model.live="jornadaSeleccionada"
+                    class="w-full bg-gray-800 border-gray-700 text-white rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                    <option value="">Todas las jornadas</option>
+                    @foreach($botonesJornadas as $jornada)
+                    <option value="{{ $jornada }}">Jornada {{ $jornada }}</option>
+                    @endforeach
+                </select>
+            </div>
 
+            <div class="hidden md:flex flex-wrap gap-2">
+                <button
+                    wire:click="$set('jornadaSeleccionada', null)"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ is_null($jornadaSeleccionada) ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
+                    Todas
+                </button>
+
+                @foreach($botonesJornadas as $jornada)
+                <button
+                    wire:key="jornada-btn-{{ $jornada }}"
+                    wire:click="$set('jornadaSeleccionada', {{ $jornada }})"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ $jornadaSeleccionada == $jornada ? 'bg-blue-600 text-white ring-2 ring-blue-400' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
+                    {{ $jornada }}
+                </button>
+                @endforeach
+            </div>
+        </div>
 
         {{-- Filtro de búsqueda --}}
         <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
 
-            <!-- Filtro -->
-            <select wire:model.live="ordenFecha"
-                class="px-3 py-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-black dark:text-white focus:ring-2 focus:ring-blue-500 shadow-[0_0_10px_rgba(0,0,0,0.2)]">
-                <option value="desc">📅 Más reciente primero</option>
-                <option value="asc">📅 Más antigua primero</option>
-            </select>
 
             <!-- Buscador -->
             <input type="text"

@@ -35,7 +35,25 @@
                 @endforeach
             </div>
         </div>
+        <div class="mb-8 space-y-6">
 
+            <div class="max-w-md mx-auto">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </span>
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Buscar por nombre o apellido..."
+                        class="w-full bg-white/5 backdrop-blur-md border border-white/20 text-black dark:text-white rounded-2xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none transition-all placeholder-gray-500">
+                </div>
+            </div>
+
+
+        </div>
         {{-- 📌 Versión Escritorio --}}
         <div class="hidden sm:block overflow-x-auto rounded-2xl shadow-[0_0_20px_rgba(0,0,0,0.3)]">
             <table class="w-full text-sm text-center text-white/90 bg-white/5 backdrop-blur-xl">
@@ -55,7 +73,7 @@
                 <!-- BODY -->
                 <tbody class="backdrop-blur-xl">
                     @forelse($estadisticas as $stat)
-                    <tr class="text-black dark:text-white border-b border-white/10 hover:bg-gray-300 transition
+                    <tr class="text-black dark:text-black border-b border-white/10 hover:bg-gray-300 transition
         odd:bg-gray-50 even:bg-gray-100">
 
                         <!-- JUGADOR -->
@@ -64,7 +82,7 @@
                         </td>
 
                         <!-- EQUIPO -->
-                        <td class="px-4 py-3 text-left text-black/80 dark:text-white/80">
+                        <td class="px-4 py-3 text-left text-black/80 dark:text-black">
                             {{ strtoupper($stat->nombre_equipo) }}
                         </td>
 
@@ -76,7 +94,7 @@
                                 {{ $stat->total_amarilla }}
                             </span>
                             @else
-                            <span class="text-black/50 dark:text-white/50">-</span>
+                            <span class="text-black/50 dark:text-black">-</span>
                             @endif
                         </td>
 
@@ -88,7 +106,7 @@
                                 {{ $stat->total_doble }}
                             </span>
                             @else
-                            <span class="text-black/50 dark:text-white/50">-</span>
+                            <span class="text-black/50 dark:text-black">-</span>
                             @endif
                         </td>
 
@@ -100,7 +118,7 @@
                                 {{ $stat->total_roja }}
                             </span>
                             @else
-                            <span class="text-black/50 dark:text-white/50">-</span>
+                            <span class="text-black/50 dark:text-black">-</span>
                             @endif
                         </td>
 

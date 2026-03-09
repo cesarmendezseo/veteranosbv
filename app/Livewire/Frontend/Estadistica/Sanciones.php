@@ -23,6 +23,7 @@ class Sanciones extends Component
     public $partido_id;
     public $ordenFecha = 'desc'; // desc = más reciente primero
     public $etapaSeleccionada = null;
+    public $jornadaSeleccionada;
 
     public function mount($id)
     {
@@ -104,9 +105,20 @@ class Sanciones extends Component
             $this->partidoJugadorInfo = 'No se encontró partido del jugador en esa fecha.';
         }
     }
+    // Método para limpiar el filtro si lo necesitas
+    public function resetJornada()
+    {
+        $this->reset('jornadaSeleccionada');
+    }
 
     public function render()
     {
+        // Obtenemos solo los números de las jornadas que tienen sanciones en este campeonato
+        $botonesJornadas = ModelsSanciones::where('campeonato_id', $this->campeonatoId)
+            ->distinct()
+            ->orderBy('etapa_sancion', 'asc')
+            ->pluck('etapa_sancion');
+
         $sanciones = ModelsSanciones::query()
             ->with([
                 'jugador',
@@ -114,6 +126,9 @@ class Sanciones extends Component
                 'sancionable.equipoVisitante'
             ])
             ->where('campeonato_id', $this->campeonatoId)
+            ->when($this->jornadaSeleccionada, function ($query) {
+                $query->where('etapa_sancion', $this->jornadaSeleccionada);
+            })
             ->when($this->search, function ($query) {
                 $query->whereHas('jugador', function ($subQuery) {
                     $subQuery->where(function ($q) {
@@ -126,9 +141,9 @@ class Sanciones extends Component
             ->orderBy('etapa_sancion', $this->ordenFecha)
             ->paginate(20);
 
-
         return view('livewire.frontend.estadistica.sanciones', [
             'sanciones' => $sanciones,
+            'botonesJornadas' => $botonesJornadas, // Pasamos las jornadas a la vista
         ]);
     }
 }
