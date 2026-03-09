@@ -22,9 +22,9 @@
                 <select
                     id="jornada-select"
                     wire:model.live="jornadaSeleccionada"
-                    class="w-full bg-gray-800 border-gray-700 text-white rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                    <option value="">Todas las jornadas</option>
-                    @foreach($botonesJornadas as $jornada)
+                    class="w-full bg-gray-800 border-gray-700 text-white rounded-lg p-2.5">
+
+                    <option value="">Todas las jornadas</option> @foreach($botonesJornadas as $jornada)
                     <option value="{{ $jornada }}">Jornada {{ $jornada }}</option>
                     @endforeach
                 </select>
@@ -33,7 +33,7 @@
             <div class="hidden md:flex flex-wrap gap-2">
                 <button
                     wire:click="$set('jornadaSeleccionada', null)"
-                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ is_null($jornadaSeleccionada) ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
+                    class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all {{ is_null($jornadaSeleccionada) ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
                     Todas
                 </button>
 
@@ -41,7 +41,7 @@
                 <button
                     wire:key="jornada-btn-{{ $jornada }}"
                     wire:click="$set('jornadaSeleccionada', {{ $jornada }})"
-                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all {{ $jornadaSeleccionada == $jornada ? 'bg-blue-600 text-white ring-2 ring-blue-400' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
+                    class="cursor-pointer px-4 py-2 rounded-lg text-sm font-medium transition-all {{ $jornadaSeleccionada == $jornada ? 'bg-blue-600 text-white ring-2 ring-blue-400' : 'bg-gray-800 text-gray-400 hover:bg-gray-700' }}">
                     {{ $jornada }}
                 </button>
                 @endforeach

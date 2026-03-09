@@ -111,6 +111,17 @@ class Sanciones extends Component
         $this->reset('jornadaSeleccionada');
     }
 
+    public function updatedJornadaSeleccionada($value)
+    {
+        // Si el valor es una cadena vacía (lo que envía el select en "Todas")
+        // lo convertimos a null para que el ->when() funcione perfecto.
+        if ($value === '') {
+            $this->jornadaSeleccionada = null;
+        }
+
+        $this->resetPage();
+    }
+
     public function render()
     {
         // Obtenemos solo los números de las jornadas que tienen sanciones en este campeonato
