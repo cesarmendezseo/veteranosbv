@@ -117,14 +117,15 @@ class Sanciones extends Component
         $this->resetPage();
     }
 
-    public function setJornada($jornada)
+    public function setJornada($jornada = null)
     {
-        $this->jornadaSeleccionada = ($jornada === '' || $jornada === null) ? null : $jornada;
+        $this->jornadaSeleccionada = $jornada;
         $this->resetPage();
     }
 
     public function render()
     {
+
         // Obtenemos solo los números de las jornadas que tienen sanciones en este campeonato
         $botonesJornadas = ModelsSanciones::where('campeonato_id', $this->campeonatoId)
             ->distinct()
@@ -152,6 +153,7 @@ class Sanciones extends Component
             })
             ->orderBy('etapa_sancion', $this->ordenFecha)
             ->paginate(20);
+
 
         return view('livewire.frontend.estadistica.sanciones', [
             'sanciones' => $sanciones,
